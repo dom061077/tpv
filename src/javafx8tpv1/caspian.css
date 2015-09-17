@@ -4267,3 +4267,8 @@ to the top and bottom -fx-padding values of the parent toolbar. */
 .alert.warning.dialog-pane {
     -fx-graphic: url("dialog-warning.png");
 }
+
+//----------CUSTOM--------------------------
+#ButtonCliente{
+    -fx-background-color: blue;
+}
