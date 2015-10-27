@@ -3,22 +3,30 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.tpv.producto;
+package com.tpv.modelo;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  *
  * @author daniel
  */
 @Entity
+@Table(name="productos")
 public class Producto {
     @Id
+    @Column(name = "idPRODUCTOS")
     private int idProducto;
+    @Column(name = "CODBARRA")
     private String codBarra;
+    @Column(name = "STOCK")
     private int stock;
-    private String detalleSucursales;
+    @Column(name = "DETALLESUCURSALES")
+    private String descripcion;
+    @Column(name = "CODIGOPRODUCTO")
     private int codigoProducto;
 
     /**
@@ -63,19 +71,6 @@ public class Producto {
         this.stock = stock;
     }
 
-    /**
-     * @return the detalleSucursales
-     */
-    public String getDetalleSucursales() {
-        return detalleSucursales;
-    }
-
-    /**
-     * @param detalleSucursales the detalleSucursales to set
-     */
-    public void setDetalleSucursales(String detalleSucursales) {
-        this.detalleSucursales = detalleSucursales;
-    }
 
     /**
      * @return the codigoProducto
@@ -89,6 +84,20 @@ public class Producto {
      */
     public void setCodigoProducto(int codigoProducto) {
         this.codigoProducto = codigoProducto;
+    }
+
+    /**
+     * @return the descripcion
+     */
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    /**
+     * @param descripcion the descripcion to set
+     */
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
          
 }
