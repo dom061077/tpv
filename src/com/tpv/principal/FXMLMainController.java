@@ -14,8 +14,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -44,6 +46,21 @@ public class FXMLMainController implements Initializable {
     private TableView tableViewTickets;
     
     @FXML
+    private TableColumn codigoColumn;
+    
+    @FXML
+    private TableColumn descripcionColumn;
+    
+    @FXML
+    private TableColumn cantidadColumn;
+    
+    @FXML
+    private TableColumn precioUnitarioColumn;
+    
+    @FXML
+    private TableColumn subTotalColumn;
+    
+    @FXML
     @ActionTrigger("buscarCliente")
     private Button clienteButton;
     
@@ -52,7 +69,7 @@ public class FXMLMainController implements Initializable {
     private Button buscarProductoButton;
     
     @Inject
-    private DataModel model;
+    private DataModelTicket modelTicket;
 
     
     @Override
@@ -62,11 +79,25 @@ public class FXMLMainController implements Initializable {
     
     @PostConstruct
     public void init(){
-        System.out.println("INIT DE FXMLMainController");
+        codigoColumn.setCellFactory(new PropertyValueFactory("codigoProducto"));
+        descripcionColumn.setCellFactory(new PropertyValueFactory("descripcion"));
+        cantidadColumn.setCellFactory(new PropertyValueFactory("cantidad"));
+        precioUnitarioColumn.setCellFactory(new PropertyValueFactory("precioUnitario"));
+        subTotalColumn.setCellFactory(new PropertyValueFactory("subTotal"));
         
         Platform.runLater(() -> {
-            tableViewTickets.setItems(model.getTickets());
+            tableViewTickets.setItems(modelTicket.getTickets());
             textFieldProducto.requestFocus();
+            textFieldProducto.setOnKeyPressed(keyEvent -> {
+                if(keyEvent.getCode() == KeyCode.F2){
+                    clienteButton.fire();
+                    keyEvent.consume();
+                }
+                if(keyEvent.getCode() == KeyCode.F3){
+                    buscarProductoButton.fire();
+                    keyEvent.consume();
+                }
+            });
             if(clienteButton.getScene()!=null){
                 clienteButton.getScene().setOnKeyPressed(keyEvent -> {
                     if(keyEvent.getCode() == KeyCode.F2){
