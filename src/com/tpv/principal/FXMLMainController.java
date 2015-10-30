@@ -79,14 +79,19 @@ public class FXMLMainController implements Initializable {
     
     @PostConstruct
     public void init(){
-        codigoColumn.setCellFactory(new PropertyValueFactory("codigoProducto"));
-        descripcionColumn.setCellFactory(new PropertyValueFactory("descripcion"));
-        cantidadColumn.setCellFactory(new PropertyValueFactory("cantidad"));
-        precioUnitarioColumn.setCellFactory(new PropertyValueFactory("precioUnitario"));
-        subTotalColumn.setCellFactory(new PropertyValueFactory("subTotal"));
-        
+        codigoColumn.setCellValueFactory(new PropertyValueFactory("codigoProducto"));
+        descripcionColumn.setCellValueFactory(new PropertyValueFactory("descripcion"));
+        cantidadColumn.setCellValueFactory(new PropertyValueFactory("cantidad"));
+        precioUnitarioColumn.setCellValueFactory(new PropertyValueFactory("precioUnitario"));
+        subTotalColumn.setCellValueFactory(new PropertyValueFactory("subTotal"));
+
         Platform.runLater(() -> {
             tableViewTickets.setItems(modelTicket.getTickets());
+            if(tableViewTickets.getItems().size()>0){
+                tableViewTickets.getSelectionModel().select(tableViewTickets.getItems().size()-1);
+                tableViewTickets.scrollTo(tableViewTickets.getItems().size()-1);
+            }
+            
             textFieldProducto.requestFocus();
             textFieldProducto.setOnKeyPressed(keyEvent -> {
                 if(keyEvent.getCode() == KeyCode.F2){

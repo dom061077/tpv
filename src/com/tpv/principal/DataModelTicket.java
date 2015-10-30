@@ -18,12 +18,12 @@ import org.datafx.samples.app.Person;
  */
 
 @FlowScoped
-public class DataModel {
-    private ListProperty<LineaTicket> tickets;
+public class DataModelTicket {
+    private ListProperty<LineaTicketData> tickets;
     
-    public ListProperty<LineaTicket> getTickets() {
+    public ListProperty<LineaTicketData> getTickets() {
     if (tickets == null) {
-        ObservableList<LineaTicket> innerList = FXCollections.observableArrayList();
+        ObservableList<LineaTicketData> innerList = FXCollections.observableArrayList();
         tickets = new SimpleListProperty<>(innerList);
     }
     return tickets;

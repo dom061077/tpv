@@ -45,9 +45,9 @@ public class JavaFX8TPV1 extends Application {
         
         Scene scene = new Scene(root);
         
-        scene.setCursor(Cursor.NONE);
-        //String css = this.getClass().getResource("caspian.css").toExternalForm(); 
-        //scene.getStylesheets().add(css);        
+        //scene.setCursor(Cursor.NONE);
+        String css = this.getClass().getResource("caspian.css").toExternalForm(); 
+        scene.getStylesheets().add(css);        
        /* stage.setFullScreen(true); //full screen without borders (no program menu bars)
         stage.setFullScreenExitHint(""); //Don't show "Press ESC to exit full screen"
         stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);*/

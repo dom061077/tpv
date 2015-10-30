@@ -6,6 +6,8 @@
 package com.tpv.producto;
 
 import com.tpv.modelo.Producto;
+import com.tpv.principal.DataModelTicket;
+import com.tpv.principal.LineaTicketData;
 import com.tpv.service.ProductoService;
 import java.math.BigDecimal;
 import java.util.Iterator;
@@ -35,6 +37,7 @@ import org.datafx.controller.FXMLController;
 import org.datafx.controller.flow.action.ActionTrigger;
 
 
+
 @FXMLController(value="BuscarPorDescProducto.fxml", title = "busqueda")
 public class BuscarPorDescProductoController {
     private ObservableList<ProductoData> data;
@@ -59,7 +62,8 @@ public class BuscarPorDescProductoController {
     @FXML
     private TableColumn descripcionColumn;
 
-    
+    @Inject
+    private DataModelTicket modelTicket;
     
     @PostConstruct
     public void init(){
@@ -73,8 +77,14 @@ public class BuscarPorDescProductoController {
                 // or para cancelar la seleccion
                 buttonAceptar.getScene().setOnKeyPressed(keyEvent->{
                     if(keyEvent.getCode()==KeyCode.F10){
-                        if(buttonAceptar.getScene()!=null)
+                        if(buttonAceptar.getScene()!=null){
+                            ProductoData productoData = (ProductoData)tableView.getSelectionModel().getSelectedItem();
+                            modelTicket.getTickets().add(
+                                    new LineaTicketData(productoData.CodigoProducto.get(),productoData.Descripcion.get(),1,10000)
+                            );
                             buttonAceptar.fire();
+                            keyEvent.consume();
+                        }
                     }
                     if(keyEvent.getCode()==KeyCode.ESCAPE){
                         if(buttonAceptar.getScene()!=null)
@@ -119,8 +129,9 @@ public class BuscarPorDescProductoController {
         tableView.setItems(null);
         tableView.setItems(data);
         if(data.size()>0){
-            tableView.requestFocus();
             tableView.getSelectionModel().select(0);
+            tableView.requestFocus();
+            
         }
         
     }

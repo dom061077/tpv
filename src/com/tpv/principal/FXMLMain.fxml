@@ -10,11 +10,13 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1296.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-      <TableView fx:id="tableViewTickets" editable="true" prefHeight="457.0" prefWidth="1101.0" BorderPane.alignment="CENTER">
+      <TableView fx:id="tableViewTickets" editable="true" prefHeight="417.0" prefWidth="1200.0" styleClass="tpv-table-view" BorderPane.alignment="CENTER">
         <columns>
-            <TableColumn fx:id="codigoColumn" minWidth="100.0" prefWidth="62.999969482421875" text="Código" />
-          <TableColumn fx:id="descripcionColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="448.0000305175781" resizable="false" sortable="false" text="DESCRIPCION" />
-          <TableColumn fx:id="cantidadColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="9.223372036854776E18" sortable="false" text="CANTIDAD" />
+            <TableColumn fx:id="codigoColumn" minWidth="150.0" prefWidth="62.999969482421875" resizable="false" text="CODIGO" />
+          <TableColumn fx:id="descripcionColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="620.0" resizable="false" sortable="false" text="DESCRIPCION" />
+          <TableColumn fx:id="cantidadColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="180.0" resizable="false" sortable="false" text="CANTIDAD" />
+            <TableColumn fx:id="precioUnitarioColumn" minWidth="100.0" prefWidth="170.0" resizable="false" text="\$ UNIDAD" />
+            <TableColumn fx:id="subTotalColumn" minWidth="100.0" prefWidth="170.0" resizable="false" text="SUBTOTAL" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -36,25 +38,23 @@
          </children>
       </FlowPane>
    </top>
-   <right>
-      <VBox prefHeight="457.0" prefWidth="186.0" BorderPane.alignment="CENTER">
+   <bottom>
+      <HBox prefHeight="40.0" prefWidth="1296.0" BorderPane.alignment="CENTER">
          <children>
-            <Button id="ButtonCliente" fx:id="buscarProductoButton" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" prefHeight="5.0" prefWidth="151.0" styleClass="tpvbutton" text="Buscar por descripcion" visible="false" />
-            <Label prefHeight="35.0" prefWidth="97.0" text="Clientes" textAlignment="RIGHT" textFill="#3062e1">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </Label>
-            <Label text="Ctrl + 1" />
-            <Button fx:id="clienteButton" focusTraversable="false" prefHeight="21.0" prefWidth="151.0" styleClass="tpvbutton" text="Cliente  F2" visible="false" wrapText="true" />
-            <Label prefHeight="35.0" prefWidth="185.0" text="Buscar por Desc." textAlignment="RIGHT" textFill="#3062e1">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </Label>
-            <Label text="Ctrl + 2" />
             <Button mnemonicParsing="false" prefHeight="33.0" prefWidth="151.0" styleClass="tpvbutton" text="Button" visible="false" />
+            <Button fx:id="clienteButton" focusTraversable="false" prefHeight="21.0" prefWidth="151.0" styleClass="tpvbutton" text="Cliente  F2" visible="false" wrapText="true" />
+            <Button id="ButtonCliente" fx:id="buscarProductoButton" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" prefHeight="5.0" prefWidth="151.0" styleClass="tpvbutton" text="Buscar por descripcion" visible="false" />
+            <Label prefHeight="35.0" prefWidth="97.0" text="F2-Clientes" textAlignment="RIGHT" textFill="#3062e1">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label prefHeight="35.0" prefWidth="185.0" text="F3-Buscar por Desc." textAlignment="RIGHT" textFill="#3062e1">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
          </children>
-      </VBox>
-   </right>
+      </HBox>
+   </bottom>
 </BorderPane>

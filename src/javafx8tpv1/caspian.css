@@ -4284,3 +4284,12 @@ to the top and bottom -fx-padding values of the parent toolbar. */
     -fx-font-size: 20px;
     //-fx-padding: 20 100 20 100;
 }
+
+.tpv-table-view{
+    -fx-font-size: 12px;
+}
+
+.table-row-cell .text{
+    -fx-font-size: 25px;
+    -fx-font-weight: bold;
+}
