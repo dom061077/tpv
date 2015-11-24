@@ -84,4 +84,34 @@ public class ProductoService {
         return productos;
     }
     
+    public Producto getProductoPorCodigo(int filtroCodigo){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("tpvpersistence");        
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+        Query q = em.createQuery("FROM Producto p WHERE p.discontinuado = 0 and p.codigoProducto = :codigoProducto").setParameter("codigoProducto", filtroCodigo);
+        Producto producto = (Producto)q.getSingleResult();
+        tx.commit();
+        em.clear();
+        em.close();
+        emf.close();
+        
+        return producto;
+    }
+    
+    public Producto getProductoPorCodBarra(String codigoBarra){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("tpvpersistence");        
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+        Query q = em.createQuery("FROM Producto p WHERE p.discontinuado = 0 and p.codBarra = :codBarra").setParameter("codBarra", codigoBarra);
+        Producto producto = (Producto)q.getSingleResult();
+        tx.commit();
+        em.clear();
+        em.close();
+        emf.close();
+        
+        return producto;
+    }
+    
 }

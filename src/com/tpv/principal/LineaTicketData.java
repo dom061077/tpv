@@ -23,19 +23,19 @@ public class LineaTicketData {
     private IntegerProperty CodigoProducto;
     private StringProperty Descripcion;
     private IntegerProperty Cantidad;
-    private DoubleProperty PrecioUnitario;
+    private ObjectProperty<BigDecimal> PrecioUnitario;
     private ObjectProperty<BigDecimal> SubTotal;
     
     public LineaTicketData(){
         
     }
     
-    public LineaTicketData(int codigoProducto,String descripcion,int cantidad,double precioUnitario){
+    public LineaTicketData(int codigoProducto,String descripcion,int cantidad,BigDecimal precioUnitario){
         this.CodigoProducto = new SimpleIntegerProperty(codigoProducto);
         this.Descripcion = new SimpleStringProperty(descripcion);
         this.Cantidad = new SimpleIntegerProperty(cantidad);
-        this.PrecioUnitario = new SimpleDoubleProperty(precioUnitario);
-        this.SubTotal = new SimpleObjectProperty(new BigDecimal(precioUnitario*cantidad));
+        this.PrecioUnitario = new SimpleObjectProperty(precioUnitario);
+        this.SubTotal = new SimpleObjectProperty(new BigDecimal(precioUnitario.doubleValue()*cantidad));
     }
     
     public int getCodigoProducto(){
@@ -72,13 +72,13 @@ public class LineaTicketData {
         return Cantidad;
     }
     
-    public double getPrecioUnitario(){
+    public BigDecimal getPrecioUnitario(){
         return precioUnitarioProperty().get();
     }
     
-    public DoubleProperty precioUnitarioProperty(){
+    public ObjectProperty<BigDecimal> precioUnitarioProperty(){
         if(PrecioUnitario == null){
-            PrecioUnitario = new SimpleDoubleProperty();
+            PrecioUnitario = new SimpleObjectProperty();
         }
         return PrecioUnitario;
     }

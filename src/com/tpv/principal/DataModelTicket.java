@@ -5,6 +5,8 @@
  */
 package com.tpv.principal;
 
+import java.math.BigDecimal;
+import java.util.Iterator;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
@@ -22,11 +24,23 @@ public class DataModelTicket {
     private ListProperty<LineaTicketData> tickets;
     
     public ListProperty<LineaTicketData> getTickets() {
-    if (tickets == null) {
-        ObservableList<LineaTicketData> innerList = FXCollections.observableArrayList();
-        tickets = new SimpleListProperty<>(innerList);
+        if (tickets == null) {
+            ObservableList<LineaTicketData> innerList = FXCollections.observableArrayList();
+            tickets = new SimpleListProperty<>(innerList);
+        }
+        return tickets;
     }
-    return tickets;
-}
+    
+    public BigDecimal getTotalTicket(){
+        ListProperty<LineaTicketData> innerList = getTickets();
+        
+        Double total = new Double(0);
+        for(Iterator iter=innerList.iterator();iter.hasNext();){
+            LineaTicketData ticket= (LineaTicketData)iter.next();
+            total = total + ticket.getSubTotal().doubleValue();
+        }
+        
+        return BigDecimal.valueOf(total);
+    }
     
 }

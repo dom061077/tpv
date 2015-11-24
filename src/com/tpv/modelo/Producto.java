@@ -28,6 +28,8 @@ public class Producto {
     private String descripcion;
     @Column(name = "CODIGOPRODUCTO")
     private int codigoProducto;
+    @Column(name = "DISCONTINUADO")
+    private int discontinuado;
 
     /**
      * @return the idProducto
@@ -98,6 +100,20 @@ public class Producto {
      */
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    /**
+     * @return the discontinuado
+     */
+    public int getDiscontinuado() {
+        return discontinuado;
+    }
+
+    /**
+     * @param discontinuado the discontinuado to set
+     */
+    public void setDiscontinuado(int discontinuado) {
+        this.discontinuado = discontinuado;
     }
          
 }

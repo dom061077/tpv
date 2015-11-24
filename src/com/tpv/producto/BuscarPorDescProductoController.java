@@ -80,7 +80,7 @@ public class BuscarPorDescProductoController {
                         if(buttonAceptar.getScene()!=null){
                             ProductoData productoData = (ProductoData)tableView.getSelectionModel().getSelectedItem();
                             modelTicket.getTickets().add(
-                                    new LineaTicketData(productoData.CodigoProducto.get(),productoData.Descripcion.get(),1,10000)
+                                    new LineaTicketData(productoData.CodigoProducto.get(),productoData.Descripcion.get(),1,BigDecimal.valueOf(10000))
                             );
                             buttonAceptar.fire();
                             keyEvent.consume();
