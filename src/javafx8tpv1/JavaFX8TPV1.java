@@ -19,7 +19,7 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.datafx.controller.flow.Flow;
-import org.datafx.samples.app.MasterViewController;
+//import org.datafx.samples.app.MasterViewController;
 
 /**
  *
@@ -51,7 +51,7 @@ public class JavaFX8TPV1 extends Application {
         //scene.setCursor(Cursor.NONE);
         String css = this.getClass().getResource("caspian.css").toExternalForm(); 
         scene.getStylesheets().add(css);        
-        stage.setFullScreen(true); //full screen without borders (no program menu bars)
+        //stage.setFullScreen(true); //full screen without borders (no program menu bars)
         stage.setFullScreenExitHint(""); //Don't show "Press ESC to exit full screen"
         stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         stage.setScene(scene);

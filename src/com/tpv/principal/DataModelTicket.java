@@ -12,7 +12,7 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.datafx.controller.flow.injection.FlowScoped;
-import org.datafx.samples.app.Person;
+//import org.datafx.samples.app.Person;
 
 /**
  *
