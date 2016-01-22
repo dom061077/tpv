@@ -140,11 +140,7 @@ public class FXMLMainController implements Initializable {
         Platform.runLater(() -> {
             tableViewTickets.setItems(modelTicket.getTickets());
             calcularTotalGeneral();
-            if(tableViewTickets.getItems().size()>0){
-                tableViewTickets.getSelectionModel().select(tableViewTickets.getItems().size()-1);
-                tableViewTickets.scrollTo(tableViewTickets.getItems().size()-1);
-            }
-            
+            scrollDown();
             textFieldProducto.requestFocus();
             textFieldProducto.setOnKeyPressed(keyEvent -> {
                 if(keyEvent.getCode() == KeyCode.F2){
@@ -163,9 +159,13 @@ public class FXMLMainController implements Initializable {
                     
                     if(textFieldProducto.getText().trim().length()>0){
                         agregarLineaTicket();
+                        scrollDown();
                     }else{
                         pagoTicketButton.fire();
                     }
+                }
+                if(keyEvent.getCode() == KeyCode.PAGE_DOWN){
+                    
                 }
             });
             if(clienteButton.getScene()!=null){
@@ -219,6 +219,13 @@ public class FXMLMainController implements Initializable {
     private void calcularTotalGeneral(){
         DecimalFormat df = new DecimalFormat("##,##0.00");
         totalGeneral.setText(df.format(modelTicket.getTotalTicket()));
+    }
+    
+    private void scrollDown(){
+            if(tableViewTickets.getItems().size()>0){
+                tableViewTickets.getSelectionModel().select(tableViewTickets.getItems().size()-1);
+                tableViewTickets.scrollTo(tableViewTickets.getItems().size()-1);
+            }
     }
     
     private void agregarLineaTicket(){

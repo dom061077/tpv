@@ -21,6 +21,24 @@
                </font>
             </Label>
             <TextField fx:id="textFieldProducto" prefHeight="25.0" prefWidth="486.0" />
+            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="336.0" styleClass="labeltotal" text="TOTAL GRAL.:" textAlignment="RIGHT" />
+            <Label fx:id="totalGeneral" styleClass="labeltotal" text="Label" />
+            <Pane prefHeight="532.0" prefWidth="1296.0">
+               <children>
+                  <TableView fx:id="tableViewTickets" editable="true" prefHeight="533.0" prefWidth="1253.0" styleClass="tpv-table-view">
+                    <columns>
+                        <TableColumn fx:id="codigoColumn" minWidth="130.0" prefWidth="62.999969482421875" resizable="false" text="CODIGO" />
+                      <TableColumn fx:id="descripcionColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="620.0" resizable="false" sortable="false" text="DESCRIPCION" />
+                      <TableColumn fx:id="cantidadColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="150.0" resizable="false" sortable="false" text="CANTIDAD" />
+                        <TableColumn fx:id="precioUnitarioColumn" minWidth="100.0" prefWidth="170.0" resizable="false" text="\$ UNIDAD" />
+                        <TableColumn fx:id="subTotalColumn" minWidth="100.0" prefWidth="170.0" resizable="false" text="SUBTOTAL" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+               </children>
+            </Pane>
          </children>
       </FlowPane>
    </top>
@@ -43,24 +61,4 @@
          </children>
       </HBox>
    </bottom>
-   <center>
-      <Pane prefHeight="463.0" prefWidth="1296.0" BorderPane.alignment="CENTER">
-         <children>
-            <TableView fx:id="tableViewTickets" editable="true" prefHeight="417.0" prefWidth="1253.0" styleClass="tpv-table-view">
-              <columns>
-                  <TableColumn fx:id="codigoColumn" minWidth="130.0" prefWidth="62.999969482421875" resizable="false" text="CODIGO" />
-                <TableColumn fx:id="descripcionColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="620.0" resizable="false" sortable="false" text="DESCRIPCION" />
-                <TableColumn fx:id="cantidadColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="150.0" resizable="false" sortable="false" text="CANTIDAD" />
-                  <TableColumn fx:id="precioUnitarioColumn" minWidth="100.0" prefWidth="170.0" resizable="false" text="\$ UNIDAD" />
-                  <TableColumn fx:id="subTotalColumn" minWidth="100.0" prefWidth="170.0" resizable="false" text="SUBTOTAL" />
-              </columns>
-               <columnResizePolicy>
-                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-               </columnResizePolicy>
-            </TableView>
-            <Label contentDisplay="RIGHT" layoutX="215.0" layoutY="422.0" styleClass="labeltotal" text="TOTAL GRAL.:" textAlignment="RIGHT" />
-            <Label fx:id="totalGeneral" layoutX="638.0" layoutY="423.0" styleClass="labeltotal" text="Label" />
-         </children>
-      </Pane>
-   </center>
 </BorderPane>
