@@ -7,13 +7,12 @@ package com.tpv.principal;
 
 import com.tpv.modelo.Producto;
 import com.tpv.service.ProductoService;
+import com.tpv.util.TpvLogger;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -24,13 +23,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
-import javafx.scene.input.KeyEvent;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.datafx.controller.FXMLController;
 import org.datafx.controller.flow.action.ActionTrigger;
+import com.tpv.util.TpvLogger;
 
 /**
  *
@@ -39,6 +36,7 @@ import org.datafx.controller.flow.action.ActionTrigger;
 @FXMLController(value="FXMLMain.fxml", title = "Edit user")
 public class FXMLMainController implements Initializable {
     ProductoService productoService = new ProductoService();
+    TpvLogger logger;
     
     @FXML
     private TextField textFieldProducto;
@@ -92,6 +90,7 @@ public class FXMLMainController implements Initializable {
     
     @PostConstruct
     public void init(){
+        
         codigoColumn.setCellValueFactory(new PropertyValueFactory<LineaTicketData,Integer>("codigoProducto"));
         codigoColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
         descripcionColumn.setCellValueFactory(new PropertyValueFactory("descripcion"));
@@ -138,11 +137,13 @@ public class FXMLMainController implements Initializable {
         });
 
         Platform.runLater(() -> {
+            logger = TpvLogger.getTpvLogger(FXMLMainController.class);
             tableViewTickets.setItems(modelTicket.getTickets());
             calcularTotalGeneral();
             scrollDown();
             textFieldProducto.requestFocus();
             textFieldProducto.setOnKeyPressed(keyEvent -> {
+                logger.info("Tecla pulsada: "+keyEvent.getCode());
                 if(keyEvent.getCode() == KeyCode.F2){
                     clienteButton.fire();
                     keyEvent.consume();
@@ -164,9 +165,16 @@ public class FXMLMainController implements Initializable {
                         pagoTicketButton.fire();
                     }
                 }
+                
                 if(keyEvent.getCode() == KeyCode.PAGE_DOWN){
                     
+                    tableViewTickets.getSelectionModel().selectNext();
+                    logger.info("Se avanzó una linea");
                 }
+                if(keyEvent.getCode() == KeyCode.PAGE_DOWN){
+                    tableViewTickets.getSelectionModel().selectPrevious();
+                }
+                
             });
             if(clienteButton.getScene()!=null){
                 clienteButton.getScene().setOnKeyPressed(keyEvent -> {
