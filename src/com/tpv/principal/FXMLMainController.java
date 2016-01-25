@@ -165,14 +165,18 @@ public class FXMLMainController implements Initializable {
                         pagoTicketButton.fire();
                     }
                 }
-                
+                int index=0;
                 if(keyEvent.getCode() == KeyCode.PAGE_DOWN){
                     
                     tableViewTickets.getSelectionModel().selectNext();
+                    index = tableViewTickets.getSelectionModel().getSelectedIndex();
+                    tableViewTickets.scrollTo(index);
                     logger.info("Se avanzó una linea");
                 }
-                if(keyEvent.getCode() == KeyCode.PAGE_DOWN){
+                if(keyEvent.getCode() == KeyCode.PAGE_UP){
                     tableViewTickets.getSelectionModel().selectPrevious();
+                    index = tableViewTickets.getSelectionModel().getSelectedIndex();
+                    tableViewTickets.scrollTo(index);
                 }
                 
             });

@@ -10,6 +10,8 @@ import com.tpv.login.LoginController;
 import com.tpv.pagoticket.PagoTicketController;
 import com.tpv.principal.FXMLMainController;
 import com.tpv.producto.BuscarPorDescProductoController;
+import com.tpv.util.EmfConnection;
+import com.tpv.util.TpvLogger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
@@ -26,9 +28,17 @@ import org.datafx.controller.flow.Flow;
  * @author daniel
  */
 public class JavaFX8TPV1 extends Application {
+    TpvLogger logger;
     
     @Override
     public void start(Stage stage) throws Exception {
+        logger = TpvLogger.getTpvLogger(JavaFX8TPV1.class);
+        try{
+            EmfConnection.initEmf();
+        }catch(Exception e){
+            logger.error("No se pudo realizar la conexión a la base de datos");
+        }
+        
         //Parent root = FXMLLoader.load(getClass().getResource("FXMLMain.fxml"));
       
         /*Flow flow = new Flow(FXMLMainController.class).withLink(FXMLMainController.class

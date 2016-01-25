@@ -25,7 +25,7 @@
             <Label fx:id="totalGeneral" styleClass="labeltotal" text="Label" />
             <Pane prefHeight="532.0" prefWidth="1296.0">
                <children>
-                  <TableView fx:id="tableViewTickets" editable="true" prefHeight="533.0" prefWidth="1253.0" styleClass="tpv-table-view">
+                  <TableView fx:id="tableViewTickets" editable="true" focusTraversable="false" prefHeight="533.0" prefWidth="1253.0" styleClass="tpv-table-view">
                     <columns>
                         <TableColumn fx:id="codigoColumn" minWidth="130.0" prefWidth="62.999969482421875" resizable="false" text="CODIGO" />
                       <TableColumn fx:id="descripcionColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="620.0" resizable="false" sortable="false" text="DESCRIPCION" />
