@@ -6,11 +6,12 @@
 package javafx8tpv1;
 
 import com.tpv.cliente.ClienteSceneController;
+import com.tpv.login.ErrorController;
 import com.tpv.login.LoginController;
 import com.tpv.pagoticket.PagoTicketController;
 import com.tpv.principal.FXMLMainController;
 import com.tpv.producto.BuscarPorDescProductoController;
-import com.tpv.util.EmfConnection;
+import com.tpv.util.ConnectionState;
 import com.tpv.util.TpvLogger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -34,7 +35,7 @@ public class JavaFX8TPV1 extends Application {
     public void start(Stage stage) throws Exception {
         logger = TpvLogger.getTpvLogger(JavaFX8TPV1.class);
         try{
-            EmfConnection.initEmf();
+            ConnectionState.initEmf();
         }catch(Exception e){
             logger.error("No se pudo realizar la conexión a la base de datos");
         }
@@ -45,8 +46,9 @@ public class JavaFX8TPV1 extends Application {
                 , "buscarCliente", ClienteSceneController.class).withLink(
                         ClienteSceneController.class, "seleccionarCliente", FXMLMainController.class);
         */
-        Flow flow = new Flow(LoginController.class).withLink(LoginController.class, "iniciarSesion", FXMLMainController.class)
+        Flow flow = new Flow(LoginController.class).withLink(LoginController.class, "iniciarSesion", ErrorController.class)
                     //--flow ventana buscar cliente
+                   .withLink(LoginController.class,"iniciarSesion",FXMLMainController.class)
                    .withLink(FXMLMainController.class,"buscarCliente", ClienteSceneController.class)
                    .withLink(ClienteSceneController.class, "seleccionarCliente", FXMLMainController.class)
                     //  flow ventana buscar por descripcion de producto

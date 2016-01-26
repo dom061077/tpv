@@ -14,7 +14,7 @@ import javax.persistence.Persistence;
  *
  * @author daniel
  */
-public class EmfConnection {
+public class ConnectionState {
     /**
      * propiedad emf que será inicializada en el método getEmf
      */
@@ -26,12 +26,28 @@ public class EmfConnection {
      * del EntityManagerFactory.
      */
     
-    public static void initEmf() throws Exception{
+    private static void initEmf() throws Exception{
         emf = Persistence.createEntityManagerFactory("tpvpersistence");
+        
         if(emf==null)
             throw new Exception("No se pudo realizar la conexión con la base de datos");
         em = emf.createEntityManager();
+        
     }
+    
+    /**
+     * Este método conecta la impresora fiscal
+     */
+    private static void initFiscalPrinter(){
+        
+    }
+    
+    /**
+     * Método principal de inicio de conexiones a la base de datos y
+     * la impresora fiscal.
+     */
+    public sta
+    
     
     /**
      * Retorna instancia de EntityManager

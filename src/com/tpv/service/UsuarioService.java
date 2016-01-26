@@ -6,7 +6,7 @@
 package com.tpv.service;
 
 import com.tpv.modelo.Usuario;
-import com.tpv.util.EmfConnection;
+import com.tpv.util.ConnectionState;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -21,7 +21,7 @@ public class UsuarioService {
     
     public boolean authenticar(String nombre,String password){
         boolean flagReturn=false;
-        EntityManager em = EmfConnection.getEm();
+        EntityManager em = ConnectionState.getEm();
         EntityTransaction tx = em.getTransaction();
         tx.begin();
         List usuarios = em.createQuery("FROM Usuario u WHERE u.nombre = :nombre").setParameter("nombre", nombre).getResultList();
