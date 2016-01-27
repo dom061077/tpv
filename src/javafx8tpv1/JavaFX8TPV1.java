@@ -14,6 +14,8 @@ import com.tpv.producto.BuscarPorDescProductoController;
 import com.tpv.util.Connection;
 import com.tpv.util.TpvLogger;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.Parent;
@@ -21,6 +23,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.datafx.controller.flow.Flow;
 //import org.datafx.samples.app.MasterViewController;
 import org.apache.log4j.Logger;
@@ -35,13 +38,38 @@ public class JavaFX8TPV1 extends Application {
     Logger logger = Logger.getLogger(JavaFX8TPV1.class);
     @Override
     public void start(Stage stage) throws Exception {
-        DOMConfigurator.configure(getClass().getResource("log4j.xml"));
         
+       stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent e) {
+               Platform.exit();
+               System.exit(0);
+            }
+       });
+        
+        DOMConfigurator.configure(getClass().getResource("log4j.xml"));
         try{
             
             Connection.initConnections();
-        }catch(Exception e){
+        }   catch(Exception e){
+            
         }
+        
+        Runnable task = () -> {
+            while(true){
+                try{
+                    Thread.sleep(500);
+                    
+                }catch(InterruptedException e){
+                    logger.info("Error en pausa de monitor de comunicaciones");
+                }
+                
+            }
+        };
+        
+        Thread thread = new Thread(task);
+        thread.start();
+        
         
         //Parent root = FXMLLoader.load(getClass().getResource("FXMLMain.fxml"));
       
