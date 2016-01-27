@@ -6,7 +6,7 @@
 package com.tpv.login;
 
 import com.tpv.principal.FXMLMainController;
-import com.tpv.util.ConnectionState;
+import com.tpv.util.Connection;
 import com.tpv.util.TpvLogger;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -40,7 +40,7 @@ public class ErrorController {
             Platform.runLater(()->{
                 logger = TpvLogger.getTpvLogger(FXMLMainController.class);
                 try{
-                    ConnectionState.initEmf();
+                    Connection.initConnections();
                 }catch(Exception e){
                     errorMsg.setText(e.getMessage());
                     logger.error("Error en la conexión con la base de datos");

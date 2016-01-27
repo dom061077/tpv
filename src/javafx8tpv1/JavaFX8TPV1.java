@@ -11,7 +11,7 @@ import com.tpv.login.LoginController;
 import com.tpv.pagoticket.PagoTicketController;
 import com.tpv.principal.FXMLMainController;
 import com.tpv.producto.BuscarPorDescProductoController;
-import com.tpv.util.ConnectionState;
+import com.tpv.util.Connection;
 import com.tpv.util.TpvLogger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -23,21 +23,24 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.datafx.controller.flow.Flow;
 //import org.datafx.samples.app.MasterViewController;
+import org.apache.log4j.Logger;
+import org.apache.log4j.xml.DOMConfigurator;
+
 
 /**
  *
  * @author daniel
  */
 public class JavaFX8TPV1 extends Application {
-    TpvLogger logger;
-    
+    Logger logger = Logger.getLogger(JavaFX8TPV1.class);
     @Override
     public void start(Stage stage) throws Exception {
-        logger = TpvLogger.getTpvLogger(JavaFX8TPV1.class);
+        DOMConfigurator.configure(getClass().getResource("log4j.xml"));
+        
         try{
-            ConnectionState.initEmf();
+            
+            Connection.initConnections();
         }catch(Exception e){
-            logger.error("No se pudo realizar la conexión a la base de datos");
         }
         
         //Parent root = FXMLLoader.load(getClass().getResource("FXMLMain.fxml"));
@@ -46,6 +49,7 @@ public class JavaFX8TPV1 extends Application {
                 , "buscarCliente", ClienteSceneController.class).withLink(
                         ClienteSceneController.class, "seleccionarCliente", FXMLMainController.class);
         */
+        logger.debug("Inicializando Flow de infaces gráficas");
         Flow flow = new Flow(LoginController.class).withLink(LoginController.class, "iniciarSesion", ErrorController.class)
                     //--flow ventana buscar cliente
                    .withLink(LoginController.class,"iniciarSesion",FXMLMainController.class)

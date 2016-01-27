@@ -69,6 +69,7 @@ public class TpvLogger extends Logger {
     public void info(String msg){
         if( this instanceof Logger){
             ((Logger)this).log(Level.INFO,msg);
+            
         }
         
     }

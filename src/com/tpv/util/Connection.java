@@ -5,6 +5,7 @@
  */
 package com.tpv.util;
 
+import javafx8tpv1.JavaFX8TPV1;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -14,7 +15,7 @@ import javax.persistence.Persistence;
  *
  * @author daniel
  */
-public class ConnectionState {
+public class Connection {
     /**
      * propiedad emf que será inicializada en el método getEmf
      */
@@ -46,7 +47,9 @@ public class ConnectionState {
      * Método principal de inicio de conexiones a la base de datos y
      * la impresora fiscal.
      */
-    public sta
+    public static void initConnections()throws Exception{
+        initEmf();
+    }
     
     
     /**
@@ -59,5 +62,10 @@ public class ConnectionState {
         }
         return em;
     }
+    
+    /**
+     * Retorna el estado de la conexión a la base de datos
+     */
+   
     
 }
