@@ -7,6 +7,7 @@ package com.tpv.principal;
 
 import com.tpv.modelo.Producto;
 import com.tpv.service.ProductoService;
+import com.tpv.util.Connection;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -60,6 +61,10 @@ public class FXMLMainController implements Initializable {
     
     @FXML
     private TableColumn subTotalColumn;
+    
+    @FXML
+    @ActionTrigger("gotoError")
+    private Button goToErrorButton;
     
     @FXML
     @ActionTrigger("buscarCliente")
@@ -134,6 +139,10 @@ public class FXMLMainController implements Initializable {
         });
 
         Platform.runLater(() -> {
+            
+            Connection.setButtonFlowFire(goToErrorButton);
+            
+            
             tableViewTickets.setItems(modelTicket.getTickets());
             calcularTotalGeneral();
             scrollDown();

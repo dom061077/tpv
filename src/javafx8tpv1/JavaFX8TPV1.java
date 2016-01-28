@@ -34,7 +34,7 @@ import org.apache.log4j.xml.DOMConfigurator;
  * @author daniel
  */
 public class JavaFX8TPV1 extends Application {
-    Logger logger = Logger.getLogger(JavaFX8TPV1.class);
+    Logger log = Logger.getLogger(JavaFX8TPV1.class);
     @Override
     public void start(Stage stage) throws Exception {
         
@@ -52,19 +52,21 @@ public class JavaFX8TPV1 extends Application {
             Connection.initConnections();
         }   catch(Exception e){
             
+            log.info("Error general de conexiòn");
         }
         
         Runnable task = () -> {
             while(true){
                 try{
                     Thread.sleep(500);
-                    if(!Connection.isDBConnected() && Connection.getStage()!=null){
-                        if(Connection.getStage() instanceof )
+                    if(!Connection.isDBConnected() && Connection.getButtonFlowFire()!=null){
+                        log.debug("Dispara evento de fallo de conexión");
+                        Connection.fireButtonEvent();
                     }
                         
                     
                 }catch(InterruptedException e){
-                    logger.info("Error en pausa de monitor de comunicaciones");
+                    log.info("Error en pausa de monitor de comunicaciones");
                 }
                 
             }
@@ -80,7 +82,7 @@ public class JavaFX8TPV1 extends Application {
                 , "buscarCliente", ClienteSceneController.class).withLink(
                         ClienteSceneController.class, "seleccionarCliente", FXMLMainController.class);
         */
-        logger.debug("Inicializando Flow de infaces gráficas");
+        log.debug("Inicializando Flow de infaces gráficas");
         Flow flow = new Flow(LoginController.class).withLink(LoginController.class, "goToError", ErrorController.class)
                     //--flow ventana buscar cliente
                    .withLink(LoginController.class,"iniciarSesion",FXMLMainController.class)
