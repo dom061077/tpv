@@ -50,6 +50,7 @@
                <font>
                   <Font name="Arial" size="14.0" />
                </font></PasswordField>
+            <Button fx:id="buttonGoToError" focusTraversable="false" mnemonicParsing="false" text="Button" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="5" />
          </children>
       </GridPane>
    </left>

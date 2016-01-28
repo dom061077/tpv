@@ -7,7 +7,6 @@ package com.tpv.login;
 
 import com.tpv.principal.FXMLMainController;
 import com.tpv.util.Connection;
-import com.tpv.util.TpvLogger;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -23,7 +22,6 @@ import org.datafx.controller.flow.action.ActionTrigger;
 
 @FXMLController(value="Error.fxml", title = "Error de Sistema")
 public class ErrorController {
-    TpvLogger logger = TpvLogger.getTpvLogger(ErrorController.class);
     @FXML
     @ActionTrigger("salir")
     private Button salirButton;
@@ -38,12 +36,10 @@ public class ErrorController {
     @PostConstruct
     public void init(){
             Platform.runLater(()->{
-                logger = TpvLogger.getTpvLogger(FXMLMainController.class);
                 try{
                     Connection.initConnections();
                 }catch(Exception e){
                     errorMsg.setText(e.getMessage());
-                    logger.error("Error en la conexión con la base de datos");
                 }
             });
                     

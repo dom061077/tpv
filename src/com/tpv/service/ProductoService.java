@@ -6,13 +6,14 @@
 package com.tpv.service;
 
 import com.tpv.modelo.Producto;
-import com.tpv.modelo.Usuario;
+import com.tpv.util.Connection;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
+import org.apache.log4j.Logger;
 
 /**
  * Clase de servicio de Producto, desde aqui se hacen todas las operaciones 
@@ -23,6 +24,7 @@ import javax.persistence.Query;
  * 
  */
 public class ProductoService {
+    Logger log = Logger.getLogger(ProductoService.class);
     
     /**
      * Este método se usa para traer todos los productos segun el parametro 
@@ -33,9 +35,9 @@ public class ProductoService {
      * 
     */
     public List getProductos(String filtro){
+        log.info("Filtro de búsqueda: "+filtro);
         List<Producto> productos;
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("tpvpersistence");        
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = Connection.getEm();
         EntityTransaction tx = em.getTransaction();
         tx.begin();
         int codigoProducto=0;
@@ -48,12 +50,14 @@ public class ProductoService {
         if(filtro==null)
             filtro="";
         if(codigoProducto>0){
+            log.info("Busqueda de productos por código");
             Query q = em.createQuery("FROM Producto p");
             q.setFirstResult(0);
             q.setMaxResults(100);
             productos = em.createQuery("FROM Producto p WHERE p.codigoProducto = :codigoProducto").setParameter("codigoProducto", codigoProducto).getResultList();
             productos = q.getResultList();
         }else{
+            log.info("Busqueda de productos por descripción o código de barra");
             Query q = em.createQuery("FROM Producto p WHERE p.descripcion like  :detalleSuc");
             q.setParameter("detalleSuc", "%"+filtro+"%");
             q.setFirstResult(0);
@@ -79,29 +83,34 @@ public class ProductoService {
         
         em.clear();
         em.close();
-        emf.close();
-        
         return productos;
     }
     
     public Producto getProductoPorCodigo(int filtroCodigo){
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("tpvpersistence");        
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = Connection.getEm();
         EntityTransaction tx = em.getTransaction();
         tx.begin();
         Query q = em.createQuery("FROM Producto p WHERE p.discontinuado = 0 and p.codigoProducto = :codigoProducto").setParameter("codigoProducto", filtroCodigo);
-        Producto producto = (Producto)q.getSingleResult();
+        
+        Producto producto = null;
+        try{
+            producto = (Producto)q.getSingleResult();
+        }catch(NoResultException e){
+            
+        }catch(NonUniqueResultException e){
+            
+        }catch(Exception e){
+            
+        }
         tx.commit();
-        em.clear();
-        em.close();
-        emf.close();
+        //em.clear();
+        //em.close();
         
         return producto;
     }
     
     public Producto getProductoPorCodBarra(String codigoBarra){
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("tpvpersistence");        
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = Connection.getEm();
         EntityTransaction tx = em.getTransaction();
         tx.begin();
         Query q = em.createQuery("FROM Producto p WHERE p.discontinuado = 0 and p.codBarra = :codBarra").setParameter("codBarra", codigoBarra);
@@ -109,7 +118,6 @@ public class ProductoService {
         tx.commit();
         em.clear();
         em.close();
-        emf.close();
         
         return producto;
     }

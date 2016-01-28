@@ -54,55 +54,16 @@
   <category name='org.apache' additivity='false'>
     <priority value='INFO' />
   </category>
-  <category name='org.jboss' additivity='false'>
-    <priority value='INFO' />
-  </category>
-  <category name='org.springframework' additivity='false'>
-    <priority value='INFO' />
-  </category>
-  <category name='org.codehaus' additivity='false'>
-    <priority value='INFO' />
-  </category>
-  <category name='org.mortbay' additivity='false'>
-    <priority value='INFO' />
-  </category>
-  <category name='groovy' additivity='false'>
-    <priority value='INFO' />
-  </category>
-  <category name='grails' additivity='false'>
-    <priority value='INFO' />
-  </category>
-  <category name='grails.app' additivity='true'>
+  <category name='com.tpv' additivity='true'>
     <priority value='TRACE' />
     <appender-ref ref='APP_LOG' />
     <appender-ref ref='CONSOLE' />
   </category>
-  <category name='org.quartz' additivity='true'>
-    <priority value='TRACE' />
-    <appender-ref ref='APP_LOG' />
-    <appender-ref ref='CONSOLE' />
-  </category>
-  <category name='org.springframework.transaction' additivity='false'>
-    <priority value='INFO' />
+  <category name='javax.persistence' additivity='false'>
+    <priority value='DEBUG' />
     <appender-ref ref='ORM_LOG' />
   </category>
-  <category name='org.springframework.orm' additivity='false'>
-    <priority value='INFO' />
-    <appender-ref ref='ORM_LOG' />
-  </category>
-  <category name='org.apache.openjpa' additivity='false'>
-    <priority value='INFO' />
-    <appender-ref ref='ORM_LOG' />
-  </category>
-  <category name='openjpa' additivity='false'>
-    <priority value='INFO' />
-    <appender-ref ref='ORM_LOG' />
-  </category>
-  <category name='org.h2' additivity='false'>
-    <priority value='INFO' />
-    <appender-ref ref='ORM_LOG' />
-  </category>
-  <category name='h2database' additivity='false'>
+  <category name='org.hibernate.SQL' additivity='false'>
     <priority value='INFO' />
     <appender-ref ref='ORM_LOG' />
   </category>

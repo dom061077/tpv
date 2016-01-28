@@ -12,7 +12,6 @@ import com.tpv.pagoticket.PagoTicketController;
 import com.tpv.principal.FXMLMainController;
 import com.tpv.producto.BuscarPorDescProductoController;
 import com.tpv.util.Connection;
-import com.tpv.util.TpvLogger;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -59,6 +58,10 @@ public class JavaFX8TPV1 extends Application {
             while(true){
                 try{
                     Thread.sleep(500);
+                    if(!Connection.isDBConnected() && Connection.getStage()!=null){
+                        if(Connection.getStage() instanceof )
+                    }
+                        
                     
                 }catch(InterruptedException e){
                     logger.info("Error en pausa de monitor de comunicaciones");
@@ -78,7 +81,7 @@ public class JavaFX8TPV1 extends Application {
                         ClienteSceneController.class, "seleccionarCliente", FXMLMainController.class);
         */
         logger.debug("Inicializando Flow de infaces gráficas");
-        Flow flow = new Flow(LoginController.class).withLink(LoginController.class, "iniciarSesion", ErrorController.class)
+        Flow flow = new Flow(LoginController.class).withLink(LoginController.class, "goToError", ErrorController.class)
                     //--flow ventana buscar cliente
                    .withLink(LoginController.class,"iniciarSesion",FXMLMainController.class)
                    .withLink(FXMLMainController.class,"buscarCliente", ClienteSceneController.class)

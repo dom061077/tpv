@@ -5,10 +5,15 @@
  */
 package com.tpv.util;
 
+import com.tpv.service.UsuarioService;
+import javafx.stage.Stage;
 import javafx8tpv1.JavaFX8TPV1;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
+import org.apache.log4j.Logger;
 
 /**
  * Clase que permite EntityManagerFactory para poder comunicarse con la base de datos.
@@ -21,6 +26,8 @@ public class Connection {
      */
     private static EntityManagerFactory emf;
     private static EntityManager em;
+    private static Logger log = Logger.getLogger(Connection.class);
+    private static Stage stage=null;
     
     /**
      * Este método cumple la función de obligar a la creación de la instancia
@@ -66,6 +73,37 @@ public class Connection {
     /**
      * Retorna el estado de la conexión a la base de datos
      */
-   
+    public static boolean isDBConnected(){
+        EntityTransaction tx = em.getTransaction();
+        tx.begin();
+        Query q = em.createNativeQuery("SELECT 1");
+        try{
+            q.getSingleResult();
+            return true;
+        }catch(Exception e){
+            log.error("La conexión a la base de datos no responde");
+        }finally{
+            tx.commit();
+            em.clear();
+            return false;
+        }
+        
+        
+    }
     
+    /**
+     * Metodo para recuperar el stage actual mientras el thread de test de conexión
+     * 
+     */
+    public static Stage getStage(){
+        return stage;
+    }
+    
+    /**
+     * Método para fijar el stage actual mientras el thread de test de conexión
+     * 
+     */
+    public static void setStage(Stage stage){
+        stage = stage;
+    }
 }

@@ -7,7 +7,6 @@ package com.tpv.principal;
 
 import com.tpv.modelo.Producto;
 import com.tpv.service.ProductoService;
-import com.tpv.util.TpvLogger;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -27,7 +26,6 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.datafx.controller.FXMLController;
 import org.datafx.controller.flow.action.ActionTrigger;
-import com.tpv.util.TpvLogger;
 
 /**
  *
@@ -36,7 +34,6 @@ import com.tpv.util.TpvLogger;
 @FXMLController(value="FXMLMain.fxml", title = "Edit user")
 public class FXMLMainController implements Initializable {
     ProductoService productoService = new ProductoService();
-    TpvLogger logger;
     
     @FXML
     private TextField textFieldProducto;
@@ -137,13 +134,11 @@ public class FXMLMainController implements Initializable {
         });
 
         Platform.runLater(() -> {
-            logger = TpvLogger.getTpvLogger(FXMLMainController.class);
             tableViewTickets.setItems(modelTicket.getTickets());
             calcularTotalGeneral();
             scrollDown();
             textFieldProducto.requestFocus();
             textFieldProducto.setOnKeyPressed(keyEvent -> {
-                logger.info("Tecla pulsada: "+keyEvent.getCode());
                 if(keyEvent.getCode() == KeyCode.F2){
                     clienteButton.fire();
                     keyEvent.consume();
@@ -171,7 +166,6 @@ public class FXMLMainController implements Initializable {
                     tableViewTickets.getSelectionModel().selectNext();
                     index = tableViewTickets.getSelectionModel().getSelectedIndex();
                     tableViewTickets.scrollTo(index);
-                    logger.info("Se avanzó una linea");
                 }
                 if(keyEvent.getCode() == KeyCode.PAGE_UP){
                     tableViewTickets.getSelectionModel().selectPrevious();

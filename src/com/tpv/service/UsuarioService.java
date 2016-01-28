@@ -9,17 +9,17 @@ import com.tpv.modelo.Usuario;
 import com.tpv.util.Connection;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import org.apache.log4j.Logger;
 
 /**
  *
  * @author daniel
  */
 public class UsuarioService {
-    
+    Logger log = Logger.getLogger(UsuarioService.class);
     public boolean authenticar(String nombre,String password){
+        log.info("Autenticando usuario: "+nombre);
         boolean flagReturn=false;
         EntityManager em = Connection.getEm();
         EntityTransaction tx = em.getTransaction();
