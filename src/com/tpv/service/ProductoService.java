@@ -39,9 +39,8 @@ public class ProductoService {
         List<Producto> productos;
         EntityManager em = Connection.getEm();
         EntityTransaction tx = em.getTransaction();
-        if(tx.isActive())
-            tx.rollback();
-        tx.begin();
+        if(!tx.isActive())
+           tx.begin();
         int codigoProducto=0;
         
         try{
@@ -84,7 +83,7 @@ public class ProductoService {
         
         
         em.clear();
-        em.close();
+        //em.close();
         return productos;
     }
     
@@ -107,9 +106,8 @@ public class ProductoService {
         }finally{
             
         }
-        if(tx.isActive())
-            tx.commit();
-        //em.clear();
+        tx.commit();
+        em.clear();
         //em.close();
         
         return producto;
