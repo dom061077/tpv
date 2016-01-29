@@ -39,6 +39,8 @@ public class ProductoService {
         List<Producto> productos;
         EntityManager em = Connection.getEm();
         EntityTransaction tx = em.getTransaction();
+        if(tx.isActive())
+            tx.rollback();
         tx.begin();
         int codigoProducto=0;
         
@@ -89,7 +91,8 @@ public class ProductoService {
     public Producto getProductoPorCodigo(int filtroCodigo){
         EntityManager em = Connection.getEm();
         EntityTransaction tx = em.getTransaction();
-        tx.begin();
+        if(!tx.isActive())
+            tx.begin();
         Query q = em.createQuery("FROM Producto p WHERE p.discontinuado = 0 and p.codigoProducto = :codigoProducto").setParameter("codigoProducto", filtroCodigo);
         
         Producto producto = null;
@@ -101,8 +104,11 @@ public class ProductoService {
             
         }catch(Exception e){
             
+        }finally{
+            
         }
-        tx.commit();
+        if(tx.isActive())
+            tx.commit();
         //em.clear();
         //em.close();
         

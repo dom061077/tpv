@@ -48,14 +48,15 @@ public class JavaFX8TPV1 extends Application {
         
         DOMConfigurator.configure(getClass().getResource("log4j.xml"));
         try{
-            
+            log.debug("INICIANDO LAS CONEXIONES");
             Connection.initConnections();
+            
         }   catch(Exception e){
             
             log.info("Error general de conexiòn");
         }
         
-        Runnable task = () -> {
+        /*Runnable task = () -> {
             while(true){
                 try{
                     Thread.sleep(500);
@@ -74,7 +75,7 @@ public class JavaFX8TPV1 extends Application {
         
         Thread thread = new Thread(task);
         thread.start();
-        
+        */
         
         //Parent root = FXMLLoader.load(getClass().getResource("FXMLMain.fxml"));
       

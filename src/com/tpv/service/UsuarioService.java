@@ -23,7 +23,8 @@ public class UsuarioService {
         boolean flagReturn=false;
         EntityManager em = Connection.getEm();
         EntityTransaction tx = em.getTransaction();
-        tx.begin();
+        if(!tx.isActive())
+            tx.begin();
         List usuarios = em.createQuery("FROM Usuario u WHERE u.nombre = :nombre").setParameter("nombre", nombre).getResultList();
         
 

@@ -6,6 +6,7 @@
 package com.tpv.util;
 
 import com.tpv.service.UsuarioService;
+import java.net.SocketException;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx8tpv1.JavaFX8TPV1;
@@ -38,6 +39,7 @@ public class Connection {
     
     private static void initEmf() throws Exception{
         emf = Persistence.createEntityManagerFactory("tpvpersistence");
+        
         
         if(emf==null)
             throw new Exception("No se pudo realizar la conexión con la base de datos");
@@ -80,14 +82,20 @@ public class Connection {
     public static boolean isDBConnected(){
         if(getEm()==null)
             return false;
+        if(!em.isOpen()){
+            log.debug("EntityManager está cerrado");
+            return false;
+        }
         EntityTransaction tx = em.getTransaction();
         //tx.begin();
         Query q = em.createNativeQuery("SELECT 1");
         try{
             q.getSingleResult();
             return true;
-        }catch(Exception e){
-            log.error("La conexión a la base de datos no responde");
+        //}catch(Exception e){
+        //    log.error("La conexión a la base de datos no responde");
+        }catch(Exception e)    {
+            log.debug("EXCEPCION ATRAPADA en q.getSingleResult");
         }finally{
             //tx.commit();
             em.clear();
