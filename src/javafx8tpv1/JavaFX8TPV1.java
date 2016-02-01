@@ -10,6 +10,7 @@ import com.tpv.login.ErrorController;
 import com.tpv.login.LoginController;
 import com.tpv.pagoticket.PagoTicketController;
 import com.tpv.principal.FXMLMainController;
+import com.tpv.principal.MenuPrincipalController;
 import com.tpv.producto.BuscarPorDescProductoController;
 import com.tpv.util.Connection;
 import javafx.application.Application;
@@ -86,8 +87,10 @@ public class JavaFX8TPV1 extends Application {
         log.debug("Inicializando Flow de infaces gráficas");
         Flow flow = new Flow(LoginController.class).withLink(LoginController.class, "goToError", ErrorController.class)
                     //--flow ventana buscar cliente
-                   .withLink(LoginController.class,"iniciarSesion",FXMLMainController.class)
+                   .withLink(LoginController.class,"iniciarSesion",MenuPrincipalController.class)
+                   .withLink(MenuPrincipalController.class, "facturacion", FXMLMainController.class)
                    .withLink(FXMLMainController.class,"buscarCliente", ClienteSceneController.class)
+                   .withLink(FXMLMainController.class, "volverMenuPrincipal", MenuPrincipalController.class)
                    .withLink(ClienteSceneController.class, "seleccionarCliente", FXMLMainController.class)
                     //  flow ventana buscar por descripcion de producto
                    .withLink(FXMLMainController.class,"buscarProducto",BuscarPorDescProductoController.class)

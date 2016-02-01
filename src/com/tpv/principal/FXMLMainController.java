@@ -8,6 +8,8 @@ package com.tpv.principal;
 import com.tpv.modelo.Producto;
 import com.tpv.service.ProductoService;
 import com.tpv.util.Connection;
+import com.tpv.util.ui.MaskTextField;
+import com.tpv.util.ui.RestrictiveTextField;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -23,6 +25,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.GridPane;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.datafx.controller.FXMLController;
@@ -34,13 +37,23 @@ import org.datafx.controller.flow.action.ActionTrigger;
  */
 @FXMLController(value="FXMLMain.fxml", title = "Edit user")
 public class FXMLMainController implements Initializable {
+    private final static String LABEL_CANTIDAD="Cantidad:";
+    private final static String LABEL_CANTIDAD_INGRESADA="(Cantidad->";
+    
     ProductoService productoService = new ProductoService();
     
-    @FXML
-    private TextField textFieldProducto;
+    private MaskTextField textFieldProducto;
+    private MaskTextField textFieldCantidad;
     
     @FXML
-    private Label label;
+    private GridPane gridPaneCodigoProducto;
+    
+    @FXML
+    private Label labelProducto;
+    
+    @FXML
+    private Label labelCantidad;
+    
     @FXML
     private Button button;
     
@@ -79,6 +92,11 @@ public class FXMLMainController implements Initializable {
     private Button pagoTicketButton;
     
     @FXML
+    @ActionTrigger("volverMenuPrincipal")
+    private Button volverMenuPrincipalButton;
+    
+   
+    @FXML
     private Label totalGeneral;
     
     @Inject
@@ -92,7 +110,21 @@ public class FXMLMainController implements Initializable {
     
     @PostConstruct
     public void init(){
+        labelCantidad.setText(LABEL_CANTIDAD);
+        textFieldProducto = new MaskTextField();
+        textFieldCantidad = new MaskTextField();
         
+        
+        textFieldProducto.setMask("N!");
+        textFieldCantidad.setMask("N!.N!");
+        textFieldCantidad.setVisible(false);
+        textFieldCantidad.setPrefWidth(150);
+        //textFieldProducto.setPrefWidth(400);
+        //gridPaneCodigoProducto.setPrefWidth(150);
+        
+        
+        gridPaneCodigoProducto.add(textFieldProducto,1,0);
+        gridPaneCodigoProducto.add(textFieldCantidad,1,1);
         codigoColumn.setCellValueFactory(new PropertyValueFactory<LineaTicketData,Integer>("codigoProducto"));
         codigoColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
         descripcionColumn.setCellValueFactory(new PropertyValueFactory("descripcion"));
@@ -146,6 +178,26 @@ public class FXMLMainController implements Initializable {
             tableViewTickets.setItems(modelTicket.getTickets());
             calcularTotalGeneral();
             scrollDown();
+            
+            
+            textFieldCantidad.setOnKeyPressed(keyEvent ->{
+                if(keyEvent.getCode() == KeyCode.ENTER ||
+                        keyEvent.getCode() == KeyCode.ESCAPE){
+                    if(keyEvent.getCode() == KeyCode.ENTER){
+                        labelCantidad.setText(LABEL_CANTIDAD_INGRESADA+textFieldCantidad.getText()+"): ");
+                    }else{
+                        labelCantidad.setVisible(false);                                                
+                    }
+                    if(textFieldCantidad.isVisible()){
+                        textFieldProducto.setVisible(true);
+                        labelProducto.setVisible(true);
+                        textFieldCantidad.setVisible(false);
+                        
+                    }
+                    
+                }
+            });
+            
             textFieldProducto.requestFocus();
             textFieldProducto.setOnKeyPressed(keyEvent -> {
                 if(keyEvent.getCode() == KeyCode.F2){
@@ -156,12 +208,14 @@ public class FXMLMainController implements Initializable {
                     buscarProductoButton.fire();
                     keyEvent.consume();
                 }
-                if(keyEvent.getCode() == KeyCode.F4){
+                /*if(keyEvent.getCode() == KeyCode.F4){
                     pagoTicketButton.fire();
                     keyEvent.consume();
-                }
+                }*/
                 if(keyEvent.getCode() == KeyCode.ENTER){
-                    
+                    if(labelCantidad.isVisible()){
+                        labelCantidad.setVisible(false);
+                    }
                     if(textFieldProducto.getText().trim().length()>0){
                         agregarLineaTicket();
                         scrollDown();
@@ -180,6 +234,16 @@ public class FXMLMainController implements Initializable {
                     tableViewTickets.getSelectionModel().selectPrevious();
                     index = tableViewTickets.getSelectionModel().getSelectedIndex();
                     tableViewTickets.scrollTo(index);
+                }
+                if(keyEvent.getCode() == KeyCode.F11){
+                    volverMenuPrincipalButton.fire();
+                }
+                if(keyEvent.getCode() == KeyCode.F4){
+                        textFieldCantidad.setVisible(true);
+                        textFieldProducto.setVisible(false);
+                        labelCantidad.setText(LABEL_CANTIDAD);
+                        labelCantidad.setVisible(true);
+                        labelProducto.setVisible(false);
                 }
                 
             });
@@ -246,7 +310,13 @@ public class FXMLMainController implements Initializable {
     private void agregarLineaTicket(){
         
         int codigoIngresado=0;
+        int cantidad = 1;
         Producto producto;
+        try{
+            cantidad = Integer.parseInt(textFieldCantidad.getText());
+        }catch(Exception e){
+            
+        }
         try{
             codigoIngresado = Integer.parseInt(textFieldProducto.getText());
         }catch(Exception e){
@@ -259,7 +329,7 @@ public class FXMLMainController implements Initializable {
         }
         if(producto!=null){
             modelTicket.getTickets().add(new LineaTicketData(producto.getCodigoProducto()
-                    ,producto.getDescripcion(),1,new BigDecimal(10)));
+                    ,producto.getDescripcion(),cantidad,new BigDecimal(10)));
         }
         textFieldProducto.setText("");
         calcularTotalGeneral();

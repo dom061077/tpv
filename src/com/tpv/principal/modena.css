@@ -3418,3 +3418,9 @@ is being used to size a border should also be in pixels.
 .alert.warning.dialog-pane {
     -fx-graphic: url("dialog-warning.png");
 }
+
+.aalabel{
+    -fx-text-fill: #3062e1;
+    -fx-font-weight: bold;
+    -fx-font-size:64;
+}
