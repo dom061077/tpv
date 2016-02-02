@@ -44,6 +44,7 @@ public class FXMLMainController implements Initializable {
     
     private MaskTextField textFieldProducto;
     private MaskTextField textFieldCantidad;
+    private MaskTextField textFieldCodCliente;
     
     @FXML
     private GridPane gridPaneCodigoProducto;
@@ -112,19 +113,38 @@ public class FXMLMainController implements Initializable {
     public void init(){
         labelCantidad.setText(LABEL_CANTIDAD);
         textFieldProducto = new MaskTextField();
-        textFieldCantidad = new MaskTextField();
-        
-        
         textFieldProducto.setMask("N!");
+        textFieldProducto.setStyle(
+                "-fx-background-color: none, none, none;//-fx-shadow-highlight-color, -fx-text-box-border, -fx-control-inner-background;"
+                +"-fx-background-insets: 0, 1, 2;"
+                +"-fx-background-radius: 3, 2, 2;"
+                +"-fx-padding: 0.25em 0.416667em  0.333333em 0.416667em; "
+                +"-fx-text-fill: -fx-text-inner-color;"
+                +"-fx-prompt-text-fill: derive(-fx-control-inner-background,-30%);"
+                +"-fx-cursor: text;"
+        );
+        textFieldProducto.setVisible(false);
+        
+        textFieldCantidad = new MaskTextField();
         textFieldCantidad.setMask("N!.N!");
         textFieldCantidad.setVisible(false);
         textFieldCantidad.setPrefWidth(150);
-        //textFieldProducto.setPrefWidth(400);
-        //gridPaneCodigoProducto.setPrefWidth(150);
+        textFieldCantidad.setMaxWidth(150);
+        
+        textFieldCodCliente = new MaskTextField();
+        textFieldCodCliente.setMask("N!");
+        textFieldCodCliente.setPrefWidth(150);
+        textFieldCodCliente.setMaxWidth(150);
         
         
-        gridPaneCodigoProducto.add(textFieldProducto,1,0);
-        gridPaneCodigoProducto.add(textFieldCantidad,1,1);
+        
+        
+        gridPaneCodigoProducto.add(textFieldCodCliente,1,0);
+        gridPaneCodigoProducto.add(textFieldProducto,1,1);
+        gridPaneCodigoProducto.add(textFieldCantidad,1,2);
+        
+        
+        
         codigoColumn.setCellValueFactory(new PropertyValueFactory<LineaTicketData,Integer>("codigoProducto"));
         codigoColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
         descripcionColumn.setCellValueFactory(new PropertyValueFactory("descripcion"));

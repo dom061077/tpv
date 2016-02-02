@@ -1,1 +1,1 @@
-2016-01-31 23:02:03,711 DEBUG [SQL                           ]      select usuario0_.idUSUARIOS as idUSUARI1_4_, usuario0_.NOMBRE as NOMBRE2_4_, usuario0_.PASSWORD as PASSWORD3_4_ from usuarios usuario0_ where usuario0_.NOMBRE=?
+2016-02-01 22:45:58,641 DEBUG [SQL                           ]      select usuario0_.idUSUARIOS as idUSUARI1_4_, usuario0_.NOMBRE as NOMBRE2_4_, usuario0_.PASSWORD as PASSWORD3_4_ from usuarios usuario0_ where usuario0_.NOMBRE=?

@@ -1358,14 +1358,36 @@
  *                                                                             *
  ******************************************************************************/
 
+
+.text-login {
+    
+	/*font-family: "Roboto", "Droid Sans", sans-serif;*/
+	-fx-font-size: 16px;
+	-fx-margin: 0;
+	-fx-padding: 8px 8px 6px 8px;
+	-fx-position: relative;
+	-fx-display: block;
+	-fx-outline: none;
+	-fx-border: none;
+	-fx-background: bottom left linear-gradient(#a9a9a9, #a9a9a9) no-repeat, bottom center linear-gradient(#a9a9a9, #a9a9a9) repeat-x, bottom right linear-gradient(#a9a9a9, #a9a9a9) no-repeat;
+	-fx-background-size: 1px 6px, 1px 1px, 1px 6px;
+}
+.text-login:focus {
+	-fx-background: bottom left linear-gradient(#0099cc, #0099cc) no-repeat, bottom center linear-gradient(#0099cc, #0099cc) repeat-x, bottom right linear-gradient(#0099cc, #0099cc) no-repeat;
+	-fx-background-size: 1px 6px, 1px 1px, 1px 6px;	
+} 
+
+
+
 .text-field {
     -fx-background-color: -fx-shadow-highlight-color, -fx-text-box-border, -fx-control-inner-background;
     -fx-background-insets: 0, 1, 2;
     -fx-background-radius: 3, 2, 2;
-    -fx-padding: 0.25em 0.416667em  0.333333em 0.416667em; /* 3 5 4 5 */
+    -fx-padding: 0.25em 0.416667em  0.333333em 0.416667em; 
     -fx-text-fill: -fx-text-inner-color;
     -fx-prompt-text-fill: derive(-fx-control-inner-background,-30%);
     -fx-cursor: text;
+    
     
 }
 
@@ -4308,21 +4330,32 @@ to the top and bottom -fx-padding values of the parent toolbar. */
    */
 }
 
-input.inputcodcantidad[type='text'] {
-	/* You can set width to whatever you like */
-    width: 200px;
-	font-family: "Roboto", "Droid Sans", sans-serif;
-	font-size: 16px;
-	margin: 0;
-	padding: 8px 8px 6px 8px;
-	position: relative;
-	display: block;
-	outline: none;
-	border: none;
-	background: bottom left linear-gradient(#a9a9a9, #a9a9a9) no-repeat, bottom center linear-gradient(#a9a9a9, #a9a9a9) repeat-x, bottom right linear-gradient(#a9a9a9, #a9a9a9) no-repeat;
-	background-size: 1px 6px, 1px 1px, 1px 6px;
+
+
+.label_menu{
+    -fx-text-fill: #3062e1;
+    -fx-font-weight: bold;
+    -fx-font-size:64;
 }
-input.inputcodcantidad[type='text']:hover, input.holo[type='text']:focus {
-	background: bottom left linear-gradient(#0099cc, #0099cc) no-repeat, bottom center linear-gradient(#0099cc, #0099cc) repeat-x, bottom right linear-gradient(#0099cc, #0099cc) no-repeat;
-	background-size: 1px 6px, 1px 1px, 1px 6px;	
-} 
+
+.label_titulo{
+    -fx-text-fill: #3062e1;
+    -fx-font-weight: bold;
+    -fx-font-size:45;
+    
+}
+
+.label_textfield{
+    -fx-text-fill: #3757a7;
+    -fx-font-weight: bold;
+    -fx-font-size:25;
+    
+}
+
+.label_shorcut{
+    -fx-text-fill: #3757a7;
+    -fx-font-weight: bold;
+    -fx-font-size:12;
+    
+}
+
