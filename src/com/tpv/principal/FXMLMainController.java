@@ -56,6 +56,9 @@ public class FXMLMainController implements Initializable {
     private Label labelCantidad;
     
     @FXML
+    private Label labelCliente;
+    
+    @FXML
     private Button button;
     
     @FXML
@@ -199,6 +202,16 @@ public class FXMLMainController implements Initializable {
             calcularTotalGeneral();
             scrollDown();
             
+            textFieldCodCliente.setOnKeyPressed(keyEvent ->{
+                if(keyEvent.getCode()== KeyCode.ENTER){
+                    if(textFieldCodCliente.getText().trim().equals("")){
+                        labelCliente.setVisible(false);
+                        textFieldCodCliente.setVisible(false);
+                        labelProducto.setVisible(true);
+                        textFieldProducto.setVisible(true);
+                    } 
+                }
+            });
             
             textFieldCantidad.setOnKeyPressed(keyEvent ->{
                 if(keyEvent.getCode() == KeyCode.ENTER ||
@@ -353,6 +366,7 @@ public class FXMLMainController implements Initializable {
         }
         textFieldProducto.setText("");
         calcularTotalGeneral();
+        textFieldCantidad.setText("");
     }
     
 }

@@ -5,19 +5,19 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="398.0" prefWidth="780.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1296.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
    <top>
       <BorderPane prefHeight="120.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <center>
             <FlowPane prefHeight="127.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label alignment="CENTER" contentDisplay="RIGHT" prefHeight="77.0" prefWidth="117.0" text="Ingrese Filtro:" textAlignment="RIGHT" />
+                  <Label alignment="CENTER" contentDisplay="RIGHT" prefHeight="77.0" prefWidth="204.0" styleClass="label_textfield" text="Ingrese Filtro:" textAlignment="RIGHT" />
                   <TextField fx:id="filtroProducto" prefHeight="25.0" prefWidth="244.0" />
                </children>
             </FlowPane>
          </center>
          <top>
-            <Label text="Buscar Producto por Descripción" textFill="#3062e1" BorderPane.alignment="CENTER">
+            <Label styleClass="label_titulo" text="Buscar Producto por Descripción" textFill="#3062e1" BorderPane.alignment="CENTER">
                <font>
                   <Font name="Arial" size="24.0" />
                </font>
@@ -37,7 +37,7 @@
       <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <columns>
           <TableColumn fx:id="codigoColumn" prefWidth="103.0" text="Código" />
-          <TableColumn fx:id="descripcionColumn" prefWidth="522.0" text="Descripción" />
+          <TableColumn fx:id="descripcionColumn" prefWidth="700.0" text="Descripción" />
         </columns>
       </TableView>
    </center>
