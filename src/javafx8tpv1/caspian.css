@@ -4352,6 +4352,20 @@ to the top and bottom -fx-padding values of the parent toolbar. */
     
 }
 
+.label_cliente{
+    -fx-text-fill: #3757a7;
+    -fx-font-weight: bold;
+    -fx-font-size:22;
+}
+
+
+.label_nroticket{
+    -fx-text-fill: #3757a7;
+    -fx-font-weight: bold;
+    -fx-font-size:18;
+}
+
+
 .label_shorcut{
     -fx-text-fill: #3757a7;
     -fx-font-weight: bold;

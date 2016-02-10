@@ -26,6 +26,8 @@ public class Cliente {
     
     @Column(name = "DNI")
     private int dni;
+    
+    @Column(name = "CUIT")
 
     /**
      * @return the id

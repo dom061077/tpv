@@ -5,11 +5,12 @@
  */
 package com.tpv.principal;
 
+import com.tpv.modelo.Cliente;
 import com.tpv.modelo.Producto;
+import com.tpv.service.ClienteService;
 import com.tpv.service.ProductoService;
 import com.tpv.util.Connection;
 import com.tpv.util.ui.MaskTextField;
-import com.tpv.util.ui.RestrictiveTextField;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -22,7 +23,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
@@ -33,6 +33,7 @@ import org.datafx.controller.flow.action.ActionTrigger;
 
 /**
  *
+ * 
  * @author daniel
  */
 @FXMLController(value="FXMLMain.fxml", title = "Edit user")
@@ -41,6 +42,8 @@ public class FXMLMainController implements Initializable {
     private final static String LABEL_CANTIDAD_INGRESADA="(Cantidad->";
     
     ProductoService productoService = new ProductoService();
+    ClienteService clienteService = new ClienteService();
+    
     
     private MaskTextField textFieldProducto;
     private MaskTextField textFieldCantidad;
@@ -57,6 +60,9 @@ public class FXMLMainController implements Initializable {
     
     @FXML
     private Label labelCliente;
+    
+    @FXML
+    private Label nombreCliente;
     
     @FXML
     private Button button;
@@ -126,26 +132,7 @@ public class FXMLMainController implements Initializable {
                 +"-fx-prompt-text-fill: derive(-fx-control-inner-background,-30%);"
                 +"-fx-cursor: text;"
         );
-        textFieldProducto.setVisible(false);
-        
-        textFieldCantidad = new MaskTextField();
-        textFieldCantidad.setMask("N!.N!");
-        textFieldCantidad.setVisible(false);
-        textFieldCantidad.setPrefWidth(150);
-        textFieldCantidad.setMaxWidth(150);
-        
-        textFieldCodCliente = new MaskTextField();
-        textFieldCodCliente.setMask("N!");
-        textFieldCodCliente.setPrefWidth(150);
-        textFieldCodCliente.setMaxWidth(150);
-        
-        
-        
-        
-        gridPaneCodigoProducto.add(textFieldCodCliente,1,0);
-        gridPaneCodigoProducto.add(textFieldProducto,1,1);
-        gridPaneCodigoProducto.add(textFieldCantidad,1,2);
-        
+        iniciaIngresosVisibles();
         
         
         codigoColumn.setCellValueFactory(new PropertyValueFactory<LineaTicketData,Integer>("codigoProducto"));
@@ -209,6 +196,9 @@ public class FXMLMainController implements Initializable {
                         textFieldCodCliente.setVisible(false);
                         labelProducto.setVisible(true);
                         textFieldProducto.setVisible(true);
+                        modelTicket.setClienteSeleccionado(true);
+                    }else{
+                        traerCliente();
                     } 
                 }
             });
@@ -217,7 +207,7 @@ public class FXMLMainController implements Initializable {
                 if(keyEvent.getCode() == KeyCode.ENTER ||
                         keyEvent.getCode() == KeyCode.ESCAPE){
                     if(keyEvent.getCode() == KeyCode.ENTER){
-                        labelCantidad.setText(LABEL_CANTIDAD_INGRESADA+textFieldCantidad.getText()+"): ");
+                        labelCantidad.setText(LABEL_CANTIDAD_INGRESADA+textFieldCantidad.getText()+")");
                     }else{
                         labelCantidad.setVisible(false);                                                
                     }
@@ -259,15 +249,31 @@ public class FXMLMainController implements Initializable {
                 int index=0;
                 if(keyEvent.getCode() == KeyCode.PAGE_DOWN){
                     
-                    tableViewTickets.getSelectionModel().selectNext();
                     index = tableViewTickets.getSelectionModel().getSelectedIndex();
-                    tableViewTickets.scrollTo(index);
+                    tableViewTickets.getSelectionModel().select(index+20);
+                    tableViewTickets.scrollTo(index+21);
                 }
                 if(keyEvent.getCode() == KeyCode.PAGE_UP){
-                    tableViewTickets.getSelectionModel().selectPrevious();
                     index = tableViewTickets.getSelectionModel().getSelectedIndex();
-                    tableViewTickets.scrollTo(index);
+                    tableViewTickets.getSelectionModel().select(index-20);
+                    tableViewTickets.scrollTo(index-21);
+                    
+                    
                 }
+                if(keyEvent.getCode() == KeyCode.DOWN){
+                    tableViewTickets.getSelectionModel().selectNext();
+                    index =tableViewTickets.getSelectionModel().getSelectedIndex();
+                    tableViewTickets.scrollTo(index);
+                            
+                }
+                
+                if(keyEvent.getCode() == KeyCode.UP){
+                    tableViewTickets.getSelectionModel().selectPrevious();
+                    index =tableViewTickets.getSelectionModel().getSelectedIndex();
+                    tableViewTickets.scrollTo(index);
+                    
+                }
+                
                 if(keyEvent.getCode() == KeyCode.F11){
                     volverMenuPrincipalButton.fire();
                 }
@@ -369,4 +375,54 @@ public class FXMLMainController implements Initializable {
         textFieldCantidad.setText("");
     }
     
+    public void iniciaIngresosVisibles(){
+        textFieldProducto.setVisible(false);
+        
+        textFieldCantidad = new MaskTextField();
+        textFieldCantidad.setMask("N!.N!");
+        textFieldCantidad.setVisible(false);
+        textFieldCantidad.setPrefWidth(150);
+        textFieldCantidad.setMaxWidth(150);
+        
+        textFieldCodCliente = new MaskTextField();
+        textFieldCodCliente.setMask("N!");
+        textFieldCodCliente.setPrefWidth(150);
+        textFieldCodCliente.setMaxWidth(150);
+        
+        
+        
+        
+        gridPaneCodigoProducto.add(textFieldCodCliente,1,1);
+        gridPaneCodigoProducto.add(textFieldProducto,1,2);
+        gridPaneCodigoProducto.add(textFieldCantidad,1,3);
+        
+        if(modelTicket.isClienteSeleccionado()){
+            labelProducto.setVisible(true);
+            textFieldProducto.setVisible(true);
+            labelCliente.setVisible(false);
+            textFieldCodCliente.setVisible(false);
+            if(modelTicket.getCliente()!=null){
+                nombreCliente.setText(modelTicket.getCliente().getRazonSocial());
+            }
+        }else{
+            nombreCliente.setVisible(false);
+        }
+                
+    }
+
+    public void traerCliente(){
+        Cliente cliente = clienteService.getClientePorCodYDni(Integer.parseInt(textFieldCodCliente.getText()));
+        if(cliente!=null){
+            nombreCliente.setText(cliente.getRazonSocial());
+            nombreCliente.setVisible(true);
+            labelCliente.setVisible(false);
+            textFieldCodCliente.setVisible(false);
+            labelProducto.setVisible(true);
+            textFieldProducto.setVisible(true);
+            modelTicket.setClienteSeleccionado(true);
+            modelTicket.setCliente(cliente);
+            
+            
+        }
+    }
 }

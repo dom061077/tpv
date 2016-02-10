@@ -5,6 +5,7 @@
  */
 package com.tpv.principal;
 
+import com.tpv.modelo.Cliente;
 import java.math.BigDecimal;
 import java.util.Iterator;
 import javafx.beans.property.ListProperty;
@@ -22,7 +23,8 @@ import org.datafx.controller.flow.injection.FlowScoped;
 @FlowScoped
 public class DataModelTicket {
     private ListProperty<LineaTicketData> tickets;
-    
+    private Cliente cliente = null;
+    private boolean clienteSelecciondo = false;
     public ListProperty<LineaTicketData> getTickets() {
         if (tickets == null) {
             ObservableList<LineaTicketData> innerList = FXCollections.observableArrayList();
@@ -41,6 +43,28 @@ public class DataModelTicket {
         }
         
         return BigDecimal.valueOf(total);
+    }
+
+    /**
+     * @return the cliente
+     */
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    /**
+     * @param cliente the cliente to set
+     */
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+    
+    public void setClienteSeleccionado(boolean seleccionado){
+        this.clienteSelecciondo = seleccionado;
+    }
+    
+    public boolean isClienteSeleccionado(){
+        return this.clienteSelecciondo;
     }
     
 }

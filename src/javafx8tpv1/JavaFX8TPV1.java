@@ -108,6 +108,7 @@ public class JavaFX8TPV1 extends Application {
         stage.setFullScreenExitHint(""); //Don't show "Press ESC to exit full screen"
         stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         stage.setScene(scene);
+       
         stage.show();
     }
 
