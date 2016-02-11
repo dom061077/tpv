@@ -5,10 +5,12 @@
  */
 package com.tpv.login;
 
-import com.tpv.principal.FXMLMainController;
 import com.tpv.util.Connection;
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javax.annotation.PostConstruct;
@@ -21,26 +23,31 @@ import org.datafx.controller.flow.action.ActionTrigger;
  */
 
 @FXMLController(value="Error.fxml", title = "Error de Sistema")
-public class ErrorController {
-    @FXML
-    @ActionTrigger("salir")
-    private Button salirButton;
+public class ErrorController implements Initializable {
+//    @FXML
+//    @ActionTrigger("salir")
+//    private Button salirButton;
+//    
+//    @FXML
+//    @ActionTrigger("reintentar")
+//    private Button reintentarButton;
     
     @FXML
-    @ActionTrigger("reintentar")
-    private Button reintentarButton;
+    @ActionTrigger("volverpantallaprincipal")
+    private Button volverButton;
     
-    @FXML
-    private TextArea errorMsg;
+    //@FXML
+    //private TextArea errorMsg;
+    
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        // TODO
+    }    
+    
     
     @PostConstruct
     public void init(){
             Platform.runLater(()->{
-                try{
-                    Connection.initConnections();
-                }catch(Exception e){
-                    errorMsg.setText(e.getMessage());
-                }
             });
                     
     }

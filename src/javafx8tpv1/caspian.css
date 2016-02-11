@@ -1361,16 +1361,10 @@
 
 .text-login {
     
-	/*font-family: "Roboto", "Droid Sans", sans-serif;*/
-	-fx-font-size: 16px;
-	-fx-margin: 0;
-	-fx-padding: 8px 8px 6px 8px;
-	-fx-position: relative;
-	-fx-display: block;
-	-fx-outline: none;
-	-fx-border: none;
-	-fx-background: bottom left linear-gradient(#a9a9a9, #a9a9a9) no-repeat, bottom center linear-gradient(#a9a9a9, #a9a9a9) repeat-x, bottom right linear-gradient(#a9a9a9, #a9a9a9) no-repeat;
-	-fx-background-size: 1px 6px, 1px 1px, 1px 6px;
+    -fx-border: 0;
+    -fx-outline: 0;
+    -fx-background: transparent;
+    -fx-border-bottom: 2px solid black;
 }
 .text-login:focus {
 	-fx-background: bottom left linear-gradient(#0099cc, #0099cc) no-repeat, bottom center linear-gradient(#0099cc, #0099cc) repeat-x, bottom right linear-gradient(#0099cc, #0099cc) no-repeat;
@@ -1380,14 +1374,15 @@
 
 
 .text-field {
-    -fx-background-color: -fx-shadow-highlight-color, -fx-text-box-border, -fx-control-inner-background;
+    //-fx-background-color: -fx-shadow-highlight-color, -fx-text-box-border, -fx-control-inner-background;
+    -fx-background-color: white, -fx-text-box-border, white, -fx-control-inner-background;
     -fx-background-insets: 0, 1, 2;
     -fx-background-radius: 3, 2, 2;
     -fx-padding: 0.25em 0.416667em  0.333333em 0.416667em; 
     -fx-text-fill: -fx-text-inner-color;
     -fx-prompt-text-fill: derive(-fx-control-inner-background,-30%);
     -fx-cursor: text;
-    
+    -fx-font-size: 20;
     
 }
 

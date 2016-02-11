@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../../../javafx8tpv1/caspian.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
    <top>
       <Label styleClass="label_titulo" text="Ingreso al Sistema" textFill="#3062e1" BorderPane.alignment="CENTER">
          <font>
@@ -45,7 +46,10 @@
             <TextField id="xxxx" fx:id="userName" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <font>
                   <Font name="Arial" size="14.0" />
-               </font></TextField>
+               </font>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets></TextField>
             <PasswordField fx:id="password" GridPane.columnIndex="2" GridPane.rowIndex="2">
                <font>
                   <Font name="Arial" size="14.0" />

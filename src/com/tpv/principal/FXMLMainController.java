@@ -86,7 +86,7 @@ public class FXMLMainController implements Initializable {
     private TableColumn subTotalColumn;
     
     @FXML
-    @ActionTrigger("gotoError")
+    @ActionTrigger("mostrarError")
     private Button goToErrorButton;
     
     @FXML
@@ -120,17 +120,23 @@ public class FXMLMainController implements Initializable {
     
     @PostConstruct
     public void init(){
+        
         labelCantidad.setText(LABEL_CANTIDAD);
         textFieldProducto = new MaskTextField();
         textFieldProducto.setMask("N!");
         textFieldProducto.setStyle(
-                "-fx-background-color: none, none, none;//-fx-shadow-highlight-color, -fx-text-box-border, -fx-control-inner-background;"
-                +"-fx-background-insets: 0, 1, 2;"
-                +"-fx-background-radius: 3, 2, 2;"
-                +"-fx-padding: 0.25em 0.416667em  0.333333em 0.416667em; "
-                +"-fx-text-fill: -fx-text-inner-color;"
-                +"-fx-prompt-text-fill: derive(-fx-control-inner-background,-30%);"
-                +"-fx-cursor: text;"
+                "-fx-border: 0;"
+                +"-fx-outline: 0;"
+                +"-fx-background: transparent;"
+                +"-fx-border-bottom: 2px solid black;"
+                +"-fx-width: 20px;"
+                //"-fx-background-color: none, none, none;//-fx-shadow-highlight-color, -fx-text-box-border, -fx-control-inner-background;"
+                //+"-fx-background-insets: 0, 1, 2;"
+                //+"-fx-background-radius: 3, 2, 2;"
+                //+"-fx-padding: 0.25em 0.416667em  0.333333em 0.416667em; "
+                //+"-fx-text-fill: -fx-text-inner-color;"
+                //+"-fx-prompt-text-fill: derive(-fx-control-inner-background,-30%);"
+                //+"-fx-cursor: text;"
         );
         iniciaIngresosVisibles();
         
@@ -182,7 +188,6 @@ public class FXMLMainController implements Initializable {
 
         Platform.runLater(() -> {
             
-            Connection.setButtonFlowFire(goToErrorButton);
             
             
             tableViewTickets.setItems(modelTicket.getTickets());
@@ -236,10 +241,15 @@ public class FXMLMainController implements Initializable {
                     keyEvent.consume();
                 }*/
                 if(keyEvent.getCode() == KeyCode.ENTER){
+                    
                     if(labelCantidad.isVisible()){
                         labelCantidad.setVisible(false);
                     }
                     if(textFieldProducto.getText().trim().length()>0){
+                        if(!Connection.getStcp().isConnected()){
+                            goToErrorButton.fire();
+                        }
+
                         agregarLineaTicket();
                         scrollDown();
                     }else{
@@ -411,6 +421,8 @@ public class FXMLMainController implements Initializable {
     }
 
     public void traerCliente(){
+        
+        
         Cliente cliente = clienteService.getClientePorCodYDni(Integer.parseInt(textFieldCodCliente.getText()));
         if(cliente!=null){
             nombreCliente.setText(cliente.getRazonSocial());

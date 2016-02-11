@@ -6,6 +6,7 @@
 package com.tpv.util;
 
 import com.tpv.service.UsuarioService;
+import java.io.IOException;
 import java.net.SocketException;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
@@ -16,6 +17,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import org.apache.log4j.Logger;
+import org.tpv.print.fiscal.comm.SpoolerTCPComm;
 
 /**
  * Clase que permite EntityManagerFactory para poder comunicarse con la base de datos.
@@ -27,6 +29,7 @@ public class Connection {
      * propiedad emf que será inicializada en el método getEmf
      */
     private static EntityManagerFactory emf;
+    private static SpoolerTCPComm stcp;
     private static EntityManager em;
     private static Logger log = Logger.getLogger(Connection.class);
     private static Button buttonFlowFire=null;
@@ -50,7 +53,13 @@ public class Connection {
     /**
      * Este método conecta la impresora fiscal
      */
-    private static void initFiscalPrinter(){
+    public static void initFiscalPrinter(){
+        stcp = new SpoolerTCPComm("127.0.0.1",1600);
+        try{
+            stcp.connect();
+        }catch(IOException e){
+            log.info("Error de conexión con impresora fiscal, mensaje: "+e.getMessage());
+        }
         
     }
     
@@ -62,6 +71,12 @@ public class Connection {
         initEmf();
     }
     
+    /**
+     * Método que permite obtener una instancia de SpoolerTCPComm
+     */
+    public static SpoolerTCPComm getStcp(){
+        return stcp;
+    }
     
     /**
      * Retorna instancia de EntityManager
@@ -105,30 +120,4 @@ public class Connection {
         
     }
     
-    /**
-     * Metodo para recuperar el stage actual mientras el thread de test de conexión
-     * 
-     */
-    public static Button getButtonFlowFire(){
-        return buttonFlowFire;
-    }
-    
-    /**
-     * Método para fijar el stage actual mientras el thread de test de conexión
-     * 
-     */
-    public static void setButtonFlowFire(Button button){
-        buttonFlowFire = button;
-        buttonEventFired = false;
-    }
-    
-    /**
-     * Mètodo para disparar el evento de buttonFlowFire
-     */
-    public static void fireButtonEvent(){
-        if(!buttonEventFired){
-            buttonFlowFire.fire();
-            buttonEventFired = true;
-        }
-    }
 }

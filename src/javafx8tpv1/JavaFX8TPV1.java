@@ -57,6 +57,8 @@ public class JavaFX8TPV1 extends Application {
             log.info("Error general de conexiòn");
         }
         
+        Connection.initFiscalPrinter();
+        
         /*Runnable task = () -> {
             while(true){
                 try{
@@ -85,7 +87,7 @@ public class JavaFX8TPV1 extends Application {
                         ClienteSceneController.class, "seleccionarCliente", FXMLMainController.class);
         */
         log.debug("Inicializando Flow de infaces gráficas");
-        Flow flow = new Flow(LoginController.class).withLink(LoginController.class, "goToError", ErrorController.class)
+        Flow flow = new Flow(LoginController.class)
                     //--flow ventana buscar cliente
                    .withLink(LoginController.class,"iniciarSesion",MenuPrincipalController.class)
                    .withLink(MenuPrincipalController.class, "facturacion", FXMLMainController.class)
@@ -96,7 +98,9 @@ public class JavaFX8TPV1 extends Application {
                    .withLink(FXMLMainController.class,"buscarProducto",BuscarPorDescProductoController.class)
                    .withLink(BuscarPorDescProductoController.class, "seleccionarProducto", FXMLMainController.class)
                    .withLink(FXMLMainController.class, "pagoTicket", PagoTicketController.class)
-                   .withLink(PagoTicketController.class,"volverpantallaprincipal",FXMLMainController.class);
+                   .withLink(PagoTicketController.class,"volverpantallaprincipal",FXMLMainController.class)
+                   .withLink(FXMLMainController.class,"mostrarError",ErrorController.class)
+                   .withLink(ErrorController.class,"volverpantallaprincipal",FXMLMainController.class);
         StackPane root = flow.start();   
         
         Scene scene = new Scene(root);
