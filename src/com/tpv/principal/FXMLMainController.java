@@ -28,6 +28,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import org.apache.log4j.Logger;
 import org.datafx.controller.FXMLController;
 import org.datafx.controller.flow.action.ActionTrigger;
 
@@ -40,6 +41,8 @@ import org.datafx.controller.flow.action.ActionTrigger;
 public class FXMLMainController implements Initializable {
     private final static String LABEL_CANTIDAD="Cantidad:";
     private final static String LABEL_CANTIDAD_INGRESADA="(Cantidad->";
+    Logger log = Logger.getLogger(FXMLMainController.class);
+
     
     ProductoService productoService = new ProductoService();
     ClienteService clienteService = new ClienteService();
@@ -245,10 +248,11 @@ public class FXMLMainController implements Initializable {
                     if(labelCantidad.isVisible()){
                         labelCantidad.setVisible(false);
                     }
+                    log.debug("Estado de impresora fiscal: "+Connection.getStcp().isConnected());
                     if(textFieldProducto.getText().trim().length()>0){
-                        if(!Connection.getStcp().isConnected()){
+                        /*if(!Connection.getStcp().isConnected()){
                             goToErrorButton.fire();
-                        }
+                        }*/
 
                         agregarLineaTicket();
                         scrollDown();

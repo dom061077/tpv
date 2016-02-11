@@ -26,6 +26,8 @@ import org.apache.log4j.Logger;
 public class ProductoService {
     Logger log = Logger.getLogger(ProductoService.class);
     
+    
+    
     /**
      * Este método se usa para traer todos los productos segun el parametro 
      * de filtro.
@@ -125,5 +127,6 @@ public class ProductoService {
         
         return producto;
     }
+    
     
 }

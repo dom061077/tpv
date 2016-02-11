@@ -12,6 +12,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javax.annotation.PostConstruct;
 import org.datafx.controller.FXMLController;
@@ -36,6 +37,8 @@ public class ErrorController implements Initializable {
     @ActionTrigger("volverpantallaprincipal")
     private Button volverButton;
     
+    @FXML
+    private Label labelError;
     //@FXML
     //private TextArea errorMsg;
     

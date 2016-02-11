@@ -5,13 +5,12 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
-<BorderPane prefHeight="160.0" prefWidth="452.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="160.0" prefWidth="452.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
    <top>
       <Button fx:id="volverButton" mnemonicParsing="false" text="Button" visible="false" BorderPane.alignment="CENTER" />
    </top>
    <center>
-      <Label text="Se produjeron los siguientes errores al iniciar el sistema:" BorderPane.alignment="CENTER">
+      <Label fx:id="labelError" styleClass="label_error" text="Se produjeron los siguientes errores al iniciar el sistema:" textFill="#db0f0f" BorderPane.alignment="CENTER">
          <font>
             <Font name="Arial" size="18.0" />
          </font>

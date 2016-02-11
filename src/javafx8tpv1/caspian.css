@@ -4368,3 +4368,9 @@ to the top and bottom -fx-padding values of the parent toolbar. */
     
 }
 
+.label_error{
+    -fx-text-fill: #db0f0f;
+    -fx-font-weight: bold;
+    -fx-font-size:35;
+
+}

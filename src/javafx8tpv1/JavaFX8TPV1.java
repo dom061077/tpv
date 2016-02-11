@@ -91,6 +91,8 @@ public class JavaFX8TPV1 extends Application {
                     //--flow ventana buscar cliente
                    .withLink(LoginController.class,"iniciarSesion",MenuPrincipalController.class)
                    .withLink(MenuPrincipalController.class, "facturacion", FXMLMainController.class)
+                   .withLink(MenuPrincipalController.class, "mostrarError", ErrorController.class)
+                   .withLink(ErrorController.class,"volverMenuPrincipal",MenuPrincipalController.class)
                    .withLink(FXMLMainController.class,"buscarCliente", ClienteSceneController.class)
                    .withLink(FXMLMainController.class, "volverMenuPrincipal", MenuPrincipalController.class)
                    .withLink(ClienteSceneController.class, "seleccionarCliente", FXMLMainController.class)
