@@ -37,7 +37,7 @@ public class ImpresoraService {
         }catch(FiscalPrinterIOException e){
             
         }
-        response.
+        //response.
 
         return "";
     }

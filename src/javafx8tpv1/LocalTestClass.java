@@ -1,4 +1,5 @@
 package javafx8tpv1;
+import java.util.ArrayList;
 import javafx.application.*;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
@@ -55,7 +56,16 @@ public class LocalTestClass extends Application {
 
         // layout the scene.
         final StackPane layout = new StackPane();
-        layout.getChildren().setAll(table);
+        ComboBox combo = new ComboBox();
+        combo.getItems().add("TARJETA NARANJA");
+        combo.getItems().add("TARJETA VISA");
+        combo.getItems().add("TARJETA NEVADA");        
+        combo.getItems().add("EFECTIVO");        
+        combo.getItems().add("VOUCHER");        
+        new AutoCompleteComboBoxListener(combo);
+        layout.getChildren().add(combo);
+        
+        //layout.getChildren().setAll(table);
         Scene scene = new Scene(layout);
         stage.setScene(scene);
         stage.show();

@@ -4312,8 +4312,8 @@ to the top and bottom -fx-padding values of the parent toolbar. */
     -fx-font-weight: bold;
 }
 
-.labeltotal{
-    -fx-text-fill: #039ED3;
+.label_total{
+    -fx-text-fill: #3757a7;
     -fx-font-weight: bold;
     -fx-font-family: "Arial";
    -fx-font-size: 40;
@@ -4334,7 +4334,7 @@ to the top and bottom -fx-padding values of the parent toolbar. */
 }
 
 .label_titulo{
-    -fx-text-fill: #3062e1;
+    -fx-text-fill: #3757a7;
     -fx-font-weight: bold;
     -fx-font-size:45;
     

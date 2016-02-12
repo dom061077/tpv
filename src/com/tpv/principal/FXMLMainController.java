@@ -194,11 +194,11 @@ public class FXMLMainController implements Initializable {
 
         Platform.runLater(() -> {
             
-            if(!Connection.getStcp().isConnected()){
-                 goToErrorButton.fire();
-            }else{
-                
-            }
+//            if(!Connection.getStcp().isConnected()){
+//                 goToErrorButton.fire();
+//            }else{
+//                
+//            }
             
             
             tableViewTickets.setItems(modelTicket.getTickets());
@@ -258,9 +258,6 @@ public class FXMLMainController implements Initializable {
                     }
                     log.debug("Estado de impresora fiscal: "+Connection.getStcp().isConnected());
                     if(textFieldProducto.getText().trim().length()>0){
-                        /*if(!Connection.getStcp().isConnected()){
-                            goToErrorButton.fire();
-                        }*/
 
                         agregarLineaTicket();
                         scrollDown();

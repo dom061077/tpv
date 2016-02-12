@@ -6,6 +6,7 @@
 package com.tpv.pagoticket;
 
 import com.tpv.principal.DataModelTicket;
+import com.tpv.util.ui.MaskTextField;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -25,12 +26,17 @@ import org.datafx.controller.flow.context.ViewFlowContext;
 public class PagoTicketController {
     Logger log = Logger.getLogger(PagoTicketController.class);
     
+    private MaskTextField textFieldTipoPago;
+    
     @FXMLViewFlowContext
     private ViewFlowContext context;    
     
+    
     @FXML
-    @ActionTrigger("volverpantallaprincipal")
-    private Button buttonAceptar;    
+    @ActionTrigger("volverFacturacoin")
+    private Button volverButton;
+    
+    
     @PostConstruct
     public void init(){
         
@@ -38,14 +44,7 @@ public class PagoTicketController {
         //log.debug("TICKETS: "+model.getTickets().size());
         
         Platform.runLater(() -> {
-            //cargarTableView();
-                //----------------- eventos de navegacion, para aceptar la seleccion del producto
-                // or para cancelar la seleccion
-                buttonAceptar.getScene().setOnKeyPressed(keyEvent->{
-                    if(keyEvent.getCode()==KeyCode.ESCAPE){
-                        buttonAceptar.fire();
-                    }
-                });
+                
         });            
     }
     
