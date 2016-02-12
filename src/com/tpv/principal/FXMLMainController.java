@@ -54,6 +54,9 @@ public class FXMLMainController implements Initializable {
     
     @FXML
     private GridPane gridPaneCodigoProducto;
+
+    @FXML
+    private Label nroticket;
     
     @FXML
     private Label labelProducto;
@@ -191,6 +194,11 @@ public class FXMLMainController implements Initializable {
 
         Platform.runLater(() -> {
             
+            if(!Connection.getStcp().isConnected()){
+                 goToErrorButton.fire();
+            }else{
+                
+            }
             
             
             tableViewTickets.setItems(modelTicket.getTickets());

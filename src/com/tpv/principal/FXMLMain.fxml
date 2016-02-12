@@ -44,7 +44,7 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label fx:id="nroticket" alignment="TOP_RIGHT" prefHeight="17.0" prefWidth="328.0" styleClass="label_nroticket" GridPane.columnSpan="2" />
+                  <Label fx:id="nroticket" alignment="TOP_RIGHT" prefHeight="17.0" prefWidth="652.0" styleClass="label_nroticket" GridPane.columnSpan="2" />
                   <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="336.0" styleClass="labeltotal" text="TOTAL GRAL.:" textAlignment="RIGHT" GridPane.rowIndex="1" />
                   <Label fx:id="totalGeneral" prefHeight="17.0" prefWidth="302.0" styleClass="labeltotal" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                </children>

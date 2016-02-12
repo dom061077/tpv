@@ -71,12 +71,6 @@ public class Connection {
         initEmf();
     }
     
-    /**
-     * Método que permite obtener una instancia de SpoolerTCPComm
-     */
-    public static SpoolerTCPComm getStcp(){
-        return stcp;
-    }
     
     /**
      * Retorna instancia de EntityManager
@@ -119,5 +113,13 @@ public class Connection {
         
         
     }
+    
+    /**
+     * Método que permite obtener una instancia de SpoolerTCPComm
+     */
+    public static SpoolerTCPComm getStcp(){
+        return stcp;
+    }
+    
     
 }
