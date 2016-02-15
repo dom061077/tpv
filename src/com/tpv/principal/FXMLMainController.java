@@ -469,7 +469,7 @@ public class FXMLMainController implements Initializable {
                     }
                     updateMessage("Pto.Venta: "+nroPtoVta+" Nro. Ticket (B/C): "
                             +proximoNroTicketBC+" Nro. Ticket (A): "+proximoNroTicketA);
-                    
+                    modelTicket.setNroTicket(Integer.parseInt(proximoNroTicketBC));
                     return "Tarea finalizada";
                 }
             };

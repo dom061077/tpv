@@ -5,10 +5,23 @@
  */
 package com.tpv.modelo;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  *
  * @author daniel
  */
+@Entity
+@Table(name="formapago")
 public class FormaPago {
+    @Id
+    @Column(name = "idCLIENTES")
+    private int id;
+    
+    @Column(name = "DETALLE")
+    private String detalle;
     
 }

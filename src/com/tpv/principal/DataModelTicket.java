@@ -6,6 +6,7 @@
 package com.tpv.principal;
 
 import com.tpv.modelo.Cliente;
+import com.tpv.modelo.FormaPago;
 import java.math.BigDecimal;
 import java.util.Iterator;
 import javafx.beans.property.ListProperty;
@@ -24,6 +25,9 @@ import org.datafx.controller.flow.injection.FlowScoped;
 public class DataModelTicket {
     private ListProperty<LineaTicketData> tickets;
     private Cliente cliente = null;
+    private FormaPago formaPago = null;
+    private int nroTicket;
+    private int puntoVenta;//checkout
     private boolean clienteSelecciondo = false;
     public ListProperty<LineaTicketData> getTickets() {
         if (tickets == null) {
@@ -65,6 +69,34 @@ public class DataModelTicket {
     
     public boolean isClienteSeleccionado(){
         return this.clienteSelecciondo;
+    }
+
+    /**
+     * @return the nroTicket
+     */
+    public int getNroTicket() {
+        return nroTicket;
+    }
+
+    /**
+     * @param nroTicket the nroTicket to set
+     */
+    public void setNroTicket(int nroTicket) {
+        this.nroTicket = nroTicket;
+    }
+
+    /**
+     * @return the puntoVenta
+     */
+    public int getPuntoVenta() {
+        return puntoVenta;
+    }
+
+    /**
+     * @param puntoVenta the puntoVenta to set
+     */
+    public void setPuntoVenta(int puntoVenta) {
+        this.puntoVenta = puntoVenta;
     }
     
 }
