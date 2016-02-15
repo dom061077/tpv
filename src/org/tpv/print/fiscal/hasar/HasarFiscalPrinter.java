@@ -269,6 +269,11 @@ public abstract class HasarFiscalPrinter extends BasicFiscalPrinter implements H
 		FiscalPacket cmd = createFiscalPacket(CMD_GET_WORKING_MEMORY);
 		return cmd;
 	}
+        
+        public FiscalPacket cmdGetInitData(){
+            FiscalPacket cmd = createFiscalPacket(CMD_GET_INIT_DATA);
+            return cmd;
+        }
 
 	public FiscalPacket cmdLastItemDiscount(String description, BigDecimal amount, boolean substract, boolean baseAmount, Integer display) {
 		FiscalPacket cmd = createFiscalPacket(CMD_LAST_ITEM_DISCOUNT);

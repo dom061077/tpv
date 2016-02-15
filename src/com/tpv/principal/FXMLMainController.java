@@ -5,9 +5,11 @@
  */
 package com.tpv.principal;
 
+import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Cliente;
 import com.tpv.modelo.Producto;
 import com.tpv.service.ClienteService;
+import com.tpv.service.ImpresoraService;
 import com.tpv.service.ProductoService;
 import com.tpv.util.Connection;
 import com.tpv.util.ui.MaskTextField;
@@ -16,6 +18,8 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
+import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -46,6 +50,7 @@ public class FXMLMainController implements Initializable {
     
     ProductoService productoService = new ProductoService();
     ClienteService clienteService = new ClienteService();
+    ImpresoraService impresoraService = new ImpresoraService();
     
     
     private MaskTextField textFieldProducto;
@@ -194,13 +199,7 @@ public class FXMLMainController implements Initializable {
 
         Platform.runLater(() -> {
             
-//            if(!Connection.getStcp().isConnected()){
-//                 goToErrorButton.fire();
-//            }else{
-//                
-//            }
-            
-            
+            traerInfoImpresora();
             tableViewTickets.setItems(modelTicket.getTickets());
             calcularTotalGeneral();
             scrollDown();
@@ -445,5 +444,40 @@ public class FXMLMainController implements Initializable {
             
             
         }
+    }
+    
+    public void traerInfoImpresora(){
+            Worker<String> worker = new Task<String>(){
+                @Override
+                protected String call() throws Exception{
+                    String nroPtoVta="",proximoNroTicketBC="",proximoNroTicketA="";
+                    try {
+                        Thread.sleep(20);
+                    } catch (InterruptedException e) {
+                        if (isCancelled()) {
+                            //updateValue("Canceled at " + System.currentTimeMillis());
+                            return null; // ignored
+                        }
+                    }
+                    
+                    if(!Connection.getStcp().isConnected()){
+                        throw new TpvException("La impresora no está conectada");
+                    }else{
+                            nroPtoVta = impresoraService.getNroPuntoVenta();
+                            proximoNroTicketBC = impresoraService.getNroUltimoTicketBC();
+                            proximoNroTicketA = impresoraService.getNroUltimoTicketA();
+                    }
+                    updateMessage("Pto.Venta: "+nroPtoVta+" Nro. Ticket (B/C): "
+                            +proximoNroTicketBC+" Nro. Ticket (A): "+proximoNroTicketA);
+                    
+                    return "Tarea finalizada";
+                }
+            };
+            ((Task<String>) worker).setOnFailed(event -> {
+               goToErrorButton.fire();
+            });
+            nroticket.textProperty().bind(worker.messageProperty());
+            
+            new Thread((Runnable) worker).start();
     }
 }

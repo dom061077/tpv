@@ -19,7 +19,7 @@ import org.datafx.controller.flow.context.FXMLViewFlowContext;
 import org.datafx.controller.flow.context.ViewFlowContext;
 
 /**
- *
+ *|
  * @author daniel
  */
 @FXMLController(value="PagoTicket.fxml", title = "pago ticket")

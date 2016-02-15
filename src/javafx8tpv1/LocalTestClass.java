@@ -62,7 +62,6 @@ public class LocalTestClass extends Application {
         combo.getItems().add("TARJETA NEVADA");        
         combo.getItems().add("EFECTIVO");        
         combo.getItems().add("VOUCHER");        
-        new AutoCompleteComboBoxListener(combo);
         layout.getChildren().add(combo);
         
         //layout.getChildren().setAll(table);

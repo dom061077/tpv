@@ -5,6 +5,7 @@
  */
 package com.tpv.service;
 
+import com.tpv.exceptions.TpvException;
 import com.tpv.util.Connection;
 import org.apache.log4j.Logger;
 import org.tpv.print.fiscal.FiscalPacket;
@@ -23,10 +24,63 @@ public class ImpresoraService {
     
     /**
      * Método para recuperar Nro. de punto de venta y Nro. de Ticket
+     * Respueta de la impresora
+     * Posicion	Datos
+        *1	Status de la Impresora
+        *2	Status Fiscal
+        *3	Ultimo Nro Ticket B/C
+        *4	Status Auxiliar
+        *5	Ultimo Nro Ticket A
+        *6	Status Documento
+        *7	Ultimo Nro Nota credito B/C
+        *8	Ultimo Nro Nota credito A
+        * 
+        * Posicion	Datos
+            *1	Status de la Impresora
+            *2	Status Fiscal
+            *3	Nro de CUIT
+            *4	Razon Social
+            *5	Nro de registro de la impresora
+            *6	Fecha de Inicializacion
+            *7	Nro. Punto de Venta
+            *8	Nro. Inscripción en ing. Brutos
+            *9	Fecha de inicio de actividades
+            *10	Responsabiliad de IVA
+     * 
+     * @return 
+     */
+    public String getNroPuntoVenta() throws TpvException{
+        HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
+        FiscalPacket request;
+        FiscalPacket response;
+        FiscalMessages fMsg;
+        try{
+            request = hfp.cmdGetInitData();
+            response = hfp.execute(request);
+        }catch(FiscalPrinterIOException e){
+            throw new TpvException("Error al obtener datos de la impresora. "
+                +e.getFullMessage());
+        }
+        //response.
+        return response.getString(7);
+    }
+    
+    /**
+     * 
+        *1	Status de la Impresora
+        *2	Status Fiscal
+        *3	Ultimo Nro Ticket B/C
+        *4	Status Auxiliar
+        *5	Ultimo Nro Ticket A
+        *6	Status Documento
+        *7	Ultimo Nro Nota credito B/C
+        *8	Ultimo Nro Nota credito A
+     * 
+     * 
      * @return 
      */
     
-    public String getPuntoVentaYNroTicket(){
+    public String getNroUltimoTicketBC()throws TpvException{
         HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
         FiscalPacket request;
         FiscalPacket response;
@@ -35,10 +89,31 @@ public class ImpresoraService {
             request = hfp.cmdStatusRequest();
             response = hfp.execute(request);
         }catch(FiscalPrinterIOException e){
-            
+            throw new TpvException("Error al obtener datos de la impresora. "
+                +e.getFullMessage());
+        }
+        return response.getString(3);
+    }
+    
+    
+    
+    public String getNroUltimoTicketA() throws TpvException{
+        
+        HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
+        FiscalPacket request;
+        FiscalPacket response;
+        FiscalMessages fMsg;
+        try{
+            request = hfp.cmdStatusRequest();
+            response = hfp.execute(request);
+        }catch(FiscalPrinterIOException e){
+            throw new TpvException("Error al obtener datos de la impresora. "
+                +e.getFullMessage());
         }
         //response.
+        return response.getString(3);
 
-        return "";
     }
+    
+    
 }
