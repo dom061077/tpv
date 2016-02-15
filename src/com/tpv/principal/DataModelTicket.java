@@ -24,17 +24,28 @@ import org.datafx.controller.flow.injection.FlowScoped;
 @FlowScoped
 public class DataModelTicket {
     private ListProperty<LineaTicketData> tickets;
+    private ListProperty<PagoTicketData> pagos;
     private Cliente cliente = null;
     private FormaPago formaPago = null;
     private int nroTicket;
     private int puntoVenta;//checkout
     private boolean clienteSelecciondo = false;
+    
+    
     public ListProperty<LineaTicketData> getTickets() {
         if (tickets == null) {
             ObservableList<LineaTicketData> innerList = FXCollections.observableArrayList();
             tickets = new SimpleListProperty<>(innerList);
         }
         return tickets;
+    }
+    
+    public ListProperty<PagoTicketData> getPagos(){
+        if(pagos == null){
+            ObservableList<PagoTicketData> innerList = FXCollections.observableArrayList();
+            pagos = new SimpleListProperty<>(innerList);            
+        }
+        return pagos;
     }
     
     public BigDecimal getTotalTicket(){
@@ -49,6 +60,16 @@ public class DataModelTicket {
         return BigDecimal.valueOf(total);
     }
 
+    public BigDecimal getTotalPagos(){
+        ListProperty<PagoTicketData> innerList = getPagos();
+        Double total = new Double(0);
+        for(Iterator iter=innerList.iterator();iter.hasNext();){
+            PagoTicketData pago = (PagoTicketData)iter.next();
+            total = total + pago.getMontoPago().doubleValue();
+        }
+        
+        return BigDecimal.valueOf(total);
+    }
     /**
      * @return the cliente
      */

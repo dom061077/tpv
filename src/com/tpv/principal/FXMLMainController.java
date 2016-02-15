@@ -474,7 +474,7 @@ public class FXMLMainController implements Initializable {
                 }
             };
             ((Task<String>) worker).setOnFailed(event -> {
-               goToErrorButton.fire();
+               //goToErrorButton.fire();
             });
             nroticket.textProperty().bind(worker.messageProperty());
             
