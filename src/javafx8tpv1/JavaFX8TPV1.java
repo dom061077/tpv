@@ -55,6 +55,7 @@ public class JavaFX8TPV1 extends Application {
         }   catch(Exception e){
             
             log.info("Error general de conexiòn");
+            e.printStackTrace();
         }
         
         Connection.initFiscalPrinter();

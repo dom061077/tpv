@@ -215,6 +215,7 @@ public class FXMLMainController implements Initializable {
                     }else{
                         traerCliente();
                     } 
+                    
                 }
             });
             
@@ -369,6 +370,7 @@ public class FXMLMainController implements Initializable {
         int codigoIngresado=0;
         int cantidad = 1;
         Producto producto;
+        BigDecimal precio = BigDecimal.valueOf(0);
         try{
             cantidad = Integer.parseInt(textFieldCantidad.getText());
         }catch(Exception e){
@@ -385,10 +387,27 @@ public class FXMLMainController implements Initializable {
             producto = productoService.getProductoPorCodBarra(textFieldProducto.getText());
         }
         if(producto!=null){
+            if(modelTicket.getTickets().size()==0){
+                try{
+                    impresoraService.abrirTicket();
+                }catch(TpvException e){
+                    log.debug("Error: "+e.getMessage());
+                }
+            }
+            precio= new BigDecimal(10);
             modelTicket.getTickets().add(new LineaTicketData(producto.getCodigoProducto()
-                    ,producto.getDescripcion(),cantidad,new BigDecimal(10)));
+                    ,producto.getDescripcion(),cantidad,precio));
+            try{
+                impresoraService.imprimirLineaTicket(producto.getDescripcion(), BigDecimal.valueOf(cantidad)
+                        ,precio , BigDecimal.valueOf(21), BigDecimal.valueOf(0));
+            }catch(TpvException e){
+                log.debug("Error: "+e.getMessage());
+            }
+            
         }
         textFieldProducto.setText("");
+        //(String descripcion,BigDecimal cantidad
+        //,BigDecimal precio, BigDecimal iva,BigDecimal impuestoInterno) 
         calcularTotalGeneral();
         textFieldCantidad.setText("");
     }
@@ -450,7 +469,7 @@ public class FXMLMainController implements Initializable {
             Worker<String> worker = new Task<String>(){
                 @Override
                 protected String call() throws Exception{
-                    String nroPtoVta="",proximoNroTicketBC="",proximoNroTicketA="";
+                    String retorno[] = new String[3];
                     try {
                         Thread.sleep(20);
                     } catch (InterruptedException e) {
@@ -463,13 +482,14 @@ public class FXMLMainController implements Initializable {
                     if(!Connection.getStcp().isConnected()){
                         throw new TpvException("La impresora no está conectada");
                     }else{
-                            nroPtoVta = impresoraService.getNroPuntoVenta();
-                            proximoNroTicketBC = impresoraService.getNroUltimoTicketBC();
-                            proximoNroTicketA = impresoraService.getNroUltimoTicketA();
+                            //nroPtoVta = impresoraService.getNroPuntoVenta();
+                            retorno = impresoraService.getPtoVtaNrosTicket();
+                            //proximoNroTicketA = impresoraService.getNroUltimoTicketA();
                     }
-                    updateMessage("Pto.Venta: "+nroPtoVta+" Nro. Ticket (B/C): "
-                            +proximoNroTicketBC+" Nro. Ticket (A): "+proximoNroTicketA);
-                    modelTicket.setNroTicket(Integer.parseInt(proximoNroTicketBC));
+                    
+                    updateMessage("Pto.Venta: "+retorno[0]+" Nro. Ticket (B/C): "
+                            +retorno[1]+" Nro. Ticket (A): "+retorno[2]);
+                    modelTicket.setNroTicket(Integer.parseInt(retorno[1]));
                     return "Tarea finalizada";
                 }
             };
