@@ -7,8 +7,11 @@ package com.tpv.principal;
 
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Cliente;
+import com.tpv.modelo.Factura;
+import com.tpv.modelo.FacturaDetalle;
 import com.tpv.modelo.Producto;
 import com.tpv.service.ClienteService;
+import com.tpv.service.FacturacionService;
 import com.tpv.service.ImpresoraService;
 import com.tpv.service.ProductoService;
 import com.tpv.util.Connection;
@@ -18,6 +21,7 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
+import javafx.beans.property.ListProperty;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
@@ -51,6 +55,7 @@ public class FXMLMainController implements Initializable {
     ProductoService productoService = new ProductoService();
     ClienteService clienteService = new ClienteService();
     ImpresoraService impresoraService = new ImpresoraService();
+    
     
     
     private MaskTextField textFieldProducto;
@@ -200,7 +205,7 @@ public class FXMLMainController implements Initializable {
         Platform.runLater(() -> {
             
             traerInfoImpresora();
-            tableViewTickets.setItems(modelTicket.getTickets());
+            tableViewTickets.setItems(modelTicket.getDetalle());
             calcularTotalGeneral();
             scrollDown();
             
@@ -387,22 +392,22 @@ public class FXMLMainController implements Initializable {
             producto = productoService.getProductoPorCodBarra(textFieldProducto.getText());
         }
         if(producto!=null){
-            if(modelTicket.getTickets().size()==0){
-                try{
-                    impresoraService.abrirTicket();
-                }catch(TpvException e){
-                    log.debug("Error: "+e.getMessage());
-                }
-            }
+//            if(modelTicket.getTickets().size()==0){
+//                try{
+//                    impresoraService.abrirTicket();
+//                }catch(TpvException e){
+//                    log.debug("Error: "+e.getMessage());
+//                }
+//            }
             precio= new BigDecimal(10);
-            modelTicket.getTickets().add(new LineaTicketData(producto.getCodigoProducto()
+            modelTicket.getDetalle().add(new LineaTicketData(producto.getCodigoProducto()
                     ,producto.getDescripcion(),cantidad,precio));
-            try{
-                impresoraService.imprimirLineaTicket(producto.getDescripcion(), BigDecimal.valueOf(cantidad)
-                        ,precio , BigDecimal.valueOf(21), BigDecimal.valueOf(0));
-            }catch(TpvException e){
-                log.debug("Error: "+e.getMessage());
-            }
+//            try{
+//                impresoraService.imprimirLineaTicket(producto.getDescripcion(), BigDecimal.valueOf(cantidad)
+//                        ,precio , BigDecimal.valueOf(21), BigDecimal.valueOf(0));
+//            }catch(TpvException e){
+//                log.debug("Error: "+e.getMessage());
+//            }
             
         }
         textFieldProducto.setText("");
@@ -480,7 +485,8 @@ public class FXMLMainController implements Initializable {
                     }
                     
                     if(!Connection.getStcp().isConnected()){
-                        throw new TpvException("La impresora no está conectada");
+                        modelTicket.setException(new TpvException("La impresora no está conectada"));
+                        throw modelTicket.getTpvException();
                     }else{
                             //nroPtoVta = impresoraService.getNroPuntoVenta();
                             retorno = impresoraService.getPtoVtaNrosTicket();
@@ -500,4 +506,5 @@ public class FXMLMainController implements Initializable {
             
             new Thread((Runnable) worker).start();
     }
+    
 }

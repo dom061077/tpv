@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="borderPane" focusTraversable="true" prefHeight="430.0" prefWidth="687.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <GridPane alignment="TOP_CENTER" BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="319.0" minWidth="10.0" prefWidth="278.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="258.0" minWidth="10.0" prefWidth="258.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label fx:id="labelError" alignment="TOP_CENTER" prefHeight="185.0" prefWidth="637.0" styleClass="label_error" text="Label" textAlignment="CENTER" GridPane.columnSpan="2" GridPane.rowSpan="2" />
+         </children>
+      </GridPane>
+   </center>
+   <bottom>
+      <Button fx:id="volverButton" focusTraversable="false" mnemonicParsing="false" text="Button" visible="false" BorderPane.alignment="CENTER" />
+   </bottom>
+   <top>
+      <Label prefHeight="100.0" prefWidth="680.0" styleClass="label_error" text="Se produjeron los siguientes errores:" textFill="#db0f0f" BorderPane.alignment="CENTER">
+         <font>
+            <Font name="Arial" size="18.0" />
+         </font>
+      </Label>
+   </top>
+</BorderPane>

@@ -5,9 +5,15 @@
  */
 package com.tpv.pagoticket;
 
+import com.tpv.exceptions.TpvException;
+import com.tpv.modelo.Factura;
+import com.tpv.modelo.FacturaDetalle;
 import com.tpv.principal.DataModelTicket;
+import com.tpv.principal.LineaTicketData;
+import com.tpv.service.FacturacionService;
 import com.tpv.util.ui.MaskTextField;
 import javafx.application.Platform;
+import javafx.beans.property.ListProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -31,7 +37,7 @@ public class PagoTicketController {
     private MaskTextField textFieldTipoPago;
     private MaskTextField textFieldMonto;
     private MaskTextField textFieldCantidadCuotas;
-    
+    private FacturacionService factService = new FacturacionService();
     
     @FXMLViewFlowContext
     private ViewFlowContext context;    
@@ -46,6 +52,11 @@ public class PagoTicketController {
     @FXML
     @ActionTrigger("volverFacturacion")
     private Button volverButton;
+    
+    @FXML
+    @ActionTrigger("mostrarError")
+    private Button gotoError;
+    
     
     
     @PostConstruct
@@ -71,7 +82,7 @@ public class PagoTicketController {
             });
             textFieldMonto.setOnKeyPressed(keyEvent -> {
                 if(keyEvent.getCode() == KeyCode.ENTER){
-                    
+                    guardarTicket();
                     keyEvent.consume();
                     return;
                 }
@@ -104,8 +115,31 @@ public class PagoTicketController {
     
     private void agregarLineaPago(){
         int codigoPago = 0;
+    }
+    
+    public void guardarTicket(){
+        DataModelTicket modelTicket = context.getRegisteredObject(DataModelTicket.class);
+        Factura factura = new Factura();
+        factura.setTotal(modelTicket.getTotalTicket());
+        //factura.setNumeroComprobante(LABEL_CANTIDAD);
+        ListProperty<LineaTicketData> detalle =  modelTicket.getDetalle();
+        
+        detalle.forEach(item->{
+            FacturaDetalle facturaDetalle = new FacturaDetalle();
+            facturaDetalle.setCantidad(item.getCantidad());
+            facturaDetalle.setSubTotal(item.getSubTotal());
+            factura.getDetalle().add(facturaDetalle);
+        });
+        try{
+            factService.registrarFactura(factura);
+        }catch(TpvException e){
+            log.error("Error: "+e.getMessage());
+            modelTicket.setException(e);
+            
+        }
         
     }
+    
             
     
 }

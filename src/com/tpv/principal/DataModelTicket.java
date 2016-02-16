@@ -5,6 +5,7 @@
  */
 package com.tpv.principal;
 
+import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Cliente;
 import com.tpv.modelo.FormaPago;
 import java.math.BigDecimal;
@@ -23,21 +24,22 @@ import org.datafx.controller.flow.injection.FlowScoped;
 
 @FlowScoped
 public class DataModelTicket {
-    private ListProperty<LineaTicketData> tickets;
+    private ListProperty<LineaTicketData> detalle;
     private ListProperty<PagoTicketData> pagos;
     private Cliente cliente = null;
     private FormaPago formaPago = null;
+    private TpvException exception;
     private int nroTicket;
     private int puntoVenta;//checkout
     private boolean clienteSelecciondo = false;
     
     
-    public ListProperty<LineaTicketData> getTickets() {
-        if (tickets == null) {
+    public ListProperty<LineaTicketData> getDetalle() {
+        if (detalle == null) {
             ObservableList<LineaTicketData> innerList = FXCollections.observableArrayList();
-            tickets = new SimpleListProperty<>(innerList);
+            detalle = new SimpleListProperty<>(innerList);
         }
-        return tickets;
+        return detalle;
     }
     
     public ListProperty<PagoTicketData> getPagos(){
@@ -49,7 +51,7 @@ public class DataModelTicket {
     }
     
     public BigDecimal getTotalTicket(){
-        ListProperty<LineaTicketData> innerList = getTickets();
+        ListProperty<LineaTicketData> innerList = getDetalle();
         
         Double total = new Double(0);
         for(Iterator iter=innerList.iterator();iter.hasNext();){
@@ -118,6 +120,15 @@ public class DataModelTicket {
      */
     public void setPuntoVenta(int puntoVenta) {
         this.puntoVenta = puntoVenta;
+    }
+    
+    
+    public TpvException getTpvException(){
+        return this.exception;
+    }
+    
+    public void setException(TpvException e){
+        this.exception = e;
     }
     
 }
