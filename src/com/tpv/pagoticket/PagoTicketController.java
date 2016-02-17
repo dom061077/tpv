@@ -37,7 +37,7 @@ public class PagoTicketController {
     private MaskTextField textFieldTipoPago;
     private MaskTextField textFieldMonto;
     private MaskTextField textFieldCantidadCuotas;
-    private FacturacionService factService = new FacturacionService();
+    
     
     @FXMLViewFlowContext
     private ViewFlowContext context;    
@@ -54,8 +54,8 @@ public class PagoTicketController {
     private Button volverButton;
     
     @FXML
-    @ActionTrigger("mostrarError")
-    private Button gotoError;
+    @ActionTrigger("confirmarTicket")
+    private Button confirmarButton;
     
     
     
@@ -82,7 +82,7 @@ public class PagoTicketController {
             });
             textFieldMonto.setOnKeyPressed(keyEvent -> {
                 if(keyEvent.getCode() == KeyCode.ENTER){
-                    guardarTicket();
+                    confirmarButton.fire();
                     keyEvent.consume();
                     return;
                 }
@@ -116,30 +116,5 @@ public class PagoTicketController {
     private void agregarLineaPago(){
         int codigoPago = 0;
     }
-    
-    public void guardarTicket(){
-        DataModelTicket modelTicket = context.getRegisteredObject(DataModelTicket.class);
-        Factura factura = new Factura();
-        factura.setTotal(modelTicket.getTotalTicket());
-        //factura.setNumeroComprobante(LABEL_CANTIDAD);
-        ListProperty<LineaTicketData> detalle =  modelTicket.getDetalle();
-        
-        detalle.forEach(item->{
-            FacturaDetalle facturaDetalle = new FacturaDetalle();
-            facturaDetalle.setCantidad(item.getCantidad());
-            facturaDetalle.setSubTotal(item.getSubTotal());
-            factura.getDetalle().add(facturaDetalle);
-        });
-        try{
-            factService.registrarFactura(factura);
-        }catch(TpvException e){
-            log.error("Error: "+e.getMessage());
-            modelTicket.setException(e);
-            
-        }
-        
-    }
-    
-            
     
 }

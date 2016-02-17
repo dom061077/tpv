@@ -23,14 +23,24 @@ public class FacturacionService  {
     public void registrarFactura(Factura factura)throws TpvException{
         EntityManager em = Connection.getEm();
         EntityTransaction tx = em.getTransaction();
-        if(!tx.isActive())
-           tx.begin();     
         try{
-            em.merge(factura);
+            if(!tx.isActive())
+               tx.begin();     
+                em.merge(factura);
+            tx.commit();
+            em.clear();        
         }catch(Exception e){
-            throw new TpvException(e.getMessage());
+            String fullTraceStr=e.getMessage()+"\n";
+            for(int i=0;i<=e.getStackTrace().length-1;i++){
+                fullTraceStr+="Clase: "+e.getStackTrace()[i].getClassName()+"; "
+                        +"Archivo: "+e.getStackTrace()[i].getFileName()+"; "
+                        +"Mètodo: "+e.getStackTrace()[i].getMethodName()+"; "
+                        +"Nro. Línea: "+e.getStackTrace()[i].getLineNumber()+"; "
+                        +"\n";
+            }
+            log.error("Error grave: "+fullTraceStr);
+            throw new TpvException(fullTraceStr);
         }
-        tx.commit();
-        em.clear();        
+        
     }
 }

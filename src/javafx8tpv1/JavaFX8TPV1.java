@@ -8,6 +8,7 @@ package javafx8tpv1;
 import com.tpv.cliente.ClienteSceneController;
 import com.tpv.errorui.ErrorController;
 import com.tpv.login.LoginController;
+import com.tpv.pagoticket.ConfirmaPagoTicketController;
 import com.tpv.pagoticket.PagoTicketController;
 import com.tpv.principal.FXMLMainController;
 import com.tpv.principal.MenuPrincipalController;
@@ -102,10 +103,12 @@ public class JavaFX8TPV1 extends Application {
                    .withLink(BuscarPorDescProductoController.class, "seleccionarProducto", FXMLMainController.class)
                    .withLink(FXMLMainController.class, "pagoTicket", PagoTicketController.class)
                    .withLink(PagoTicketController.class,"volverFacturacion",FXMLMainController.class)
-                   .withLink(PagoTicketController.class,"mostrarError",ErrorController.class)
-                   .withLink(ErrorController.class,"facturacion",PagoTicketController.class)
+                   //.withLink(PagoTicketController.class,"mostrarError",ErrorController.class)
                    .withLink(FXMLMainController.class,"mostrarError",ErrorController.class)
-                   .withLink(ErrorController.class,"facturacion",FXMLMainController.class);
+                   .withLink(ErrorController.class,"facturacion",FXMLMainController.class)
+                   .withLink(PagoTicketController.class, "confirmarTicket", ConfirmaPagoTicketController.class)
+                   .withLink(ConfirmaPagoTicketController.class,"pagoTicket", PagoTicketController.class)
+                   .withLink(ConfirmaPagoTicketController.class,"mostrarError",ErrorController.class);
         StackPane root = flow.start();   
         
         Scene scene = new Scene(root);

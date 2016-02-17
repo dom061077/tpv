@@ -12,7 +12,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javax.annotation.PostConstruct;
@@ -51,9 +51,7 @@ public class ErrorController implements Initializable {
     private BorderPane borderPane;
     
     @FXML
-    private Label labelError;
-    //@FXML
-    //private TextArea errorMsg;
+    private TextArea textAreaError;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -65,9 +63,10 @@ public class ErrorController implements Initializable {
     public void init(){
             DataModelTicket model = context.getRegisteredObject(DataModelTicket.class);
             log.info("Ingresando a pantalla de error: "+model.getTpvException().getMessage());
-            labelError.setText(model.getTpvException().getMessage());
+            //labelError.setText(model.getTpvException().getMessage());
+            textAreaError.setText(model.getTpvException().getMessage());
             Platform.runLater(()->{
-                borderPane.setOnKeyPressed(keyEvent->{
+                textAreaError.setOnKeyPressed(keyEvent->{
                     if(keyEvent.getCode()==KeyCode.ESCAPE){
                         volverButton.fire();
                     }
