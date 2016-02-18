@@ -11,6 +11,7 @@ import com.tpv.modelo.FacturaDetalle;
 import com.tpv.principal.DataModelTicket;
 import com.tpv.principal.LineaTicketData;
 import com.tpv.service.FacturacionService;
+import com.tpv.service.ImpresoraService;
 import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.fxml.FXML;
@@ -31,6 +32,7 @@ public class ConfirmaPagoTicketController {
     Logger log = Logger.getLogger(ConfirmaPagoTicketController.class);
     
     private FacturacionService factService = new FacturacionService();
+    private ImpresoraService impresoraService = new ImpresoraService();
     
     @FXMLViewFlowContext
     private ViewFlowContext context;    
@@ -51,13 +53,15 @@ public class ConfirmaPagoTicketController {
     @PostConstruct
     public void init(){
             DataModelTicket model = context.getRegisteredObject(DataModelTicket.class);
-            log.info("Ingresando a pantalla de error: "+model.getTpvException().getMessage());
+            log.info("Ingresando a la confirmación de pago");
             //labelError.setText(model.getTpvException().getMessage());
             Platform.runLater(()->{
                 borderPane.setOnKeyPressed(keyEvent->{
                     if(keyEvent.getCode()==KeyCode.ESCAPE){
                         volverButton.fire();
                     }
+                    if(keyEvent.getCode() == KeyCode.ENTER)
+                        guardarTicket();
                 });
             });
                     
@@ -70,14 +74,19 @@ public class ConfirmaPagoTicketController {
         //factura.setNumeroComprobante(LABEL_CANTIDAD);
         ListProperty<LineaTicketData> detalle =  modelTicket.getDetalle();
         
-        detalle.forEach(item->{
-            FacturaDetalle facturaDetalle = new FacturaDetalle();
-            facturaDetalle.setCantidad(item.getCantidad());
-            facturaDetalle.setSubTotal(item.getSubTotal());
-            factura.getDetalle().add(facturaDetalle);
-        });
+//        detalle.forEach(item->{
+//            FacturaDetalle facturaDetalle = new FacturaDetalle();
+//            facturaDetalle.setFactura(factura);
+//            facturaDetalle.setCantidad(item.getCantidad());
+//            facturaDetalle.setSubTotal(item.getSubTotal());
+//            factura.getDetalle().add(facturaDetalle);
+//        });
         try{
-            factService.registrarFactura(factura);
+            impresoraService.cerrarTicket();
+            factService.registrarFactura(factura,detalle);
+            modelTicket.setCliente(null);
+            modelTicket.getDetalle().clear();
+            modelTicket.getPagos().clear();;
             volverButton.fire();
         }catch(TpvException e){
             log.error("Error: "+e.getMessage());

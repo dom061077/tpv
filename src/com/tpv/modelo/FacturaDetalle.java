@@ -6,9 +6,11 @@
 package com.tpv.modelo;
 
 import java.math.BigDecimal;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -22,7 +24,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name="facturasdetalle")
 public class FacturaDetalle {
-    @Id @GeneratedValue
+    @Id 
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "idFACTURASDETALLE")
     private int id;
     
@@ -32,9 +35,11 @@ public class FacturaDetalle {
     @Column(name = "TOTAL")
     private BigDecimal subTotal;
     
-    @ManyToOne
-    @JoinColumn(name = "idFACTURAS", nullable = false,
-            updatable = false, insertable = false)
+    
+    
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "idFACTURAS", referencedColumnName = "idFACTURAS", nullable=false)
+            //,updatable = false,insertable=true)
     private Factura factura;
 
     /**

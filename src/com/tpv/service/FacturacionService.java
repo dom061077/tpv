@@ -7,7 +7,11 @@ package com.tpv.service;
 
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Factura;
+import com.tpv.modelo.FacturaDetalle;
+import com.tpv.principal.LineaTicketData;
 import com.tpv.util.Connection;
+import java.math.BigDecimal;
+import javafx.beans.property.ListProperty;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import org.apache.log4j.Logger;
@@ -20,13 +24,24 @@ public class FacturacionService  {
     Logger log = Logger.getLogger(FacturacionService.class);
     
     
-    public void registrarFactura(Factura factura)throws TpvException{
+    public void registrarFactura(Factura factura, ListProperty<LineaTicketData> detalle)throws TpvException{
         EntityManager em = Connection.getEm();
         EntityTransaction tx = em.getTransaction();
         try{
             if(!tx.isActive())
                tx.begin();     
-                em.merge(factura);
+                em.persist(factura);
+                
+                
+//            detalle.forEach(item->{
+                FacturaDetalle facturaDetalle = new FacturaDetalle();
+                facturaDetalle.setFactura(factura);
+                facturaDetalle.setCantidad(10);//(item.getCantidad());
+                facturaDetalle.setSubTotal(new  BigDecimal(12));//(item.getSubTotal());
+                factura.getDetalle().add(facturaDetalle);
+                em.persist(facturaDetalle);
+//            });
+//                
             tx.commit();
             em.clear();        
         }catch(Exception e){

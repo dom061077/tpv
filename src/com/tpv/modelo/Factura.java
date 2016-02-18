@@ -7,9 +7,14 @@ package com.tpv.modelo;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -24,6 +29,7 @@ import javax.persistence.Table;
 @Table(name="facturas")
 public class Factura {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "idFACTURAS")
     private int id;
     
@@ -39,10 +45,11 @@ public class Factura {
     @Column(name = "TOTAL")
     private BigDecimal total;
     
-    @OneToMany
-    @JoinColumn(name = "idFACTURAS", nullable = false)
+    
+    
+    @OneToMany(cascade = CascadeType.ALL,mappedBy="factura")
     //@org.hibernate.annotations.IndexColumn(name = "BID_POSITION")
-    private List<FacturaDetalle> detalle = new ArrayList<>();
+    private Set<FacturaDetalle> detalle = new HashSet<>();
 
     /**
      * @return the id
@@ -117,7 +124,7 @@ public class Factura {
     /**
      * @return the detalle
      */
-    public List<FacturaDetalle> getDetalle() {
+    public Set<FacturaDetalle> getDetalle() {
         return detalle;
     }
 
