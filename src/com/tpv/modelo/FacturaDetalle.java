@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package com.tpv.modelo;
+//http://vladmihalcea.com/2015/03/05/a-beginners-guide-to-jpa-and-hibernate-cascade-types/
 
 import java.math.BigDecimal;
 import javax.persistence.CascadeType;
