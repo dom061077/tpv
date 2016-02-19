@@ -17,6 +17,8 @@ import javafx.beans.property.ListProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javax.annotation.PostConstruct;
@@ -37,6 +39,25 @@ public class PagoTicketController {
     private MaskTextField textFieldTipoPago;
     private MaskTextField textFieldMonto;
     private MaskTextField textFieldCantidadCuotas;
+    
+    
+    @FXML
+    private TableView tableViewPagos;
+    
+    @FXML
+    private TableColumn codigoPagoColumn;
+    
+    @FXML
+    private TableColumn descripcionPagoColumn;
+    
+    @FXML
+    private TableColumn montoPagoColumn;
+    
+    @FXML
+    private TableColumn cantidadCuotaColumn;
+    
+    @FXML
+    private TableColumn codigoCuponColumn;
     
     
     @FXMLViewFlowContext
