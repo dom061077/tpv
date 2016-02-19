@@ -24,24 +24,13 @@ public class FacturacionService  {
     Logger log = Logger.getLogger(FacturacionService.class);
     
     
-    public void registrarFactura(Factura factura, ListProperty<LineaTicketData> detalle)throws TpvException{
+    public void registrarFactura(Factura factura)throws TpvException{
         EntityManager em = Connection.getEm();
         EntityTransaction tx = em.getTransaction();
         try{
             if(!tx.isActive())
                tx.begin();     
-                em.persist(factura);
-                
-                
-//            detalle.forEach(item->{
-                FacturaDetalle facturaDetalle = new FacturaDetalle();
-                facturaDetalle.setFactura(factura);
-                facturaDetalle.setCantidad(10);//(item.getCantidad());
-                facturaDetalle.setSubTotal(new  BigDecimal(12));//(item.getSubTotal());
-                factura.getDetalle().add(facturaDetalle);
-                em.persist(facturaDetalle);
-//            });
-//                
+            em.persist(factura);
             tx.commit();
             em.clear();        
         }catch(Exception e){

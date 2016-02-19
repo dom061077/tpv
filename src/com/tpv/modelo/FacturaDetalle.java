@@ -40,8 +40,13 @@ public class FacturaDetalle {
     
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "idFACTURAS", referencedColumnName = "idFACTURAS", nullable=false)
-            //,updatable = false,insertable=true)
     private Factura factura;
+    
+    
+    @ManyToOne
+    @JoinColumn(name = "idPRODUCTOS", referencedColumnName = "idPRODUCTOS", nullable=false)
+    private Producto producto;
+    
 
     /**
      * @return the id
@@ -97,6 +102,20 @@ public class FacturaDetalle {
      */
     public void setFactura(Factura factura) {
         this.factura = factura;
+    }
+
+    /**
+     * @return the producto
+     */
+    public Producto getProducto() {
+        return producto;
+    }
+
+    /**
+     * @param producto the producto to set
+     */
+    public void setProducto(Producto producto) {
+        this.producto = producto;
     }
     
     

@@ -17,6 +17,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -49,8 +50,16 @@ public class Factura {
     
     @OneToMany(cascade = CascadeType.ALL,mappedBy="factura")
     //@org.hibernate.annotations.IndexColumn(name = "BID_POSITION")
-    private Set<FacturaDetalle> detalle = new HashSet<>();
+    private List<FacturaDetalle> detalle = new ArrayList<FacturaDetalle>();
 
+    
+    @ManyToOne
+    @JoinColumn(name = "idClientes", referencedColumnName = "idClientes", nullable=true)
+    private Cliente cliente;
+    
+    
+    
+    
     /**
      * @return the id
      */
@@ -124,8 +133,22 @@ public class Factura {
     /**
      * @return the detalle
      */
-    public Set<FacturaDetalle> getDetalle() {
+    public List<FacturaDetalle> getDetalle() {
         return detalle;
+    }
+
+    /**
+     * @return the cliente
+     */
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    /**
+     * @param cliente the cliente to set
+     */
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 
     

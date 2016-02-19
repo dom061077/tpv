@@ -8,10 +8,12 @@ package com.tpv.pagoticket;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Factura;
 import com.tpv.modelo.FacturaDetalle;
+import com.tpv.modelo.Producto;
 import com.tpv.principal.DataModelTicket;
 import com.tpv.principal.LineaTicketData;
 import com.tpv.service.FacturacionService;
 import com.tpv.service.ImpresoraService;
+import com.tpv.service.ProductoService;
 import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.fxml.FXML;
@@ -33,6 +35,7 @@ public class ConfirmaPagoTicketController {
     
     private FacturacionService factService = new FacturacionService();
     private ImpresoraService impresoraService = new ImpresoraService();
+    private ProductoService productoService = new ProductoService();
     
     @FXMLViewFlowContext
     private ViewFlowContext context;    
@@ -59,9 +62,13 @@ public class ConfirmaPagoTicketController {
                 borderPane.setOnKeyPressed(keyEvent->{
                     if(keyEvent.getCode()==KeyCode.ESCAPE){
                         volverButton.fire();
+                        
                     }
-                    if(keyEvent.getCode() == KeyCode.ENTER)
+                    if(keyEvent.getCode() == KeyCode.ENTER){
                         guardarTicket();
+                        volverButton.fire();
+                    }
+                    keyEvent.consume();
                 });
             });
                     
@@ -71,23 +78,26 @@ public class ConfirmaPagoTicketController {
         DataModelTicket modelTicket = context.getRegisteredObject(DataModelTicket.class);
         Factura factura = new Factura();
         factura.setTotal(modelTicket.getTotalTicket());
+        factura.setCliente(modelTicket.getCliente());
         //factura.setNumeroComprobante(LABEL_CANTIDAD);
         ListProperty<LineaTicketData> detalle =  modelTicket.getDetalle();
         
-//        detalle.forEach(item->{
-//            FacturaDetalle facturaDetalle = new FacturaDetalle();
-//            facturaDetalle.setFactura(factura);
-//            facturaDetalle.setCantidad(item.getCantidad());
-//            facturaDetalle.setSubTotal(item.getSubTotal());
-//            factura.getDetalle().add(facturaDetalle);
-//        });
+        detalle.forEach(item->{
+            FacturaDetalle facturaDetalle = new FacturaDetalle();
+            Producto producto = productoService.getProductoPorCodigo(item.getCodigoProducto());
+            facturaDetalle.setFactura(factura);
+            facturaDetalle.setProducto(producto);
+            facturaDetalle.setCantidad(item.getCantidad());
+            facturaDetalle.setSubTotal(item.getSubTotal());
+            factura.getDetalle().add(facturaDetalle);
+        });
         try{
             impresoraService.cerrarTicket();
-            factService.registrarFactura(factura,detalle);
+            factService.registrarFactura(factura);
             modelTicket.setCliente(null);
             modelTicket.getDetalle().clear();
             modelTicket.getPagos().clear();;
-            volverButton.fire();
+
         }catch(TpvException e){
             log.error("Error: "+e.getMessage());
             modelTicket.setException(e);

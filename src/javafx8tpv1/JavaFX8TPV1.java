@@ -107,7 +107,7 @@ public class JavaFX8TPV1 extends Application {
                    .withLink(FXMLMainController.class,"mostrarError",ErrorController.class)
                    .withLink(ErrorController.class,"facturacion",FXMLMainController.class)
                    .withLink(PagoTicketController.class, "confirmarTicket", ConfirmaPagoTicketController.class)
-                   .withLink(ConfirmaPagoTicketController.class,"pagoTicket", PagoTicketController.class)
+                   .withLink(ConfirmaPagoTicketController.class,"pagoTicket", FXMLMainController.class)
                    .withLink(ConfirmaPagoTicketController.class,"mostrarError",ErrorController.class);
         StackPane root = flow.start();   
         
