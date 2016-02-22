@@ -18,10 +18,55 @@ import javax.persistence.Table;
 @Table(name="formapago")
 public class FormaPago {
     @Id
-    @Column(name = "idCLIENTES")
+    @Column(name = "idFORMAPAGO")
     private int id;
     
     @Column(name = "DETALLE")
     private String detalle;
+    
+    @Column(name="MAXIMOCUOTAS")
+    private int maxiCuotas;
+
+    /**
+     * @return the id
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    /**
+     * @return the detalle
+     */
+    public String getDetalle() {
+        return detalle;
+    }
+
+    /**
+     * @param detalle the detalle to set
+     */
+    public void setDetalle(String detalle) {
+        this.detalle = detalle;
+    }
+
+    /**
+     * @return the maxiCuotas
+     */
+    public int getMaxiCuotas() {
+        return maxiCuotas;
+    }
+
+    /**
+     * @param maxiCuotas the maxiCuotas to set
+     */
+    public void setMaxiCuotas(int maxiCuotas) {
+        this.maxiCuotas = maxiCuotas;
+    }
     
 }

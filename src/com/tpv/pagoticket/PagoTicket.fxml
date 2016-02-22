@@ -30,11 +30,12 @@
                   <Insets />
                </opaqueInsets>
             </Label>
+            <Label fx:id="labelFormaPagoDescripcion" prefHeight="17.0" prefWidth="437.0" styleClass="label_textfield" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="1" />
          </children>
       </GridPane>
    </top>
    <center>
-      <TableView fx:id="tableVIewPagos" focusTraversable="false" prefHeight="327.0" prefWidth="1173.0" BorderPane.alignment="CENTER">
+      <TableView fx:id="tableViewPagos" focusTraversable="false" prefHeight="327.0" prefWidth="1173.0" BorderPane.alignment="CENTER">
         <columns>
           <TableColumn fx:id="codigoPagoColumn" prefWidth="157.0" text="Cod. Pago" />
             <TableColumn fx:id="descripcionPagoColumn" prefWidth="233.0" text="Descripción Pago" />

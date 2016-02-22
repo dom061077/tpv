@@ -37,6 +37,76 @@ public class LineaPagoData {
         this.CantidadCuotas = new SimpleIntegerProperty(cantidadCuotas);
         this.CodigoCupon = new SimpleIntegerProperty(codigoCupon);
     }
+
+    /**
+     * @return the CodigoPago
+     */
+    public IntegerProperty getCodigoPago() {
+        return CodigoPago;
+    }
+
+    /**
+     * @param CodigoPago the CodigoPago to set
+     */
+    public void setCodigoPago(IntegerProperty CodigoPago) {
+        this.CodigoPago = CodigoPago;
+    }
+
+    /**
+     * @return the Descripcion
+     */
+    public StringProperty getDescripcion() {
+        return Descripcion;
+    }
+
+    /**
+     * @param Descripcion the Descripcion to set
+     */
+    public void setDescripcion(StringProperty Descripcion) {
+        this.Descripcion = Descripcion;
+    }
+
+    /**
+     * @return the Monto
+     */
+    public ObjectProperty<BigDecimal> getMonto() {
+        return Monto;
+    }
+
+    /**
+     * @param Monto the Monto to set
+     */
+    public void setMonto(ObjectProperty<BigDecimal> Monto) {
+        this.Monto = Monto;
+    }
+
+    /**
+     * @return the CantidadCuotas
+     */
+    public IntegerProperty getCantidadCuotas() {
+        return CantidadCuotas;
+    }
+
+    /**
+     * @param CantidadCuotas the CantidadCuotas to set
+     */
+    public void setCantidadCuotas(IntegerProperty CantidadCuotas) {
+        this.CantidadCuotas = CantidadCuotas;
+    }
+
+    /**
+     * @return the CodigoCupon
+     */
+    public IntegerProperty getCodigoCupon() {
+        return CodigoCupon;
+    }
+
+    /**
+     * @param CodigoCupon the CodigoCupon to set
+     */
+    public void setCodigoCupon(IntegerProperty CodigoCupon) {
+        this.CodigoCupon = CodigoCupon;
+    }
     
     
 }

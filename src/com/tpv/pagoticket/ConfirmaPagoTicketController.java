@@ -42,8 +42,12 @@ public class ConfirmaPagoTicketController {
     
     
     @FXML
-    @ActionTrigger("pagoTicket")
+    @ActionTrigger("volverPagoTicket")
     private Button volverButton;
+    
+    @FXML
+    @ActionTrigger("facturacion")
+    private Button confirmarButton;
     
     @FXML
     @ActionTrigger("mostrarError")
@@ -66,7 +70,7 @@ public class ConfirmaPagoTicketController {
                     }
                     if(keyEvent.getCode() == KeyCode.ENTER){
                         guardarTicket();
-                        volverButton.fire();
+                        confirmarButton.fire();
                     }
                     keyEvent.consume();
                 });

@@ -8,6 +8,7 @@ package com.tpv.principal;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Cliente;
 import com.tpv.modelo.FormaPago;
+import com.tpv.pagoticket.LineaPagoData;
 import java.math.BigDecimal;
 import java.util.Iterator;
 import javafx.beans.property.ListProperty;
@@ -25,7 +26,7 @@ import org.datafx.controller.flow.injection.FlowScoped;
 @FlowScoped
 public class DataModelTicket {
     private ListProperty<LineaTicketData> detalle;
-    private ListProperty<PagoTicketData> pagos;
+    private ListProperty<LineaPagoData> pagos;
     private Cliente cliente = null;
     private FormaPago formaPago = null;
     private TpvException exception;
@@ -42,9 +43,9 @@ public class DataModelTicket {
         return detalle;
     }
     
-    public ListProperty<PagoTicketData> getPagos(){
+    public ListProperty<LineaPagoData> getPagos(){
         if(pagos == null){
-            ObservableList<PagoTicketData> innerList = FXCollections.observableArrayList();
+            ObservableList<LineaPagoData> innerList = FXCollections.observableArrayList();
             pagos = new SimpleListProperty<>(innerList);            
         }
         return pagos;
@@ -63,11 +64,11 @@ public class DataModelTicket {
     }
 
     public BigDecimal getTotalPagos(){
-        ListProperty<PagoTicketData> innerList = getPagos();
+        ListProperty<LineaPagoData> innerList = getPagos();
         Double total = new Double(0);
         for(Iterator iter=innerList.iterator();iter.hasNext();){
-            PagoTicketData pago = (PagoTicketData)iter.next();
-            total = total + pago.getMontoPago().doubleValue();
+            LineaPagoData pago = (LineaPagoData)iter.next();
+            total = total + pago.getMonto().get().doubleValue();
         }
         
         return BigDecimal.valueOf(total);
