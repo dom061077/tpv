@@ -392,22 +392,22 @@ public class FXMLMainController implements Initializable {
             producto = productoService.getProductoPorCodBarra(textFieldProducto.getText());
         }
         if(producto!=null){
-            if(modelTicket.getDetalle().size()==0){
-                try{
-                    impresoraService.abrirTicket();
-                }catch(TpvException e){
-                    log.error("Error: "+e.getMessage());
-                }
-            }
+//            if(modelTicket.getDetalle().size()==0){
+//                try{
+//                    impresoraService.abrirTicket();
+//                }catch(TpvException e){
+//                    log.error("Error: "+e.getMessage());
+//                }
+//            }
             precio= new BigDecimal(10);
             modelTicket.getDetalle().add(new LineaTicketData(producto.getCodigoProducto()
                     ,producto.getDescripcion(),cantidad,precio));
-            try{
-                impresoraService.imprimirLineaTicket(producto.getDescripcion(), BigDecimal.valueOf(cantidad)
-                        ,precio , BigDecimal.valueOf(21), BigDecimal.valueOf(0));
-            }catch(TpvException e){
-                log.error("Error: "+e.getMessage());
-            }
+//            try{
+//                impresoraService.imprimirLineaTicket(producto.getDescripcion(), BigDecimal.valueOf(cantidad)
+//                        ,precio , BigDecimal.valueOf(21), BigDecimal.valueOf(0));
+//            }catch(TpvException e){
+//                log.error("Error: "+e.getMessage());
+//            }
             
         }
         textFieldProducto.setText("");
@@ -498,7 +498,7 @@ public class FXMLMainController implements Initializable {
                 }
             };
             ((Task<String>) worker).setOnFailed(event -> {
-               goToErrorButton.fire();
+               //goToErrorButton.fire();
             });
             nroticket.textProperty().bind(worker.messageProperty());
             

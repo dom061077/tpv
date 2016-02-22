@@ -15,11 +15,13 @@ import com.tpv.service.FacturacionService;
 import com.tpv.service.PagoService;
 import com.tpv.util.ui.MaskTextField;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -45,6 +47,7 @@ public class PagoTicketController {
     private MaskTextField textFieldCantidadCuotas;
     private boolean tieneCuotas=false;
     private boolean tieneCuponPago = false;
+    private DataModelTicket modelTicket;
     
     PagoService pagoService = new PagoService();
     
@@ -95,21 +98,56 @@ public class PagoTicketController {
     @PostConstruct
     public void init(){
         iniciarIngresosVisibles();
-        DataModelTicket modelTicket = context.getRegisteredObject(DataModelTicket.class);
+        modelTicket = context.getRegisteredObject(DataModelTicket.class);
         modelTicket.getPagos();
-        codigoPagoColumn.setCellValueFactory(new PropertyValueFactory<LineaTicketData,Integer>("codigoPago"));
+        codigoPagoColumn.setCellValueFactory(new PropertyValueFactory<LineaPagoData,Integer>("codigoPago"));
+        codigoPagoColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
         descripcionPagoColumn.setCellValueFactory(new PropertyValueFactory("descripcion"));
         montoPagoColumn.setCellValueFactory(new PropertyValueFactory("monto"));
+        
+        montoPagoColumn.setCellFactory(col -> {
+            TableCell<LineaPagoData,BigDecimal> cell = new TableCell<LineaPagoData,BigDecimal>(){
+                @Override
+                public void updateItem(BigDecimal item,boolean empty){
+                    super.updateItem(item, empty);
+                    this.setText(null);
+                    this.setGraphic(null);
+                    if (!empty) {
+                            //String formattedDob = De
+                            DecimalFormat df = new DecimalFormat("##,###.00");
+                                    
+                            this.setText(df.format(item));
+                    }
+                }
+            };
+            return cell;
+        });
+        montoPagoColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+        
         cantidadCuotaColumn.setCellValueFactory(new PropertyValueFactory("cantidadCuotas"));
+        cantidadCuotaColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
         codigoCuponColumn.setCellValueFactory(new PropertyValueFactory("codigoCupon"));
+        codigoCuponColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+        
         
         textFieldMonto.setText(modelTicket.getTotalTicket().toString());
         
         Platform.runLater(() -> {
             tableViewPagos.setItems(modelTicket.getPagos());
             textFieldTipoPago.setOnKeyPressed(keyEvent -> {
-                if(keyEvent.getCode() == KeyCode.ENTER){
+                if(keyEvent.getCode() == KeyCode.SUBTRACT){
+                    eliminarLineaPago();
+                    refrescarTextFieldSaldo();
+                    keyEvent.consume();;
+                    return;
+                }
                     
+                if(keyEvent.getCode() == KeyCode.ENTER){
+                    if(modelTicket.getsaldo().compareTo(BigDecimal.valueOf(Double.parseDouble("0")))==0){
+                        confirmarButton.fire();
+                        keyEvent.consume();
+                        return;
+                    }
                     try{
                         buscarDescTipoPago(Integer.parseInt(textFieldTipoPago.getText()));
                         if(labelFormaPagoDescripcion.getText().length()!=0){
@@ -128,11 +166,33 @@ public class PagoTicketController {
                     keyEvent.consume();
                     return;
                 }
+                
+                
+                int index;
+                if(keyEvent.getCode() == KeyCode.DOWN){
+                    tableViewPagos.getSelectionModel().selectNext();
+                    index = tableViewPagos.getSelectionModel().getSelectedIndex();
+                    tableViewPagos.scrollTo(index);
+                    keyEvent.consume();
+                    return;
+                }
+                
+                if(keyEvent.getCode() == KeyCode.UP){
+                    tableViewPagos.getSelectionModel().selectPrevious();
+                    index = tableViewPagos.getSelectionModel().getSelectedIndex();
+                    tableViewPagos.scrollTo(index);
+                    keyEvent.consume();
+                    return;
+                }
+                    
+                    
                     
             });
             textFieldMonto.setOnKeyPressed(keyEvent -> {
                 if(keyEvent.getCode() == KeyCode.ENTER){
                     agregarLineaPago();
+                    refrescarTextFieldSaldo();
+                    scrollDown();
                     keyEvent.consume();
                     return;
                 }
@@ -149,11 +209,11 @@ public class PagoTicketController {
     
     private void iniciarIngresosVisibles(){
         textFieldTipoPago = new MaskTextField();
-        textFieldTipoPago.setMask("N!.N!");
+        textFieldTipoPago.setMask("N!");
         textFieldMonto = new MaskTextField();
         textFieldMonto.setMask("N!.N!");
         textFieldCantidadCuotas = new MaskTextField();
-        textFieldCantidadCuotas.setMask("N!.N!");
+        textFieldCantidadCuotas.setMask("N!");
         
         gridPanePagos.add(textFieldTipoPago,2,1);
         gridPanePagos.add(textFieldMonto,2,2);
@@ -175,7 +235,6 @@ public class PagoTicketController {
     }
     
     private void agregarLineaPago(){
-        DataModelTicket modelTicket = context.getRegisteredObject(DataModelTicket.class);
         BigDecimal pagoParcial = new BigDecimal(textFieldMonto.getText());
         pagoParcial = pagoParcial.add(modelTicket.getTotalPagos());
         if(pagoParcial.compareTo(modelTicket.getTotalTicket())==1)
@@ -191,9 +250,30 @@ public class PagoTicketController {
         modelTicket.getPagos().add(new LineaPagoData(
             codigoPago,labelFormaPagoDescripcion.getText(),monto
             ,cantidadCuotas,codigoCupon));
-        BigDecimal saldoParcial = modelTicket.getTotalTicket().subtract(modelTicket.getTotalPagos());
-        textFieldMonto.setText(modelTicket.getTotalPagos().toString());
+        //BigDecimal saldoParcial = modelTicket.getTotalTicket().subtract(modelTicket.getTotalPagos());
+        textFieldMonto.setText(modelTicket.getsaldo().toString());
+        textFieldTipoPago.setText("");
+        labelFormaPagoDescripcion.setText("");
+        textFieldTipoPago.requestFocus();
+        textFieldMonto.setDisable(true);
         
+    }
+ 
+    private void eliminarLineaPago(){
+       int index = tableViewPagos.getSelectionModel().getSelectedIndex();
+       LineaPagoData lineaPagoData = (LineaPagoData)tableViewPagos.getItems().get(index);
+       modelTicket.getPagos().remove(lineaPagoData);
+    }
+
+    private void scrollDown(){
+            if(tableViewPagos.getItems().size()>0){
+                tableViewPagos.getSelectionModel().select(tableViewPagos.getItems().size()-1);
+                tableViewPagos.scrollTo(tableViewPagos.getItems().size()-1);
+            }
+    }    
+    
+    private void refrescarTextFieldSaldo(){
+        textFieldMonto.setText(modelTicket.getsaldo().toString());
     }
     
 }

@@ -41,72 +41,77 @@ public class LineaPagoData {
     /**
      * @return the CodigoPago
      */
-    public IntegerProperty getCodigoPago() {
+    public IntegerProperty codigoPagoProperty() {
         return CodigoPago;
     }
 
+
     /**
-     * @param CodigoPago the CodigoPago to set
+     * @return the Descripcion
      */
-    public void setCodigoPago(IntegerProperty CodigoPago) {
-        this.CodigoPago = CodigoPago;
+    public StringProperty descripcionProperty() {
+        return Descripcion;
+    }
+
+
+    /**
+     * @return the Monto
+     */
+    public ObjectProperty<BigDecimal> montoProperty() {
+        return Monto;
+    }
+
+
+    /**
+     * @return the CantidadCuotas
+     */
+    public IntegerProperty cantidadCuotasProperty() {
+        return CantidadCuotas;
+    }
+
+
+    /**
+     * @return the CodigoCupon
+     */
+    public IntegerProperty codigoCuponProperty() {
+        return CodigoCupon;
+    }
+
+    /**
+     * @return the CodigoPago
+     */
+    public int getCodigoPago() {
+        return codigoPagoProperty().get();
     }
 
     /**
      * @return the Descripcion
      */
-    public StringProperty getDescripcion() {
-        return Descripcion;
-    }
-
-    /**
-     * @param Descripcion the Descripcion to set
-     */
-    public void setDescripcion(StringProperty Descripcion) {
-        this.Descripcion = Descripcion;
+    public String getDescripcion() {
+        return descripcionProperty().get();
     }
 
     /**
      * @return the Monto
      */
-    public ObjectProperty<BigDecimal> getMonto() {
-        return Monto;
-    }
-
-    /**
-     * @param Monto the Monto to set
-     */
-    public void setMonto(ObjectProperty<BigDecimal> Monto) {
-        this.Monto = Monto;
+    public BigDecimal getMonto() {
+        return montoProperty().get();
     }
 
     /**
      * @return the CantidadCuotas
      */
-    public IntegerProperty getCantidadCuotas() {
-        return CantidadCuotas;
-    }
-
-    /**
-     * @param CantidadCuotas the CantidadCuotas to set
-     */
-    public void setCantidadCuotas(IntegerProperty CantidadCuotas) {
-        this.CantidadCuotas = CantidadCuotas;
+    public int getCantidadCuotas() {
+        return cantidadCuotasProperty().get();
     }
 
     /**
      * @return the CodigoCupon
      */
-    public IntegerProperty getCodigoCupon() {
-        return CodigoCupon;
+    public int getCodigoCupon() {
+        return codigoCuponProperty().get();
     }
 
-    /**
-     * @param CodigoCupon the CodigoCupon to set
-     */
-    public void setCodigoCupon(IntegerProperty CodigoCupon) {
-        this.CodigoCupon = CodigoCupon;
-    }
     
     
 }

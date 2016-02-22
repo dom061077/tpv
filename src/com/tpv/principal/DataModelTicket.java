@@ -68,11 +68,16 @@ public class DataModelTicket {
         Double total = new Double(0);
         for(Iterator iter=innerList.iterator();iter.hasNext();){
             LineaPagoData pago = (LineaPagoData)iter.next();
-            total = total + pago.getMonto().get().doubleValue();
+            total = total + pago.getMonto().doubleValue();
         }
         
         return BigDecimal.valueOf(total);
     }
+    
+    public BigDecimal getsaldo(){
+        return getTotalTicket().subtract(getTotalPagos());
+    }
+    
     /**
      * @return the cliente
      */
