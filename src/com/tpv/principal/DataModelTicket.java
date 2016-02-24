@@ -12,7 +12,9 @@ import com.tpv.pagoticket.LineaPagoData;
 import java.math.BigDecimal;
 import java.util.Iterator;
 import javafx.beans.property.ListProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.datafx.controller.flow.injection.FlowScoped;
@@ -34,6 +36,8 @@ public class DataModelTicket {
     private int puntoVenta;//checkout
     private boolean clienteSelecciondo = false;
     
+    public DataModelTicket(){
+    }
     
     public ListProperty<LineaTicketData> getDetalle() {
         if (detalle == null) {
@@ -74,9 +78,11 @@ public class DataModelTicket {
         return BigDecimal.valueOf(total);
     }
     
-    public BigDecimal getsaldo(){
+    public BigDecimal getSaldo(){
         return getTotalTicket().subtract(getTotalPagos());
     }
+    
+    
     
     /**
      * @return the cliente

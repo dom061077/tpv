@@ -14,10 +14,19 @@ import com.tpv.principal.LineaTicketData;
 import com.tpv.service.FacturacionService;
 import com.tpv.service.ImpresoraService;
 import com.tpv.service.ProductoService;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javax.annotation.PostConstruct;
@@ -36,6 +45,8 @@ public class ConfirmaPagoTicketController {
     private FacturacionService factService = new FacturacionService();
     private ImpresoraService impresoraService = new ImpresoraService();
     private ProductoService productoService = new ProductoService();
+    private DataModelTicket modelTicket;
+    
     
     @FXMLViewFlowContext
     private ViewFlowContext context;    
@@ -56,13 +67,76 @@ public class ConfirmaPagoTicketController {
     @FXML
     BorderPane borderPane;
     
+    @FXML
+    TableView tableViewPagos;
+
+    @FXML
+    private TableColumn codigoPagoColumn;
+    
+    @FXML
+    private TableColumn descripcionPagoColumn;
+    
+    @FXML
+    private TableColumn montoPagoColumn;
+    
+    @FXML
+    private TableColumn cantidadCuotaColumn;
+    
+    @FXML
+    private TableColumn codigoCuponColumn;
+    
+    @FXML
+    private TextField totalTicketTextField;
+    
+    @FXML
+    private TextField totalPagoTextField;
+    
+    @FXML
+    private Label cambioLabel;
+    
+    @FXML
+    private Label totalTicketLabel;
+    
+    @FXML
+    private Label totalPagosLabel;
+
+    
     
     @PostConstruct
     public void init(){
-            DataModelTicket model = context.getRegisteredObject(DataModelTicket.class);
             log.info("Ingresando a la confirmación de pago");
             //labelError.setText(model.getTpvException().getMessage());
+            modelTicket = context.getRegisteredObject(DataModelTicket.class);
+            codigoPagoColumn.setCellValueFactory(new PropertyValueFactory<LineaPagoData,Integer>("codigoPago"));
+            codigoPagoColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+            descripcionPagoColumn.setCellValueFactory(new PropertyValueFactory("descripcion"));
+            montoPagoColumn.setCellValueFactory(new PropertyValueFactory("monto"));
+            montoPagoColumn.setCellFactory(col -> {
+                TableCell<LineaPagoData,BigDecimal> cell = new TableCell<LineaPagoData,BigDecimal>(){
+                    @Override
+                    public void updateItem(BigDecimal item,boolean empty){
+                        super.updateItem(item, empty);
+                        this.setText(null);
+                        this.setGraphic(null);
+                        if (!empty) {
+                                //String formattedDob = De
+                                DecimalFormat df = new DecimalFormat("##,###.00");
+
+                                this.setText(df.format(item));
+                        }
+                    }
+                };
+                return cell;
+            });
+            montoPagoColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+            DecimalFormat df = new DecimalFormat("##,##0.00");
+            
+            totalPagosLabel.setText(df.format(modelTicket.getTotalPagos()));
+            totalTicketLabel.setText(df.format(modelTicket.getTotalTicket()));
+            cambioLabel.setText(df.format(modelTicket.getSaldo().abs()));
+            
             Platform.runLater(()->{
+                tableViewPagos.setItems(modelTicket.getPagos());
                 borderPane.setOnKeyPressed(keyEvent->{
                     if(keyEvent.getCode()==KeyCode.ESCAPE){
                         volverButton.fire();
@@ -75,6 +149,8 @@ public class ConfirmaPagoTicketController {
                     keyEvent.consume();
                 });
             });
+            
+            
                     
     }    
     

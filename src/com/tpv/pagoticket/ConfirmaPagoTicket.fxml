@@ -4,27 +4,61 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane fx:id="borderPane" focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="1173.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="borderPane" focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1173.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
    <bottom>
       <GridPane BorderPane.alignment="CENTER">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <Button fx:id="mostrarErrorButton" mnemonicParsing="false" text="Button" visible="false" />
-            <Button fx:id="volverButton" mnemonicParsing="false" text="Button" visible="false" />
+            <Button fx:id="volverButton" mnemonicParsing="false" text="Button" visible="false" GridPane.columnIndex="1" />
+            <Button fx:id="confirmarButton" mnemonicParsing="false" text="Button" visible="false" GridPane.columnIndex="2" />
          </children>
       </GridPane>
    </bottom>
    <center>
-      <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <center>
+            <TableView fx:id="tableViewPagos" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+              <columns>
+                  <TableColumn fx:id="codigoPagoColumn" prefWidth="157.0" text="Cod.Pago" />
+                <TableColumn fx:id="descripcionPagoColumn" prefWidth="280.0" text="Descripción" />
+                <TableColumn fx:id="montoPagoColumn" prefWidth="200.0" text="Monto Pago" />
+                  <TableColumn fx:id="cantidadCuotaColumn" prefWidth="200.0" text="Cantidad Cuotas" />
+                  <TableColumn fx:id="codigoCuponColumn" prefWidth="200.0" text="Cod.Pago" />
+              </columns>
+            </TableView>
+         </center>
+         <bottom>
+            <GridPane prefHeight="104.0" prefWidth="1173.0" BorderPane.alignment="CENTER">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label alignment="TOP_LEFT" prefHeight="17.0" prefWidth="580.0" styleClass="label_total" text="Total Ticker:" />
+                  <Label alignment="TOP_LEFT" prefHeight="17.0" prefWidth="580.0" styleClass="label_total" text="Total Pago:" GridPane.rowIndex="1" />
+                  <Label alignment="TOP_LEFT" prefHeight="17.0" prefWidth="580.0" styleClass="label_total" text="Cambio del Cliente:" GridPane.rowIndex="2" />
+                  <Label fx:id="totalTicketLabel" prefHeight="17.0" prefWidth="400.0" styleClass="label_total" textAlignment="RIGHT" GridPane.columnIndex="1" />
+                  <Label fx:id="totalPagosLabel" prefHeight="17.0" prefWidth="400.0" styleClass="label_total" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label fx:id="cambioLabel" prefHeight="17.0" prefWidth="400.0" styleClass="label_total" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+               </children>
+            </GridPane>
+         </bottom></BorderPane>
    </center>
    <top>
-      <GridPane BorderPane.alignment="CENTER">
+      <GridPane prefHeight="82.0" prefWidth="1173.0" BorderPane.alignment="CENTER">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -33,7 +67,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label prefHeight="17.0" prefWidth="1163.0" styleClass="label_titulo" text="Cierre de Ticket" GridPane.columnSpan="2" />
+            <Label alignment="TOP_CENTER" prefHeight="42.0" prefWidth="1163.0" styleClass="label_titulo" text="Cierre de Ticket" GridPane.columnSpan="2" />
          </children>
       </GridPane>
    </top>
