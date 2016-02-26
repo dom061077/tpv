@@ -413,22 +413,22 @@ public class FXMLMainController implements Initializable {
             producto = productoService.getProductoPorCodBarra(textFieldProducto.getText());
         }
         if(producto!=null){
-            if(modelTicket.getDetalle().size()==0){
-                try{
-                    impresoraService.abrirTicket();
-                }catch(TpvException e){
-                    log.error("Error: "+e.getMessage());
-                }
-            }
+//            if(modelTicket.getDetalle().size()==0){
+//                try{
+//                    impresoraService.abrirTicket();
+//                }catch(TpvException e){
+//                    log.error("Error: "+e.getMessage());
+//                }
+//            }
             precio= new BigDecimal(10);
             modelTicket.getDetalle().add(new LineaTicketData(producto.getCodigoProducto()
                     ,producto.getDescripcion(),cantidad,precio));
-            try{
-                impresoraService.imprimirLineaTicket(producto.getDescripcion(), BigDecimal.valueOf(cantidad)
-                        ,precio , BigDecimal.valueOf(21), BigDecimal.valueOf(0));
-            }catch(TpvException e){
-                log.error("Error: "+e.getMessage());
-            }
+//            try{
+//                impresoraService.imprimirLineaTicket(producto.getDescripcion(), BigDecimal.valueOf(cantidad)
+//                        ,precio , BigDecimal.valueOf(21), BigDecimal.valueOf(0));
+//            }catch(TpvException e){
+//                log.error("Error: "+e.getMessage());
+//            }
             
         }
         textFieldProducto.setText("");
@@ -492,38 +492,38 @@ public class FXMLMainController implements Initializable {
     }
     
     public void traerInfoImpresora(){
-            Worker<String> worker = new Task<String>(){
-                @Override
-                protected String call() throws Exception{
-                    String retorno[] = new String[3];
-                    try {
-                        Thread.sleep(20);
-                    } catch (InterruptedException e) {
-                        if (isCancelled()) {
-                            //updateValue("Canceled at " + System.currentTimeMillis());
-                            return null; // ignored
-                        }
-                    }
-                    
-                    if(!Connection.getStcp().isConnected()){
-                        modelTicket.setException(new TpvException("La impresora no está conectada"));
-                        throw modelTicket.getTpvException();
-                    }else{
-                            retorno = impresoraService.getPtoVtaNrosTicket();
-                    }
-                    
-                    updateMessage("Pto.Venta: "+retorno[0]+" Nro. Ticket (B/C): "
-                            +retorno[1]+" Nro. Ticket (A): "+retorno[2]);
-                    modelTicket.setNroTicket(Integer.parseInt(retorno[1]));
-                    return "Tarea finalizada";
-                }
-            };
-            ((Task<String>) worker).setOnFailed(event -> {
-               goToErrorButton.fire();
-            });
-            nroticket.textProperty().bind(worker.messageProperty());
-            
-            new Thread((Runnable) worker).start();
+//            Worker<String> worker = new Task<String>(){
+//                @Override
+//                protected String call() throws Exception{
+//                    String retorno[] = new String[3];
+//                    try {
+//                        Thread.sleep(20);
+//                    } catch (InterruptedException e) {
+//                        if (isCancelled()) {
+//                            //updateValue("Canceled at " + System.currentTimeMillis());
+//                            return null; // ignored
+//                        }
+//                    }
+//                    
+//                    if(!Connection.getStcp().isConnected()){
+//                        modelTicket.setException(new TpvException("La impresora no está conectada"));
+//                        throw modelTicket.getTpvException();
+//                    }else{
+//                            retorno = impresoraService.getPtoVtaNrosTicket();
+//                    }
+//                    
+//                    updateMessage("Pto.Venta: "+retorno[0]+" Nro. Ticket (B/C): "
+//                            +retorno[1]+" Nro. Ticket (A): "+retorno[2]);
+//                    modelTicket.setNroTicket(Integer.parseInt(retorno[1]));
+//                    return "Tarea finalizada";
+//                }
+//            };
+//            ((Task<String>) worker).setOnFailed(event -> {
+//               goToErrorButton.fire();
+//            });
+//            nroticket.textProperty().bind(worker.messageProperty());
+//            
+//            new Thread((Runnable) worker).start();
     }
     
 }

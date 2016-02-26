@@ -46,7 +46,7 @@ public class BuscarPorDescProductoController {
     private Button buttonCancelar;
     
     @FXML
-    private TextField filtroProducto;
+    private TextField textFieldFiltroProducto;
     
     @FXML
     private TableView tableView; 
@@ -67,12 +67,9 @@ public class BuscarPorDescProductoController {
         codigoColumn.setCellValueFactory(new  PropertyValueFactory("CodigoProducto"));
         descripcionColumn.setCellValueFactory(new PropertyValueFactory("Descripcion"));
         Platform.runLater(() -> {
-            //cargarTableView();
-                //----------------- eventos de navegacion, para aceptar la seleccion del producto
-                // or para cancelar la seleccion
-                buttonAceptar.getScene().setOnKeyPressed(keyEvent->{
-                    if(keyEvent.getCode()==KeyCode.F10){
-                        if(buttonAceptar.getScene()!=null){
+                textFieldFiltroProducto.setOnKeyPressed(keyEvent->{
+                    if(keyEvent.getCode()==KeyCode.ENTER){
+                        if(textFieldFiltroProducto.getText().trim().equals("")){
                             ProductoData productoData = (ProductoData)tableView.getSelectionModel().getSelectedItem();
                             modelTicket.getDetalle().add(
                                     new LineaTicketData(productoData.CodigoProducto.get(),productoData.Descripcion.get(),1,BigDecimal.valueOf(10000))
@@ -80,40 +77,52 @@ public class BuscarPorDescProductoController {
                             buttonAceptar.fire();
                             keyEvent.consume();
                         }
-                    }
-                    if(keyEvent.getCode()==KeyCode.ESCAPE){
-                        if(buttonAceptar.getScene()!=null)
-                            buttonAceptar.fire();
-                    }
-                    
-                });
-                
-                filtroProducto.setOnKeyPressed(keyEvent->{
-                    if(keyEvent.getCode()==KeyCode.ENTER){
-                        cargarTableView();
+                        else{
+                            cargarTableView();
+                            textFieldFiltroProducto.setText("");
+                        }
                         
                     }
-                });
-                
-                tableView.setOnKeyPressed(keyEvent->{
                     if(keyEvent.getCode()==KeyCode.ESCAPE)
                         buttonAceptar.fire();
-                });
-            
-                /*buttonCancelar.getScene().setOnKeyPressed(keyEvent->{
-                    if(keyEvent.getCode()==KeyCode.ESCAPE){
-                        if(buttonAceptar.getScene()!=null)
-                            buttonAceptar.fire();
+                    int index=0;
+                    if(keyEvent.getCode() == KeyCode.PAGE_DOWN){
+
+                        index = tableView.getSelectionModel().getSelectedIndex();
+                        tableView.getSelectionModel().select(index+20);
+                        tableView.scrollTo(index+21);
                     }
-                });*/
-            
+                    if(keyEvent.getCode() == KeyCode.PAGE_UP){
+                        index = tableView.getSelectionModel().getSelectedIndex();
+                        tableView.getSelectionModel().select(index-20);
+                        tableView.scrollTo(index-21);
+
+
+                    }
+                    if(keyEvent.getCode() == KeyCode.DOWN){
+                        tableView.getSelectionModel().selectNext();
+                        index =tableView.getSelectionModel().getSelectedIndex();
+                        tableView.scrollTo(index);
+
+                    }
+
+                    if(keyEvent.getCode() == KeyCode.UP){
+                        tableView.getSelectionModel().selectPrevious();
+                        index =tableView.getSelectionModel().getSelectedIndex();
+                        tableView.scrollTo(index);
+
+                    }
+                    
+                    
+                    keyEvent.consume();
+                });
         });
         
     }
     
     public void cargarTableView(){
         data = FXCollections.observableArrayList();
-        List<Producto> productos = productoService.getProductos(filtroProducto.getText());
+        List<Producto> productos = productoService.getProductos(textFieldFiltroProducto.getText());
         for(Iterator iter = productos.iterator();iter.hasNext();){
             Producto producto = (Producto)iter.next();
             ProductoData productoData = new ProductoData(producto.getCodigoProducto(),producto.getDescripcion());
@@ -125,7 +134,6 @@ public class BuscarPorDescProductoController {
         tableView.setItems(data);
         if(data.size()>0){
             tableView.getSelectionModel().select(0);
-            tableView.requestFocus();
             
         }
         
