@@ -30,10 +30,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
+import javafx.util.Callback;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
@@ -136,6 +138,25 @@ public class FXMLMainController implements Initializable {
     
     @PostConstruct
     public void init(){
+        
+        tableViewTickets.setRowFactory(new Callback<TableView<LineaTicketData>, TableRow<LineaTicketData>>(){
+            @Override
+            public TableRow<LineaTicketData> call(TableView<LineaTicketData> paramP) {
+                return new TableRow<LineaTicketData>() {
+                    @Override
+                    protected void updateItem(LineaTicketData item, boolean paramBoolean) {
+                        if (item!=null){
+                            if(item.getSubTotal().compareTo(BigDecimal.valueOf(0))<0){
+                                String style = "-fx-background-color: linear-gradient(#007F0E 0%, #FFFFFF 90%, #eaeaea 90%);";
+                                setStyle(style);
+                            }
+                        }
+                        super.updateItem(item, paramBoolean);
+                    }
+                };
+            }
+            
+        });
         
         labelCantidad.setText(LABEL_CANTIDAD);
         textFieldProducto = new MaskTextField();
@@ -360,7 +381,7 @@ public class FXMLMainController implements Initializable {
     }
     private void calcularTotalGeneral(){
         DecimalFormat df = new DecimalFormat("##,##0.00");
-        //totalGeneral.setText(df.format(modelTicket.getTotalTicket()));
+        totalGeneral.setText(df.format(modelTicket.getTotalTicket()));
     }
     
     private void scrollDown(){
@@ -471,38 +492,38 @@ public class FXMLMainController implements Initializable {
     }
     
     public void traerInfoImpresora(){
-//            Worker<String> worker = new Task<String>(){
-//                @Override
-//                protected String call() throws Exception{
-//                    String retorno[] = new String[3];
-//                    try {
-//                        Thread.sleep(20);
-//                    } catch (InterruptedException e) {
-//                        if (isCancelled()) {
-//                            //updateValue("Canceled at " + System.currentTimeMillis());
-//                            return null; // ignored
-//                        }
-//                    }
-//                    
-//                    if(!Connection.getStcp().isConnected()){
-//                        modelTicket.setException(new TpvException("La impresora no está conectada"));
-//                        throw modelTicket.getTpvException();
-//                    }else{
-//                            retorno = impresoraService.getPtoVtaNrosTicket();
-//                    }
-//                    
-//                    updateMessage("Pto.Venta: "+retorno[0]+" Nro. Ticket (B/C): "
-//                            +retorno[1]+" Nro. Ticket (A): "+retorno[2]);
-//                    modelTicket.setNroTicket(Integer.parseInt(retorno[1]));
-//                    return "Tarea finalizada";
-//                }
-//            };
-//            ((Task<String>) worker).setOnFailed(event -> {
-//               goToErrorButton.fire();
-//            });
-//            nroticket.textProperty().bind(worker.messageProperty());
-//            
-//            new Thread((Runnable) worker).start();
+            Worker<String> worker = new Task<String>(){
+                @Override
+                protected String call() throws Exception{
+                    String retorno[] = new String[3];
+                    try {
+                        Thread.sleep(20);
+                    } catch (InterruptedException e) {
+                        if (isCancelled()) {
+                            //updateValue("Canceled at " + System.currentTimeMillis());
+                            return null; // ignored
+                        }
+                    }
+                    
+                    if(!Connection.getStcp().isConnected()){
+                        modelTicket.setException(new TpvException("La impresora no está conectada"));
+                        throw modelTicket.getTpvException();
+                    }else{
+                            retorno = impresoraService.getPtoVtaNrosTicket();
+                    }
+                    
+                    updateMessage("Pto.Venta: "+retorno[0]+" Nro. Ticket (B/C): "
+                            +retorno[1]+" Nro. Ticket (A): "+retorno[2]);
+                    modelTicket.setNroTicket(Integer.parseInt(retorno[1]));
+                    return "Tarea finalizada";
+                }
+            };
+            ((Task<String>) worker).setOnFailed(event -> {
+               goToErrorButton.fire();
+            });
+            nroticket.textProperty().bind(worker.messageProperty());
+            
+            new Thread((Runnable) worker).start();
     }
     
 }

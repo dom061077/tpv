@@ -30,16 +30,16 @@
                   <TableColumn fx:id="codigoPagoColumn" prefWidth="157.0" text="Cod.Pago" />
                 <TableColumn fx:id="descripcionPagoColumn" prefWidth="280.0" text="Descripción" />
                 <TableColumn fx:id="montoPagoColumn" prefWidth="200.0" text="Monto Pago" />
-                  <TableColumn fx:id="cantidadCuotaColumn" prefWidth="200.0" text="Cantidad Cuotas" />
-                  <TableColumn fx:id="codigoCuponColumn" prefWidth="200.0" text="Cod.Pago" />
+                  <TableColumn fx:id="cantidadCuotaColumn" prefWidth="100.0" text="Cuotas" />
+                  <TableColumn fx:id="codigoCuponColumn" prefWidth="300.0" text="Cod.Pago" />
               </columns>
             </TableView>
          </center>
          <bottom>
             <GridPane prefHeight="104.0" prefWidth="1173.0" BorderPane.alignment="CENTER">
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="656.0" minWidth="10.0" prefWidth="656.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="580.0" minWidth="10.0" prefWidth="517.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -47,12 +47,12 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label alignment="TOP_LEFT" prefHeight="17.0" prefWidth="580.0" styleClass="label_total" text="Total Ticker:" />
+                  <Label alignment="TOP_LEFT" prefHeight="17.0" prefWidth="580.0" styleClass="label_total" text="Total Ticket:" />
                   <Label alignment="TOP_LEFT" prefHeight="17.0" prefWidth="580.0" styleClass="label_total" text="Total Pago:" GridPane.rowIndex="1" />
                   <Label alignment="TOP_LEFT" prefHeight="17.0" prefWidth="580.0" styleClass="label_total" text="Cambio del Cliente:" GridPane.rowIndex="2" />
-                  <Label fx:id="totalTicketLabel" prefHeight="17.0" prefWidth="400.0" styleClass="label_total" textAlignment="RIGHT" GridPane.columnIndex="1" />
-                  <Label fx:id="totalPagosLabel" prefHeight="17.0" prefWidth="400.0" styleClass="label_total" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <Label fx:id="cambioLabel" prefHeight="17.0" prefWidth="400.0" styleClass="label_total" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Label fx:id="totalTicketLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="400.0" styleClass="label_total" textAlignment="RIGHT" GridPane.columnIndex="1" />
+                  <Label fx:id="totalPagosLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="400.0" styleClass="label_total" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label fx:id="cambioLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="400.0" styleClass="label_total" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                </children>
             </GridPane>
          </bottom></BorderPane>
