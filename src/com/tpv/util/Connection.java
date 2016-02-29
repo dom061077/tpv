@@ -30,6 +30,7 @@ public class Connection {
      */
     private static EntityManagerFactory emf;
     private static SpoolerTCPComm stcp;
+    private static SpoolerTCPComm stcpStatus;
     private static EntityManager em;
     private static Logger log = Logger.getLogger(Connection.class);
     private static Button buttonFlowFire=null;
@@ -56,10 +57,16 @@ public class Connection {
     public static void initFiscalPrinter(){
         stcp = new SpoolerTCPComm("127.0.0.1",1600);
         try{
-            stcp.connect();
+            stcp.connect(100);
         }catch(IOException e){
             log.info("Error de conexión con impresora fiscal, mensaje: "+e.getMessage());
         }
+//        stcpStatus = new SpoolerTCPComm("127.0.0.1",1600);
+//        try{
+//            stcpStatus.connect(100);
+//        }catch(IOException e){
+//            log.info("Error de conexión con impresora fiscal, mensaje: "+e.getMessage());
+//        }
         
     }
     
@@ -121,5 +128,9 @@ public class Connection {
         return stcp;
     }
     
+    
+    public static SpoolerTCPComm getStcpStatus(){
+        return stcpStatus;
+    }
     
 }

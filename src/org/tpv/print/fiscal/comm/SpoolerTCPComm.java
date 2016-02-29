@@ -110,10 +110,10 @@ public class SpoolerTCPComm extends AbstractFiscalComm {
 		this.host = host;
 	}
 
-	public void connect() throws IOException {
+	public void connect(int socketTimeout) throws IOException {
 		try {
 			Socket soc = new Socket(getHost(), getTcpPort());
-			soc.setSoTimeout(5);//soc.setSoTimeout(200);
+			soc.setSoTimeout(socketTimeout);//soc.setSoTimeout(200);
 			setSpoolerSocket(soc);
 			setInputStream(soc.getInputStream());
 			setOutputStream(soc.getOutputStream());

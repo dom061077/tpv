@@ -219,8 +219,8 @@ public abstract class BasicFiscalPrinter implements FiscalPrinter {
 		this.lastDocumentNo = lastDocumentNo;
 	}
 
-	public void connect() throws IOException {
-		getFiscalComm().connect();
+	public void connect(int socketTimeout) throws IOException {
+		getFiscalComm().connect(socketTimeout);
 		setConnected(getFiscalComm().isConnected());
 	}
 

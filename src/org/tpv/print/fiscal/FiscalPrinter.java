@@ -143,7 +143,7 @@ public interface FiscalPrinter {
 	 * @throws IOException Cuando se preduce algún error en el intento de conexión
 	 * con el dispositivo.
 	 */
-	public void connect() throws IOException;
+	public void connect(int socketTimeout) throws IOException;
 	
 	/**
 	 * Desconecta la impresora con el dispositivo fiscal. Luego de invocar este

@@ -413,22 +413,22 @@ public class FXMLMainController implements Initializable {
             producto = productoService.getProductoPorCodBarra(textFieldProducto.getText());
         }
         if(producto!=null){
-//            if(modelTicket.getDetalle().size()==0){
-//                try{
-//                    impresoraService.abrirTicket();
-//                }catch(TpvException e){
-//                    log.error("Error: "+e.getMessage());
-//                }
-//            }
+            if(modelTicket.getDetalle().size()==0){
+                try{
+                    impresoraService.abrirTicket();
+                }catch(TpvException e){
+                    log.error("Error: "+e.getMessage());
+                }
+            }
             precio= new BigDecimal(10);
             modelTicket.getDetalle().add(new LineaTicketData(producto.getCodigoProducto()
                     ,producto.getDescripcion(),cantidad,precio));
-//            try{
-//                impresoraService.imprimirLineaTicket(producto.getDescripcion(), BigDecimal.valueOf(cantidad)
-//                        ,precio , BigDecimal.valueOf(21), BigDecimal.valueOf(0));
-//            }catch(TpvException e){
-//                log.error("Error: "+e.getMessage());
-//            }
+            try{
+                impresoraService.imprimirLineaTicket(producto.getDescripcion(), BigDecimal.valueOf(cantidad)
+                        ,precio , BigDecimal.valueOf(21), BigDecimal.valueOf(0));
+            }catch(TpvException e){
+                log.error("Error: "+e.getMessage());
+            }
             
         }
         textFieldProducto.setText("");
@@ -492,6 +492,21 @@ public class FXMLMainController implements Initializable {
     }
     
     public void traerInfoImpresora(){
+        if(modelTicket.getNroTicket()==0){
+            try{
+
+                String retorno[] = impresoraService.getPtoVtaNrosTicket();
+                modelTicket.setNroTicket(Integer.parseInt(retorno[1])+1);
+                modelTicket.setPuntoVenta(Integer.parseInt(retorno[0]));
+            }catch(Exception e){
+
+            }
+        }
+        nroticket.setText("Pto.Venta: "+modelTicket.getPuntoVenta()+" Nro. Ticket (B/C): "
+                            +modelTicket.getNroTicket()
+                //+" Nro. Ticket (A): "+retorno[2]
+        );
+        
 //            Worker<String> worker = new Task<String>(){
 //                @Override
 //                protected String call() throws Exception{

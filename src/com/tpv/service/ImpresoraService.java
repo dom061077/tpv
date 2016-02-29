@@ -7,6 +7,7 @@ package com.tpv.service;
 
 import com.tpv.exceptions.TpvException;
 import com.tpv.util.Connection;
+import java.io.IOException;
 import java.math.BigDecimal;
 import org.apache.log4j.Logger;
 import org.tpv.print.fiscal.FiscalPacket;
@@ -101,7 +102,7 @@ public class ImpresoraService {
     
     public String getNroUltimoTicketA() throws TpvException{
         
-        HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
+        HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcpStatus()); //new HasarPrinterP320F(stcp);
         FiscalPacket request;
         FiscalPacket response;
         FiscalMessages fMsg;
@@ -112,7 +113,7 @@ public class ImpresoraService {
             throw new TpvException("Error al obtener datos de la impresora. "
                 +e.getFullMessage());
         }
-        //response.
+
         return response.getString(5);
 
     }
@@ -125,6 +126,7 @@ public class ImpresoraService {
         try{
             request = hfp.cmdStatusRequest();
             response = hfp.execute(request);
+            
         }catch(FiscalPrinterIOException e){
             throw new TpvException("Error al obtener datos de la impresora. "
                 +e.getFullMessage());
@@ -136,10 +138,11 @@ public class ImpresoraService {
            request = hfp.cmdGetInitData();
            response = hfp.execute(request);
         }catch(FiscalPrinterIOException e){
-            throw new TpvException("Error al obtener datos de la impresora");
+            throw new TpvException("Error al obtener datos de la impresora  "
+                    +e.getFullMessage());
         }
-        
         retorno[0]=response.getString(7);
+        
         return retorno;
     }
     
@@ -162,6 +165,7 @@ public class ImpresoraService {
             throw new TpvException("Error al obtener datos de la impresora. "
                 +e.getFullMessage());
         }
+        
         
     }
     
@@ -190,6 +194,7 @@ public class ImpresoraService {
                 +e.getFullMessage());
         }
         
+        
     }
     
     public void cerrarTicket() throws TpvException{
@@ -211,6 +216,7 @@ public class ImpresoraService {
             throw new TpvException("Error al obtener datos de la impresora. "
                 +e.getFullMessage());
         }
+        
         
     }
     

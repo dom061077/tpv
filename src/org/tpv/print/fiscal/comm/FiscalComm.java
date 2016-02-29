@@ -16,7 +16,7 @@ public interface FiscalComm {
 	 * @throws IOException si ocurre un error en la comunicación con el
 	 * dispositivo.
 	 */
-	public void connect() throws IOException;
+	public void connect(int socketTimeout) throws IOException;
 	
 	/**
 	 * @return Verdadero si la interfaz de comunicación está conectada
