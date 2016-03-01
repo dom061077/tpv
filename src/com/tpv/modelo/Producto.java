@@ -8,6 +8,8 @@ package com.tpv.modelo;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 /**
@@ -30,6 +32,7 @@ public class Producto {
     private int codigoProducto;
     @Column(name = "DISCONTINUADO")
     private int discontinuado;
+    
 
     /**
      * @return the idProducto
