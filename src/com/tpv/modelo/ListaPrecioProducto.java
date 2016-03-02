@@ -226,7 +226,7 @@ public class ListaPrecioProducto {
         private Producto producto;
         
         @ManyToOne
-        @JoinColumn(name = "idLISTAPREIOCS",insertable=false ,updatable = false)
+        @JoinColumn(name = "idLISTAPRECIOS",insertable=false ,updatable = false)
         private ListaPrecio listaPrecio;
         
         public ListaPrecioProducto(){

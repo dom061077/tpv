@@ -9,6 +9,7 @@ import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Cliente;
 import com.tpv.modelo.Factura;
 import com.tpv.modelo.FacturaDetalle;
+import com.tpv.modelo.ListaPrecioProducto;
 import com.tpv.modelo.Producto;
 import com.tpv.service.ClienteService;
 import com.tpv.service.FacturacionService;
@@ -392,10 +393,9 @@ public class FXMLMainController implements Initializable {
     }
     
     private void agregarLineaTicket(){
-        
         int codigoIngresado=0;
         int cantidad = 1;
-        Producto producto;
+        Producto producto = null;
         BigDecimal precio = BigDecimal.valueOf(0);
         try{
             cantidad = Integer.parseInt(textFieldCantidad.getText());
@@ -408,26 +408,29 @@ public class FXMLMainController implements Initializable {
             
         }
         if(codigoIngresado>0){
-            producto = productoService.getProductoPorCodigo(codigoIngresado);
+            producto = productoService.getProductoPorCodigo(codigoIngresado); //productoService.getProductoPorCodigo(codigoIngresado);
         }else{
-            producto = productoService.getProductoPorCodBarra(textFieldProducto.getText());
+            //producto = productoService.getProductoPorCodBarra(textFieldProducto.getText());
         }
         if(producto!=null){
-            if(modelTicket.getDetalle().size()==0){
+            precio= productoService.getPrecioProducto(codigoIngresado);
+            if(precio.compareTo(BigDecimal.valueOf(0))>0){
+                if(modelTicket.getDetalle().size()==0){
+                    try{
+                        impresoraService.abrirTicket();
+                    }catch(TpvException e){
+                        log.error("Error: "+e.getMessage());
+                    }
+                }
                 try{
-                    impresoraService.abrirTicket();
+                    impresoraService.imprimirLineaTicket(producto.getDescripcion(), BigDecimal.valueOf(cantidad)
+                            ,precio , BigDecimal.valueOf(21), BigDecimal.valueOf(0));
+                    modelTicket.getDetalle().add(new LineaTicketData(producto.getCodigoProducto()
+                            ,producto.getDescripcion(),cantidad,precio));
+                    
                 }catch(TpvException e){
                     log.error("Error: "+e.getMessage());
                 }
-            }
-            precio= new BigDecimal(10);
-            modelTicket.getDetalle().add(new LineaTicketData(producto.getCodigoProducto()
-                    ,producto.getDescripcion(),cantidad,precio));
-            try{
-                impresoraService.imprimirLineaTicket(producto.getDescripcion(), BigDecimal.valueOf(cantidad)
-                        ,precio , BigDecimal.valueOf(21), BigDecimal.valueOf(0));
-            }catch(TpvException e){
-                log.error("Error: "+e.getMessage());
             }
             
         }
