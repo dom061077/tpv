@@ -79,16 +79,17 @@ public class ProductoService {
     public List getProductosPrecio(String filtro){
         EntityManager em = Connection.getEm();
         EntityTransaction tx = em.getTransaction();
+        List<ListaPrecioProducto> productosPrecios=null;
         if(!tx.isActive())
             tx.begin();
         Query q = em.createQuery("FROM ListaPrecioProducto lpp WHERE "
                 +" lpp.producto.descripcion like :filtro"
             ).setParameter("filtro", filtro);
-        
+        productosPrecios = q.getResultList();
         
         tx.commit();
         em.clear();
-        
+        return productosPrecios;
     }
     
     public Producto getProductoPorCodigo(int filtroCodigo){

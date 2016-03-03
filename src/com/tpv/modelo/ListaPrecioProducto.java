@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import java.sql.Date;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 import org.hibernate.annotations.Formula;
 
 /**
@@ -257,6 +258,20 @@ public class ListaPrecioProducto {
             this.listaPrecio = listaPrecio;
             this.id.listaId = listaPrecio.getId();
             this.id.productoId = producto.getIdProducto();
+        }
+        
+        @Transient
+        public BigDecimal getPrecioFinal(){
+               if(fechaInicioEspecial.compareTo(fechaHoy)<=0 &&
+                       fechaFinEspecial.compareTo(fechaHoy)>=0){
+                   return precioEspecial;
+               }else{
+                   if(fechaInicioOferta.compareTo(fechaHoy)<=0 &&
+                       fechaFinOferta.compareTo(fechaHoy)>=0)
+                       return precioOferta;
+                   else
+                       return precioPublico;
+               }
         }
     
 }

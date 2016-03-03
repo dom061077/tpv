@@ -5,6 +5,7 @@
  */
 package com.tpv.producto;
 
+import com.tpv.modelo.ListaPrecioProducto;
 import com.tpv.modelo.Producto;
 import com.tpv.principal.DataModelTicket;
 import com.tpv.principal.LineaTicketData;
@@ -124,12 +125,15 @@ public class BuscarPorDescProductoController {
     
     public void cargarTableView(){
         data = FXCollections.observableArrayList();
-        List<Producto> productos = productoService.getProductos(textFieldFiltroProducto.getText());
-        for(Iterator iter = productos.iterator();iter.hasNext();){
-            Producto producto = (Producto)iter.next();
-            ProductoData productoData = new ProductoData(producto.getCodigoProducto(),producto.getDescripcion());
-            data.add(productoData);
-        }
+        List<ListaPrecioProducto> productosPrecios = productoService.getProductos(textFieldFiltroProducto.getText());
+        productosPrecios.forEach(lstPrecioProducto->{
+//            data.add(new ProductoData(
+//                    lstPrecioProducto.getProducto().getCodigoProducto(),
+//                    lstPrecioProducto.getProducto().getDescripcion()
+//                    ,lstPrecioProducto.get
+//            ));
+        });
+        
         
         tableView.getItems().clear();
         tableView.setItems(null);

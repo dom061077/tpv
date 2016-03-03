@@ -42,6 +42,11 @@ public class TestHibernate {
         }catch(Exception e){
             e.printStackTrace();
         }
+        lista.forEach(item -> {
+            System.out.println("Item: "
+                        +item.getProducto().getDescripcion()
+                        +", precio: "+item.getPrecioFinal());
+        });
         
         //System.out.println("Descripcion de producto: "+((ListaPrecioProducto)o[0]).getProducto().getDescripcion());
         System.out.println(lista.getClass().toString());
