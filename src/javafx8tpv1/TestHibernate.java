@@ -7,6 +7,7 @@ package javafx8tpv1;
 
 import com.tpv.modelo.ListaPrecioProducto;
 import com.tpv.util.Connection;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import org.apache.log4j.Logger;
@@ -25,16 +26,25 @@ public class TestHibernate {
             
         }
         EntityManager em = Connection.getEm();
-        Query q = em.createQuery("SELECT lpp,current_date() as FechaHoy FROM ListaPrecioProducto lpp "
-                +" WHERE lpp.producto.codigoProducto = :codigoProducto").setParameter("codigoProducto",1003);
-        Object o[]=null;
+//        Query q = em.createQuery("SELECT lpp,current_date() as FechaHoy FROM ListaPrecioProducto lpp "
+//                +" WHERE lpp.producto.codigoProducto = :codigoProducto").setParameter("codigoProducto",1003);
+//        Object o[]=null;
+//        try{
+//            o = (Object[])q.getSingleResult();
+//            
+//        }catch(Exception e){
+//            e.printStackTrace();
+//        }
+        Query q = em.createQuery("FROM ListaPrecioProducto p");
+        List<ListaPrecioProducto> lista=null;
         try{
-            o = (Object[])q.getSingleResult();
-            
+            lista = q.getResultList();
         }catch(Exception e){
             e.printStackTrace();
         }
-        System.out.println("Descripcion de producto: "+((ListaPrecioProducto)o[0]).getProducto().getDescripcion());
+        
+        //System.out.println("Descripcion de producto: "+((ListaPrecioProducto)o[0]).getProducto().getDescripcion());
+        System.out.println(lista.getClass().toString());
     }
     
 }

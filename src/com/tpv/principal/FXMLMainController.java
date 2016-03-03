@@ -223,7 +223,10 @@ public class FXMLMainController implements Initializable {
             };
             return cell;
         });
-
+        if(modelTicket.getCodigoProdSelecEnBuscarPorDesc()>0){
+            textFieldProducto.setText(modelTicket.getCodigoProdSelecEnBuscarPorDesc()+"");
+            modelTicket.setCodigoProdSelecEnBuscarPorDesc(0);
+        }
         Platform.runLater(() -> {
             
             traerInfoImpresora();

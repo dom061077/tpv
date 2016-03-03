@@ -70,25 +70,25 @@ public class ProductoService {
             productos = q.getResultList();
             
         }
-        
-        
-        //List usuarios = em.createQuery("FROM Producto p WHERE p. = :nombre").setParameter("nombre", nombre).getResultList();
-        
-        
-
-/*        if (usuarios.size()>0) {
-                    Usuario usuario = (Usuario)usuarios.get(0);
-            if(usuario.getPassword().equals(password))
-                flagReturn=true;
-        }else
-            flagReturn=false;*/
-        
         tx.commit();
-        
-        
         em.clear();
         //em.close();
         return productos;
+    }
+    
+    public List getProductosPrecio(String filtro){
+        EntityManager em = Connection.getEm();
+        EntityTransaction tx = em.getTransaction();
+        if(!tx.isActive())
+            tx.begin();
+        Query q = em.createQuery("FROM ListaPrecioProducto lpp WHERE "
+                +" lpp.producto.descripcion like :filtro"
+            ).setParameter("filtro", filtro);
+        
+        
+        tx.commit();
+        em.clear();
+        
     }
     
     public Producto getProductoPorCodigo(int filtroCodigo){
@@ -172,6 +172,22 @@ public class ProductoService {
         
         tx.commit();
         
+        return precio;
+    }
+    
+    public BigDecimal getPrecioProducto(ListaPrecioProducto lstPrecioProducto){
+        BigDecimal precio=new BigDecimal(0);
+//        if(lstPrecioProducto.getFechaInicioEspecial().compareTo(fechaHoy)<=0 &&
+//                lstPrecioProducto.getFechaFinEspecial().compareTo(fechaHoy)>=0){
+//            precio = lstPrecioProducto.getPrecioEspecial();
+//        }else{
+//            if(lstPrecioProducto.getFechaInicioOferta().compareTo(fechaHoy)<=0 &&
+//                lstPrecioProducto.getFechaFinOferta().compareTo(fechaHoy)>=0)
+//                precio = lstPrecioProducto.getPrecioOferta();
+//            else
+//                precio = lstPrecioProducto.getPrecioPublico();
+//        }
+//        
         return precio;
     }
 

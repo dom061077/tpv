@@ -14,7 +14,9 @@ import java.util.Iterator;
 import java.util.List;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -71,9 +73,7 @@ public class BuscarPorDescProductoController {
                     if(keyEvent.getCode()==KeyCode.ENTER){
                         if(textFieldFiltroProducto.getText().trim().equals("")){
                             ProductoData productoData = (ProductoData)tableView.getSelectionModel().getSelectedItem();
-                            modelTicket.getDetalle().add(
-                                    new LineaTicketData(productoData.CodigoProducto.get(),productoData.Descripcion.get(),1,BigDecimal.valueOf(10000))
-                            );
+                            modelTicket.setCodigoProdSelecEnBuscarPorDesc(productoData.CodigoProductoProperty().get());
                             buttonAceptar.fire();
                             keyEvent.consume();
                         }
@@ -83,8 +83,10 @@ public class BuscarPorDescProductoController {
                         }
                         
                     }
-                    if(keyEvent.getCode()==KeyCode.ESCAPE)
+                    if(keyEvent.getCode()==KeyCode.ESCAPE){
+                        modelTicket.setCodigoProdSelecEnBuscarPorDesc(0);
                         buttonAceptar.fire();
+                    }
                     int index=0;
                     if(keyEvent.getCode() == KeyCode.PAGE_DOWN){
 
@@ -142,10 +144,12 @@ public class BuscarPorDescProductoController {
     public static class ProductoData{
         private IntegerProperty CodigoProducto;
         private StringProperty Descripcion;
+        private ObjectProperty<BigDecimal> Precio;
         
-        public ProductoData(int codigoProducto,String descripcion){
+        public ProductoData(int codigoProducto,String descripcion, BigDecimal precio){
             this.CodigoProducto = new SimpleIntegerProperty(codigoProducto);
             this.Descripcion = new SimpleStringProperty(descripcion);
+            this.Precio = new SimpleObjectProperty(precio);
         }
 
         public IntegerProperty CodigoProductoProperty(){
@@ -156,6 +160,21 @@ public class BuscarPorDescProductoController {
             return Descripcion;
         }
         
+        public ObjectProperty<BigDecimal> PrecioProperty(){
+            return Precio;
+        }
+        
+        public int getCodigoProducto(){
+            return CodigoProductoProperty().get();
+        }
+        
+        public String getDescripcion(){
+            return DescripcionProperty().get();
+        }
+        
+        public BigDecimal getPrecio(){
+            return PrecioProperty().get();
+        }
         
     }
 }

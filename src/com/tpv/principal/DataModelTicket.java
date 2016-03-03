@@ -35,6 +35,7 @@ public class DataModelTicket {
     private int nroTicket;
     private int puntoVenta;//checkout
     private boolean clienteSelecciondo = false;
+    private int codigoProdSelecEnBuscarPorDesc;
     
     public DataModelTicket(){
     }
@@ -141,6 +142,14 @@ public class DataModelTicket {
     
     public void setException(TpvException e){
         this.exception = e;
+    }
+    
+    public int getCodigoProdSelecEnBuscarPorDesc(){
+        return this.codigoProdSelecEnBuscarPorDesc;
+    }
+    
+    public void setCodigoProdSelecEnBuscarPorDesc(int codigoProducto){
+        this.codigoProdSelecEnBuscarPorDesc = codigoProducto;
     }
     
 }

@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import java.sql.Date;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import org.hibernate.annotations.Formula;
 
 /**
  *
@@ -163,6 +164,15 @@ public class ListaPrecioProducto {
     public void setListaPrecio(ListaPrecio listaPrecio) {
         this.listaPrecio = listaPrecio;
     }
+    
+    public java.sql.Date getFechaHoy(){
+        return this.fechaHoy;
+    }
+    
+    public void setFechaHoy(java.sql.Date fechaHoy){
+        this.fechaHoy = fechaHoy;
+    }
+    
     @Embeddable
     public static class Id implements Serializable{
         @Column(name = "idPRODUCTOS")
@@ -220,6 +230,9 @@ public class ListaPrecioProducto {
         
         @Column(name = "FECHAFINESPECIAL")
         private Date fechaFinEspecial;
+        
+        @Formula("(SELECT current_date())")
+        private java.sql.Date fechaHoy;
         
         @ManyToOne
         @JoinColumn(name = "idPRODUCTOS",insertable=false ,updatable = false)
