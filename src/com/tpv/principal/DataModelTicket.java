@@ -80,7 +80,9 @@ public class DataModelTicket {
     }
     
     public BigDecimal getSaldo(){
-        return getTotalTicket().subtract(getTotalPagos());
+        BigDecimal saldo = getTotalTicket().subtract(getTotalPagos());
+        saldo.setScale(2,BigDecimal.ROUND_CEILING);
+        return saldo;
     }
     
     

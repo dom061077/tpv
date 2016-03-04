@@ -84,7 +84,9 @@ public class ProductoService {
             tx.begin();
         Query q = em.createQuery("FROM ListaPrecioProducto lpp WHERE "
                 +" lpp.producto.descripcion like :filtro"
-            ).setParameter("filtro", filtro);
+            ).setParameter("filtro", "%"+filtro+"%");
+        q.setFirstResult(0);
+        q.setMaxResults(100);
         productosPrecios = q.getResultList();
         
         tx.commit();

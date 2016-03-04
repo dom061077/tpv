@@ -11,6 +11,7 @@ import com.tpv.principal.DataModelTicket;
 import com.tpv.principal.LineaTicketData;
 import com.tpv.service.ProductoService;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.List;
 import javafx.application.Platform;
@@ -24,6 +25,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -31,6 +33,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import org.apache.log4j.Logger;
 import org.datafx.controller.FXMLController;
 import org.datafx.controller.flow.action.ActionTrigger;
 
@@ -38,6 +41,8 @@ import org.datafx.controller.flow.action.ActionTrigger;
 
 @FXMLController(value="BuscarPorDescProducto.fxml", title = "busqueda")
 public class BuscarPorDescProductoController {
+    Logger log = Logger.getLogger(BuscarPorDescProductoController.class);
+    
     private ObservableList<ProductoData> data;
     private ProductoService productoService= new ProductoService();
     
@@ -58,17 +63,41 @@ public class BuscarPorDescProductoController {
     private TableColumn codigoColumn;
     
     @FXML
+    private TableColumn precioColumn;
+    
+    
+    @FXML
     private TableColumn descripcionColumn;
 
     @Inject
     private DataModelTicket modelTicket;
     
+    
     @PostConstruct
     public void init(){
-        System.out.println("INIT DEL Buscar por descripcion controller");
+        log.info("Ingesando al método init");
         
         codigoColumn.setCellValueFactory(new  PropertyValueFactory("CodigoProducto"));
         descripcionColumn.setCellValueFactory(new PropertyValueFactory("Descripcion"));
+        precioColumn.setCellValueFactory(new PropertyValueFactory("Precio"));
+        precioColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+        precioColumn.setCellFactory(col -> {
+            TableCell<LineaTicketData,BigDecimal> cell = new TableCell<LineaTicketData,BigDecimal>(){
+                @Override
+                public void updateItem(BigDecimal item,boolean empty){
+                    super.updateItem(item, empty);
+                    this.setText(null);
+                    this.setGraphic(null);
+                    if (!empty) {
+                            //String formattedDob = De
+                            DecimalFormat df = new DecimalFormat("##,###.00");
+                                    
+                            this.setText(df.format(item));
+                    }
+                }
+            };
+            return cell;
+        });
         Platform.runLater(() -> {
                 textFieldFiltroProducto.setOnKeyPressed(keyEvent->{
                     if(keyEvent.getCode()==KeyCode.ENTER){
@@ -117,7 +146,7 @@ public class BuscarPorDescProductoController {
                     }
                     
                     
-                    keyEvent.consume();
+                    //keyEvent.consume();
                 });
         });
         
@@ -125,13 +154,13 @@ public class BuscarPorDescProductoController {
     
     public void cargarTableView(){
         data = FXCollections.observableArrayList();
-        List<ListaPrecioProducto> productosPrecios = productoService.getProductos(textFieldFiltroProducto.getText());
+        List<ListaPrecioProducto> productosPrecios = productoService.getProductosPrecio(textFieldFiltroProducto.getText());
         productosPrecios.forEach(lstPrecioProducto->{
-//            data.add(new ProductoData(
-//                    lstPrecioProducto.getProducto().getCodigoProducto(),
-//                    lstPrecioProducto.getProducto().getDescripcion()
-//                    ,lstPrecioProducto.get
-//            ));
+            data.add(new ProductoData(
+                    lstPrecioProducto.getProducto().getCodigoProducto(),
+                    lstPrecioProducto.getProducto().getDescripcion()
+                    ,lstPrecioProducto.getPrecioFinal()
+            ));
         });
         
         

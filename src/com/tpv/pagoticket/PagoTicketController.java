@@ -133,6 +133,7 @@ public class PagoTicketController {
         cantidadCuotaColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
         codigoCuponColumn.setCellValueFactory(new PropertyValueFactory("codigoCupon"));
         codigoCuponColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+        textFieldMonto.setStyle("-fx-alignment: CENTER-RIGHT;");
         
         if (modelTicket.getSaldo().compareTo(BigDecimal.valueOf(0))>0)
             textFieldMonto.setText(modelTicket.getSaldo().toString());
