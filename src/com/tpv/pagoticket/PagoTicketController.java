@@ -271,10 +271,10 @@ public class PagoTicketController {
         textFieldNroCupon = new MaskTextField();
         textFieldNroCupon.setMask("N!");
         
-        gridPanePagos.add(textFieldTipoPago,2,1);
-        gridPanePagos.add(textFieldMonto,2,2);
-        gridPanePagos.add(textFieldCantidadCuotas,2,3);
-        gridPanePagos.add(textFieldNroCupon,2,4,2,1);
+        gridPanePagos.add(textFieldTipoPago,1,1);
+        gridPanePagos.add(textFieldMonto,1,2);
+        gridPanePagos.add(textFieldCantidadCuotas,1,3);
+        gridPanePagos.add(textFieldNroCupon,1,4,2,1);
         labelCantidadCuotas.setVisible(false);
         textFieldCantidadCuotas.setVisible(false);
         textFieldNroCupon.setVisible(false);
