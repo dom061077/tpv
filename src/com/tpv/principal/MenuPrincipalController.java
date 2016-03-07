@@ -45,6 +45,8 @@ public class MenuPrincipalController {
                 log.debug("Tecla pulsada: "+keyEvent.getCode());
                 if(keyEvent.getCode()==KeyCode.NUMPAD1)
                     buttonFacturacion.fire();
+                if(keyEvent.getCode()==KeyCode.NUMPAD4)
+                    System.exit(0);
                 keyEvent.consume();
             });
         });
