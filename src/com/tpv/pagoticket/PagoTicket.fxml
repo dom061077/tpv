@@ -5,25 +5,26 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1273.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
    <top>
-      <GridPane fx:id="gridPanePagos" prefHeight="220.0" prefWidth="1273.0" BorderPane.alignment="CENTER">
+      <GridPane fx:id="gridPanePagos" prefHeight="333.0" prefWidth="1273.0" BorderPane.alignment="TOP_CENTER">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="809.0" minWidth="10.0" prefWidth="508.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="809.0" minWidth="10.0" prefWidth="508.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="809.0" minWidth="10.0" prefWidth="508.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="809.0" minWidth="10.0" prefWidth="508.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="765.0" minWidth="10.0" prefWidth="765.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="809.0" minWidth="10.0" prefWidth="248.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="809.0" minWidth="10.0" prefWidth="191.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="809.0" minWidth="10.0" prefWidth="345.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="809.0" minWidth="10.0" prefWidth="243.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="765.0" minWidth="10.0" prefWidth="249.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints maxHeight="57.0" minHeight="10.0" prefHeight="43.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="62.0" minHeight="10.0" prefHeight="44.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="65.0" minHeight="10.0" prefHeight="48.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="56.0" minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="58.0" minHeight="10.0" prefHeight="58.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="73.0" minHeight="10.0" prefHeight="57.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="96.0" minHeight="10.0" prefHeight="58.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="91.0" minHeight="10.0" prefHeight="56.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="75.0" minHeight="10.0" prefHeight="53.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label alignment="TOP_CENTER" prefHeight="17.0" prefWidth="1269.0" styleClass="label_titulo" text="Formas de Pagos" textAlignment="CENTER" GridPane.columnSpan="5" />
+            <Label alignment="TOP_CENTER" contentDisplay="TOP" prefHeight="17.0" prefWidth="1269.0" styleClass="label_titulo" text="Formas de Pagos" textAlignment="CENTER" GridPane.columnSpan="5" GridPane.valignment="TOP" />
             <Label prefHeight="17.0" prefWidth="240.0" styleClass="label_textfield" text="Tipo Pago:" GridPane.rowIndex="1" />
             <Label prefHeight="17.0" prefWidth="244.0" styleClass="label_textfield" text="Importe a Pagar:" GridPane.rowIndex="2" />
             <Label fx:id="labelCantidadCuotas" prefHeight="17.0" prefWidth="244.0" styleClass="label_textfield" text="Cantidad Cuotas:" GridPane.rowIndex="3">
@@ -31,8 +32,13 @@
                   <Insets />
                </opaqueInsets>
             </Label>
-            <Label fx:id="labelFormaPagoDescripcion" prefHeight="17.0" prefWidth="437.0" styleClass="label_textfield" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.columnSpan="2" GridPane.rowIndex="1" />
-            <Label fx:id="labelCuponTarjeta" styleClass="label_textfield" text="Cupón Tarjeta:" GridPane.rowIndex="4" />
+            <Label fx:id="labelNroCuponTarjeta" prefHeight="17.0" prefWidth="437.0" styleClass="label_textfield" text="N° Cupón Tarjeta:" textAlignment="CENTER" GridPane.rowIndex="5" />
+            <Label fx:id="labelNroTarjeta" styleClass="label_textfield" text="N° Tarjeta:" GridPane.rowIndex="4" />
+            <Label styleClass="label_textfield" text="Total Gral." GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <Label styleClass="label_textfield" text="Saldo a Pagar:" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+            <Label fx:id="totalGral" prefHeight="17.0" prefWidth="242.0" styleClass="label_total" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+            <Label fx:id="saldoPagar" prefHeight="17.0" prefWidth="245.0" styleClass="label_total" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+            <Label fx:id="labelFormaPagoDescripcion" prefHeight="17.0" prefWidth="339.0" styleClass="label_textfield" GridPane.columnIndex="2" GridPane.rowIndex="1" />
          </children>
       </GridPane>
    </top>

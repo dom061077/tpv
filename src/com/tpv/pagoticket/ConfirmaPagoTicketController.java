@@ -177,6 +177,7 @@ public class ConfirmaPagoTicketController {
             //factura.set
             factService.registrarFactura(factura);
             modelTicket.setCliente(null);
+            modelTicket.setClienteSeleccionado(false);
             modelTicket.setNroTicket(modelTicket.getNroTicket()+1);
             modelTicket.getDetalle().clear();
             modelTicket.getPagos().clear();;
