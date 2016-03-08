@@ -87,6 +87,9 @@ public class PagoTicketController {
     @FXML
     private TableColumn codigoCuponColumn;
     
+    @FXML
+    private TableColumn nroTarjetaColumn;
+    
     
     @FXMLViewFlowContext
     private ViewFlowContext context;    
@@ -120,6 +123,9 @@ public class PagoTicketController {
         codigoPagoColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
         descripcionPagoColumn.setCellValueFactory(new PropertyValueFactory("descripcion"));
         montoPagoColumn.setCellValueFactory(new PropertyValueFactory("monto"));
+        nroTarjetaColumn.setCellValueFactory(new PropertyValueFactory("nroTarjeta"));
+        codigoCuponColumn.setCellValueFactory(new PropertyValueFactory("codigoCupon"));
+                
         //textFieldCantidadCuotas.setDisable(true);
         DecimalFormat df = new DecimalFormat("##,###,##0.00");
         totalGral.setText(df.format(modelTicket.getTotalTicket()));
@@ -339,19 +345,26 @@ public class PagoTicketController {
             if  (formaPago.getMaxiCuotas()>0){
                 textFieldCantidadCuotas.setVisible(true);
                 labelCantidadCuotas.setVisible(true);
+                
                 labelNroCuponTarjeta.setVisible(true);
-                labelNroTarjeta.setVisible(true);
                 textFieldNroCupon.setVisible(true);
-                textFieldCantidadCuotas.setDisable(false);
-                labelCantidadCuotas.setDisable(false);
-                textFieldNroCupon.setDisable(false);
+                
+                labelNroTarjeta.setVisible(true);
+                textFieldNroTarjeta.setVisible(true);
+                
+                
+                textFieldNroCupon.setDisable(true);
+                textFieldCantidadCuotas.setDisable(true);
+                textFieldNroTarjeta.setDisable(true);
+                
                 
             }else{
                 textFieldCantidadCuotas.setVisible(false);
                 labelCantidadCuotas.setVisible(false);
-                labelNroCuponTarjeta.setVisible(false);
-                labelNroTarjeta.setVisible(false);
                 textFieldNroCupon.setVisible(false);
+                labelNroCuponTarjeta.setVisible(false);
+                textFieldNroTarjeta.setVisible(false);
+                labelNroTarjeta.setVisible(false);
             }
         }else
             labelFormaPagoDescripcion.setText("");
@@ -365,15 +378,33 @@ public class PagoTicketController {
         //    return;
             
         int codigoPago = 0;int cantidadCuotas=0;int codigoCupon=0;
+        int nroTarjeta = 0;
         BigDecimal monto = new BigDecimal(0);
 //(int codigoPago,String descripcion,BigDecimal monto
             //,int cantidadCuotas, int codigoCupon)        
         codigoPago = Integer.parseInt(textFieldTipoPago.getText());
         monto = new BigDecimal(textFieldMonto.getText());
+        try{
+            cantidadCuotas = Integer.parseInt(textFieldCantidadCuotas.getText());
+        }catch(Exception e){
+            cantidadCuotas = 0;
+        }
+        try{
+            codigoCupon = Integer.parseInt(textFieldNroCupon.getText());
+        }catch(Exception e){
+            codigoCupon = 0;
+        }
+        try{
+            nroTarjeta = Integer.parseInt(textFieldNroTarjeta.getText());
+        }catch(Exception e){
+            nroTarjeta = 0;
+        }
+            
+        
         
         modelTicket.getPagos().add(new LineaPagoData(
             codigoPago,labelFormaPagoDescripcion.getText(),monto
-            ,cantidadCuotas,codigoCupon));
+            ,cantidadCuotas,nroTarjeta,codigoCupon));
         //BigDecimal saldoParcial = modelTicket.getTotalTicket().subtract(modelTicket.getTotalPagos());
         if (modelTicket.getSaldo().compareTo(BigDecimal.valueOf(0))>0)
             textFieldMonto.setText(modelTicket.getSaldo().toString());
@@ -386,8 +417,9 @@ public class PagoTicketController {
         textFieldMonto.setDisable(true);
         textFieldCantidadCuotas.setVisible(false);
         textFieldNroCupon.setVisible(false);
+        textFieldNroTarjeta.setVisible(false);
         tableViewPagos.getSelectionModel().selectLast();
-        
+        saldoPagar.setText(null);
     }
  
     private void eliminarLineaPago(){

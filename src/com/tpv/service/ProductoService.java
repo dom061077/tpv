@@ -9,6 +9,7 @@ import com.tpv.modelo.ListaPrecioProducto;
 import com.tpv.modelo.Producto;
 import com.tpv.util.Connection;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -174,7 +175,7 @@ public class ProductoService {
         }
         
         tx.commit();
-        
+        precio.setScale(2,BigDecimal.ROUND_HALF_EVEN);
         return precio;
     }
     

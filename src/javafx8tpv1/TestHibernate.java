@@ -7,6 +7,7 @@ package javafx8tpv1;
 
 import com.tpv.modelo.ListaPrecioProducto;
 import com.tpv.util.Connection;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -20,36 +21,34 @@ import org.apache.log4j.xml.DOMConfigurator;
 public class TestHibernate {
     
     public static void main(String[] args){
-        try{
-            Connection.initConnections();
-        }catch(Exception e){
-            
-        }
-        EntityManager em = Connection.getEm();
-//        Query q = em.createQuery("SELECT lpp,current_date() as FechaHoy FROM ListaPrecioProducto lpp "
-//                +" WHERE lpp.producto.codigoProducto = :codigoProducto").setParameter("codigoProducto",1003);
-//        Object o[]=null;
 //        try{
-//            o = (Object[])q.getSingleResult();
+//            Connection.initConnections();
+//        }catch(Exception e){
 //            
+//        }
+//        EntityManager em = Connection.getEm();
+//        Query q = em.createQuery("FROM ListaPrecioProducto p");
+//        List<ListaPrecioProducto> lista=null;
+//        try{
+//            lista = q.getResultList();
 //        }catch(Exception e){
 //            e.printStackTrace();
 //        }
-        Query q = em.createQuery("FROM ListaPrecioProducto p");
-        List<ListaPrecioProducto> lista=null;
-        try{
-            lista = q.getResultList();
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        lista.forEach(item -> {
-            System.out.println("Item: "
-                        +item.getProducto().getDescripcion()
-                        +", precio: "+item.getPrecioFinal());
-        });
-        
-        //System.out.println("Descripcion de producto: "+((ListaPrecioProducto)o[0]).getProducto().getDescripcion());
-        System.out.println(lista.getClass().toString());
+//        lista.forEach(item -> {
+//            System.out.println("Item: "
+//                        +item.getProducto().getDescripcion()
+//                        +", precio: "+item.getPrecioFinal());
+//        });
+//        System.out.println(lista.getClass().toString());
+    
+            BigDecimal a = new BigDecimal("4.4182");
+            BigDecimal b = new BigDecimal("10.1255");
+
+            a = a.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+            b = b.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+
+            System.out.println(a);
+            System.out.println(b);
     }
     
 }

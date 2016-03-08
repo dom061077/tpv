@@ -24,18 +24,20 @@ public class LineaPagoData {
     private ObjectProperty<BigDecimal> Monto;
     private IntegerProperty CantidadCuotas;
     private IntegerProperty CodigoCupon;
+    private IntegerProperty NroTarjeta;
     
     public LineaPagoData(){
         
     }
     
     public LineaPagoData(int codigoPago,String descripcion,BigDecimal monto
-            ,int cantidadCuotas, int codigoCupon){
+            ,int cantidadCuotas,int nroTarjeta, int codigoCupon){
         this.CodigoPago = new SimpleIntegerProperty(codigoPago);
         this.Descripcion = new SimpleStringProperty(descripcion);
         this.Monto = new SimpleObjectProperty(monto);
         this.CantidadCuotas = new SimpleIntegerProperty(cantidadCuotas);
         this.CodigoCupon = new SimpleIntegerProperty(codigoCupon);
+        this.NroTarjeta = new SimpleIntegerProperty(nroTarjeta);
     }
 
     /**
@@ -76,6 +78,13 @@ public class LineaPagoData {
     public IntegerProperty codigoCuponProperty() {
         return CodigoCupon;
     }
+    
+    /**
+     * 
+     */
+    public IntegerProperty nroTarjetaProperty(){
+        return NroTarjeta;
+    }
 
     /**
      * @return the CodigoPago
@@ -112,6 +121,9 @@ public class LineaPagoData {
         return codigoCuponProperty().get();
     }
 
+    public int getNroTarjeta(){
+        return nroTarjetaProperty().get();
+    }
     
     
 }

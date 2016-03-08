@@ -10,6 +10,7 @@ import com.tpv.modelo.Cliente;
 import com.tpv.modelo.FormaPago;
 import com.tpv.pagoticket.LineaPagoData;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.Iterator;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
@@ -59,13 +60,14 @@ public class DataModelTicket {
     public BigDecimal getTotalTicket(){
         ListProperty<LineaTicketData> innerList = getDetalle();
         
-        Double total = new Double(0);
+        BigDecimal total = new BigDecimal(0);
         for(Iterator iter=innerList.iterator();iter.hasNext();){
             LineaTicketData ticket= (LineaTicketData)iter.next();
-            total = total + ticket.getSubTotal().doubleValue();
+            //total = total + ticket.getSubTotal().doubleValue();
+            total = total.add(ticket.getSubTotal());
         }
         
-        return BigDecimal.valueOf(total);
+        return total;
     }
 
     public BigDecimal getTotalPagos(){
@@ -81,11 +83,15 @@ public class DataModelTicket {
     
     public BigDecimal getSaldo(){
         BigDecimal saldo = getTotalTicket().subtract(getTotalPagos());
-        saldo.setScale(2,BigDecimal.ROUND_CEILING);
+        saldo = saldo.setScale(2,BigDecimal.ROUND_HALF_EVEN);
         return saldo;
     }
     
-    
+
+    public String getFormatSaldo(){
+        DecimalFormat df = new DecimalFormat("###,###,###,##0.00");
+        return df.format(getSaldo());
+    }
     
     /**
      * @return the cliente
