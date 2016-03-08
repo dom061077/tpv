@@ -112,6 +112,8 @@ public class PagoTicketController {
     @PostConstruct
     public void init(){
         iniciarIngresosVisibles();
+        if(tableViewPagos.getItems().size()>0)
+            tableViewPagos.getSelectionModel().select(0);
         modelTicket = context.getRegisteredObject(DataModelTicket.class);
         modelTicket.getPagos();
         codigoPagoColumn.setCellValueFactory(new PropertyValueFactory<LineaPagoData,Integer>("codigoPago"));
@@ -256,6 +258,8 @@ public class PagoTicketController {
                 if(keyEvent.getCode() == KeyCode.ENTER){
                     textFieldNroTarjeta.setDisable(false);
                     textFieldNroTarjeta.requestFocus();
+                    keyEvent.consume();
+                    return;
                 }
             });
             
@@ -271,10 +275,12 @@ public class PagoTicketController {
                 }
                 
                 if(keyEvent.getCode() == KeyCode.ENTER){
-                        agregarLineaPago();
-                        refrescarTextFieldSaldo();
-                        scrollDown();
+                    textFieldNroCupon.setDisable(false);
+                    textFieldNroCupon.requestFocus();
+                    keyEvent.consume();
+                    return;
                 }
+                
             });
             
             textFieldNroCupon.setOnKeyPressed(keyEvent->{
@@ -285,6 +291,13 @@ public class PagoTicketController {
                 if(textFieldNroCupon.getText().trim().equals("") || textFieldNroCupon.getText().equals("0")){
                     keyEvent.consume();
                     return;
+                }
+                
+
+                if(keyEvent.getCode() == KeyCode.ENTER){
+                        agregarLineaPago();
+                        refrescarTextFieldSaldo();
+                        scrollDown();
                 }
                 
                 
@@ -373,13 +386,16 @@ public class PagoTicketController {
         textFieldMonto.setDisable(true);
         textFieldCantidadCuotas.setVisible(false);
         textFieldNroCupon.setVisible(false);
+        tableViewPagos.getSelectionModel().selectLast();
         
     }
  
     private void eliminarLineaPago(){
        int index = tableViewPagos.getSelectionModel().getSelectedIndex();
-       LineaPagoData lineaPagoData = (LineaPagoData)tableViewPagos.getItems().get(index);
-       modelTicket.getPagos().remove(lineaPagoData);
+       if(index>=0){
+            LineaPagoData lineaPagoData = (LineaPagoData)tableViewPagos.getItems().get(index);
+            modelTicket.getPagos().remove(lineaPagoData);
+       }
     }
 
     private void scrollDown(){
