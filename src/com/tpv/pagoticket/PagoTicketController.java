@@ -129,7 +129,8 @@ public class PagoTicketController {
         //textFieldCantidadCuotas.setDisable(true);
         DecimalFormat df = new DecimalFormat("##,###,##0.00");
         totalGral.setText(df.format(modelTicket.getTotalTicket()));
-        saldoPagar.setText(df.format(modelTicket.getTotalTicket().subtract(modelTicket.getTotalPagos())));
+        //saldoPagar.setText(df.format(modelTicket.getTotalTicket().subtract(modelTicket.getTotalPagos())));
+        saldoPagar.setText(modelTicket.getFormatSaldo());
         
         montoPagoColumn.setCellFactory(col -> {
             TableCell<LineaPagoData,BigDecimal> cell = new TableCell<LineaPagoData,BigDecimal>(){
