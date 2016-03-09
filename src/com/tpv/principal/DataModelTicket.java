@@ -37,6 +37,8 @@ public class DataModelTicket {
     private int puntoVenta;//checkout
     private boolean clienteSelecciondo = false;
     private int codigoProdSelecEnBuscarPorDesc;
+    private boolean imprimeComoNegativo = false;
+    
     
     public DataModelTicket(){
     }
@@ -159,5 +161,21 @@ public class DataModelTicket {
     public void setCodigoProdSelecEnBuscarPorDesc(int codigoProducto){
         this.codigoProdSelecEnBuscarPorDesc = codigoProducto;
     }
+
+    /**
+     * @return the imprimeComoNegativo
+     */
+    public boolean isImprimeComoNegativo() {
+        return imprimeComoNegativo;
+    }
+
+    /**
+     * @param imprimeComoNegativo the imprimeComoNegativo to set
+     */
+    public void setImprimeComoNegativo(boolean imprimeComoNegativo) {
+        this.imprimeComoNegativo = imprimeComoNegativo;
+    }
+    
+    
     
 }

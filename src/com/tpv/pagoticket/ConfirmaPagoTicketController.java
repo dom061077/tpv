@@ -86,6 +86,9 @@ public class ConfirmaPagoTicketController {
     private TableColumn codigoCuponColumn;
     
     @FXML
+    private TableColumn nroTarjetaColumn;
+    
+    @FXML
     private TextField totalTicketTextField;
     
     @FXML
@@ -110,6 +113,8 @@ public class ConfirmaPagoTicketController {
             codigoPagoColumn.setCellValueFactory(new PropertyValueFactory<LineaPagoData,Integer>("codigoPago"));
             codigoPagoColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
             descripcionPagoColumn.setCellValueFactory(new PropertyValueFactory("descripcion"));
+            nroTarjetaColumn.setCellValueFactory(new PropertyValueFactory("nroTarjeta"));
+            codigoCuponColumn.setCellValueFactory(new PropertyValueFactory("codigoCupon"));
             montoPagoColumn.setCellValueFactory(new PropertyValueFactory("monto"));
             montoPagoColumn.setCellFactory(col -> {
                 TableCell<LineaPagoData,BigDecimal> cell = new TableCell<LineaPagoData,BigDecimal>(){
