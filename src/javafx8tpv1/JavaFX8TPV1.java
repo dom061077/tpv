@@ -5,7 +5,7 @@
  */
 package javafx8tpv1;
 
-import com.tpv.cliente.ClienteSceneController;
+import com.tpv.cliente.BuscarPorNombreClienteController;
 import com.tpv.errorui.ErrorController;
 import com.tpv.login.LoginController;
 import com.tpv.pagoticket.ConfirmaPagoTicketController;
@@ -95,9 +95,9 @@ public class JavaFX8TPV1 extends Application {
                    .withLink(MenuPrincipalController.class, "facturacion", FXMLMainController.class)
                    .withLink(MenuPrincipalController.class, "mostrarError", ErrorController.class)
                    .withLink(ErrorController.class,"volverMenuPrincipal",MenuPrincipalController.class)
-                   .withLink(FXMLMainController.class,"buscarCliente", ClienteSceneController.class)
+                   .withLink(FXMLMainController.class,"buscarCliente", BuscarPorNombreClienteController.class)
                    .withLink(FXMLMainController.class, "volverMenuPrincipal", MenuPrincipalController.class)
-                   .withLink(ClienteSceneController.class, "seleccionarCliente", FXMLMainController.class)
+                   .withLink(BuscarPorNombreClienteController.class, "seleccionarCliente", FXMLMainController.class)
                     //  flow ventana buscar por descripcion de producto
                    .withLink(FXMLMainController.class,"buscarProducto",BuscarPorDescProductoController.class)
                    .withLink(BuscarPorDescProductoController.class, "seleccionarProducto", FXMLMainController.class)

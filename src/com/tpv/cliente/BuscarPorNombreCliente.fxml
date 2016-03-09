@@ -9,7 +9,7 @@
    <top>
       <BorderPane prefHeight="120.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <top>
-            <Label styleClass="label_titulo" text="Buscar Producto por Descripción" textFill="#3062e1" BorderPane.alignment="CENTER">
+            <Label styleClass="label_titulo" text="Buscar Cliente Por Nombre" textFill="#3062e1" BorderPane.alignment="CENTER">
                <font>
                   <Font name="Arial" size="24.0" />
                </font>
@@ -27,8 +27,8 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="650.0" styleClass="label_textfield" text="Buscar Producto Por:   " GridPane.rowIndex="1" />
-                  <TextField fx:id="textFieldFiltroProducto" maxWidth="350.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="650.0" styleClass="label_textfield" text="Buscar Cliente Por Nombre:   " GridPane.rowIndex="1" />
+                  <TextField fx:id="textFieldFiltroNombreCliente" maxWidth="350.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                </children>
             </GridPane>
          </center>
@@ -46,8 +46,9 @@
       <TableView fx:id="tableView" focusTraversable="false" prefHeight="334.0" prefWidth="1296.0" BorderPane.alignment="CENTER">
         <columns>
           <TableColumn fx:id="codigoColumn" prefWidth="103.0" text="Código" />
-          <TableColumn fx:id="descripcionColumn" prefWidth="700.0" text="Descripción" />
-            <TableColumn fx:id="precioColumn" prefWidth="139.0" text="Precio" />
+            <TableColumn fx:id="dniColumn" prefWidth="128.0" text="D.N.I" />
+            <TableColumn fx:id="cuitColumn" prefWidth="114.99996948242188" text="C.U.I.T" />
+          <TableColumn fx:id="nombreColumn" prefWidth="607.0" text="Nombre" />
         </columns>
       </TableView>
    </center>

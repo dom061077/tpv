@@ -90,7 +90,7 @@ public class BuscarPorDescProductoController {
                     this.setGraphic(null);
                     if (!empty) {
                             //String formattedDob = De
-                            DecimalFormat df = new DecimalFormat("##,###.00");
+                            DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
                                     
                             this.setText(df.format(item));
                     }

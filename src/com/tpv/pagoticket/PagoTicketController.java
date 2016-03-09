@@ -329,8 +329,8 @@ public class PagoTicketController {
         gridPanePagos.add(textFieldTipoPago,1,1);
         gridPanePagos.add(textFieldMonto,1,2);
         gridPanePagos.add(textFieldCantidadCuotas,1,3);
-        gridPanePagos.add(textFieldNroTarjeta,1,4,2,1);
-        gridPanePagos.add(textFieldNroCupon,1,5,2,1);
+        gridPanePagos.add(textFieldNroTarjeta,1,4);
+        gridPanePagos.add(textFieldNroCupon,1,5);
         labelCantidadCuotas.setVisible(false);
         textFieldCantidadCuotas.setVisible(false);
         textFieldNroCupon.setVisible(false);

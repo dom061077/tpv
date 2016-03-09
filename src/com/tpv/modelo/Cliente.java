@@ -28,7 +28,7 @@ public class Cliente {
     private int dni;
     
     @Column(name = "CUIT")
-
+    private String cuit;
     /**
      * @return the id
      */
@@ -69,6 +69,20 @@ public class Cliente {
      */
     public void setDni(int dni) {
         this.dni = dni;
+    }
+
+    /**
+     * @return the cuit
+     */
+    public String getCuit() {
+        return cuit;
+    }
+
+    /**
+     * @param cuit the cuit to set
+     */
+    public void setCuit(String cuit) {
+        this.cuit = cuit;
     }
     
     

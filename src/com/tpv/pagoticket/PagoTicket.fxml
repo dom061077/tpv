@@ -5,7 +5,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
    <top>
       <GridPane fx:id="gridPanePagos" prefHeight="333.0" prefWidth="1273.0" BorderPane.alignment="TOP_CENTER">
         <columnConstraints>
@@ -45,12 +45,12 @@
    <center>
       <TableView fx:id="tableViewPagos" focusTraversable="false" prefHeight="327.0" prefWidth="1173.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn fx:id="codigoPagoColumn" prefWidth="100.0" text="Cod. Pago" />
-            <TableColumn fx:id="descripcionPagoColumn" prefWidth="280.0" text="Descripción Pago" />
+          <TableColumn fx:id="codigoPagoColumn" prefWidth="126.0" text="Cod. Pago" />
+            <TableColumn fx:id="descripcionPagoColumn" prefWidth="254.0" text="Descripción Pago" />
             <TableColumn fx:id="montoPagoColumn" prefWidth="150.0" text="Monto Pago" />
           <TableColumn fx:id="cantidadCuotaColumn" minWidth="100.0" prefWidth="100.0" text="Cuotas" />
-            <TableColumn fx:id="nroTarjetaColumn" prefWidth="200.0" text="Nº Tarjeta" />
-            <TableColumn fx:id="codigoCuponColumn" prefWidth="200.0" text="Cod.Cupón" />
+            <TableColumn fx:id="nroTarjetaColumn" prefWidth="257.0" text="Nº Tarjeta" />
+            <TableColumn fx:id="codigoCuponColumn" prefWidth="206.0" text="Cod.Cupón" />
         </columns>
          <BorderPane.margin>
             <Insets bottom="20.0" left="50.0" right="50.0" top="20.0" />

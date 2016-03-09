@@ -13,11 +13,15 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.Mnemonic;
 import javax.annotation.PostConstruct;
+import org.apache.log4j.Logger;
 import org.datafx.controller.FXMLController;
 import org.datafx.controller.flow.action.ActionTrigger;
 
@@ -26,12 +30,33 @@ import org.datafx.controller.flow.action.ActionTrigger;
  *
  * @author daniel
  */
-@FXMLController(value="ClienteScene.fxml", title = "Cliente a buscar")
-public class ClienteSceneController  {
+@FXMLController(value="BuscarPorNombreCliente.fxml", title = "Cliente a buscar")
+public class BuscarPorNombreClienteController  {
+    Logger log = Logger.getLogger(BuscarPorNombreClienteController.class);
 
     /**
      * Initializes the controller class.
      */
+    
+    @FXML
+    private TextField textFieldFiltroNombreCliente;
+    
+    @FXML
+    private TableView tableView;
+    
+    @FXML
+    private TableColumn codigoColumn;
+    
+    @FXML
+    private TableColumn nombreColumn;
+    
+    @FXML
+    private TableColumn dniColumn;
+    
+    @FXML
+    private TableColumn cuitColumn;
+    
+    
     @FXML
     @ActionTrigger("seleccionarCliente")
     private Button seleccionarCliente;
