@@ -13,6 +13,7 @@ import com.tpv.pagoticket.PagoTicketController;
 import com.tpv.principal.FXMLMainController;
 import com.tpv.principal.MenuPrincipalController;
 import com.tpv.producto.BuscarPorDescProductoController;
+import com.tpv.supervisor.SupervisorController;
 import com.tpv.util.Connection;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -109,7 +110,9 @@ public class JavaFX8TPV1 extends Application {
                    .withLink(PagoTicketController.class, "confirmarTicket", ConfirmaPagoTicketController.class)
                    .withLink(ConfirmaPagoTicketController.class,"facturacion", FXMLMainController.class)
                    .withLink(ConfirmaPagoTicketController.class,"volverPagoTicket", PagoTicketController.class)
-                   .withLink(ConfirmaPagoTicketController.class,"mostrarError",ErrorController.class);
+                   .withLink(ConfirmaPagoTicketController.class,"mostrarError",ErrorController.class)
+                   .withLink(FXMLMainController.class,"activarNegativos",SupervisorController.class)
+                   .withLink(SupervisorController.class,"volverFacturacion", FXMLMainController.class);
         StackPane root = flow.start();   
         
         Scene scene = new Scene(root);

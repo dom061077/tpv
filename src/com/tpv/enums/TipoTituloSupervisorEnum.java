@@ -10,7 +10,9 @@ package com.tpv.enums;
  * @author daniel
  */
 public enum TipoTituloSupervisorEnum {
-    HABILITAR_NEGATIVO("Habilitar Negativos",1);
+    HABILITAR_NEGATIVO("Habilitar Negativos",1),
+    CANCELAR_TICKET("Cancelar Ticket",2);
+    
     
     private String titulo;
     private int tituloNum;
@@ -19,5 +21,14 @@ public enum TipoTituloSupervisorEnum {
         this.titulo = titulo;
         this.tituloNum = tituloNum;
     }
+    
+    public String getTitulo(){
+        return this.titulo;
+    }
+    
+    public int getTituloNum(){
+        return tituloNum;
+    }
+            
     
 }

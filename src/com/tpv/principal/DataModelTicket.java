@@ -5,6 +5,7 @@
  */
 package com.tpv.principal;
 
+import com.tpv.enums.TipoTituloSupervisorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Cliente;
 import com.tpv.modelo.FormaPago;
@@ -38,7 +39,7 @@ public class DataModelTicket {
     private boolean clienteSelecciondo = false;
     private int codigoProdSelecEnBuscarPorDesc;
     private boolean imprimeComoNegativo = false;
-    
+    private TipoTituloSupervisorEnum tipoTituloSupervisor;
     
     public DataModelTicket(){
     }
@@ -174,6 +175,20 @@ public class DataModelTicket {
      */
     public void setImprimeComoNegativo(boolean imprimeComoNegativo) {
         this.imprimeComoNegativo = imprimeComoNegativo;
+    }
+
+    /**
+     * @return the tipoTituloSupervisor
+     */
+    public TipoTituloSupervisorEnum getTipoTituloSupervisor() {
+        return tipoTituloSupervisor;
+    }
+
+    /**
+     * @param tipoTituloSupervisor the tipoTituloSupervisor to set
+     */
+    public void setTipoTituloSupervisor(TipoTituloSupervisorEnum tipoTituloSupervisor) {
+        this.tipoTituloSupervisor = tipoTituloSupervisor;
     }
     
     

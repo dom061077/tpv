@@ -31,6 +31,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javax.annotation.PostConstruct;
 import org.apache.log4j.Logger;
+import org.datafx.controller.FXMLController;
 import org.datafx.controller.flow.action.ActionTrigger;
 import org.datafx.controller.flow.context.FXMLViewFlowContext;
 import org.datafx.controller.flow.context.ViewFlowContext;
@@ -39,6 +40,8 @@ import org.datafx.controller.flow.context.ViewFlowContext;
  *
  * @author daniel
  */
+
+//@FXMLController(value="ConfirmarPagoTicket.fxml", title = "Confirmar Ticket")
 public class ConfirmaPagoTicketController {
     Logger log = Logger.getLogger(ConfirmaPagoTicketController.class);
     
