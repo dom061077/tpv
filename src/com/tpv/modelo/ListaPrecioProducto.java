@@ -262,16 +262,24 @@ public class ListaPrecioProducto {
         
         @Transient
         public BigDecimal getPrecioFinal(){
+               BigDecimal precioAux = new BigDecimal(0);
                if(fechaInicioEspecial.compareTo(fechaHoy)<=0 &&
                        fechaFinEspecial.compareTo(fechaHoy)>=0){
-                   return precioEspecial;
+                   precioAux =  precioEspecial;
                }else{
                    if(fechaInicioOferta.compareTo(fechaHoy)<=0 &&
                        fechaFinOferta.compareTo(fechaHoy)>=0)
-                       return precioOferta;
+                       precioAux = precioOferta;
                    else
-                       return precioPublico;
+                       precioAux = precioPublico;
                }
+               BigDecimal valorImpositivo = new BigDecimal(0);
+               valorImpositivo = precioAux.multiply(producto.getValorImpositivo().getValor());
+               valorImpositivo = valorImpositivo.divide(BigDecimal.valueOf(100));
+               precioAux = precioAux.add(valorImpositivo);
+               precioAux = precioAux.add(producto.getImpuestoInterno());
+               
+               return precioAux;
         }
     
 }

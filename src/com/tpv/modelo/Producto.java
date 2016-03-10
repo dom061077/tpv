@@ -5,11 +5,13 @@
  */
 package com.tpv.modelo;
 
+import java.math.BigDecimal;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -32,6 +34,15 @@ public class Producto {
     private int codigoProducto;
     @Column(name = "DISCONTINUADO")
     private int discontinuado;
+    @Column(name = "IMPUESTOINTERNO")
+    private BigDecimal impuestoInterno;
+    
+    
+    @ManyToOne
+    @JoinColumn(name = "idVALORESIMPOSITIVOS"
+            ,referencedColumnName="idVALORESIMPOSITIVOS",nullable=false)
+    private ValorImpositivo valorImpositivo;
+    
     
 
     /**
@@ -117,6 +128,34 @@ public class Producto {
      */
     public void setDiscontinuado(int discontinuado) {
         this.discontinuado = discontinuado;
+    }
+
+    /**
+     * @return the valorImpositivo
+     */
+    public ValorImpositivo getValorImpositivo() {
+        return valorImpositivo;
+    }
+
+    /**
+     * @param valorImpositivo the valorImpositivo to set
+     */
+    public void setValorImpositivo(ValorImpositivo valorImpositivo) {
+        this.valorImpositivo = valorImpositivo;
+    }
+
+    /**
+     * @return the impuestoInterno
+     */
+    public BigDecimal getImpuestoInterno() {
+        return impuestoInterno;
+    }
+
+    /**
+     * @param impuestoInterno the impuestoInterno to set
+     */
+    public void setImpuestoInterno(BigDecimal impuestoInterno) {
+        this.impuestoInterno = impuestoInterno;
     }
          
 }
