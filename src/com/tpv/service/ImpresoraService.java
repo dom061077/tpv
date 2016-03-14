@@ -170,7 +170,7 @@ public class ImpresoraService {
     }
     
     public void imprimirLineaTicket(String descripcion,BigDecimal cantidad
-            ,BigDecimal precio, BigDecimal iva,BigDecimal impuestoInterno) throws TpvException{
+            ,BigDecimal precio, BigDecimal iva,boolean imprimeNegativo,BigDecimal impuestoInterno) throws TpvException{
         HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
         FiscalPacket request;
         FiscalPacket response;
@@ -178,7 +178,7 @@ public class ImpresoraService {
         //cmdPrintLineItem(String description, BigDecimal quantity, BigDecimal price, BigDecimal ivaPercent
         //, boolean substract, BigDecimal internalTaxes, boolean basePrice, Integer display) {
         //request = hfp.cmdPrintLineItem("CACAO", new BigDecimal("1"), new BigDecimal("1"), new BigDecimal("21"), false, new BigDecimal("0"), false,0);
-        request = hfp.cmdPrintLineItem(descripcion,  cantidad, precio, iva, false, impuestoInterno, false,0);
+        request = hfp.cmdPrintLineItem(descripcion,  cantidad, precio, iva, imprimeNegativo, impuestoInterno, false,0);
         
         try{
             response = hfp.execute(request);
@@ -219,5 +219,6 @@ public class ImpresoraService {
         
         
     }
+    
     
 }

@@ -35,6 +35,8 @@ public class LineaTicketData {
         this.Descripcion = new SimpleStringProperty(descripcion);
         this.Cantidad = new SimpleIntegerProperty(cantidad);
         this.PrecioUnitario = new SimpleObjectProperty(precioUnitario);
+        if(cantidad<0)
+            cantidad = cantidad * -1;
         this.SubTotal = new SimpleObjectProperty(new BigDecimal(precioUnitario.doubleValue()*cantidad));
     }
     

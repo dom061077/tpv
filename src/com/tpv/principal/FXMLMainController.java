@@ -37,6 +37,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.util.Callback;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -132,6 +133,9 @@ public class FXMLMainController implements Initializable {
     @FXML
     private Label totalGeneral;
     
+    @FXML
+    private Label labelTotalGral;
+    
     @Inject
     private DataModelTicket modelTicket;
 
@@ -143,6 +147,9 @@ public class FXMLMainController implements Initializable {
     
     @PostConstruct
     public void init(){
+        
+        
+        
         
         tableViewTickets.setRowFactory(new Callback<TableView<LineaTicketData>, TableRow<LineaTicketData>>(){
             @Override
@@ -208,6 +215,23 @@ public class FXMLMainController implements Initializable {
             return cell;
         });
         subTotalColumn.setCellValueFactory(new PropertyValueFactory("subTotal"));
+        subTotalColumn.setCellFactory(col->{
+            TableCell<LineaTicketData,BigDecimal> cell = new TableCell<LineaTicketData,BigDecimal>(){
+                @Override
+                public void updateItem(BigDecimal item, boolean empty){
+                    super.updateItem(item, empty);
+                    this.setText(null);
+                    this.setGraphic(null);
+                    if (!empty) {
+                            //String formattedDob = De
+                            DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
+                                    
+                            this.setText(df.format(item));
+                    }
+                }
+            };
+            return cell;
+        });
         subTotalColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
         
         subTotalColumn.setCellFactory(col -> {
@@ -232,7 +256,7 @@ public class FXMLMainController implements Initializable {
             modelTicket.setCodigoProdSelecEnBuscarPorDesc(0);
         }
         Platform.runLater(() -> {
-            
+            chequearInterfazNegativo();            
             traerInfoImpresora();
             tableViewTickets.setItems(modelTicket.getDetalle());
             calcularTotalGeneral();
@@ -343,6 +367,12 @@ public class FXMLMainController implements Initializable {
                     habilitarNegativoButton.fire();
                     keyEvent.consume();
                 }
+                
+                if(keyEvent.getCode() == KeyCode.F6){
+                    modelTicket.setImprimeComoNegativo(false);
+                    chequearInterfazNegativo();        
+                    keyEvent.consume();
+                }
                     
                 
             });
@@ -409,6 +439,7 @@ public class FXMLMainController implements Initializable {
     private void agregarLineaTicket(){
         int codigoIngresado=0;
         int cantidad = 1;
+        String descripcion="";
         Producto producto = null;
         BigDecimal precio = BigDecimal.valueOf(0);
         try{
@@ -421,6 +452,7 @@ public class FXMLMainController implements Initializable {
         }catch(Exception e){
             
         }
+
         if(codigoIngresado>0){
             producto = productoService.getProductoPorCodigo(codigoIngresado); //productoService.getProductoPorCodigo(codigoIngresado);
         }else{
@@ -428,24 +460,31 @@ public class FXMLMainController implements Initializable {
         }
         if(producto!=null){
             precio= productoService.getPrecioProducto(codigoIngresado);
-            if(precio.compareTo(BigDecimal.valueOf(0))>0){
+//            if(precio.compareTo(BigDecimal.valueOf(0))>0){
                 if(modelTicket.getDetalle().size()==0){
-//                    try{
-//                        impresoraService.abrirTicket();
-//                    }catch(TpvException e){
-//                        log.error("Error: "+e.getMessage());
-//                    }
+                    try{
+                        impresoraService.abrirTicket();
+                    }catch(TpvException e){
+                        log.error("Error: "+e.getMessage());
+                    }
                 }
-//                try{
-//                    impresoraService.imprimirLineaTicket(producto.getDescripcion(), BigDecimal.valueOf(cantidad)
-//                            ,precio , BigDecimal.valueOf(21), BigDecimal.valueOf(0));
+                descripcion = producto.getCodigoProducto()+" "+ producto.getDescripcion();
+
+                
+                try{
+                    impresoraService.imprimirLineaTicket(descripcion, BigDecimal.valueOf(cantidad)
+                            ,precio , BigDecimal.valueOf(21),modelTicket.isImprimeComoNegativo(), producto.getImpuestoInterno());
+                    if(modelTicket.isImprimeComoNegativo()){
+                        precio = precio.multiply(BigDecimal.valueOf(-1));
+                        cantidad = cantidad * -1;
+                    }                    
                     modelTicket.getDetalle().add(new LineaTicketData(producto.getCodigoProducto()
                             ,producto.getDescripcion(),cantidad,precio));
                     
-//                }catch(TpvException e){
-//                    log.error("Error: "+e.getMessage());
-//                }
-            }
+                }catch(TpvException e){
+                    log.error("Error: "+e.getMessage());
+                }
+//            }
             
         }
         textFieldProducto.setText("");
@@ -510,14 +549,14 @@ public class FXMLMainController implements Initializable {
     
     public void traerInfoImpresora(){
         if(modelTicket.getNroTicket()==0){
-//            try{
-//
-//                String retorno[] = impresoraService.getPtoVtaNrosTicket();
-//                modelTicket.setNroTicket(Integer.parseInt(retorno[1])+1);
-//                modelTicket.setPuntoVenta(Integer.parseInt(retorno[0]));
-//            }catch(Exception e){
-//
-//            }
+            try{
+
+                String retorno[] = impresoraService.getPtoVtaNrosTicket();
+                modelTicket.setNroTicket(Integer.parseInt(retorno[1])+1);
+                modelTicket.setPuntoVenta(Integer.parseInt(retorno[0]));
+            }catch(Exception e){
+
+            }
         }
         nroticket.setText("Pto.Venta: "+modelTicket.getPuntoVenta()+" Nro. Ticket (B/C): "
                             +modelTicket.getNroTicket()
@@ -557,5 +596,21 @@ public class FXMLMainController implements Initializable {
 //            
 //            new Thread((Runnable) worker).start();
     }
+
     
+    private void chequearInterfazNegativo(){
+        if(modelTicket.isImprimeComoNegativo()){
+            labelProducto.setTextFill(Color.web("#ed0404"));
+            labelCliente.setTextFill(Color.web("#ed0404"));
+            labelCantidad.setTextFill(Color.web("#ed0404"));
+            totalGeneral.setTextFill(Color.web("#ed0404"));
+            labelTotalGral.setTextFill(Color.web("#ed0404"));
+        }else{
+            labelProducto.setTextFill(Color.web("#000000"));
+            labelCliente.setTextFill(Color.web("#000000"));
+            labelCantidad.setTextFill(Color.web("#000000"));
+            totalGeneral.setTextFill(Color.web("#000000"));
+            labelTotalGral.setTextFill(Color.web("#000000"));
+        }
+    }
 }

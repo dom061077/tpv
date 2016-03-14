@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
    <top>
       <FlowPane prefHeight="82.0" prefWidth="1296.0" rowValignment="TOP" BorderPane.alignment="TOP_LEFT">
          <children>
@@ -34,7 +34,7 @@
                   </Label>
                   <Label fx:id="labelCantidad" prefHeight="17.0" prefWidth="256.0" styleClass="label_textfield" text="Cantidad:" visible="false" GridPane.rowIndex="3" />
                   <Label fx:id="nombreCliente" styleClass="label_cliente" GridPane.columnSpan="2" />
-                  <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="320.0" styleClass="label_total" text="TOTAL GRAL.:" textAlignment="RIGHT" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                  <Label fx:id="labelTotalGral" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="320.0" styleClass="label_total" text="TOTAL GRAL.:" textAlignment="RIGHT" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                   <Label fx:id="totalGeneral" prefHeight="17.0" prefWidth="316.0" styleClass="label_total" GridPane.columnIndex="3" GridPane.rowIndex="2" />
                   <Label fx:id="nroticket" alignment="TOP_RIGHT" prefHeight="17.0" prefWidth="654.0" styleClass="label_nroticket" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="1" />
                </children>
@@ -82,6 +82,7 @@
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -94,9 +95,10 @@
                </font>
             </Label>
             <Label styleClass="label_shorcut" text="F4-Ingreso Cantidad" GridPane.columnIndex="2" />
-            <Label styleClass="label_shorcut" text="F11- Menu Principal" GridPane.columnIndex="4" />
+            <Label styleClass="label_shorcut" text="F11- Menu Principal" GridPane.columnIndex="5" />
             <Label text="F5- Habilitar Negativo" GridPane.columnIndex="3" />
             <Button fx:id="habilitarNegativoButton" mnemonicParsing="false" text="Button" visible="false" GridPane.columnIndex="3" />
+            <Label text="F6- Deshabilita Negativo" GridPane.columnIndex="4" />
          </children>
       </GridPane>
    </bottom>

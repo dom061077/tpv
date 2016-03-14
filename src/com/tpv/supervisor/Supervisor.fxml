@@ -4,8 +4,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
    <top>
       <Label fx:id="labelTitulo" styleClass="label_titulo" text="Label" BorderPane.alignment="CENTER" />
    </top>
@@ -23,8 +22,8 @@
          <children>
             <Label styleClass="label_textfield" text="Código de Supervisor:" />
             <Label styleClass="label_textfield" text="Contraseña:" GridPane.rowIndex="1" />
-            <TextField fx:id="codigoSupervisorTextField" GridPane.columnIndex="1" />
-            <TextField fx:id="passwordTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="textFieldCodigoSupervisor" GridPane.columnIndex="1" />
+            <TextField fx:id="textFieldPassword" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
       </GridPane>
    </center>
