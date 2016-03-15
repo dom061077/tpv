@@ -107,6 +107,9 @@ public class FXMLMainController implements Initializable {
     private TableColumn subTotalColumn;
     
     @FXML
+    private Label ingresoNegativoHabilitado;
+    
+    @FXML
     @ActionTrigger("mostrarError")
     private Button goToErrorButton;
     
@@ -157,13 +160,16 @@ public class FXMLMainController implements Initializable {
                 return new TableRow<LineaTicketData>() {
                     @Override
                     protected void updateItem(LineaTicketData item, boolean paramBoolean) {
+                        super.updateItem(item, paramBoolean);
                         if (item!=null){
                             if(item.getSubTotal().compareTo(BigDecimal.valueOf(0))<0){
-                                String style = "-fx-background-color: linear-gradient(#007F0E 0%, #FFFFFF 90%, #eaeaea 90%);";
-                                setStyle(style);
+                                setStyle("-fx-background-color: red");
+                            }else{
+                                setStyle("-fx-background-color: white");
                             }
                         }
-                        super.updateItem(item, paramBoolean);
+                        setItem(item);
+                        
                     }
                 };
             }
@@ -243,7 +249,7 @@ public class FXMLMainController implements Initializable {
                     this.setGraphic(null);
                     if (!empty) {
                             //String formattedDob = De
-                            DecimalFormat df = new DecimalFormat("#,###.00");
+                            DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
                                     
                             this.setText(df.format(item));
                     }
@@ -470,7 +476,10 @@ public class FXMLMainController implements Initializable {
                 }
                 descripcion = producto.getCodigoProducto()+" "+ producto.getDescripcion();
 
-                
+                if(modelTicket.isImprimeComoNegativo())
+                    if(!existeItemIngresado(producto.getCodigoProducto(), cantidad)){
+                        return;
+                    }
                 try{
                     impresoraService.imprimirLineaTicket(descripcion, BigDecimal.valueOf(cantidad)
                             ,precio , BigDecimal.valueOf(21),modelTicket.isImprimeComoNegativo(), producto.getImpuestoInterno());
@@ -599,18 +608,41 @@ public class FXMLMainController implements Initializable {
 
     
     private void chequearInterfazNegativo(){
+        ingresoNegativoHabilitado.setVisible(modelTicket.isImprimeComoNegativo());
         if(modelTicket.isImprimeComoNegativo()){
-            labelProducto.setTextFill(Color.web("#ed0404"));
-            labelCliente.setTextFill(Color.web("#ed0404"));
-            labelCantidad.setTextFill(Color.web("#ed0404"));
-            totalGeneral.setTextFill(Color.web("#ed0404"));
-            labelTotalGral.setTextFill(Color.web("#ed0404"));
+            labelProducto.getStyleClass().clear();
+            labelProducto.getStyleClass().add("label_textfield_negativo");
+            labelCliente.getStyleClass().clear();
+            labelCliente.getStyleClass().add("label_textfield_negativo");
+            labelCantidad.getStyleClass().clear();
+            labelCantidad.getStyleClass().add("label_textfield_negativo");
+            totalGeneral.getStyleClass().clear();
+            totalGeneral.getStyleClass().add("label_textfield_negativo");
+            labelTotalGral.getStyleClass().clear();
+            labelTotalGral.getStyleClass().add("label_textfield_negativo");
         }else{
-            labelProducto.setTextFill(Color.web("#000000"));
-            labelCliente.setTextFill(Color.web("#000000"));
-            labelCantidad.setTextFill(Color.web("#000000"));
-            totalGeneral.setTextFill(Color.web("#000000"));
-            labelTotalGral.setTextFill(Color.web("#000000"));
+            labelProducto.getStyleClass().clear();
+            labelProducto.getStyleClass().add("label_textfield");
+            labelCliente.getStyleClass().clear();
+            labelCliente.getStyleClass().add("label_textfield");
+            labelCantidad.getStyleClass().clear();
+            labelCantidad.getStyleClass().add("label_textfield");
+            totalGeneral.getStyleClass().clear();
+            totalGeneral.getStyleClass().add("label_textfield");
+            labelTotalGral.getStyleClass().clear();
+            labelTotalGral.getStyleClass().add("label_textfield");
         }
+    }
+    
+    private boolean existeItemIngresado(int codigo,int cantidad ){
+        boolean existeItem=false;
+        while(tableViewTickets.getItems().iterator().hasNext()){
+            if(((LineaTicketData)tableViewTickets.getItems().iterator().next()).getCantidad()==cantidad
+                    &&
+                ((LineaTicketData)tableViewTickets.getItems().iterator().next()).getCantidad()==codigo
+               )
+                existeItem = true;
+        }
+        return existeItem;
     }
 }

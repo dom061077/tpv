@@ -4346,6 +4346,12 @@ to the top and bottom -fx-padding values of the parent toolbar. */
     -fx-font-size:25;
     
 }
+.label_textfield_negativo{
+    -fx-text-fill: #ed0404;
+    -fx-font-weight: bold;
+    -fx-font-size:25;
+    
+}
 
 .label_cliente{
     -fx-text-fill: #3757a7;
@@ -4373,4 +4379,8 @@ to the top and bottom -fx-padding values of the parent toolbar. */
     -fx-font-weight: bold;
     -fx-font-size:35;
 
+}
+
+.table_view_row_negativo{
+    -fx-background-color: #ed0404;    
 }

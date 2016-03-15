@@ -23,7 +23,7 @@
             <Label styleClass="label_textfield" text="Código de Supervisor:" />
             <Label styleClass="label_textfield" text="Contraseña:" GridPane.rowIndex="1" />
             <TextField fx:id="textFieldCodigoSupervisor" GridPane.columnIndex="1" />
-            <TextField fx:id="textFieldPassword" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <PasswordField fx:id="textFieldPassword" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
       </GridPane>
    </center>
