@@ -21,7 +21,9 @@ import com.tpv.util.ui.MaskTextField;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.util.Iterator;
 import java.util.ResourceBundle;
+import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.concurrent.Task;
@@ -37,8 +39,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Callback;
+import javafx.util.Duration;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
@@ -66,6 +70,8 @@ public class FXMLMainController implements Initializable {
     private MaskTextField textFieldProducto;
     private MaskTextField textFieldCantidad;
     private MaskTextField textFieldCodCliente;
+    
+    private FadeTransition fadeInOut;
     
     @FXML
     private GridPane gridPaneCodigoProducto;
@@ -110,6 +116,9 @@ public class FXMLMainController implements Initializable {
     private Label ingresoNegativoHabilitado;
     
     @FXML
+    private Pane ingresoNegativoPane;
+    
+    @FXML
     @ActionTrigger("mostrarError")
     private Button goToErrorButton;
     
@@ -152,7 +161,7 @@ public class FXMLMainController implements Initializable {
     public void init(){
         
         
-        
+        configurarAnimacionIngresoNegativo();
         
         tableViewTickets.setRowFactory(new Callback<TableView<LineaTicketData>, TableRow<LineaTicketData>>(){
             @Override
@@ -261,6 +270,11 @@ public class FXMLMainController implements Initializable {
             textFieldProducto.setText(modelTicket.getCodigoProdSelecEnBuscarPorDesc()+"");
             modelTicket.setCodigoProdSelecEnBuscarPorDesc(0);
         }
+        if(modelTicket.getCodigoClienteSelecEnBuscarPorDesc()>0){
+            textFieldCodCliente.setText(""+modelTicket.getCodigoClienteSelecEnBuscarPorDesc());
+            modelTicket.setCodigoClienteSelecEnBuscarPorDesc(0);
+        }
+        
         Platform.runLater(() -> {
             chequearInterfazNegativo();            
             traerInfoImpresora();
@@ -269,6 +283,11 @@ public class FXMLMainController implements Initializable {
             scrollDown();
             
             textFieldCodCliente.setOnKeyPressed(keyEvent ->{
+                if(keyEvent.getCode() == KeyCode.F2){
+                    clienteButton.fire();
+                    keyEvent.consume();
+                } 
+                
                 if(keyEvent.getCode()== KeyCode.ENTER){
                     if(textFieldCodCliente.getText().trim().equals("")){
                         labelCliente.setVisible(false);
@@ -303,10 +322,6 @@ public class FXMLMainController implements Initializable {
             
             textFieldProducto.requestFocus();
             textFieldProducto.setOnKeyPressed(keyEvent -> {
-                if(keyEvent.getCode() == KeyCode.F2){
-                    clienteButton.fire();
-                    keyEvent.consume();
-                }
                 if(keyEvent.getCode() == KeyCode.F3){
                     buscarProductoButton.fire();
                     keyEvent.consume();
@@ -468,31 +483,32 @@ public class FXMLMainController implements Initializable {
             precio= productoService.getPrecioProducto(codigoIngresado);
 //            if(precio.compareTo(BigDecimal.valueOf(0))>0){
                 if(modelTicket.getDetalle().size()==0){
-                    try{
-                        impresoraService.abrirTicket();
-                    }catch(TpvException e){
-                        log.error("Error: "+e.getMessage());
-                    }
+//                    try{
+//                        impresoraService.abrirTicket();
+//                    }catch(TpvException e){
+//                        log.error("Error: "+e.getMessage());
+//                    }
                 }
                 descripcion = producto.getCodigoProducto()+" "+ producto.getDescripcion();
 
                 if(modelTicket.isImprimeComoNegativo())
-                    if(!existeItemIngresado(producto.getCodigoProducto(), cantidad)){
+                    if(!anulaItemIngresado(producto.getCodigoProducto(), cantidad)){
+                        textFieldCantidad.setText("");
                         return;
                     }
-                try{
-                    impresoraService.imprimirLineaTicket(descripcion, BigDecimal.valueOf(cantidad)
-                            ,precio , BigDecimal.valueOf(21),modelTicket.isImprimeComoNegativo(), producto.getImpuestoInterno());
+//                try{
+//                    impresoraService.imprimirLineaTicket(descripcion, BigDecimal.valueOf(cantidad)
+//                            ,precio , BigDecimal.valueOf(21),modelTicket.isImprimeComoNegativo(), producto.getImpuestoInterno());
                     if(modelTicket.isImprimeComoNegativo()){
                         precio = precio.multiply(BigDecimal.valueOf(-1));
                         cantidad = cantidad * -1;
                     }                    
                     modelTicket.getDetalle().add(new LineaTicketData(producto.getCodigoProducto()
-                            ,producto.getDescripcion(),cantidad,precio));
+                            ,producto.getDescripcion(),cantidad,precio,false));
                     
-                }catch(TpvException e){
-                    log.error("Error: "+e.getMessage());
-                }
+//                }catch(TpvException e){
+//                    log.error("Error: "+e.getMessage());
+//                }
 //            }
             
         }
@@ -608,40 +624,54 @@ public class FXMLMainController implements Initializable {
 
     
     private void chequearInterfazNegativo(){
-        ingresoNegativoHabilitado.setVisible(modelTicket.isImprimeComoNegativo());
-        if(modelTicket.isImprimeComoNegativo()){
-            labelProducto.getStyleClass().clear();
-            labelProducto.getStyleClass().add("label_textfield_negativo");
-            labelCliente.getStyleClass().clear();
-            labelCliente.getStyleClass().add("label_textfield_negativo");
-            labelCantidad.getStyleClass().clear();
-            labelCantidad.getStyleClass().add("label_textfield_negativo");
-            totalGeneral.getStyleClass().clear();
-            totalGeneral.getStyleClass().add("label_textfield_negativo");
-            labelTotalGral.getStyleClass().clear();
-            labelTotalGral.getStyleClass().add("label_textfield_negativo");
-        }else{
-            labelProducto.getStyleClass().clear();
-            labelProducto.getStyleClass().add("label_textfield");
-            labelCliente.getStyleClass().clear();
-            labelCliente.getStyleClass().add("label_textfield");
-            labelCantidad.getStyleClass().clear();
-            labelCantidad.getStyleClass().add("label_textfield");
-            totalGeneral.getStyleClass().clear();
-            totalGeneral.getStyleClass().add("label_textfield");
-            labelTotalGral.getStyleClass().clear();
-            labelTotalGral.getStyleClass().add("label_textfield");
-        }
+        //ingresoNegativoHabilitado.setVisible(modelTicket.isImprimeComoNegativo());
+        ingresoNegativoPane.setVisible(modelTicket.isImprimeComoNegativo());
+//        if(modelTicket.isImprimeComoNegativo()){
+//            labelProducto.getStyleClass().clear();
+//            labelProducto.getStyleClass().add("label_textfield_negativo");
+//            labelCliente.getStyleClass().clear();
+//            labelCliente.getStyleClass().add("label_textfield_negativo");
+//            labelCantidad.getStyleClass().clear();
+//            labelCantidad.getStyleClass().add("label_textfield_negativo");
+//            totalGeneral.getStyleClass().clear();
+//            totalGeneral.getStyleClass().add("label_textfield_negativo");
+//            labelTotalGral.getStyleClass().clear();
+//            labelTotalGral.getStyleClass().add("label_textfield_negativo");
+//        }else{
+//            labelProducto.getStyleClass().clear();
+//            labelProducto.getStyleClass().add("label_textfield");
+//            labelCliente.getStyleClass().clear();
+//            labelCliente.getStyleClass().add("label_textfield");
+//            labelCantidad.getStyleClass().clear();
+//            labelCantidad.getStyleClass().add("label_textfield");
+//            totalGeneral.getStyleClass().clear();
+//            totalGeneral.getStyleClass().add("label_textfield");
+//            labelTotalGral.getStyleClass().clear();
+//            labelTotalGral.getStyleClass().add("label_textfield");
+//        }
     }
     
-    private boolean existeItemIngresado(int codigo,int cantidad ){
+    private void configurarAnimacionIngresoNegativo(){
+                fadeInOut = new FadeTransition(Duration.seconds(1),ingresoNegativoPane);
+		fadeInOut.setFromValue(1.0);
+		fadeInOut.setToValue(.20);
+		fadeInOut.setCycleCount(FadeTransition.INDEFINITE);
+		fadeInOut.setAutoReverse(true);
+		fadeInOut.play();
+        
+    }
+    
+    private boolean anulaItemIngresado(int codigo,int cantidad ){
         boolean existeItem=false;
-        while(tableViewTickets.getItems().iterator().hasNext()){
-            if(((LineaTicketData)tableViewTickets.getItems().iterator().next()).getCantidad()==cantidad
-                    &&
-                ((LineaTicketData)tableViewTickets.getItems().iterator().next()).getCantidad()==codigo
-               )
+        Iterator iterator = tableViewTickets.getItems().iterator();
+        while(iterator.hasNext()){
+            LineaTicketData lineaTicket = (LineaTicketData)iterator.next();
+            if(lineaTicket.getCantidad()==cantidad && lineaTicket.getCodigoProducto()==codigo
+                    && lineaTicket.getDevuelto()==false){
+                lineaTicket.setDevuelto(true);
                 existeItem = true;
+                break;
+            }
         }
         return existeItem;
     }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.shape.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
@@ -8,7 +9,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
    <top>
       <FlowPane prefHeight="82.0" prefWidth="1296.0" rowValignment="TOP" BorderPane.alignment="TOP_LEFT">
          <children>
@@ -37,7 +38,11 @@
                   <Label fx:id="labelTotalGral" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="320.0" styleClass="label_total" text="TOTAL GRAL.:" textAlignment="RIGHT" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                   <Label fx:id="totalGeneral" prefHeight="17.0" prefWidth="316.0" styleClass="label_total" GridPane.columnIndex="3" GridPane.rowIndex="2" />
                   <Label fx:id="nroticket" alignment="TOP_RIGHT" prefHeight="17.0" prefWidth="654.0" styleClass="label_nroticket" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="1" />
-                  <Label fx:id="ingresoNegativoHabilitado" prefHeight="17.0" prefWidth="672.0" styleClass="label_textfield_negativo" text="Ingreso Negativo Habilitado" GridPane.columnIndex="2" GridPane.columnSpan="2" />
+                  <Pane fx:id="ingresoNegativoPane" prefHeight="29.0" prefWidth="677.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3">
+                     <children>
+                        <Label fx:id="ingresoNegativoHabilitado" prefHeight="17.0" prefWidth="672.0" styleClass="label_textfield_negativo" text="Ingreso Negativo Habilitado" />
+                     </children>
+                  </Pane>
                </children>
             </GridPane>
          </children>

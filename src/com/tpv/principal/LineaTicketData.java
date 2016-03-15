@@ -6,10 +6,12 @@
 package com.tpv.principal;
 
 import java.math.BigDecimal;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -25,16 +27,18 @@ public class LineaTicketData {
     private IntegerProperty Cantidad;
     private ObjectProperty<BigDecimal> PrecioUnitario;
     private ObjectProperty<BigDecimal> SubTotal;
+    private BooleanProperty Devuelto;
     
     public LineaTicketData(){
         
     }
     
-    public LineaTicketData(int codigoProducto,String descripcion,int cantidad,BigDecimal precioUnitario){
+    public LineaTicketData(int codigoProducto,String descripcion,int cantidad,BigDecimal precioUnitario,boolean devuelto){
         this.CodigoProducto = new SimpleIntegerProperty(codigoProducto);
         this.Descripcion = new SimpleStringProperty(descripcion);
         this.Cantidad = new SimpleIntegerProperty(cantidad);
         this.PrecioUnitario = new SimpleObjectProperty(precioUnitario);
+        this.Devuelto = new SimpleBooleanProperty(devuelto);
         if(cantidad<0)
             cantidad = cantidad * -1;
         this.SubTotal = new SimpleObjectProperty(new BigDecimal(precioUnitario.doubleValue()*cantidad));
@@ -94,6 +98,21 @@ public class LineaTicketData {
             SubTotal = new SimpleObjectProperty<BigDecimal>();
         }
         return SubTotal;
+    }
+    
+    public boolean getDevuelto(){
+        return devueltoProperty().get();
+    }
+    
+    public void setDevuelto(boolean dev){
+        this.devueltoProperty().set(dev);
+    }
+    
+    public BooleanProperty devueltoProperty(){
+        if(Devuelto == null){
+            Devuelto = new SimpleBooleanProperty();
+        }
+        return Devuelto;
     }
     
     

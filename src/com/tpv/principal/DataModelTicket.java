@@ -38,6 +38,7 @@ public class DataModelTicket {
     private int puntoVenta;//checkout
     private boolean clienteSelecciondo = false;
     private int codigoProdSelecEnBuscarPorDesc;
+    private int codigoClienteSelecEnBuscarPorDesc;
     private boolean imprimeComoNegativo = false;
     private TipoTituloSupervisorEnum tipoTituloSupervisor;
     
@@ -189,6 +190,20 @@ public class DataModelTicket {
      */
     public void setTipoTituloSupervisor(TipoTituloSupervisorEnum tipoTituloSupervisor) {
         this.tipoTituloSupervisor = tipoTituloSupervisor;
+    }
+
+    /**
+     * @return the codigoClienteSelecEnBuscarPorDesc
+     */
+    public int getCodigoClienteSelecEnBuscarPorDesc() {
+        return codigoClienteSelecEnBuscarPorDesc;
+    }
+
+    /**
+     * @param codigoClienteSelecEnBuscarPorDesc the codigoClienteSelecEnBuscarPorDesc to set
+     */
+    public void setCodigoClienteSelecEnBuscarPorDesc(int codigoClienteSelecEnBuscarPorDesc) {
+        this.codigoClienteSelecEnBuscarPorDesc = codigoClienteSelecEnBuscarPorDesc;
     }
     
     
