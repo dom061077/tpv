@@ -57,6 +57,10 @@ public class Factura {
     @JoinColumn(name = "idClientes", referencedColumnName = "idClientes", nullable=true)
     private Cliente cliente;
     
+    @ManyToOne
+    @JoinColumn(name = "idUSUARIOALTA", referencedColumnName = "idUSUARIOS",nullable=false)
+    private Usuario usuario;
+    
     
     
     

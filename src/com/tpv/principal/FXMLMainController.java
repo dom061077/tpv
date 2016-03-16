@@ -8,12 +8,8 @@ package com.tpv.principal;
 import com.tpv.enums.TipoTituloSupervisorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Cliente;
-import com.tpv.modelo.Factura;
-import com.tpv.modelo.FacturaDetalle;
-import com.tpv.modelo.ListaPrecioProducto;
 import com.tpv.modelo.Producto;
 import com.tpv.service.ClienteService;
-import com.tpv.service.FacturacionService;
 import com.tpv.service.ImpresoraService;
 import com.tpv.service.ProductoService;
 import com.tpv.util.Connection;
@@ -25,9 +21,6 @@ import java.util.Iterator;
 import java.util.ResourceBundle;
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
-import javafx.beans.property.ListProperty;
-import javafx.concurrent.Task;
-import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -40,7 +33,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import javax.annotation.PostConstruct;
@@ -139,8 +131,8 @@ public class FXMLMainController implements Initializable {
     private Button volverMenuPrincipalButton;
     
     @FXML
-    @ActionTrigger("activarNegativos")
-    private Button habilitarNegativoButton;
+    @ActionTrigger("habilitarSupervisor")
+    private Button habilitarSupervisorButton;
    
     @FXML
     private Label totalGeneral;
@@ -385,7 +377,7 @@ public class FXMLMainController implements Initializable {
                 
                 if(keyEvent.getCode() ==  KeyCode.F5){
                     modelTicket.setTipoTituloSupervisor(TipoTituloSupervisorEnum.HABILITAR_NEGATIVO);
-                    habilitarNegativoButton.fire();
+                    habilitarSupervisorButton.fire();
                     keyEvent.consume();
                 }
                 
@@ -393,6 +385,11 @@ public class FXMLMainController implements Initializable {
                     modelTicket.setImprimeComoNegativo(false);
                     chequearInterfazNegativo();        
                     keyEvent.consume();
+                }
+                
+                if(keyEvent.getCode() == KeyCode.F7){
+                    modelTicket.setTipoTituloSupervisor(TipoTituloSupervisorEnum.CANCELAR_TICKET);
+                    habilitarSupervisorButton.fire();
                 }
                     
                 

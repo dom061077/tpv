@@ -5,7 +5,9 @@
  */
 package com.tpv.supervisor;
 
+import com.tpv.exceptions.TpvException;
 import com.tpv.principal.DataModelTicket;
+import com.tpv.service.ImpresoraService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -14,6 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import org.apache.log4j.Logger;
 import org.datafx.controller.FXMLController;
 import org.datafx.controller.flow.action.ActionTrigger;
 
@@ -26,6 +29,9 @@ import org.datafx.controller.flow.action.ActionTrigger;
 
 @FXMLController(value="Supervisor.fxml", title = "Habilitacion de Supervisor")
 public class SupervisorController {
+    Logger log = Logger.getLogger(SupervisorController.class);
+
+    private ImpresoraService impresoraService = new ImpresoraService();
     
     @FXML
     private Label labelTitulo;
@@ -81,6 +87,19 @@ public class SupervisorController {
     
     private void habilitarNegativos(boolean habilita){
         modelTicket.setImprimeComoNegativo(habilita);
+    }
+    
+    private void cancelarTicket(){
+        try{
+            impresoraService.cancelarTicket();
+            modelTicket.setCliente(null);
+            modelTicket.setClienteSeleccionado(false);
+            modelTicket.getDetalle().clear();
+            modelTicket.getPagos().clear();;
+        }catch(TpvException e){
+            //TODO agregar Bandera de Error en ModelTicket
+        } 
+        
     }
     
 }

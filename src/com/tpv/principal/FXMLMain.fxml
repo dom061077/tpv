@@ -89,6 +89,7 @@
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -101,10 +102,11 @@
                </font>
             </Label>
             <Label styleClass="label_shorcut" text="F4-Ingreso Cantidad" GridPane.columnIndex="2" />
-            <Label styleClass="label_shorcut" text="F11- Menu Principal" GridPane.columnIndex="5" />
-            <Label text="F5- Habilitar Negativo" GridPane.columnIndex="3" />
-            <Button fx:id="habilitarNegativoButton" mnemonicParsing="false" text="Button" visible="false" GridPane.columnIndex="3" />
-            <Label text="F6- Deshabilita Negativo" GridPane.columnIndex="4" />
+            <Label styleClass="label_shorcut" text="F11- Menu Principal" GridPane.columnIndex="6" />
+            <Label styleClass="label_shorcut" text="F5- Habilitar Negativo" GridPane.columnIndex="3" />
+            <Button fx:id="habilitarSupervisorButton" mnemonicParsing="false" text="Button" visible="false" GridPane.columnIndex="3" />
+            <Label styleClass="label_shorcut" text="F6- Deshabilita Negativo" GridPane.columnIndex="4" />
+            <Label styleClass="label_shorcut" text="F7- Cancelar Ticket Completo" GridPane.columnIndex="5" />
          </children>
       </GridPane>
    </bottom>
