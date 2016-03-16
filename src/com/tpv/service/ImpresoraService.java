@@ -171,17 +171,23 @@ public class ImpresoraService {
     
     public void imprimirLineaTicket(String descripcion,BigDecimal cantidad
             ,BigDecimal precio, BigDecimal iva,boolean imprimeNegativo,BigDecimal impuestoInterno) throws TpvException{
+        String _2daLineaDetalle = descripcion.substring(descripcion.length()-21,descripcion.length()-1);
+        String _1erLineaDetalle = descripcion.substring(0,descripcion.length()-21);
+        
+        
         HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
-        FiscalPacket request;
+        FiscalPacket request2daLineaDetalle,request1eraLineaDetalle;
         FiscalPacket response;
         FiscalMessages fMsg;
         //cmdPrintLineItem(String description, BigDecimal quantity, BigDecimal price, BigDecimal ivaPercent
         //, boolean substract, BigDecimal internalTaxes, boolean basePrice, Integer display) {
         //request = hfp.cmdPrintLineItem("CACAO", new BigDecimal("1"), new BigDecimal("1"), new BigDecimal("21"), false, new BigDecimal("0"), false,0);
-        request = hfp.cmdPrintLineItem(descripcion,  cantidad, precio, iva, imprimeNegativo, impuestoInterno, false,0);
-        
+        request1eraLineaDetalle = hfp.cmdPrintFiscalText(_1erLineaDetalle,0);
+        request2daLineaDetalle = hfp.cmdPrintLineItem(_2daLineaDetalle,  cantidad, precio, iva, imprimeNegativo, impuestoInterno, false,0);
+//        hfp.cmdPrintFiscalText(descripcion, Integer.SIZE)
         try{
-            response = hfp.execute(request);
+            response = hfp.execute(request1eraLineaDetalle);
+            response = hfp.execute(request2daLineaDetalle);
         }catch(FiscalPrinterStatusError e){
             fMsg = hfp.getMessages();
             log.error(fMsg.getErrorsAsString());
