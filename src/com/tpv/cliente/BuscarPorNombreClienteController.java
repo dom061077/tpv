@@ -10,24 +10,17 @@ package com.tpv.cliente;
 import com.tpv.modelo.Cliente;
 import com.tpv.principal.DataModelTicket;
 import com.tpv.service.ClienteService;
-import com.tpv.service.ProductoService;
-import java.net.URL;
 import java.util.List;
-import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
-import javafx.scene.input.Mnemonic;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
@@ -80,7 +73,7 @@ public class BuscarPorNombreClienteController  {
     @PostConstruct
     public void init() {
         log.info("Ingresando al mètodo init");
-        codigoColumn.setCellValueFactory(new PropertyValueFactory("CodigoProducto"));
+        codigoColumn.setCellValueFactory(new PropertyValueFactory("CodigoCliente"));
         nombreColumn.setCellValueFactory(new PropertyValueFactory("NombreCliente"));
         dniColumn.setCellValueFactory(new PropertyValueFactory("Dni"));
         cuitColumn.setCellValueFactory(new PropertyValueFactory("Cuit"));

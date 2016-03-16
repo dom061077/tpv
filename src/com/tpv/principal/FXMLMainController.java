@@ -481,13 +481,13 @@ public class FXMLMainController implements Initializable {
         }
         if(producto!=null){
             precio= productoService.getPrecioProducto(codigoIngresado);
-//            if(precio.compareTo(BigDecimal.valueOf(0))>0){
+            if(precio.compareTo(BigDecimal.valueOf(0))>0){
                 if(modelTicket.getDetalle().size()==0){
-//                    try{
-//                        impresoraService.abrirTicket();
-//                    }catch(TpvException e){
-//                        log.error("Error: "+e.getMessage());
-//                    }
+                    try{
+                        impresoraService.abrirTicket();
+                    }catch(TpvException e){
+                        log.error("Error: "+e.getMessage());
+                    }
                 }
                 descripcion = producto.getCodigoProducto()+" "+ producto.getDescripcion();
 
@@ -496,9 +496,9 @@ public class FXMLMainController implements Initializable {
                         textFieldCantidad.setText("");
                         return;
                     }
-//                try{
-//                    impresoraService.imprimirLineaTicket(descripcion, BigDecimal.valueOf(cantidad)
-//                            ,precio , BigDecimal.valueOf(21),modelTicket.isImprimeComoNegativo(), producto.getImpuestoInterno());
+                try{
+                    impresoraService.imprimirLineaTicket(descripcion, BigDecimal.valueOf(cantidad)
+                            ,precio ,producto.getValorImpositivo().getValor() ,modelTicket.isImprimeComoNegativo(), producto.getImpuestoInterno());
                     if(modelTicket.isImprimeComoNegativo()){
                         precio = precio.multiply(BigDecimal.valueOf(-1));
                         cantidad = cantidad * -1;
@@ -506,10 +506,10 @@ public class FXMLMainController implements Initializable {
                     modelTicket.getDetalle().add(new LineaTicketData(producto.getCodigoProducto()
                             ,producto.getDescripcion(),cantidad,precio,false));
                     
-//                }catch(TpvException e){
-//                    log.error("Error: "+e.getMessage());
-//                }
-//            }
+                }catch(TpvException e){
+                    log.error("Error: "+e.getMessage());
+                }
+            }
             
         }
         textFieldProducto.setText("");
