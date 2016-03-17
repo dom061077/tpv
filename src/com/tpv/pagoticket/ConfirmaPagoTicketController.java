@@ -182,13 +182,14 @@ public class ConfirmaPagoTicketController {
         try{
             impresoraService.cerrarTicket();
             factura.setNumeroComprobante(impresoraService.getNroUltimoTicketBC());
+            factura.setUsuario(modelTicket.getUsuario());
             //factura.set
             factService.registrarFactura(factura);
             modelTicket.setCliente(null);
             modelTicket.setClienteSeleccionado(false);
             modelTicket.setNroTicket(modelTicket.getNroTicket()+1);
             modelTicket.getDetalle().clear();
-            modelTicket.getPagos().clear();;
+            modelTicket.getPagos().clear();
            
 
         }catch(TpvException e){

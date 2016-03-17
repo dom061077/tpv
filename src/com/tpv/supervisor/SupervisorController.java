@@ -5,6 +5,7 @@
  */
 package com.tpv.supervisor;
 
+import com.tpv.enums.TipoTituloSupervisorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.principal.DataModelTicket;
 import com.tpv.service.ImpresoraService;
@@ -69,7 +70,10 @@ public class SupervisorController {
             });
             textFieldPassword.setOnKeyPressed(keyEvent->{
                 if(keyEvent.getCode() == KeyCode.ENTER){
-                    habilitarNegativos(true);
+                    if(modelTicket.getTipoTituloSupervisor()==TipoTituloSupervisorEnum.HABILITAR_NEGATIVO)
+                        habilitarNegativos(true);
+                    if(modelTicket.getTipoTituloSupervisor()==TipoTituloSupervisorEnum.CANCELAR_TICKET)
+                        cancelarTicketCompleto();
                     keyEvent.consume();
                     volverButton.fire();                    
                 }
@@ -100,6 +104,15 @@ public class SupervisorController {
             //TODO agregar Bandera de Error en ModelTicket
         } 
         
+    }
+    
+    private void cancelarTicketCompleto(){
+        try{
+            impresoraService.cancelarTicket();
+            
+        }catch(TpvException e){
+            modelTicket.setException(e);
+        }
     }
     
 }

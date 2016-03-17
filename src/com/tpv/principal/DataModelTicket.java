@@ -9,6 +9,7 @@ import com.tpv.enums.TipoTituloSupervisorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Cliente;
 import com.tpv.modelo.FormaPago;
+import com.tpv.modelo.Usuario;
 import com.tpv.pagoticket.LineaPagoData;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -31,6 +32,7 @@ import org.datafx.controller.flow.injection.FlowScoped;
 public class DataModelTicket {
     private ListProperty<LineaTicketData> detalle;
     private ListProperty<LineaPagoData> pagos;
+    private Usuario usuario = null;
     private Cliente cliente = null;
     private FormaPago formaPago = null;
     private TpvException exception;
@@ -41,6 +43,7 @@ public class DataModelTicket {
     private int codigoClienteSelecEnBuscarPorDesc;
     private boolean imprimeComoNegativo = false;
     private TipoTituloSupervisorEnum tipoTituloSupervisor;
+    
     
     public DataModelTicket(){
     }
@@ -204,6 +207,30 @@ public class DataModelTicket {
      */
     public void setCodigoClienteSelecEnBuscarPorDesc(int codigoClienteSelecEnBuscarPorDesc) {
         this.codigoClienteSelecEnBuscarPorDesc = codigoClienteSelecEnBuscarPorDesc;
+    }
+
+    /**
+     * @return the usuario
+     */
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    /**
+     * @param usuario the usuario to set
+     */
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+    
+    public void limpiarModelTicket(){
+        this.cliente=null;
+        this.clienteSelecciondo=false;
+        this.codigoClienteSelecEnBuscarPorDesc=0;
+        this.codigoProdSelecEnBuscarPorDesc=0;
+        
+                
+                
     }
     
     

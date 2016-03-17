@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
  */
 public class UsuarioService {
     Logger log = Logger.getLogger(UsuarioService.class);
-    public boolean authenticar(String nombre,String password){
+    public Usuario authenticar(String nombre,String password){
         log.info("Autenticando usuario: "+nombre);
         boolean flagReturn=false;
         EntityManager em = Connection.getEm();
@@ -27,9 +27,9 @@ public class UsuarioService {
             tx.begin();
         List usuarios = em.createQuery("FROM Usuario u WHERE u.nombre = :nombre").setParameter("nombre", nombre).getResultList();
         
-
+        Usuario usuario = (Usuario)usuarios.get(0); 
         if (usuarios.size()>0) {
-                    Usuario usuario = (Usuario)usuarios.get(0);
+                    usuario = (Usuario)usuarios.get(0);
             if(usuario.getPassword().equals(password))
                 flagReturn=true;
         }else
@@ -39,6 +39,6 @@ public class UsuarioService {
         em.clear();
         
         //emf.close();
-        return flagReturn;
+        return usuario;
     }
 }

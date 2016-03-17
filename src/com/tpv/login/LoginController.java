@@ -5,6 +5,8 @@
  */
 package com.tpv.login;
 
+import com.tpv.modelo.Usuario;
+import com.tpv.principal.DataModelTicket;
 import com.tpv.service.UsuarioService;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -14,6 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import org.datafx.controller.FXMLController;
 import org.datafx.controller.flow.action.ActionTrigger;
 
@@ -40,74 +43,35 @@ public class LoginController {
     @FXML
     private TextField password;
     
+    @Inject
+    private DataModelTicket modelTicket;
+    
+    
     @PostConstruct
     public void init(){
-        /*Platform.runLater(() -> {
-                buttonLogin.getScene().getAccelerators().put(
-                        new KeyCodeCombination(KeyCode.NUMPAD1, KeyCombination.CONTROL_DOWN), 
-                        new Runnable() {
-                          @Override public void run() {
-                            buttonLogin.fire();
-                          }
-                        }
-                      );
-            
-        });*/
-        //Direction.NEXT;
         
         Platform.runLater(() -> {
-            buttonLogin.getScene().setOnKeyPressed(keyEvent->{
+            userName.setOnKeyPressed(keyEvent->{
                 if(keyEvent.getCode() == KeyCode.ENTER){
-                    if(buttonLogin.getScene()!=null){
-                        
-                        
-                        if(keyEvent.getCode() == KeyCode.ENTER && !keyEvent.isControlDown()){
-                            if(userName.isFocused()){
-                                 password.requestFocus();
-                                 keyEvent.consume();
-                                 return;
-                            }else
-                                 if(password.isFocused()){
-                                     if(usuarioService.authenticar(userName.getText(), password.getText()))
-                                       buttonLogin.fire();
-                                     else
-                                        ; 
-
-                                 }
-
-
-                        }
-                        
-                    }
+                    password.requestFocus();
+                    
                 }
             });
             
-            
-            buttonLogin.getScene().addEventFilter(KeyEvent.KEY_PRESSED, 
-                    new EventHandler<KeyEvent>(){
-                           public void handle(KeyEvent event) {
-                               UsuarioService usuarioService = new UsuarioService();
-                               if(event.getCode() == KeyCode.ENTER && !event.isControlDown()){
-                                   if(userName.isFocused()){
-                                        password.requestFocus();
-                                        event.consume();
-                                        return;
-                                   }else
-                                        if(password.isFocused()){
-                                            if(usuarioService.authenticar(userName.getText(), password.getText()))
-                                              buttonLogin.fire();
-                                            else
-                                               ; 
-                                            
-                                        }
-                                   
-                                                    
-                               }
-                           }
-                    }
-            );
-
-            
+            password.setOnKeyPressed(keyEvent->{
+                if(keyEvent.getCode() == KeyCode.ENTER){
+                    Usuario usuario = usuarioService.authenticar(userName.getText(), password.getText());
+                    if(usuario!=null){
+                      modelTicket.setUsuario(usuario);
+                      buttonLogin.fire();
+                    }else
+                       ; 
+                    
+                }
+                if(keyEvent.getCode() == KeyCode.ESCAPE){
+                    userName.requestFocus();
+                }
+            });
         });
         
     }
