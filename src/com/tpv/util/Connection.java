@@ -5,6 +5,7 @@
  */
 package com.tpv.util;
 
+import com.tpv.exceptions.TpvException;
 import com.tpv.service.UsuarioService;
 import java.io.IOException;
 import java.net.SocketException;
@@ -54,12 +55,13 @@ public class Connection {
     /**
      * Este método conecta la impresora fiscal
      */
-    public static void initFiscalPrinter(){
+    public static void initFiscalPrinter() throws TpvException{
         stcp = new SpoolerTCPComm("127.0.0.1",1600);
         try{
             stcp.connect(100);
         }catch(IOException e){
-            log.info("Error de conexión con impresora fiscal, mensaje: "+e.getMessage());
+            throw new TpvException("Error de conexión con la impresora: "
+                    +e.getMessage());
         }
 //        stcpStatus = new SpoolerTCPComm("127.0.0.1",1600);
 //        try{

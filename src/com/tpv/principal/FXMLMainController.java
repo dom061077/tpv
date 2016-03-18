@@ -483,7 +483,8 @@ public class FXMLMainController implements Initializable {
                     try{
                         impresoraService.abrirTicket();
                     }catch(TpvException e){
-                        log.error("Error: "+e.getMessage());
+                        modelTicket.setException(e);
+                        goToErrorButton.fire();
                     }
                 }
                 descripcion = producto.getCodigoProducto()+" "+ producto.getDescripcion();
@@ -504,7 +505,8 @@ public class FXMLMainController implements Initializable {
                             ,producto.getDescripcion(),cantidad,precio,false));
                     
                 }catch(TpvException e){
-                    log.error("Error: "+e.getMessage());
+                    modelTicket.setException(e);
+                    goToErrorButton.fire();
                 }
             }
             

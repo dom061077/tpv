@@ -147,6 +147,10 @@ public class ImpresoraService {
     }
     
     public void abrirTicket() throws TpvException{
+        if(!Connection.getStcp().isConnected()){
+            throw new TpvException("La impresora no está conectada");
+        }
+        
         HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
         FiscalPacket request;
         FiscalPacket response;

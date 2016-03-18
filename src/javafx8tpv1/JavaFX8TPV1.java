@@ -7,6 +7,7 @@ package javafx8tpv1;
 
 import com.tpv.cliente.BuscarPorNombreClienteController;
 import com.tpv.errorui.ErrorController;
+import com.tpv.exceptions.TpvException;
 import com.tpv.login.LoginController;
 import com.tpv.pagoticket.ConfirmaPagoTicketController;
 import com.tpv.pagoticket.PagoTicketController;
@@ -18,9 +19,6 @@ import com.tpv.util.Connection;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Cursor;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.StackPane;
@@ -50,17 +48,6 @@ public class JavaFX8TPV1 extends Application {
        });
         
         DOMConfigurator.configure(getClass().getResource("log4j.xml"));
-        try{
-            log.debug("INICIANDO LAS CONEXIONES");
-            Connection.initConnections();
-            
-        }   catch(Exception e){
-            
-            log.info("Error general de conexiòn");
-            e.printStackTrace();
-        }
-        
-        Connection.initFiscalPrinter();
         
         /*Runnable task = () -> {
             while(true){
@@ -124,6 +111,21 @@ public class JavaFX8TPV1 extends Application {
         stage.setFullScreenExitHint(""); //Don't show "Press ESC to exit full screen"
         stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         stage.setScene(scene);
+        try{
+            log.debug("INICIANDO LAS CONEXIONES");
+            Connection.initConnections();
+            
+        }   catch(Exception e){
+            
+            log.info("Error general de conexiòn");
+            e.printStackTrace();
+        }
+        try{
+            Connection.initFiscalPrinter();
+        }catch(TpvException e){
+            
+        }
+        
        
         stage.show();
     }
