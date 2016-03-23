@@ -440,6 +440,7 @@ public class PagoTicketController {
     
     private void refrescarTextFieldSaldo(){
         textFieldMonto.setText(modelTicket.getSaldo().toString());
+        saldoPagar.setText(modelTicket.getFormatSaldo());
     }
     
 }

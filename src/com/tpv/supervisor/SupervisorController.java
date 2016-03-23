@@ -93,7 +93,8 @@ public class SupervisorController {
         modelTicket.setImprimeComoNegativo(habilita);
     }
     
-    private void cancelarTicket(){
+    
+    private void cancelarTicketCompleto(){
         try{
             impresoraService.cancelarTicket();
             modelTicket.setCliente(null);
@@ -101,18 +102,9 @@ public class SupervisorController {
             modelTicket.getDetalle().clear();
             modelTicket.getPagos().clear();;
         }catch(TpvException e){
-            //TODO agregar Bandera de Error en ModelTicket
-        } 
-        
-    }
-    
-    private void cancelarTicketCompleto(){
-        try{
-            impresoraService.cancelarTicket();
-            
-        }catch(TpvException e){
+            log.info("Error en cancelacion de ticket");
             modelTicket.setException(e);
-        }
+        } 
     }
     
 }

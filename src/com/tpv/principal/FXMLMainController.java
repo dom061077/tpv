@@ -292,6 +292,9 @@ public class FXMLMainController implements Initializable {
                     } 
                     
                 }
+                if(keyEvent.getCode()==KeyCode.F11){
+                    volverMenuPrincipalButton.fire();
+                }
             });
             
             textFieldCantidad.setOnKeyPressed(keyEvent ->{
