@@ -104,6 +104,7 @@ public class FXMLMainController implements Initializable {
     @FXML
     private TableColumn subTotalColumn;
     
+    
     @FXML
     private Label ingresoNegativoHabilitado;
     
@@ -505,7 +506,7 @@ public class FXMLMainController implements Initializable {
                         cantidad = cantidad * -1;
                     }                    
                     modelTicket.getDetalle().add(new LineaTicketData(producto.getCodigoProducto()
-                            ,producto.getDescripcion(),cantidad,precio,false));
+                            ,producto.getDescripcion(),cantidad,precio,modelTicket.isImprimeComoNegativo()));
                     
                 }catch(TpvException e){
                     modelTicket.setException(e);
@@ -664,17 +665,45 @@ public class FXMLMainController implements Initializable {
     }
     
     private boolean anulaItemIngresado(int codigo,int cantidad ){
-        boolean existeItem=false;
         Iterator iterator = tableViewTickets.getItems().iterator();
+        int totalCantidad=0;
+        boolean itemEncontrado=false;
         while(iterator.hasNext()){
             LineaTicketData lineaTicket = (LineaTicketData)iterator.next();
-            if(lineaTicket.getCantidad()==cantidad && lineaTicket.getCodigoProducto()==codigo
-                    && lineaTicket.getDevuelto()==false){
+            if(lineaTicket.getCodigoProducto()==codigo){
+                  totalCantidad+=lineaTicket.getCantidad();
+            }
+            if(lineaTicket.getCodigoProducto()==codigo && 
+                lineaTicket.getCantidad()==cantidad && 
+                lineaTicket.getDevuelto()==false &&
+                itemEncontrado == false
+                    ){
                 lineaTicket.setDevuelto(true);
-                existeItem = true;
-                break;
+                itemEncontrado=true;
             }
         }
-        return existeItem;
+        if(totalCantidad>=cantidad && itemEncontrado==false){
+            Iterator segundoIterator = tableViewTickets.getItems().iterator();
+            while(segundoIterator.hasNext()){
+                LineaTicketData lineaTicket = (LineaTicketData)segundoIterator.next();
+                if(lineaTicket.getCodigoProducto()==codigo && 
+                    lineaTicket.getCantidad()>=cantidad && 
+                    lineaTicket.getDevuelto()==false &&
+                    itemEncontrado == false
+                        ){
+                    lineaTicket.setDevuelto(true);
+                    itemEncontrado=true;
+                    continue;
+                }
+            }
+        }
+        if(totalCantidad>=cantidad && itemEncontrado == true){
+            
+            return true;
+        }else{
+            return false;
+        }
     }
+    
+    //private void 
 }

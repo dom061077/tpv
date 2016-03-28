@@ -190,6 +190,7 @@ public class ConfirmaPagoTicketController {
             modelTicket.setNroTicket(modelTicket.getNroTicket()+1);
             modelTicket.getDetalle().clear();
             modelTicket.getPagos().clear();
+            modelTicket.setImprimeComoNegativo(false);
            
 
         }catch(TpvException e){

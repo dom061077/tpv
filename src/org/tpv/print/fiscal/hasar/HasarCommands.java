@@ -87,7 +87,7 @@ public interface HasarCommands {
 	public int CMD_REPRINT_DOCUMENT           = 0x99;
 	/** Cargar código de barras. (0x5A) */
 	public int CMD_SET_BAR_CODE               = 0x5A;
-	/** Cargar datos del cliente. (0x62) */
+	/** Cargar datos del cliente. (0x62) */  //XXXXX PARA IMPRIMIR LOS DATOS DEL CLIENTE
 	public int CMD_SET_CUSTOMER_DATA          = 0x62;
 	/** Cargar información de remito o de comprobante original. (0x93) */
 	public int CMD_SET_EMBARK_NUMBER          = 0x93;
@@ -112,7 +112,7 @@ public interface HasarCommands {
 	public int CMD_LAST_ITEM_DISCOUNT         = 0x55;
 	/** DF: Descuento general. (0x54) */
 	public int CMD_GENERAL_DISCOUNT           = 0x54;
-	/** DF: Devolución de envases, bonificaciones y recargos. (0x6D) */
+	/** DF: Devolución de envases, bonificaciones y recargos. (0x6D) XXXXX PARA LAS BONIFICACIONES DE COMBOS Y DEMAS*/
 	public int CMD_RETURN_RECHARGE            = 0x6D;
 	/** DF: Recargo de IVA a responsable no inscripto. (0x61) */
 	public int CMD_CHARGE_NON_REGISTERED_TAX  = 0x61;
