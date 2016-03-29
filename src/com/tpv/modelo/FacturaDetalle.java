@@ -28,10 +28,10 @@ public class FacturaDetalle {
     @Id 
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "idFACTURASDETALLE")
-    private int id;
+    private Long id;
     
     @Column(name = "CANTIDAD")
-    private int cantidad;
+    private BigDecimal cantidad;
     
     @Column(name = "TOTAL")
     private BigDecimal subTotal;
@@ -51,28 +51,28 @@ public class FacturaDetalle {
     /**
      * @return the id
      */
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
     /**
      * @return the cantidad
      */
-    public int getCantidad() {
+    public BigDecimal getCantidad() {
         return cantidad;
     }
 
     /**
      * @param cantidad the cantidad to set
      */
-    public void setCantidad(int cantidad) {
+    public void setCantidad(BigDecimal cantidad) {
         this.cantidad = cantidad;
     }
 

@@ -32,7 +32,7 @@ public class Factura {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "idFACTURAS")
-    private int id;
+    private Long id;
     
     @Column(name = "FECHAALTA")
     private java.util.Date fechaAlta;
@@ -46,7 +46,29 @@ public class Factura {
     @Column(name = "TOTAL")
     private BigDecimal total;
     
+    @Column(name = "NETO")
+    private BigDecimal neto;
     
+    @Column(name = "IVA")
+    private BigDecimal iva;
+    
+    @Column(name = "IMPUESTOINTERNO")
+    private BigDecimal impuestoInterno;
+            
+    @Column(name = "RETENCION")
+    private BigDecimal retencion;
+    
+    @Column(name = "INTERESTARJETA")
+    private BigDecimal interesTarjeta;
+    
+    @Column(name = "BONIFICATARJETA")
+    private BigDecimal bonificaTarjeta;
+    
+    @Column(name = "IVABONIFTARJETA")
+    private BigDecimal ivaBonificaTarjeta;
+    
+    @Column(name = "ANULADO", nullable = false, columnDefinition = "TINYINT(1)") 
+    private boolean anulada;
     
     @OneToMany(cascade = CascadeType.ALL,mappedBy="factura")
     //@org.hibernate.annotations.IndexColumn(name = "BID_POSITION")
@@ -67,14 +89,14 @@ public class Factura {
     /**
      * @return the id
      */
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

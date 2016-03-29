@@ -24,7 +24,7 @@ import javafx.beans.property.SimpleStringProperty;
 public class LineaTicketData {
     private IntegerProperty CodigoProducto;
     private StringProperty Descripcion;
-    private IntegerProperty Cantidad;
+    private ObjectProperty<BigDecimal> Cantidad;
     private ObjectProperty<BigDecimal> PrecioUnitario;
     private ObjectProperty<BigDecimal> SubTotal;
     private BooleanProperty Devuelto;
@@ -33,15 +33,16 @@ public class LineaTicketData {
         
     }
     
-    public LineaTicketData(int codigoProducto,String descripcion,int cantidad,BigDecimal precioUnitario,boolean devuelto){
+    public LineaTicketData(int codigoProducto,String descripcion,BigDecimal cantidad,BigDecimal precioUnitario,boolean devuelto){
         this.CodigoProducto = new SimpleIntegerProperty(codigoProducto);
         this.Descripcion = new SimpleStringProperty(descripcion);
-        this.Cantidad = new SimpleIntegerProperty(cantidad);
+        this.Cantidad = new SimpleObjectProperty(cantidad);
         this.PrecioUnitario = new SimpleObjectProperty(precioUnitario);
         this.Devuelto = new SimpleBooleanProperty(devuelto);
-        if(cantidad<0)
-            cantidad = cantidad * -1;
-        this.SubTotal = new SimpleObjectProperty(new BigDecimal(precioUnitario.doubleValue()*cantidad));
+        if(cantidad.compareTo(new BigDecimal(0))<0)
+            cantidad = cantidad.multiply(new BigDecimal(-1));
+        //this.SubTotal = new SimpleObjectProperty(new BigDecimal(precioUnitario.doubleValue()*cantidad));
+        this.SubTotal = new SimpleObjectProperty(precioUnitario.multiply(cantidad));
     }
     
     public int getCodigoProducto(){
@@ -67,13 +68,13 @@ public class LineaTicketData {
         return Descripcion;
     }
     
-    public int getCantidad(){
+    public BigDecimal getCantidad(){
         return cantidadProperty().get();
     }
     
-    public IntegerProperty cantidadProperty(){
+    public ObjectProperty<BigDecimal> cantidadProperty(){
         if(Cantidad == null){
-            Cantidad = new SimpleIntegerProperty();
+            Cantidad = new SimpleObjectProperty<BigDecimal>();
         }
         return Cantidad;
     }

@@ -47,4 +47,20 @@ public class FacturacionService  {
         }
         
     }
+    
+    public Factura devolverFactura(Long id) throws TpvException{
+        Factura factura = null;
+        EntityManager em = Connection.getEm();
+        EntityTransaction tx = em.getTransaction();
+        if(!tx.isActive())
+            tx.begin();
+
+        tx.commit();
+        em.clear();
+        
+        
+        return factura;
+    }
+    
+    
 }

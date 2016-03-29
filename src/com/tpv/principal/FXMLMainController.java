@@ -460,12 +460,12 @@ public class FXMLMainController implements Initializable {
     
     private void agregarLineaTicket(){
         int codigoIngresado=0;
-        int cantidad = 1;
+        BigDecimal cantidad = new BigDecimal(1);
         String descripcion="";
         Producto producto = null;
         BigDecimal precio = BigDecimal.valueOf(0);
         try{
-            cantidad = Integer.parseInt(textFieldCantidad.getText());
+            cantidad = new BigDecimal(textFieldCantidad.getText());
         }catch(Exception e){
             
         }
@@ -499,11 +499,11 @@ public class FXMLMainController implements Initializable {
                         return;
                     }
                 try{
-                    impresoraService.imprimirLineaTicket(descripcion, BigDecimal.valueOf(cantidad)
+                    impresoraService.imprimirLineaTicket(descripcion, cantidad
                             ,precio ,producto.getValorImpositivo().getValor() ,modelTicket.isImprimeComoNegativo(), producto.getImpuestoInterno());
                     if(modelTicket.isImprimeComoNegativo()){
                         precio = precio.multiply(BigDecimal.valueOf(-1));
-                        cantidad = cantidad * -1;
+                        cantidad = cantidad.multiply(new BigDecimal(-1));
                     }                    
                     modelTicket.getDetalle().add(new LineaTicketData(producto.getCodigoProducto()
                             ,producto.getDescripcion(),cantidad,precio,modelTicket.isImprimeComoNegativo()));
@@ -664,17 +664,18 @@ public class FXMLMainController implements Initializable {
         
     }
     
-    private boolean anulaItemIngresado(int codigo,int cantidad ){
+    private boolean anulaItemIngresado(int codigo,BigDecimal cantidad ){
         Iterator iterator = tableViewTickets.getItems().iterator();
-        int totalCantidad=0;
+        BigDecimal totalCantidad= new BigDecimal(0);
         boolean itemEncontrado=false;
         while(iterator.hasNext()){
             LineaTicketData lineaTicket = (LineaTicketData)iterator.next();
             if(lineaTicket.getCodigoProducto()==codigo){
-                  totalCantidad+=lineaTicket.getCantidad();
+                  //totalCantidad+=lineaTicket.getCantidad();
+                
             }
             if(lineaTicket.getCodigoProducto()==codigo && 
-                lineaTicket.getCantidad()==cantidad && 
+                lineaTicket.getCantidad().compareTo(cantidad) == 0 && 
                 lineaTicket.getDevuelto()==false &&
                 itemEncontrado == false
                     ){
@@ -682,12 +683,12 @@ public class FXMLMainController implements Initializable {
                 itemEncontrado=true;
             }
         }
-        if(totalCantidad>=cantidad && itemEncontrado==false){
+        if(totalCantidad.compareTo(cantidad) >= 0 && itemEncontrado==false){
             Iterator segundoIterator = tableViewTickets.getItems().iterator();
             while(segundoIterator.hasNext()){
                 LineaTicketData lineaTicket = (LineaTicketData)segundoIterator.next();
                 if(lineaTicket.getCodigoProducto()==codigo && 
-                    lineaTicket.getCantidad()>=cantidad && 
+                    lineaTicket.getCantidad().compareTo(cantidad)>=0 && 
                     lineaTicket.getDevuelto()==false &&
                     itemEncontrado == false
                         ){
@@ -697,7 +698,7 @@ public class FXMLMainController implements Initializable {
                 }
             }
         }
-        if(totalCantidad>=cantidad && itemEncontrado == true){
+        if(totalCantidad.compareTo(cantidad)>=0 && itemEncontrado == true){
             
             return true;
         }else{
