@@ -8,6 +8,7 @@ package com.tpv.principal;
 import com.tpv.enums.TipoTituloSupervisorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Cliente;
+import com.tpv.modelo.GrupoProducto;
 import com.tpv.modelo.Producto;
 import com.tpv.service.ClienteService;
 import com.tpv.service.ImpresoraService;
@@ -18,6 +19,7 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.Iterator;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
@@ -37,6 +39,7 @@ import javafx.util.Callback;
 import javafx.util.Duration;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.persistence.Query;
 import org.apache.log4j.Logger;
 import org.datafx.controller.FXMLController;
 import org.datafx.controller.flow.action.ActionTrigger;
@@ -153,6 +156,7 @@ public class FXMLMainController implements Initializable {
     @PostConstruct
     public void init(){
         
+        productoService.ConsultaGrupo();
         
         configurarAnimacionIngresoNegativo();
         
@@ -706,5 +710,4 @@ public class FXMLMainController implements Initializable {
         }
     }
     
-    //private void 
 }

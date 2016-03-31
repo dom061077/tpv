@@ -5,6 +5,7 @@
  */
 package com.tpv.service;
 
+import com.tpv.modelo.GrupoProducto;
 import com.tpv.modelo.ListaPrecioProducto;
 import com.tpv.modelo.Producto;
 import com.tpv.util.Connection;
@@ -210,6 +211,26 @@ public class ProductoService {
         return precio;
     }
 
-    
+    public void ConsultaGrupo(){
+        EntityManager em = Connection.getEm();
+        EntityTransaction tx = em.getTransaction();
+        if(!tx.isActive())
+            tx.begin();
+        Query q = em.createQuery("FROM GrupoProducto gp");
+        List<GrupoProducto> lista = null;
+        try{
+            lista = q.getResultList();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        lista.forEach(item ->{
+            System.out.println("Grupo: "+item.getDescripcion()
+                    +"      Padre: "+item.getGrupoPadre().getDescripcion()
+            );
+        });
+        tx.commit();
+        em.clear();
+        
+    }
     
 }
