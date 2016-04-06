@@ -30,6 +30,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import org.apache.log4j.Logger;
 import org.datafx.controller.FXMLController;
 import org.datafx.controller.flow.action.ActionTrigger;
@@ -48,7 +49,7 @@ public class ConfirmaPagoTicketController {
     private FacturacionService factService = new FacturacionService();
     private ImpresoraService impresoraService = new ImpresoraService();
     private ProductoService productoService = new ProductoService();
-    private DataModelTicket modelTicket;
+
     
     
     @FXMLViewFlowContext
@@ -62,7 +63,7 @@ public class ConfirmaPagoTicketController {
     @FXML
     @ActionTrigger("facturacion")
     private Button confirmarButton;
-    
+   
     @FXML
     @ActionTrigger("mostrarError")
     private Button mostrarErrorButton;
@@ -106,6 +107,8 @@ public class ConfirmaPagoTicketController {
     @FXML
     private Label totalPagosLabel;
 
+    @Inject
+    private DataModelTicket modelTicket;
     
     
     @PostConstruct
@@ -151,7 +154,8 @@ public class ConfirmaPagoTicketController {
                         
                     }
                     if(keyEvent.getCode() == KeyCode.ENTER){
-                        guardarTicket();
+                        confirmarFactura();
+
                         confirmarButton.fire();
                     }
                     keyEvent.consume();
@@ -162,6 +166,29 @@ public class ConfirmaPagoTicketController {
                     
     }    
     
+    public void confirmarFactura(){
+        try{
+            log.info("Cerrando y confirmando factura ");
+            impresoraService.cerrarTicket();
+            factService.confirmarFactura(modelTicket.getIdFactura());
+            modelTicket.setCliente(null);
+            modelTicket.setClienteSeleccionado(false);
+            modelTicket.setNroTicket(modelTicket.getNroTicket()+1);
+            modelTicket.getDetalle().clear();
+            modelTicket.getPagos().clear();
+            modelTicket.setImprimeComoNegativo(false);
+            log.info("Factura cerrada y confirmada");
+
+        }catch(TpvException e){
+            modelTicket.setException(e);
+            mostrarErrorButton.fire();
+        }catch(NullPointerException e){
+            e.printStackTrace();
+                    
+        }
+    }
+    
+    /*
     public void guardarTicket(){
         DataModelTicket modelTicket = context.getRegisteredObject(DataModelTicket.class);
         Factura factura = new Factura();
@@ -183,8 +210,7 @@ public class ConfirmaPagoTicketController {
             impresoraService.cerrarTicket();
             factura.setNumeroComprobante(impresoraService.getNroUltimoTicketBC());
             factura.setUsuario(modelTicket.getUsuario());
-            //factura.set
-            factService.registrarFactura(factura);
+            //factService.registrarFactura(factura);
             modelTicket.setCliente(null);
             modelTicket.setClienteSeleccionado(false);
             modelTicket.setNroTicket(modelTicket.getNroTicket()+1);
@@ -200,7 +226,7 @@ public class ConfirmaPagoTicketController {
             
         }
         
-    }    
+    }    */
     
     
     

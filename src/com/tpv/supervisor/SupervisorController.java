@@ -8,6 +8,7 @@ package com.tpv.supervisor;
 import com.tpv.enums.TipoTituloSupervisorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.principal.DataModelTicket;
+import com.tpv.service.FacturacionService;
 import com.tpv.service.ImpresoraService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -33,6 +34,7 @@ public class SupervisorController {
     Logger log = Logger.getLogger(SupervisorController.class);
 
     private ImpresoraService impresoraService = new ImpresoraService();
+    private FacturacionService facturaService = new FacturacionService();
     
     @FXML
     private Label labelTitulo;
@@ -73,7 +75,7 @@ public class SupervisorController {
                     if(modelTicket.getTipoTituloSupervisor()==TipoTituloSupervisorEnum.HABILITAR_NEGATIVO)
                         habilitarNegativos(true);
                     if(modelTicket.getTipoTituloSupervisor()==TipoTituloSupervisorEnum.CANCELAR_TICKET)
-                        cancelarTicketCompleto();
+                        cancelarFacturaCompleta();
                     keyEvent.consume();
                     volverButton.fire();                    
                 }
@@ -94,9 +96,10 @@ public class SupervisorController {
     }
     
     
-    private void cancelarTicketCompleto(){
+    private void cancelarFacturaCompleta(){
         try{
             impresoraService.cancelarTicket();
+            facturaService.cancelarFactura(modelTicket.getIdFactura());
             modelTicket.setCliente(null);
             modelTicket.setClienteSeleccionado(false);
             modelTicket.getDetalle().clear();

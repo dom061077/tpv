@@ -24,15 +24,20 @@ public class ComboDetalle {
     @Column(name = "idCOMBOS")
     private Long id;
     
-    @Column(name = "cantidad")
+    @Column(name = "CANTIDADPRODUCTOS")
     BigDecimal cantidad;
             
-    
+    @Column(name = "PORCENTAJE")
+    BigDecimal porcentaje;
         
     
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "idPRODUCTOS", referencedColumnName = "idPRODUCTOS", nullable=true)
-    private Producto producto;    
+    private Producto producto;  
+    
+    @ManyToOne
+    @JoinColumn(name = "idGRUPRODUCTOS")
+    private GrupoProducto grupoProducto;
     
     
     

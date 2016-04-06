@@ -23,7 +23,7 @@ import javax.persistence.Table;
 public class Producto {
     @Id
     @Column(name = "idPRODUCTOS")
-    private int idProducto;
+    private Long idProducto;
     @Column(name = "CODBARRA")
     private String codBarra;
     @Column(name = "STOCK")
@@ -48,14 +48,14 @@ public class Producto {
     /**
      * @return the idProducto
      */
-    public int getIdProducto() {
+    public Long getIdProducto() {
         return idProducto;
     }
 
     /**
      * @param idProducto the idProducto to set
      */
-    public void setIdProducto(int idProducto) {
+    public void setIdProducto(Long idProducto) {
         this.idProducto = idProducto;
     }
 

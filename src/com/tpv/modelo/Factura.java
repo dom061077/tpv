@@ -5,6 +5,7 @@
  */
 package com.tpv.modelo;
 
+import com.tpv.modelo.enums.FacturaEstadoEnum;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -69,6 +70,9 @@ public class Factura {
     
     @Column(name = "ANULADO", nullable = false, columnDefinition = "TINYINT(1)") 
     private boolean anulada;
+    
+    @Column(name = "ESTADO",nullable = false)
+    private FacturaEstadoEnum estado;
     
     @OneToMany(cascade = CascadeType.ALL,mappedBy="factura")
     //@org.hibernate.annotations.IndexColumn(name = "BID_POSITION")
@@ -189,6 +193,20 @@ public class Factura {
      */
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    /**
+     * @return the estado
+     */
+    public FacturaEstadoEnum getEstado() {
+        return estado;
+    }
+
+    /**
+     * @param estado the estado to set
+     */
+    public void setEstado(FacturaEstadoEnum estado) {
+        this.estado = estado;
     }
 
     

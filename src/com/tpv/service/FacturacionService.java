@@ -8,6 +8,7 @@ package com.tpv.service;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Factura;
 import com.tpv.modelo.FacturaDetalle;
+import com.tpv.modelo.enums.FacturaEstadoEnum;
 import com.tpv.principal.LineaTicketData;
 import com.tpv.util.Connection;
 import java.math.BigDecimal;
@@ -24,7 +25,7 @@ public class FacturacionService  {
     Logger log = Logger.getLogger(FacturacionService.class);
     
     
-    public void registrarFactura(Factura factura)throws TpvException{
+    public Factura registrarFactura(Factura factura)throws TpvException{
         EntityManager em = Connection.getEm();
         EntityTransaction tx = em.getTransaction();
         try{
@@ -45,7 +46,7 @@ public class FacturacionService  {
             log.error("Error grave: "+fullTraceStr);
             throw new TpvException(fullTraceStr);
         }
-        
+        return factura;
     }
     
     public Factura devolverFactura(Long id) throws TpvException{
@@ -60,6 +61,57 @@ public class FacturacionService  {
         
         
         return factura;
+    }
+    
+    public void agregarDetalleFactura(Long id,FacturaDetalle facturaDetalle) throws TpvException{
+        Factura factura;
+        EntityManager em = Connection.getEm();
+        EntityTransaction tx = em.getTransaction();
+        if(!tx.isActive())
+            tx.begin();
+        factura = em.find(Factura.class,id);
+        facturaDetalle.setFactura(factura);
+        factura.getDetalle().add(facturaDetalle);
+        tx.commit();
+        em.clear();
+    }
+    
+    public void confirmarFactura(Long id)throws TpvException{
+        Factura factura;
+        EntityManager em = Connection.getEm();
+        EntityTransaction tx = em.getTransaction();
+        if(!tx.isActive())
+            tx.begin();
+        factura = em.find(Factura.class, id);
+        factura.setEstado(FacturaEstadoEnum.CERRADA);
+        tx.commit();
+        em.clear();
+        
+    }
+    
+    public void cancelarFactura(Long id) throws TpvException{
+        Factura factura;
+        EntityManager em = Connection.getEm();
+        EntityTransaction tx = em.getTransaction();
+        if(!tx.isActive())
+            tx.begin();
+        factura = em.find(Factura.class, id);
+        factura.setEstado(FacturaEstadoEnum.ANULADA);
+        tx.commit();
+        em.clear();
+    }
+            
+    public void registrarCombos(Long id){
+        Factura factura;
+        EntityManager em = Connection.getEm();
+        EntityTransaction tx = em.getTransaction();
+        if(!tx.isActive())
+            tx.begin();
+        factura = em.find(Factura.class,id );
+        factura.setEstado(FacturaEstadoEnum.CERRADA);
+        tx.commit();
+        em.clear();
+        
     }
     
     

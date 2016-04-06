@@ -43,6 +43,7 @@ public class DataModelTicket {
     private int codigoClienteSelecEnBuscarPorDesc;
     private boolean imprimeComoNegativo = false;
     private TipoTituloSupervisorEnum tipoTituloSupervisor;
+    private Long idFactura;
     
     
     public DataModelTicket(){
@@ -231,6 +232,20 @@ public class DataModelTicket {
         
                 
                 
+    }
+
+    /**
+     * @return the idFactura
+     */
+    public Long getIdFactura() {
+        return idFactura;
+    }
+
+    /**
+     * @param idFactura the idFactura to set
+     */
+    public void setIdFactura(Long idFactura) {
+        this.idFactura = idFactura;
     }
     
     

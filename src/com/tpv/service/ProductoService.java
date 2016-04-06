@@ -158,38 +158,6 @@ public class ProductoService {
         }
         
         
-//        //traigo la lista por fecha de precio de oferta
-//        Query q = em.createQuery("SELECT lpp,current_date() FROM ListaPrecioProducto lpp where lpp.producto.discontinuado = 0"
-//                +" and lpp.producto.codigoProducto = :codigoProducto").setParameter("codigoProducto",filtroCodigo);
-//        ListaPrecioProducto listaPrecio;
-//        java.sql.Date fechaHoy;
-//        
-//        try{
-//            Object[] resultado = (Object[])q.getSingleResult();
-//            if(resultado.length>0){
-//               listaPrecio = ((ListaPrecioProducto)resultado[0]);
-//               fechaHoy = (java.sql.Date)resultado[1];
-//               if(listaPrecio.getFechaInicioEspecial().compareTo(fechaHoy)<=0 &&
-//                       listaPrecio.getFechaFinEspecial().compareTo(fechaHoy)>=0){
-//                   precio = listaPrecio.getPrecioEspecial();
-//               }else{
-//                   if(listaPrecio.getFechaInicioOferta().compareTo(fechaHoy)<=0 &&
-//                       listaPrecio.getFechaFinOferta().compareTo(fechaHoy)>=0)
-//                       precio = listaPrecio.getPrecioOferta();
-//                   else
-//                       precio = listaPrecio.getPrecioPublico();
-//               }
-//            }
-//        }catch(NoResultException e){
-//            
-//        }catch(NonUniqueResultException e){    
-//            
-//        }catch(Exception e){
-//            e.printStackTrace();
-//        }finally{
-//            
-//        }
-//        
         tx.commit();
         precio = precio.setScale(2,BigDecimal.ROUND_HALF_EVEN);
         return precio;
@@ -211,7 +179,7 @@ public class ProductoService {
         return precio;
     }
 
-    public void ConsultaGrupo(){
+    /*public void ConsultaGrupo(){
         EntityManager em = Connection.getEm();
         EntityTransaction tx = em.getTransaction();
         if(!tx.isActive())
@@ -231,6 +199,7 @@ public class ProductoService {
         tx.commit();
         em.clear();
         
-    }
+    }*/
+    
     
 }

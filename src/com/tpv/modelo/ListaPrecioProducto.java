@@ -177,7 +177,7 @@ public class ListaPrecioProducto {
     @Embeddable
     public static class Id implements Serializable{
         @Column(name = "idPRODUCTOS")
-        private int productoId;
+        private Long productoId;
         
         @Column(name = "idLISTAPRECIOS")
         private int listaId;
@@ -186,7 +186,7 @@ public class ListaPrecioProducto {
             
         }
         
-        public Id(int productoId, int listaId){
+        public Id(Long productoId, int listaId){
             this.productoId = productoId;
             this.listaId = listaId;
         }
@@ -202,7 +202,7 @@ public class ListaPrecioProducto {
         }
         
         public int hashCode(){
-            return Integer.hashCode(productoId)+Integer.hashCode(listaId);
+            return Long.hashCode(productoId)+Long.hashCode(listaId);
         }
     }
         @EmbeddedId
@@ -258,6 +258,22 @@ public class ListaPrecioProducto {
             this.listaPrecio = listaPrecio;
             this.id.listaId = listaPrecio.getId();
             this.id.productoId = producto.getIdProducto();
+        }
+        
+        @Transient
+        public BigDecimal getPrecioBase(){
+               BigDecimal precioAux = new BigDecimal(0);
+               if(fechaInicioEspecial.compareTo(fechaHoy)<=0 &&
+                       fechaFinEspecial.compareTo(fechaHoy)>=0){
+                   precioAux =  precioEspecial;
+               }else{
+                   if(fechaInicioOferta.compareTo(fechaHoy)<=0 &&
+                       fechaFinOferta.compareTo(fechaHoy)>=0)
+                       precioAux = precioOferta;
+                   else
+                       precioAux = precioPublico;
+               }
+               return precioAux; 
         }
         
         @Transient

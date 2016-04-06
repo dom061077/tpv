@@ -48,6 +48,8 @@ public class FacturaDetalle {
     private Producto producto;
     
 
+    
+
     /**
      * @return the id
      */

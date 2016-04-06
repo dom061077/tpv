@@ -8,9 +8,12 @@ package com.tpv.principal;
 import com.tpv.enums.TipoTituloSupervisorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Cliente;
-import com.tpv.modelo.GrupoProducto;
+import com.tpv.modelo.Factura;
+import com.tpv.modelo.FacturaDetalle;
 import com.tpv.modelo.Producto;
+import com.tpv.modelo.enums.FacturaEstadoEnum;
 import com.tpv.service.ClienteService;
+import com.tpv.service.FacturacionService;
 import com.tpv.service.ImpresoraService;
 import com.tpv.service.ProductoService;
 import com.tpv.util.Connection;
@@ -19,10 +22,10 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.Iterator;
-import java.util.List;
 import java.util.ResourceBundle;
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
+import javafx.beans.property.ListProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -39,7 +42,6 @@ import javafx.util.Callback;
 import javafx.util.Duration;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import javax.persistence.Query;
 import org.apache.log4j.Logger;
 import org.datafx.controller.FXMLController;
 import org.datafx.controller.flow.action.ActionTrigger;
@@ -59,6 +61,7 @@ public class FXMLMainController implements Initializable {
     ProductoService productoService = new ProductoService();
     ClienteService clienteService = new ClienteService();
     ImpresoraService impresoraService = new ImpresoraService();
+    private FacturacionService factService = new FacturacionService();
     
     
     
@@ -156,7 +159,6 @@ public class FXMLMainController implements Initializable {
     @PostConstruct
     public void init(){
         
-        productoService.ConsultaGrupo();
         
         configurarAnimacionIngresoNegativo();
         
@@ -490,6 +492,7 @@ public class FXMLMainController implements Initializable {
                 if(modelTicket.getDetalle().size()==0){
                     try{
                         impresoraService.abrirTicket();
+                        guardarFacturaPrimeraVez();
                     }catch(TpvException e){
                         modelTicket.setException(e);
                         goToErrorButton.fire();
@@ -497,11 +500,11 @@ public class FXMLMainController implements Initializable {
                 }
                 descripcion = producto.getCodigoProducto()+" "+ producto.getDescripcion();
 
-                if(modelTicket.isImprimeComoNegativo())
-                    if(!anulaItemIngresado(producto.getCodigoProducto(), cantidad)){
-                        textFieldCantidad.setText("");
-                        return;
-                    }
+//                if(modelTicket.isImprimeComoNegativo())
+//                    if(!anulaItemIngresado(producto.getCodigoProducto(), cantidad)){
+//                        textFieldCantidad.setText("");
+//                        return;
+//                    }
                 try{
                     impresoraService.imprimirLineaTicket(descripcion, cantidad
                             ,precio ,producto.getValorImpositivo().getValor() ,modelTicket.isImprimeComoNegativo(), producto.getImpuestoInterno());
@@ -509,9 +512,12 @@ public class FXMLMainController implements Initializable {
                         precio = precio.multiply(BigDecimal.valueOf(-1));
                         cantidad = cantidad.multiply(new BigDecimal(-1));
                     }                    
-                    modelTicket.getDetalle().add(new LineaTicketData(producto.getCodigoProducto()
-                            ,producto.getDescripcion(),cantidad,precio,modelTicket.isImprimeComoNegativo()));
-                    
+                    LineaTicketData lineaTicketData = new LineaTicketData(producto.getCodigoProducto()
+                            ,producto.getDescripcion(),cantidad,precio,modelTicket.isImprimeComoNegativo());
+                    agregarDetalleFactura(lineaTicketData);
+                    modelTicket.getDetalle().add(lineaTicketData);
+//                    if(modelTicket.getDetalle().size()>1)
+//                        modificarTicket(lineaTicketData);
                 }catch(TpvException e){
                     modelTicket.setException(e);
                     goToErrorButton.fire();
@@ -709,5 +715,49 @@ public class FXMLMainController implements Initializable {
             return false;
         }
     }
+    
+    private void guardarFacturaPrimeraVez(){
+        Factura factura = new Factura();
+        factura.setTotal(modelTicket.getTotalTicket());
+        factura.setEstado(FacturaEstadoEnum.ABIERTA);
+        factura.setCliente(modelTicket.getCliente());
+        ListProperty<LineaTicketData> detalle =  modelTicket.getDetalle();
+        
+        detalle.forEach(item->{
+            FacturaDetalle facturaDetalle = new FacturaDetalle();
+            Producto producto = productoService.getProductoPorCodigo(item.getCodigoProducto());
+            facturaDetalle.setFactura(factura);
+            facturaDetalle.setProducto(producto);
+            facturaDetalle.setCantidad(item.getCantidad());
+            facturaDetalle.setSubTotal(item.getSubTotal());
+            factura.getDetalle().add(facturaDetalle);
+        });
+        Factura facturaGuardada=null;
+        try{
+            factura.setNumeroComprobante(impresoraService.getNroUltimoTicketBC());
+            factura.setUsuario(modelTicket.getUsuario());
+            facturaGuardada=factService.registrarFactura(factura);
+        }catch(TpvException e){
+            log.error("Error: "+e.getMessage());
+            modelTicket.setException(e);
+        }
+        modelTicket.setIdFactura(facturaGuardada.getId());
+        log.debug("ID de factura: "+facturaGuardada.getId());
+    }  
+    
+    private void agregarDetalleFactura(LineaTicketData lineaTicketData){
+        FacturaDetalle facturaDetalle = new FacturaDetalle();
+        facturaDetalle.setCantidad(lineaTicketData.getCantidad());
+        facturaDetalle.setSubTotal(lineaTicketData.getSubTotal());
+
+        try{
+            facturaDetalle.setProducto(productoService.getProductoPorCodigo(lineaTicketData.getCodigoProducto()));
+            factService.agregarDetalleFactura(modelTicket.getIdFactura(), facturaDetalle);
+        }catch(TpvException e){
+            log.error("Error: "+e.getMessage());
+            modelTicket.setException(e);
+        }
+    }
+    
     
 }
