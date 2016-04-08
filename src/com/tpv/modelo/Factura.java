@@ -14,6 +14,9 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -72,11 +75,15 @@ public class Factura {
     private boolean anulada;
     
     @Column(name = "ESTADO",nullable = false)
+    @Enumerated(EnumType.STRING)
     private FacturaEstadoEnum estado;
     
     @OneToMany(cascade = CascadeType.ALL,mappedBy="factura")
     //@org.hibernate.annotations.IndexColumn(name = "BID_POSITION")
     private List<FacturaDetalle> detalle = new ArrayList<FacturaDetalle>();
+    
+    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL,mappedBy="factura")
+    private List<FacturaFormaPagoDetalle> detallePagos = new ArrayList<FacturaFormaPagoDetalle>();
 
     
     @ManyToOne
@@ -207,6 +214,13 @@ public class Factura {
      */
     public void setEstado(FacturaEstadoEnum estado) {
         this.estado = estado;
+    }
+
+    /**
+     * @return the detallePagos
+     */
+    public List<FacturaFormaPagoDetalle> getDetallePagos() {
+        return detallePagos;
     }
 
     

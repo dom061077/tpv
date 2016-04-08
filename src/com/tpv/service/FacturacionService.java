@@ -55,7 +55,7 @@ public class FacturacionService  {
         EntityTransaction tx = em.getTransaction();
         if(!tx.isActive())
             tx.begin();
-
+        factura = em.find(Factura.class, id);
         tx.commit();
         em.clear();
         
@@ -76,14 +76,15 @@ public class FacturacionService  {
         em.clear();
     }
     
-    public void confirmarFactura(Long id)throws TpvException{
-        Factura factura;
+    public void confirmarFactura(Factura factura)throws TpvException{
+        //Factura factura;
         EntityManager em = Connection.getEm();
         EntityTransaction tx = em.getTransaction();
         if(!tx.isActive())
             tx.begin();
-        factura = em.find(Factura.class, id);
+        //factura = em.find(Factura.class, id);
         factura.setEstado(FacturaEstadoEnum.CERRADA);
+        em.merge(factura);
         tx.commit();
         em.clear();
         
@@ -111,7 +112,6 @@ public class FacturacionService  {
         factura.setEstado(FacturaEstadoEnum.CERRADA);
         tx.commit();
         em.clear();
-        
     }
     
     

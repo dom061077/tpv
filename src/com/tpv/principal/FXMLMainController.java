@@ -514,8 +514,11 @@ public class FXMLMainController implements Initializable {
                     }                    
                     LineaTicketData lineaTicketData = new LineaTicketData(producto.getCodigoProducto()
                             ,producto.getDescripcion(),cantidad,precio,modelTicket.isImprimeComoNegativo());
-                    agregarDetalleFactura(lineaTicketData);
-                    modelTicket.getDetalle().add(lineaTicketData);
+                    modelTicket.getDetalle().add(lineaTicketData);                    
+                    if(modelTicket.getDetalle().size()>1){
+                        agregarDetalleFactura(lineaTicketData);
+
+                    }
 //                    if(modelTicket.getDetalle().size()>1)
 //                        modificarTicket(lineaTicketData);
                 }catch(TpvException e){

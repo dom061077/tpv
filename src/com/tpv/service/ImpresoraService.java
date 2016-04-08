@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import org.tpv.print.fiscal.FiscalPacket;
 import org.tpv.print.fiscal.exception.FiscalPrinterIOException;
 import org.tpv.print.fiscal.exception.FiscalPrinterStatusError;
+import org.tpv.print.fiscal.hasar.HasarFiscalPacket;
 import org.tpv.print.fiscal.hasar.HasarFiscalPrinter;
 import org.tpv.print.fiscal.hasar.HasarPrinterP715F;
 import org.tpv.print.fiscal.msg.FiscalMessages;
@@ -134,6 +135,7 @@ public class ImpresoraService {
         
         retorno[1]=response.getString(3);
         retorno[2]=response.getString(5);
+        response.getFiscalStatus();
         try{
            request = hfp.cmdGetInitData();
            response = hfp.execute(request);

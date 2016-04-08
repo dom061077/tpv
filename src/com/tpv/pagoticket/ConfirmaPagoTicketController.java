@@ -7,18 +7,18 @@ package com.tpv.pagoticket;
 
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Factura;
-import com.tpv.modelo.FacturaDetalle;
-import com.tpv.modelo.Producto;
+import com.tpv.modelo.FacturaFormaPagoDetalle;
 import com.tpv.principal.DataModelTicket;
-import com.tpv.principal.LineaTicketData;
 import com.tpv.service.FacturacionService;
 import com.tpv.service.ImpresoraService;
+import com.tpv.service.PagoService;
 import com.tpv.service.ProductoService;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
-import javafx.beans.property.ObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -32,7 +32,6 @@ import javafx.scene.layout.BorderPane;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
-import org.datafx.controller.FXMLController;
 import org.datafx.controller.flow.action.ActionTrigger;
 import org.datafx.controller.flow.context.FXMLViewFlowContext;
 import org.datafx.controller.flow.context.ViewFlowContext;
@@ -49,6 +48,7 @@ public class ConfirmaPagoTicketController {
     private FacturacionService factService = new FacturacionService();
     private ImpresoraService impresoraService = new ImpresoraService();
     private ProductoService productoService = new ProductoService();
+    private PagoService pagoService = new PagoService();
 
     
     
@@ -170,7 +170,18 @@ public class ConfirmaPagoTicketController {
         try{
             log.info("Cerrando y confirmando factura ");
             impresoraService.cerrarTicket();
-            factService.confirmarFactura(modelTicket.getIdFactura());
+            List<FacturaFormaPagoDetalle> pagos = new ArrayList<FacturaFormaPagoDetalle>();
+            ListProperty<LineaPagoData> detallePagosData = modelTicket.getPagos();
+            Factura factura = factService.devolverFactura(modelTicket.getIdFactura());
+            detallePagosData.forEach(item ->{
+                FacturaFormaPagoDetalle formaPagoDetalle = new FacturaFormaPagoDetalle();
+                formaPagoDetalle.setFormaPago(pagoService.getFormaPago(item.getCodigoPago()));
+                formaPagoDetalle.setFactura(factura);
+                formaPagoDetalle.setMontoPago(item.getMonto());
+                factura.getDetallePagos().add(formaPagoDetalle);
+            });
+            
+            factService.confirmarFactura(factura);
             modelTicket.setCliente(null);
             modelTicket.setClienteSeleccionado(false);
             modelTicket.setNroTicket(modelTicket.getNroTicket()+1);
