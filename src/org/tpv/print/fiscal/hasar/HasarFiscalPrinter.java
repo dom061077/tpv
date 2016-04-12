@@ -118,6 +118,7 @@ public abstract class HasarFiscalPrinter extends BasicFiscalPrinter implements H
 										 PST_JOURNAL_PAPER_OUT, PST_TICKET_PAPER_OUT, PST_PRINT_BUFFER_FULL, 
 										 PST_PRINT_BUFFER_EMPTY, PST_PRINTER_COVER_OPEN, PST_MONEY_DRAWER_CLOSED
 										};
+        //4096 codigo de documento fiscal abierto
 	/** Códigos de mensajes de estado del controlador fiscal */
 	private int[] fiscalStatusCodes  = { FST_FISCAL_MEMORY_CRC_ERROR, FST_WORKING_MEMORY_CRC_ERROR, FST_UNKNOWN_COMMAND,    
 										 FST_INVALID_DATA_FIELD, FST_INVALID_COMMAND, FST_ACCUMULATOR_OVERFLOW,

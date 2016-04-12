@@ -9,6 +9,7 @@ import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Factura;
 import com.tpv.modelo.FacturaFormaPagoDetalle;
 import com.tpv.principal.DataModelTicket;
+import com.tpv.print.event.FiscalPrinterEvent;
 import com.tpv.service.FacturacionService;
 import com.tpv.service.ImpresoraService;
 import com.tpv.service.PagoService;
@@ -35,6 +36,10 @@ import org.apache.log4j.Logger;
 import org.datafx.controller.flow.action.ActionTrigger;
 import org.datafx.controller.flow.context.FXMLViewFlowContext;
 import org.datafx.controller.flow.context.ViewFlowContext;
+import org.tpv.print.fiscal.FiscalPacket;
+import org.tpv.print.fiscal.FiscalPrinter;
+import org.tpv.print.fiscal.hasar.HasarCommands;
+import org.tpv.print.fiscal.msg.FiscalMessages;
 
 /**
  *
@@ -49,6 +54,7 @@ public class ConfirmaPagoTicketController {
     private ImpresoraService impresoraService = new ImpresoraService();
     private ProductoService productoService = new ProductoService();
     private PagoService pagoService = new PagoService();
+    private FiscalPrinterEvent fiscalPrinterEvent;
 
     
     
@@ -114,6 +120,7 @@ public class ConfirmaPagoTicketController {
     @PostConstruct
     public void init(){
             log.info("Ingresando a la confirmación de pago");
+            asignarEvento();
             //labelError.setText(model.getTpvException().getMessage());
             modelTicket = context.getRegisteredObject(DataModelTicket.class);
             codigoPagoColumn.setCellValueFactory(new PropertyValueFactory<LineaPagoData,Integer>("codigoPago"));
@@ -197,6 +204,54 @@ public class ConfirmaPagoTicketController {
             e.printStackTrace();
                     
         }
+    }
+    
+    
+    private void asignarEvento(){
+        this.fiscalPrinterEvent = new FiscalPrinterEvent(){
+            @Override
+            public void commandExecuted(FiscalPrinter source, FiscalPacket command, FiscalPacket response){
+                log.debug("Se ejecutó correctamente el siguiente comando:");
+                if(command.getCommandCode()==HasarCommands.CMD_OPEN_FISCAL_RECEIPT){
+                    log.debug("     CMD_OPEN_FISCAL_RECEIPT: ");
+                }
+                log.debug("Mensajes de error: ");
+                source.getMessages().getErrorMsgs().forEach(item->{
+                    log.debug("     Código de Error: "+item.getCode());
+                    log.debug("     Titulo: "+item.getTitle());
+                    log.debug("     Descripción: "+item.getDescription());
+                });
+                log.debug("Mensajes: ");
+                source.getMessages().getMsgs().forEach(item->{
+                    log.debug("     Código de Msg: "+item.getCode());
+                    log.debug("     Titulo: "+item.getTitle());
+                    log.debug("     Descripción: "+item.getDescription());
+                    
+                });
+                
+            }
+            
+            @Override
+            public void statusChanged(FiscalPrinter source, FiscalPacket command, FiscalPacket response, FiscalMessages msgs) {
+                log.debug("Ingresando al evento statusChanged");
+                log.debug("Mensajes de error: ");
+                source.getMessages().getErrorMsgs().forEach(item->{
+                    log.debug("     Código de Error: "+item.getCode());
+                    log.debug("     Titulo: "+item.getTitle());
+                    log.debug("     Descripción: "+item.getDescription());
+                });
+                log.debug("Mensajes: ");
+                source.getMessages().getMsgs().forEach(item->{
+                    log.debug("     Código de Msg: "+item.getCode());
+                    log.debug("     Titulo: "+item.getTitle());
+                    log.debug("     Descripción: "+item.getDescription());
+                    
+                });
+                                
+            }              
+        };
+        impresoraService.getHfp().setEventListener(this.fiscalPrinterEvent);
+                
     }
     
     /*

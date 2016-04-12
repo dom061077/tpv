@@ -30,5 +30,6 @@
       <Button fx:id="buttonFacturacion" mnemonicParsing="false" text="Button" visible="false" />
       <Button fx:id="buttonControlador" mnemonicParsing="false" text="Button" visible="false" />
       <Button fx:id="buttonRetirarDinero" mnemonicParsing="false" text="Button" visible="false" />
+      <Button fx:id="buttonError" focusTraversable="false" mnemonicParsing="false" visible="false" />
    </children>
 </VBox>

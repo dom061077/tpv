@@ -24,7 +24,7 @@ import org.tpv.print.fiscal.msg.FiscalMessages;
  */
 public class ImpresoraService {
     Logger log = Logger.getLogger(ImpresoraService.class);
-    
+    private HasarPrinterP715F hfp;
     
     /**
      * Método para recuperar Nro. de punto de venta y Nro. de Ticket
@@ -53,14 +53,18 @@ public class ImpresoraService {
      * 
      * @return 
      */
+    public ImpresoraService(){
+        hfp = new HasarPrinterP715F(Connection.getStcp());
+    }
+            
     public String getNroPuntoVenta() throws TpvException{
-        HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
+        //HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
         FiscalPacket request;
         FiscalPacket response;
         FiscalMessages fMsg;
         try{
-            request = hfp.cmdGetInitData();
-            response = hfp.execute(request);
+            request = getHfp().cmdGetInitData();
+            response = getHfp().execute(request);
         }catch(FiscalPrinterIOException e){
             throw new TpvException("Error al obtener datos de la impresora. "
                 +e.getFullMessage());
@@ -85,13 +89,13 @@ public class ImpresoraService {
      */
     
     public String getNroUltimoTicketBC()throws TpvException{
-        HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
+        //HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
         FiscalPacket request;
         FiscalPacket response;
         FiscalMessages fMsg;
         try{
-            request = hfp.cmdStatusRequest();
-            response = hfp.execute(request);
+            request = getHfp().cmdStatusRequest();
+            response = getHfp().execute(request);
         }catch(FiscalPrinterIOException e){
             throw new TpvException("Error al obtener datos de la impresora. "
                 +e.getFullMessage());
@@ -103,13 +107,13 @@ public class ImpresoraService {
     
     public String getNroUltimoTicketA() throws TpvException{
         
-        HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcpStatus()); //new HasarPrinterP320F(stcp);
+        //HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcpStatus()); //new HasarPrinterP320F(stcp);
         FiscalPacket request;
         FiscalPacket response;
         FiscalMessages fMsg;
         try{
-            request = hfp.cmdStatusRequest();
-            response = hfp.execute(request);
+            request = getHfp().cmdStatusRequest();
+            response = getHfp().execute(request);
         }catch(FiscalPrinterIOException e){
             throw new TpvException("Error al obtener datos de la impresora. "
                 +e.getFullMessage());
@@ -121,24 +125,26 @@ public class ImpresoraService {
     
     public String[] getPtoVtaNrosTicket() throws TpvException{
         String[] retorno = new String[3];
-        HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
+        //HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
         FiscalPacket request;
         FiscalPacket response;
         try{
-            request = hfp.cmdStatusRequest();
-            response = hfp.execute(request);
+            request = getHfp().cmdStatusRequest();
+            response = getHfp().execute(request);
             
         }catch(FiscalPrinterIOException e){
             throw new TpvException("Error al obtener datos de la impresora. "
                 +e.getFullMessage());
+        }catch(IllegalStateException e){
+            throw new TpvException(e.getMessage());
         }
         
         retorno[1]=response.getString(3);
         retorno[2]=response.getString(5);
         response.getFiscalStatus();
         try{
-           request = hfp.cmdGetInitData();
-           response = hfp.execute(request);
+           request = getHfp().cmdGetInitData();
+           response = getHfp().execute(request);
         }catch(FiscalPrinterIOException e){
             throw new TpvException("Error al obtener datos de la impresora  "
                     +e.getFullMessage());
@@ -153,16 +159,16 @@ public class ImpresoraService {
             throw new TpvException("La impresora no está conectada");
         }
         
-        HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
+        //HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
         FiscalPacket request;
         FiscalPacket response;
         FiscalMessages fMsg;
         
         try{
-            request = hfp.cmdOpenFiscalReceipt("B");
-            response = hfp.execute(request);
+            request = getHfp().cmdOpenFiscalReceipt("B");
+            response = getHfp().execute(request);
         }catch(FiscalPrinterStatusError e){
-            fMsg = hfp.getMessages();
+            fMsg = getHfp().getMessages();
             log.error(fMsg.getErrorsAsString());
             throw new TpvException("Error en el estado de la impresora: "
                 +fMsg.getErrorsAsString());
@@ -181,21 +187,21 @@ public class ImpresoraService {
         String _1erLineaDetalle = descripcion.substring(0,descripcion.length()-21);
         
         
-        HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
+        //HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
         FiscalPacket request2daLineaDetalle,request1eraLineaDetalle;
         FiscalPacket response;
         FiscalMessages fMsg;
         //cmdPrintLineItem(String description, BigDecimal quantity, BigDecimal price, BigDecimal ivaPercent
         //, boolean substract, BigDecimal internalTaxes, boolean basePrice, Integer display) {
         //request = hfp.cmdPrintLineItem("CACAO", new BigDecimal("1"), new BigDecimal("1"), new BigDecimal("21"), false, new BigDecimal("0"), false,0);
-        request1eraLineaDetalle = hfp.cmdPrintFiscalText(_1erLineaDetalle,0);
-        request2daLineaDetalle = hfp.cmdPrintLineItem(_2daLineaDetalle,  cantidad, precio, iva, imprimeNegativo, impuestoInterno, false,0);
+        request1eraLineaDetalle = getHfp().cmdPrintFiscalText(_1erLineaDetalle,0);
+        request2daLineaDetalle = getHfp().cmdPrintLineItem(_2daLineaDetalle,  cantidad, precio, iva, imprimeNegativo, impuestoInterno, false,0);
 //        hfp.cmdPrintFiscalText(descripcion, Integer.SIZE)
         try{
-            response = hfp.execute(request1eraLineaDetalle);
-            response = hfp.execute(request2daLineaDetalle);
+            response = getHfp().execute(request1eraLineaDetalle);
+            response = getHfp().execute(request2daLineaDetalle);
         }catch(FiscalPrinterStatusError e){
-            fMsg = hfp.getMessages();
+            fMsg = getHfp().getMessages();
             log.error(fMsg.getErrorsAsString());
             throw new TpvException("Error en el estado de la impresora: "
                 +fMsg.getErrorsAsString());
@@ -210,15 +216,15 @@ public class ImpresoraService {
     }
     
     public void cerrarTicket() throws TpvException{
-        HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
+        //HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
         FiscalPacket request;
         FiscalPacket response;
         FiscalMessages fMsg;
-        request = hfp.cmdCloseFiscalReceipt(null);
+        request = getHfp().cmdCloseFiscalReceipt(null);
         try{
-          response = hfp.execute(request);
+          response = getHfp().execute(request);
         }catch(FiscalPrinterStatusError e){
-            fMsg = hfp.getMessages();
+            fMsg = getHfp().getMessages();
             log.error(fMsg.getErrorsAsString());
             throw new TpvException("Error en el estado de la impresora: "
                 +fMsg.getErrorsAsString());
@@ -233,15 +239,15 @@ public class ImpresoraService {
     }
     
     public void cancelarTicket() throws TpvException{
-        HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
+        //HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
         FiscalPacket request;
         FiscalPacket response;
         FiscalMessages fMsg;
-        request = hfp.cmdCancelDocument();
+        request = getHfp().cmdCancelDocument();
         try{
-          response = hfp.execute(request);
+          response = getHfp().execute(request);
         }catch(FiscalPrinterStatusError e){
-            fMsg = hfp.getMessages();
+            fMsg = getHfp().getMessages();
             log.error(fMsg.getErrorsAsString());
             throw new TpvException("Error en el estado de la impresora: "
                 +fMsg.getErrorsAsString());
@@ -251,6 +257,20 @@ public class ImpresoraService {
             throw new TpvException("Error al obtener datos de la impresora. "
                 +e.getFullMessage());
         }        
+    }
+
+    /**
+     * @return the hfp
+     */
+    public HasarPrinterP715F getHfp() {
+        return hfp;
+    }
+
+    /**
+     * @param hfp the hfp to set
+     */
+    public void setHfp(HasarPrinterP715F hfp) {
+        this.hfp = hfp;
     }
     
     

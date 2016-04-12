@@ -11,12 +11,26 @@ package com.tpv.exceptions;
  */
 public class TpvException extends Exception {
     
+    private Exception exceptionOrigen;
+    
     public TpvException(){
         
     }
     
+    public TpvException(String s,Exception e){
+        super(s);
+        this.exceptionOrigen = e;
+    }
+    
     public TpvException(String s){
         super(s);
+    }
+
+    /**
+     * @return the exceptionOrigen
+     */
+    public Exception getExceptionOrigen() {
+        return exceptionOrigen;
     }
     
     

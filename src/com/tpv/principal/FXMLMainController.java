@@ -5,6 +5,7 @@
  */
 package com.tpv.principal;
 
+import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.enums.TipoTituloSupervisorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Cliente;
@@ -12,6 +13,7 @@ import com.tpv.modelo.Factura;
 import com.tpv.modelo.FacturaDetalle;
 import com.tpv.modelo.Producto;
 import com.tpv.modelo.enums.FacturaEstadoEnum;
+import com.tpv.print.event.FiscalPrinterEvent;
 import com.tpv.service.ClienteService;
 import com.tpv.service.FacturacionService;
 import com.tpv.service.ImpresoraService;
@@ -45,6 +47,10 @@ import javax.inject.Inject;
 import org.apache.log4j.Logger;
 import org.datafx.controller.FXMLController;
 import org.datafx.controller.flow.action.ActionTrigger;
+import org.tpv.print.fiscal.FiscalPacket;
+import org.tpv.print.fiscal.FiscalPrinter;
+import org.tpv.print.fiscal.hasar.HasarCommands;
+import org.tpv.print.fiscal.msg.FiscalMessages;
 
 /**
  *
@@ -61,6 +67,10 @@ public class FXMLMainController implements Initializable {
     ProductoService productoService = new ProductoService();
     ClienteService clienteService = new ClienteService();
     ImpresoraService impresoraService = new ImpresoraService();
+    
+    private FiscalPrinterEvent fiscalPrinterEvent;
+    
+    
     private FacturacionService factService = new FacturacionService();
     
     
@@ -158,8 +168,7 @@ public class FXMLMainController implements Initializable {
     
     @PostConstruct
     public void init(){
-        
-        
+        asignarEvento();
         configurarAnimacionIngresoNegativo();
         
         tableViewTickets.setRowFactory(new Callback<TableView<LineaTicketData>, TableRow<LineaTicketData>>(){
@@ -182,6 +191,8 @@ public class FXMLMainController implements Initializable {
                 };
             }
             
+          
+
         });
         
         labelCantidad.setText(LABEL_CANTIDAD);
@@ -595,8 +606,12 @@ public class FXMLMainController implements Initializable {
                 String retorno[] = impresoraService.getPtoVtaNrosTicket();
                 modelTicket.setNroTicket(Integer.parseInt(retorno[1])+1);
                 modelTicket.setPuntoVenta(Integer.parseInt(retorno[0]));
-            }catch(Exception e){
-
+            }catch(TpvException e){
+                log.error(e.getMessage());
+                modelTicket.setException(e);
+                modelTicket.setOrgienPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+                goToErrorButton.fire();
+                
             }
         }
         nroticket.setText("Pto.Venta: "+modelTicket.getPuntoVenta()+" Nro. Ticket (B/C): "
@@ -760,6 +775,34 @@ public class FXMLMainController implements Initializable {
             log.error("Error: "+e.getMessage());
             modelTicket.setException(e);
         }
+    }
+    
+    private void asignarEvento(){
+        this.fiscalPrinterEvent = new FiscalPrinterEvent(){
+            @Override
+            public void commandExecuted(FiscalPrinter source, FiscalPacket command, FiscalPacket response){
+                log.debug("Se ejecutó correctamente el siguiente comando:");
+                if(command.getCommandCode()==HasarCommands.CMD_OPEN_FISCAL_RECEIPT){
+                    log.debug("     CMD_OPEN_FISCAL_RECEIPT: ");
+                }
+                log.debug("Mensajes de error: ");
+                source.getMessages().getErrorMsgs().forEach(item->{
+                    log.debug("     Código de Error: "+item.getCode());
+                    log.debug("     Titulo: "+item.getTitle());
+                    log.debug("     Descripción: "+item.getDescription());
+                });
+                log.debug("Mensajes: ");
+                source.getMessages().getMsgs().forEach(item->{
+                    log.debug("     Código de Msg: "+item.getCode());
+                    log.debug("     Titulo: "+item.getTitle());
+                    log.debug("     Descripción: "+item.getDescription());
+                    
+                });
+                
+            }
+        };
+        impresoraService.getHfp().setEventListener(this.fiscalPrinterEvent);
+                
     }
     
     

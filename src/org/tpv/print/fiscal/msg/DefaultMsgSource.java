@@ -31,7 +31,7 @@ public class DefaultMsgSource implements MsgSource {
 		msgs.put("UnknownHostError","El Host ingresado es desconocido.");
 		msgs.put("NullRequestError","El paquete de petición no puede ser null.");
 		msgs.put("NullResponseError","El paquete de respuesta no puede ser null.");
-		msgs.put("DeviceNotConnectedError","No existe conexión con el dispositivo.");
+		msgs.put("DeviceNotConnectedError","No existe conexión con la impresora fiscal.");//msgs.put("DeviceNotConnectedError","No existe conexión con el dispositivo.");
 		msgs.put("SpoolerConnectError","No es posible conectarse con el spooler de la impresora fiscal.");
 		msgs.put("FiscalRequest","Petición");
 		msgs.put("FiscalResponse", "Respuesta");

@@ -5,6 +5,7 @@
  */
 package com.tpv.principal;
 
+import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.enums.TipoTituloSupervisorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Cliente;
@@ -44,6 +45,7 @@ public class DataModelTicket {
     private boolean imprimeComoNegativo = false;
     private TipoTituloSupervisorEnum tipoTituloSupervisor;
     private Long idFactura;
+    private OrigenPantallaErrorEnum orgienPantalla;
     
     
     public DataModelTicket(){
@@ -246,6 +248,20 @@ public class DataModelTicket {
      */
     public void setIdFactura(Long idFactura) {
         this.idFactura = idFactura;
+    }
+
+    /**
+     * @return the orgienPantalla
+     */
+    public OrigenPantallaErrorEnum getOrgienPantalla() {
+        return orgienPantalla;
+    }
+
+    /**
+     * @param orgienPantalla the orgienPantalla to set
+     */
+    public void setOrgienPantalla(OrigenPantallaErrorEnum orgienPantalla) {
+        this.orgienPantalla = orgienPantalla;
     }
     
     

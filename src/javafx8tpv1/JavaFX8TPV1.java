@@ -99,7 +99,9 @@ public class JavaFX8TPV1 extends Application {
                    .withLink(ConfirmaPagoTicketController.class,"volverPagoTicket", PagoTicketController.class)
                    .withLink(ConfirmaPagoTicketController.class,"mostrarError",ErrorController.class)
                    .withLink(FXMLMainController.class,"habilitarSupervisor",SupervisorController.class)
-                   .withLink(SupervisorController.class,"volverFacturacion", FXMLMainController.class);
+                   .withLink(SupervisorController.class,"volverFacturacion", FXMLMainController.class)
+                   .withLink(ErrorController.class,"menuprincipal", MenuPrincipalController.class)
+                   .withLink(ErrorController.class,"confirmarticket",ConfirmaPagoTicketController.class);
         StackPane root = flow.start();   
         
         Scene scene = new Scene(root);
@@ -117,13 +119,8 @@ public class JavaFX8TPV1 extends Application {
             
         }   catch(Exception e){
             
-            log.info("Error general de conexiòn");
+            log.error("Error general de conexiòn a la base de datos");
             e.printStackTrace();
-        }
-        try{
-            Connection.initFiscalPrinter();
-        }catch(TpvException e){
-            
         }
         
        
