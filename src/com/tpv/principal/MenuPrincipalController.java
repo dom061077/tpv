@@ -58,7 +58,7 @@ public class MenuPrincipalController {
             }catch(TpvException e){
                 log.error(e.getMessage());
                 modelTicket.setException(e);
-                modelTicket.setOrgienPantalla(OrigenPantallaErrorEnum.PANTALLA_MENUPRINCIPAL);
+                modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_MENUPRINCIPAL);
                 buttonError.fire();
             }
             

@@ -5,6 +5,10 @@
  */
 package com.tpv.exceptions;
 
+import java.util.Iterator;
+import org.tpv.print.fiscal.exception.FiscalPrinterStatusError;
+import org.tpv.print.fiscal.msg.FiscalMessage;
+
 /**
  *
  * @author daniel
@@ -31,6 +35,18 @@ public class TpvException extends Exception {
      */
     public Exception getExceptionOrigen() {
         return exceptionOrigen;
+    }
+    
+    public String getFiscalErrorMsg(){
+        String msg = "";
+        if(exceptionOrigen instanceof FiscalPrinterStatusError){
+            
+            
+            for(Iterator fmsg = ((FiscalPrinterStatusError)exceptionOrigen).getErrorMsgs().iterator();fmsg.hasNext();){
+                msg+=((FiscalMessage)fmsg.next()).getTitle();
+            }
+        }
+        return msg;
     }
     
     

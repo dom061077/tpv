@@ -82,16 +82,17 @@ public class ErrorController implements Initializable {
     public void init(){
             log.info("Ingresando a pantalla de error: "+modelTicket.getTpvException().getMessage());
             //labelError.setText(model.getTpvException().getMessage());
-            textAreaError.setText(modelTicket.getTpvException().getMessage());
+            textAreaError.setText(modelTicket.getTpvException().getMessage()+'\n'
+                +modelTicket.getTpvException().getFiscalErrorMsg());
             Platform.runLater(()->{
                 textAreaError.setOnKeyPressed(keyEvent->{
                     if(keyEvent.getCode()==KeyCode.ESCAPE){
                         recuperarFallo();
-                        if(modelTicket.getOrgienPantalla()==OrigenPantallaErrorEnum.PANTALLA_FACTURACION)
+                        if(modelTicket.getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_FACTURACION)
                             facturacionButton.fire();
-                        if(modelTicket.getOrgienPantalla()==OrigenPantallaErrorEnum.PANTALLA_MENUPRINCIPAL)
+                        if(modelTicket.getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_MENUPRINCIPAL)
                             menuButton.fire();
-                        if(modelTicket.getOrgienPantalla()==OrigenPantallaErrorEnum.PANTALLA_CONFIRMARTICKET)
+                        if(modelTicket.getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_CONFIRMARTICKET)
                             confirmarTicketButton.fire();
                         
                     }

@@ -5,6 +5,7 @@
  */
 package com.tpv.pagoticket;
 
+import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Factura;
 import com.tpv.modelo.FacturaFormaPagoDetalle;
@@ -199,6 +200,7 @@ public class ConfirmaPagoTicketController {
 
         }catch(TpvException e){
             modelTicket.setException(e);
+            modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CONFIRMARTICKET);
             mostrarErrorButton.fire();
         }catch(NullPointerException e){
             e.printStackTrace();

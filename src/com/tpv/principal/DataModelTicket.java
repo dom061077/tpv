@@ -45,7 +45,7 @@ public class DataModelTicket {
     private boolean imprimeComoNegativo = false;
     private TipoTituloSupervisorEnum tipoTituloSupervisor;
     private Long idFactura;
-    private OrigenPantallaErrorEnum orgienPantalla;
+    private OrigenPantallaErrorEnum origenPantalla;
     
     
     public DataModelTicket(){
@@ -253,15 +253,15 @@ public class DataModelTicket {
     /**
      * @return the orgienPantalla
      */
-    public OrigenPantallaErrorEnum getOrgienPantalla() {
-        return orgienPantalla;
+    public OrigenPantallaErrorEnum getOrigenPantalla() {
+        return origenPantalla;
     }
 
     /**
      * @param orgienPantalla the orgienPantalla to set
      */
-    public void setOrgienPantalla(OrigenPantallaErrorEnum orgienPantalla) {
-        this.orgienPantalla = orgienPantalla;
+    public void setOrigenPantalla(OrigenPantallaErrorEnum orgienPantalla) {
+        this.origenPantalla = orgienPantalla;
     }
     
     
