@@ -50,6 +50,7 @@ import org.datafx.controller.flow.action.ActionTrigger;
 import org.tpv.print.fiscal.FiscalPacket;
 import org.tpv.print.fiscal.FiscalPrinter;
 import org.tpv.print.fiscal.hasar.HasarCommands;
+import static org.tpv.print.fiscal.hasar.HasarCommands.CMD_STATUS_REQUEST;
 import org.tpv.print.fiscal.msg.FiscalMessages;
 
 /**
@@ -80,6 +81,7 @@ public class FXMLMainController implements Initializable {
     private MaskTextField textFieldCodCliente;
     
     private FadeTransition fadeInOut;
+    private LineaTicketData lineaTicketData;
     
     @FXML
     private GridPane gridPaneCodigoProducto;
@@ -351,7 +353,7 @@ public class FXMLMainController implements Initializable {
                     log.debug("Estado de impresora fiscal: "+Connection.getStcp().isConnected());
                     if(textFieldProducto.getText().trim().length()>0){
 
-                        agregarLineaTicket();
+                        enviarComandoLineaTicket();
                         scrollDown();
                     }else{
                         pagoTicketButton.fire();
@@ -475,7 +477,7 @@ public class FXMLMainController implements Initializable {
             }
     }
     
-    private void agregarLineaTicket(){
+    private void enviarComandoLineaTicket(){
         int codigoIngresado=0;
         BigDecimal cantidad = new BigDecimal(1);
         String descripcion="";
@@ -503,7 +505,7 @@ public class FXMLMainController implements Initializable {
                 if(modelTicket.getDetalle().size()==0){
                     try{
                         impresoraService.abrirTicket();
-                        guardarFacturaPrimeraVez();
+                        //guardarFacturaPrimeraVez();
                     }catch(TpvException e){
                         modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
                         modelTicket.setException(e);
@@ -517,6 +519,9 @@ public class FXMLMainController implements Initializable {
 //                        textFieldCantidad.setText("");
 //                        return;
 //                    }
+                lineaTicketData = new LineaTicketData(producto.getCodigoProducto()
+                        ,producto.getDescripcion(),cantidad,precio,modelTicket.isImprimeComoNegativo());
+                
                 try{
                     impresoraService.imprimirLineaTicket(descripcion, cantidad
                             ,precio ,producto.getValorImpositivo().getValor() ,modelTicket.isImprimeComoNegativo(), producto.getImpuestoInterno());
@@ -524,15 +529,13 @@ public class FXMLMainController implements Initializable {
                         precio = precio.multiply(BigDecimal.valueOf(-1));
                         cantidad = cantidad.multiply(new BigDecimal(-1));
                     }                    
-                    LineaTicketData lineaTicketData = new LineaTicketData(producto.getCodigoProducto()
-                            ,producto.getDescripcion(),cantidad,precio,modelTicket.isImprimeComoNegativo());
-                    modelTicket.getDetalle().add(lineaTicketData);                    
-                    if(modelTicket.getDetalle().size()>1){
-                        agregarDetalleFactura(lineaTicketData);
 
-                    }
-//                    if(modelTicket.getDetalle().size()>1)
-//                        modificarTicket(lineaTicketData);
+                    
+//                    modelTicket.getDetalle().add(lineaTicketData);                    
+//                    if(modelTicket.getDetalle().size()>1){
+//                            agregarDetalleFactura(lineaTicketData);
+//
+//                    }
                 }catch(TpvException e){
                     modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
                     modelTicket.setException(e);
@@ -737,6 +740,7 @@ public class FXMLMainController implements Initializable {
     }
     
     private void guardarFacturaPrimeraVez(){
+        log.debug("Guardar Factura Primera Vez:");
         Factura factura = new Factura();
         factura.setTotal(modelTicket.getTotalTicket());
         factura.setEstado(FacturaEstadoEnum.ABIERTA);
@@ -766,7 +770,13 @@ public class FXMLMainController implements Initializable {
         log.debug("ID de factura: "+facturaGuardada.getId());
     }  
     
-    private void agregarDetalleFactura(LineaTicketData lineaTicketData){
+    private void agregarDetalleFactura(){
+        modelTicket.getDetalle().add(lineaTicketData);                    
+//        if(modelTicket.getDetalle().size()>1){
+//            agregarDetalleFactura(lineaTicketData);
+//
+//        }
+        
         FacturaDetalle facturaDetalle = new FacturaDetalle();
         facturaDetalle.setCantidad(lineaTicketData.getCantidad());
         facturaDetalle.setSubTotal(lineaTicketData.getSubTotal());
@@ -788,6 +798,16 @@ public class FXMLMainController implements Initializable {
                 log.debug("Se ejecutó correctamente el siguiente comando:");
                 if(command.getCommandCode()==HasarCommands.CMD_OPEN_FISCAL_RECEIPT){
                     log.debug("     CMD_OPEN_FISCAL_RECEIPT: ");
+                    guardarFacturaPrimeraVez();
+                }
+                
+                if(command.getCommandCode()==HasarCommands.CMD_STATUS_REQUEST){
+                    log.debug("     CMD_STATUS_REQUEST");
+                    
+                }
+                
+                if(command.getCommandCode()==HasarCommands.CMD_PRINT_LINE_ITEM){
+                    agregarDetalleFactura();
                 }
                 log.debug("Mensajes de error: ");
                 source.getMessages().getErrorMsgs().forEach(item->{
@@ -808,6 +828,7 @@ public class FXMLMainController implements Initializable {
         impresoraService.getHfp().setEventListener(this.fiscalPrinterEvent);
                 
     }
+    
     
     
 }

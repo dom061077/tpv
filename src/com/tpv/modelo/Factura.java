@@ -47,6 +47,9 @@ public class Factura {
     @Column(name = "NUMEROCOMPROBANTE")
     private String numeroComprobante;
     
+    @Column(name = "")
+    private 
+    
     @Column(name = "TOTAL")
     private BigDecimal total;
     
