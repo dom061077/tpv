@@ -172,7 +172,6 @@ public class FXMLMainController implements Initializable {
     public void init(){
         asignarEvento();
         configurarAnimacionIngresoNegativo();
-        
         tableViewTickets.setRowFactory(new Callback<TableView<LineaTicketData>, TableRow<LineaTicketData>>(){
             @Override
             public TableRow<LineaTicketData> call(TableView<LineaTicketData> paramP) {
@@ -293,6 +292,11 @@ public class FXMLMainController implements Initializable {
             tableViewTickets.setItems(modelTicket.getDetalle());
             calcularTotalGeneral();
             scrollDown();
+            textFieldProducto.getStyleClass().add("textfield_sin_border");
+//            textFieldProducto.setStyle(
+//                    //"-fx-focus-color: transparent;"+
+//                    "-fx-faint-focus-color: transparent;"
+//                    );
             
             textFieldCodCliente.setOnKeyPressed(keyEvent ->{
                 if(keyEvent.getCode() == KeyCode.F2){

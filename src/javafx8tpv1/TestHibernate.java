@@ -7,6 +7,7 @@ package javafx8tpv1;
 
 import com.tpv.modelo.GrupoProducto;
 import com.tpv.modelo.ListaPrecioProducto;
+import com.tpv.service.ImpresoraService;
 import com.tpv.util.Connection;
 import java.math.BigDecimal;
 import java.util.List;
@@ -22,11 +23,6 @@ import org.apache.log4j.xml.DOMConfigurator;
 public class TestHibernate {
     
     public static void main(String[] args){
-        try{
-            Connection.initConnections();
-        }catch(Exception e){
-            
-        }
 //        EntityManager em = Connection.getEm();
 //        Query q = em.createQuery("FROM ListaPrecioProducto p");
 //        List<ListaPrecioProducto> lista=null;
@@ -50,20 +46,28 @@ public class TestHibernate {
 //
 //            System.out.println(a);
 //            System.out.println(b);
-        EntityManager em = Connection.getEm();
-        Query q = em.createQuery("FROM GrupoProducto gp");
-        List<GrupoProducto> lista = null;
+
+//        EntityManager em = Connection.getEm();
+//        Query q = em.createQuery("FROM GrupoProducto gp");
+//        List<GrupoProducto> lista = null;
+//        try{
+//            lista = q.getResultList();
+//        }catch(Exception e){
+//            e.printStackTrace();
+//        }
+//        lista.forEach(item ->{
+//            System.out.println("Grupo: "+item.getDescripcion()
+//                    +"      Padre: "+(item.getGrupoPadre() != null ? item.getGrupoPadre().getDescripcion() : "")
+//            );
+//        });
+        ImpresoraService impresoraService;
         try{
-            lista = q.getResultList();
+            Connection.initFiscalPrinter();
+            impresoraService = new ImpresoraService();
+            impresoraService.getPrinterVersion();
         }catch(Exception e){
             e.printStackTrace();
         }
-        lista.forEach(item ->{
-            System.out.println("Grupo: "+item.getDescripcion()
-                    +"      Padre: "+(item.getGrupoPadre() != null ? item.getGrupoPadre().getDescripcion() : "")
-            );
-        });
-        
     }
     
 }

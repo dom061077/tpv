@@ -47,8 +47,9 @@ public class Factura {
     @Column(name = "NUMEROCOMPROBANTE")
     private String numeroComprobante;
     
-    @Column(name = "")
-    private 
+    @Column(name = "PREFIJOFISCAL")
+    private Long prefijoFiscal;
+    
     
     @Column(name = "TOTAL")
     private BigDecimal total;
@@ -76,6 +77,11 @@ public class Factura {
     
     @Column(name = "ANULADO", nullable = false, columnDefinition = "TINYINT(1)") 
     private boolean anulada;
+    
+    @Column(name = "CAJA", nullable = false, columnDefinition = "TINYINT(2)")
+    private int caja;
+    
+   
     
     @Column(name = "ESTADO",nullable = false)
     @Enumerated(EnumType.STRING)
@@ -224,6 +230,34 @@ public class Factura {
      */
     public List<FacturaFormaPagoDetalle> getDetallePagos() {
         return detallePagos;
+    }
+
+    /**
+     * @return the prefijoFiscal
+     */
+    public Long getPrefijoFiscal() {
+        return prefijoFiscal;
+    }
+
+    /**
+     * @param prefijoFiscal the prefijoFiscal to set
+     */
+    public void setPrefijoFiscal(Long prefijoFiscal) {
+        this.prefijoFiscal = prefijoFiscal;
+    }
+
+    /**
+     * @return the caja
+     */
+    public int getCaja() {
+        return caja;
+    }
+
+    /**
+     * @param caja the caja to set
+     */
+    public void setCaja(int caja) {
+        this.caja = caja;
     }
 
     

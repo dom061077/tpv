@@ -273,5 +273,26 @@ public class ImpresoraService {
         this.hfp = hfp;
     }
     
+    public void getPrinterVersion() throws TpvException{
+        FiscalPacket request;
+        FiscalPacket response;
+        FiscalMessages fMsg;
+        request = getHfp().cmdGetFiscalDeviceVersion();
+        try{
+          response = getHfp().execute(request);
+          log.debug("Respuesta: "+response.toASCIIString());
+        }catch(FiscalPrinterStatusError e){
+            fMsg = getHfp().getMessages();
+            log.error(fMsg.getErrorsAsString());
+            throw new TpvException("Error en el estado de la impresora: "
+                +fMsg.getErrorsAsString());
+            
+        }catch(FiscalPrinterIOException e){
+            log.error(e.getFullMessage());
+            throw new TpvException("Error al obtener datos de la impresora. "
+                +e.getFullMessage());
+        }        
+    }
+    
     
 }

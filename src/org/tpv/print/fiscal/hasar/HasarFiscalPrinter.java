@@ -158,6 +158,11 @@ public abstract class HasarFiscalPrinter extends BasicFiscalPrinter implements H
 		cmd.setText(i++, "x", false);
 		return cmd;
 	}
+        
+        public FiscalPacket cmdGetFiscalDeviceVersion(){
+            FiscalPacket cmd = createFiscalPacket(CMD_GET_FISCAL_DEVICE_VERSION);
+            return cmd;
+        }
 
 	public FiscalPacket cmdCancelDocument() {
 		FiscalPacket cmd = createFiscalPacket(CMD_CANCEL_DOCUMENT);
