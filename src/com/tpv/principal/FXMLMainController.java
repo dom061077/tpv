@@ -288,15 +288,11 @@ public class FXMLMainController implements Initializable {
         
         Platform.runLater(() -> {
             chequearInterfazNegativo();            
-            traerInfoImpresora();
+            //traerInfoImpresora();
             tableViewTickets.setItems(modelTicket.getDetalle());
             calcularTotalGeneral();
             scrollDown();
             textFieldProducto.getStyleClass().add("textfield_sin_border");
-//            textFieldProducto.setStyle(
-//                    //"-fx-focus-color: transparent;"+
-//                    "-fx-faint-focus-color: transparent;"
-//                    );
             
             textFieldCodCliente.setOnKeyPressed(keyEvent ->{
                 if(keyEvent.getCode() == KeyCode.F2){
@@ -354,7 +350,6 @@ public class FXMLMainController implements Initializable {
                     if(labelCantidad.isVisible()){
                         labelCantidad.setVisible(false);
                     }
-                    log.debug("Estado de impresora fiscal: "+Connection.getStcp().isConnected());
                     if(textFieldProducto.getText().trim().length()>0){
 
                         enviarComandoLineaTicket();

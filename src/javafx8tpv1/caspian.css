@@ -40,7 +40,7 @@
     /* A light grey that is the base color for objects.  Instead of using
      * -fx-base directly, the sections in this file will typically use -fx-color.
      */
-    -fx-base: #d0d0d0;
+    -fx-base: #5AA0D0;//#d0d0d0;CAMBIADO
 
     /* A very light grey used for the background of windows.  See also
      * -fx-text-background-color, which should be used as the -fx-text-fill
@@ -2092,7 +2092,7 @@
  ******************************************************************************/
 
 .table-view {
-    -fx-background-color: -fx-box-border, -fx-control-inner-background;
+    -fx-background-color: -fx-box-border, -fx-control-inner-background; 
     -fx-background-insets: 0,1;
 
     /* There is some oddness if padding is in em values rather than pixels,
@@ -2102,9 +2102,11 @@
     /* Constants used throughout the tableview.
      * TODO: Should these be derived from the palette in .scene?
      */
-    -fx-table-header-border-color: #959595;
+    -fx-table-header-border-color: #959595; 
 /*    -fx-table-header-background-color: linear (0%,0%) to (0%,100%) stops (80%, #bbbbbb) (10%, #f6f6f6);*/
     -fx-table-cell-border-color: #bbbbbb;
+    -fx-box-border:transparent;//AGREGADO
+    
 }
 
 /** Draws focus border around tableview */
@@ -2201,7 +2203,7 @@
 .table-row-cell:filled:selected,
 .tree-table-row-cell:filled:selected:focused, 
 .tree-table-row-cell:filled:selected {
-    -fx-background-color: lightgray;
+    -fx-background-color:  lightgray;
     -fx-text-fill: -fx-selection-bar-text;
 }
 
@@ -2340,7 +2342,7 @@
    and border colors for the whole area (not individual column-header's). */
 .table-view .column-header-background,
 .tree-table-view .column-header-background {
-    -fx-background-color: -fx-body-color;
+    -fx-background-color: transparent;//-fx-body-color; MODIFICADO
     -fx-padding: 0;
 }
 
@@ -2354,7 +2356,7 @@
     /* TODO: for some reason, this doesn't scale. */
     -fx-font-size: 2em; /* 13pt - 1 more than the default font */
     -fx-size: 25;
-    -fx-border-style: solid;
+    -fx-border-style: transparent;//solid;CAMBIADO
     -fx-border-color: 
         /* 
           Inner border: we have different colours along the top, right, bottom and left.
@@ -2367,7 +2369,9 @@
         /* Outer border: */
         transparent -fx-table-header-border-color -fx-table-header-border-color transparent;
     -fx-border-insets: 0 1 1 0, 0 0 0 0;
-    -fx-border-width: 0.083333em, 0.083333em;
+    -fx-border-width: 0;//0.083333em, 0.083333em;MODIFICADO
+    -fx-background-radius: 20.0 20.0 0.0 0.0;//AGREGADO
+    
 }
 
 .table-view .filler,
@@ -4393,4 +4397,19 @@ to the top and bottom -fx-padding values of the parent toolbar. */
     //-fx-padding: 1 3 1 3;    
     //-fx-background-color: none ;
     -fx-text-box-border: transparent;
+}
+
+.rounded_corner{
+/*    -fx-background-color: linear-gradient(#EEFAFF 50%, white 100%) ;    
+    -fx-border-width:2;
+    -fx-border-color:white;
+    -fx-border-radius:30 0 30 0;    */
+    -fx-background-color: white;
+    -fx-background-radius: 15.0;
+    -fx-border-color:transparent;
+    //-fx-background-insets: 15.0 15.0 15.0 15.0;
+    //-fx-padding: 10;
+    -fx-effect: dropshadow(three-pass-box, #5AA0D0, 10, 0, 0, 0);
+    -fx-hgap: 10;
+    -fx-vgap: 10;
 }
