@@ -20,6 +20,7 @@ import com.tpv.service.ImpresoraService;
 import com.tpv.service.ProductoService;
 import com.tpv.util.Connection;
 import com.tpv.util.ui.MaskTextField;
+import java.io.File;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -40,6 +41,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import javax.annotation.PostConstruct;
@@ -62,6 +67,9 @@ import org.tpv.print.fiscal.msg.FiscalMessages;
 public class FXMLMainController implements Initializable {
     private final static String LABEL_CANTIDAD="Cantidad:";
     private final static String LABEL_CANTIDAD_INGRESADA="(Cantidad->";
+    private final static String TITULO_INGRESO_CLIENTE="Ingreso de Cliente";
+    private final static String TITULO_INGRESO_CANTIDAD="Ingrese Cantidad";
+    
     Logger log = Logger.getLogger(FXMLMainController.class);
 
     
@@ -127,7 +135,26 @@ public class FXMLMainController implements Initializable {
     private Label ingresoNegativoHabilitado;
     
     @FXML
+    private Label labelCantidadIngresada;
+    
+    @FXML
+    private Label labelSubTituloIngresos;
+    
+    @FXML
     private Pane ingresoNegativoPane;
+    
+    @FXML
+    private GridPane gridPaneIngresos;
+    
+    @FXML
+    private StackPane stackPaneMediaView;
+    
+    @FXML
+    private StackPane stackPaneIngresos;
+    
+    @FXML
+    private MediaView mediaView;
+    
     
     @FXML
     @ActionTrigger("mostrarError")
@@ -170,6 +197,7 @@ public class FXMLMainController implements Initializable {
     
     @PostConstruct
     public void init(){
+        setBanner();
         asignarEvento();
         configurarAnimacionIngresoNegativo();
         tableViewTickets.setRowFactory(new Callback<TableView<LineaTicketData>, TableRow<LineaTicketData>>(){
@@ -197,22 +225,6 @@ public class FXMLMainController implements Initializable {
         });
         
         labelCantidad.setText(LABEL_CANTIDAD);
-        textFieldProducto = new MaskTextField();
-        textFieldProducto.setMask("N!");
-        textFieldProducto.setStyle(
-                "-fx-border: 0;"
-                +"-fx-outline: 0;"
-                +"-fx-background: transparent;"
-                +"-fx-border-bottom: 2px solid black;"
-                +"-fx-width: 20px;"
-                //"-fx-background-color: none, none, none;//-fx-shadow-highlight-color, -fx-text-box-border, -fx-control-inner-background;"
-                //+"-fx-background-insets: 0, 1, 2;"
-                //+"-fx-background-radius: 3, 2, 2;"
-                //+"-fx-padding: 0.25em 0.416667em  0.333333em 0.416667em; "
-                //+"-fx-text-fill: -fx-text-inner-color;"
-                //+"-fx-prompt-text-fill: derive(-fx-control-inner-background,-30%);"
-                //+"-fx-cursor: text;"
-        );
         iniciaIngresosVisibles();
         
         
@@ -286,13 +298,15 @@ public class FXMLMainController implements Initializable {
             modelTicket.setCodigoClienteSelecEnBuscarPorDesc(0);
         }
         
+        
+        
         Platform.runLater(() -> {
             chequearInterfazNegativo();            
             //traerInfoImpresora();
             tableViewTickets.setItems(modelTicket.getDetalle());
             calcularTotalGeneral();
             scrollDown();
-            textFieldProducto.getStyleClass().add("textfield_sin_border");
+            
             
             textFieldCodCliente.setOnKeyPressed(keyEvent ->{
                 if(keyEvent.getCode() == KeyCode.F2){
@@ -304,8 +318,11 @@ public class FXMLMainController implements Initializable {
                     if(textFieldCodCliente.getText().trim().equals("")){
                         labelCliente.setVisible(false);
                         textFieldCodCliente.setVisible(false);
+                        
+                        stackPaneIngresos.setVisible(false);                        
                         labelProducto.setVisible(true);
                         textFieldProducto.setVisible(true);
+
                         modelTicket.setClienteSeleccionado(true);
                     }else{
                         traerCliente();
@@ -321,15 +338,16 @@ public class FXMLMainController implements Initializable {
                 if(keyEvent.getCode() == KeyCode.ENTER ||
                         keyEvent.getCode() == KeyCode.ESCAPE){
                     if(keyEvent.getCode() == KeyCode.ENTER){
-                        labelCantidad.setText(LABEL_CANTIDAD_INGRESADA+textFieldCantidad.getText()+")");
+                        labelCantidadIngresada.setText(LABEL_CANTIDAD_INGRESADA+textFieldCantidad.getText()+")");
+                        labelCantidadIngresada.setVisible(true);
                     }else{
-                        labelCantidad.setVisible(false);                                                
+                        labelCantidadIngresada.setVisible(false);                                                
                     }
                     if(textFieldCantidad.isVisible()){
                         textFieldProducto.setVisible(true);
                         labelProducto.setVisible(true);
                         textFieldCantidad.setVisible(false);
-                        
+                        stackPaneIngresos.setVisible(false);
                     }
                     
                 }
@@ -395,6 +413,8 @@ public class FXMLMainController implements Initializable {
                         labelCantidad.setText(LABEL_CANTIDAD);
                         labelCantidad.setVisible(true);
                         labelProducto.setVisible(false);
+                        stackPaneIngresos.setVisible(true);
+                        labelSubTituloIngresos.setText(TITULO_INGRESO_CANTIDAD);
                 }
                 
                 if(keyEvent.getCode() ==  KeyCode.F5){
@@ -551,36 +571,46 @@ public class FXMLMainController implements Initializable {
     }
     
     public void iniciaIngresosVisibles(){
+        textFieldProducto = new MaskTextField();
+        textFieldProducto.setMask("N!");
         textFieldProducto.setVisible(false);
+        textFieldProducto.getStyleClass().add("textfield_sin_border");
         
         textFieldCantidad = new MaskTextField();
         textFieldCantidad.setMask("N!.N!");
         textFieldCantidad.setVisible(false);
         textFieldCantidad.setPrefWidth(150);
         textFieldCantidad.setMaxWidth(150);
+        textFieldCantidad.getStyleClass().add("textfield_sin_border");
         
         textFieldCodCliente = new MaskTextField();
         textFieldCodCliente.setMask("N!");
         textFieldCodCliente.setPrefWidth(150);
         textFieldCodCliente.setMaxWidth(150);
+        textFieldCodCliente.getStyleClass().add("textfield_sin_border");
+        
+        labelCantidadIngresada.setVisible(false);
         
         
-        
-        
-        gridPaneCodigoProducto.add(textFieldCodCliente,1,1);
-        gridPaneCodigoProducto.add(textFieldProducto,1,2);
-        gridPaneCodigoProducto.add(textFieldCantidad,1,3);
+//        gridPaneCodigoProducto.add(textFieldCodCliente,1,1);
+        gridPaneCodigoProducto.add(textFieldProducto,1,1);
+//        gridPaneCodigoProducto.add(textFieldCantidad,1,3);
+        gridPaneIngresos.add(textFieldCodCliente,1,1);
+        gridPaneIngresos.add(textFieldCantidad,1,1);
         
         if(modelTicket.isClienteSeleccionado()){
             labelProducto.setVisible(true);
             textFieldProducto.setVisible(true);
             labelCliente.setVisible(false);
             textFieldCodCliente.setVisible(false);
+            stackPaneIngresos.setVisible(false);
             if(modelTicket.getCliente()!=null){
                 nombreCliente.setText(modelTicket.getCliente().getRazonSocial());
             }
         }else{
             nombreCliente.setVisible(false);
+            labelSubTituloIngresos.setText(TITULO_INGRESO_CLIENTE);
+            
         }
                 
     }
@@ -594,6 +624,7 @@ public class FXMLMainController implements Initializable {
             nombreCliente.setVisible(true);
             labelCliente.setVisible(false);
             textFieldCodCliente.setVisible(false);
+            stackPaneIngresos.setVisible(false);                                    
             labelProducto.setVisible(true);
             textFieldProducto.setVisible(true);
             modelTicket.setClienteSeleccionado(true);
@@ -828,6 +859,21 @@ public class FXMLMainController implements Initializable {
                 
     }
     
-    
+    private void setBanner(){
+        File f = new File("E:\\JAVA TPV\\luque\\top.mp4");//(this.getClass().getResource("Banner.flv").toExternalForm());
+        Media m = new Media(f.toURI().toString());
+        MediaPlayer mp = new MediaPlayer(m);
+        mediaView.setMediaPlayer(mp);
+        //stackPaneMediaView.getChildren().add(mv);
+        
+       
+        mp.setAutoPlay(true);
+        mp.setCycleCount(MediaPlayer.INDEFINITE);
+        
+        mp.setRate(0.5);
+                
+        //mp.play();
+    }
+           
     
 }

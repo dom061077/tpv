@@ -10,6 +10,10 @@ import com.tpv.modelo.ListaPrecioProducto;
 import com.tpv.service.ImpresoraService;
 import com.tpv.util.Connection;
 import java.math.BigDecimal;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -21,6 +25,34 @@ import org.apache.log4j.xml.DOMConfigurator;
  * @author daniel
  */
 public class TestHibernate {
+    
+    public static void getMACAddress(){
+        InetAddress ip;
+        try{
+            ip = InetAddress.getLocalHost();
+            
+            NetworkInterface network = NetworkInterface.getByInetAddress(ip);
+
+            byte[] mac = network.getHardwareAddress();
+
+            System.out.print("Current MAC address : ");
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < mac.length; i++) {
+                    sb.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : ""));		
+            }
+            System.out.println(sb.toString());            
+	} catch (UnknownHostException e) {
+		
+		e.printStackTrace();
+		
+	} catch (SocketException e){
+			
+		e.printStackTrace();
+			
+	}
+
+    }
     
     public static void main(String[] args){
 //        EntityManager em = Connection.getEm();
@@ -60,14 +92,15 @@ public class TestHibernate {
 //                    +"      Padre: "+(item.getGrupoPadre() != null ? item.getGrupoPadre().getDescripcion() : "")
 //            );
 //        });
-        ImpresoraService impresoraService;
-        try{
-            Connection.initFiscalPrinter();
-            impresoraService = new ImpresoraService();
-            impresoraService.getPrinterVersion();
-        }catch(Exception e){
-            e.printStackTrace();
-        }
+//        ImpresoraService impresoraService;
+//        try{
+//            Connection.initFiscalPrinter();
+//            impresoraService = new ImpresoraService();
+//            impresoraService.getPrinterVersion();
+//        }catch(Exception e){
+//            e.printStackTrace();
+//        }
+        getMACAddress();
     }
     
 }

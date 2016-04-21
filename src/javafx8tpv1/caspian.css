@@ -4341,8 +4341,18 @@ to the top and bottom -fx-padding values of the parent toolbar. */
     -fx-text-fill: #3757a7;
     -fx-font-weight: bold;
     -fx-font-size:45;
+    -fx-alignment:CENTER;
     
 }
+
+.label_sub_titulo{
+    -fx-text-fill: #3757a7;
+    -fx-font-weight: bold;
+    -fx-font-size:30;
+    -fx-alignment:CENTER;    
+    
+}
+
 
 .label_textfield{
     -fx-text-fill: #3757a7;
@@ -4397,6 +4407,9 @@ to the top and bottom -fx-padding values of the parent toolbar. */
     //-fx-padding: 1 3 1 3;    
     //-fx-background-color: none ;
     -fx-text-box-border: transparent;
+    -fx-border-color: transparent transparent -fx-base transparent;
+    -fx-border-width: 3;
+ 
 }
 
 .rounded_corner{
@@ -4409,7 +4422,7 @@ to the top and bottom -fx-padding values of the parent toolbar. */
     -fx-border-color:transparent;
     //-fx-background-insets: 15.0 15.0 15.0 15.0;
     //-fx-padding: 10;
-    -fx-effect: dropshadow(three-pass-box, #5AA0D0, 10, 0, 0, 0);
+    -fx-effect: dropshadow(three-pass-box, #5AA0D0, 20, 0, 0, 0);
     -fx-hgap: 10;
     -fx-vgap: 10;
 }
