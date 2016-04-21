@@ -29,10 +29,6 @@ public class PreloaderFX extends Preloader {
         Stage stage;
         //boolean noLoadingProgress = true;
 
-//        public static final String APPLICATION_ICON
-//            = PreloaderFX.class.getResource("")
-        public static final String SPLASH_IMAGE
-            = "http://fxexperience.com/wp-content/uploads/2010/06/logo.png";
 
         private Pane splashLayout;
         private ProgressBar loadProgress;
@@ -43,7 +39,7 @@ public class PreloaderFX extends Preloader {
         @Override
         public void init() {
             ImageView splash = new ImageView(new Image(
-                SPLASH_IMAGE
+                "/com/tpv/resources/LogoLuque.jpg"
             ));
             loadProgress = new ProgressBar();
             loadProgress.setPrefWidth(SPLASH_WIDTH - 20);
