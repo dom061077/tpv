@@ -18,6 +18,9 @@ import com.tpv.supervisor.SupervisorController;
 import com.tpv.util.Connection;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.application.Preloader.StateChangeNotification;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCombination;
@@ -36,6 +39,7 @@ import org.apache.log4j.xml.DOMConfigurator;
  */
 public class JavaFX8TPV1 extends Application {
     Logger log = Logger.getLogger(JavaFX8TPV1.class);
+    BooleanProperty ready = new SimpleBooleanProperty(false);
     @Override
     public void start(Stage stage) throws Exception {
         
@@ -109,12 +113,13 @@ public class JavaFX8TPV1 extends Application {
 //        scene.setCursor(Cursor.NONE);
         String css = this.getClass().getResource("caspian.css").toExternalForm(); 
         scene.getStylesheets().add(css);        
-//        stage.setFullScreen(true); //full screen without borders (no program menu bars)
+        stage.setFullScreen(true); //full screen without borders (no program menu bars)
         stage.setFullScreenExitHint(""); //Don't show "Press ESC to exit full screen"
-        stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+        //stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         stage.setScene(scene);
         try{
             log.debug("INICIANDO LAS CONEXIONES");
+            log.debug("PATH DEL DIRECTORIO DE RECURSOS: "+this.getClass().getResource("/com/tpv/resources/people.png"));
             Connection.initConnections();
             
         }   catch(Exception e){
@@ -123,7 +128,10 @@ public class JavaFX8TPV1 extends Application {
             e.printStackTrace();
         }
         
-       
+        ready.setValue(Boolean.TRUE);
+        notifyPreloader(new StateChangeNotification(
+                 StateChangeNotification.Type.BEFORE_START));
+        
         stage.show();
     }
 
