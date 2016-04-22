@@ -115,7 +115,7 @@ public class JavaFX8TPV1 extends Application {
         scene.getStylesheets().add(css);        
         stage.setFullScreen(true); //full screen without borders (no program menu bars)
         stage.setFullScreenExitHint(""); //Don't show "Press ESC to exit full screen"
-        //stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+        stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         stage.setScene(scene);
         try{
             log.debug("INICIANDO LAS CONEXIONES");

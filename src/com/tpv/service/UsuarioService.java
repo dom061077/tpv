@@ -41,4 +41,21 @@ public class UsuarioService {
         //emf.close();
         return usuario;
     }
+    
+    public boolean checkMac(){
+        String mac = Connection.getMACAddress();
+        if(mac!=null){
+            EntityManager em = Connection.getEm();
+            EntityTransaction tx = em.getTransaction();
+            if(!tx.isActive())
+                tx.begin();
+            
+            
+            tx.commit();
+            em.clear();
+           
+            
+        }
+        return false;
+    }
 }

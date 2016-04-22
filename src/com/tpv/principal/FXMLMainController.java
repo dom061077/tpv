@@ -18,9 +18,7 @@ import com.tpv.service.ClienteService;
 import com.tpv.service.FacturacionService;
 import com.tpv.service.ImpresoraService;
 import com.tpv.service.ProductoService;
-import com.tpv.util.Connection;
 import com.tpv.util.ui.MaskTextField;
-import java.io.File;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -44,9 +42,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import javax.annotation.PostConstruct;
@@ -57,8 +52,6 @@ import org.datafx.controller.flow.action.ActionTrigger;
 import org.tpv.print.fiscal.FiscalPacket;
 import org.tpv.print.fiscal.FiscalPrinter;
 import org.tpv.print.fiscal.hasar.HasarCommands;
-import static org.tpv.print.fiscal.hasar.HasarCommands.CMD_STATUS_REQUEST;
-import org.tpv.print.fiscal.msg.FiscalMessages;
 
 /**
  *

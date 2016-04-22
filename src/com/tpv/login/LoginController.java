@@ -13,8 +13,11 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.datafx.controller.FXMLController;
@@ -43,19 +46,38 @@ public class LoginController {
     @FXML
     private TextField password;
     
+    @FXML
+    private ImageView imageViewLogoRight;
+    
+    @FXML
+    private ImageView imageViewLogoLeft;
+    
+    @FXML
+    private BorderPane borderPane;
+    
+                      
+    
     @Inject
     private DataModelTicket modelTicket;
     
     
+    
+    
     @PostConstruct
     public void init(){
-        
+        loadImage();
+
         Platform.runLater(() -> {
+            userName.requestFocus();            
             userName.setOnKeyPressed(keyEvent->{
                 if(keyEvent.getCode() == KeyCode.ENTER){
                     password.requestFocus();
                     
                 }
+                if(keyEvent.getCode() == KeyCode.F11){
+                    System.exit(0);
+                }
+                
             });
             
             password.setOnKeyPressed(keyEvent->{
@@ -71,9 +93,22 @@ public class LoginController {
                 if(keyEvent.getCode() == KeyCode.ESCAPE){
                     userName.requestFocus();
                 }
+                if(keyEvent.getCode() == KeyCode.F11){
+                    System.exit(0);
+                }
+                
             });
+            
+                    
         });
         
     }
+    
+    private void loadImage(){
+        String f = this.getClass().getResource("/com/tpv/resources/logologin.jpg").toExternalForm();
+        imageViewLogoRight.setImage(new Image(f));
+        imageViewLogoLeft.setImage(new Image(f));
+    }
+            
     
 }

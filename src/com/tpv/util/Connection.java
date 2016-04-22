@@ -9,7 +9,10 @@ import com.tpv.exceptions.TpvException;
 import com.tpv.service.UsuarioService;
 import java.io.IOException;
 import java.net.ConnectException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx8tpv1.JavaFX8TPV1;
@@ -138,5 +141,39 @@ public class Connection {
     public static SpoolerTCPComm getStcpStatus(){
         return stcpStatus;
     }
+    
+    public static String getMACAddress(){
+        InetAddress ip;
+        try{
+            ip = InetAddress.getLocalHost();
+            
+            NetworkInterface network = NetworkInterface.getByInetAddress(ip);
+
+            byte[] mac = network.getHardwareAddress();
+
+            System.out.print("Current MAC address : ");
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < mac.length; i++) {
+                    sb.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : ""));		
+            }
+            //System.out.println(sb.toString());            
+            return sb.toString().replace("-", "");
+	} catch (UnknownHostException e) {
+		
+		log.error("Error desconocido al intentar obtener la MAC ");
+                log.error(e.getMessage());
+		
+	} catch (SocketException e){
+			
+		log.error("Error de Sockeet al intentar obtener la MAC ");
+                log.error(e.getMessage());
+
+			
+	}
+        return null;
+
+    }
+    
     
 }

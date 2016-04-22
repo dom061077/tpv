@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
@@ -7,18 +8,8 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
-   <top>
-      <Label styleClass="label_titulo" text="Ingreso al Sistema" textFill="#3062e1" BorderPane.alignment="CENTER">
-         <font>
-            <Font name="Arial" size="64.0" />
-         </font>
-      </Label>
-   </top>
-   <bottom>
-      <Button fx:id="buttonLogin" focusTraversable="false" mnemonicParsing="false" visible="false" BorderPane.alignment="CENTER" />
-   </bottom>
-   <left>
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="936.0" styleClass="rounded_corner" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
       <GridPane BorderPane.alignment="CENTER">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="206.0" minWidth="10.0" prefWidth="80.0" />
@@ -57,5 +48,32 @@
             <Button fx:id="buttonGoToError" focusTraversable="false" mnemonicParsing="false" text="Button" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="5" />
          </children>
       </GridPane>
-   </left>
+   </center>
+   <top>
+      <BorderPane prefHeight="126.0" prefWidth="936.0" BorderPane.alignment="CENTER">
+         <top>
+            <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ImageView fx:id="imageViewLogoLeft" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="74.0" prefWidth="774.0" styleClass="label_titulo" text="Ingreso al Sistema" textAlignment="CENTER" textFill="#3062e1">
+                     <font>
+                        <Font name="Arial" size="64.0" />
+                     </font>
+                  </Label>
+                  <ImageView fx:id="imageViewLogoRight" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+               </children>
+            </HBox>
+         </top>
+      </BorderPane>
+   </top>
+   <right>
+      <Button fx:id="buttonLogin" focusTraversable="false" mnemonicParsing="false" visible="false" BorderPane.alignment="CENTER" />
+   </right>
+   <bottom>
+      <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label styleClass="label_shorcut" text="F11- Salir del Sistema" />
+         </children>
+      </HBox>
+   </bottom>
 </BorderPane>

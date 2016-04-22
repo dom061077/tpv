@@ -11,6 +11,8 @@ import com.tpv.util.Connection;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javax.annotation.PostConstruct;
@@ -45,6 +47,12 @@ public class MenuPrincipalController {
     @FXML
     private VBox vboxMenuPrincipal;
     
+    @FXML
+    private ImageView imageViewLogoRight;
+    @FXML
+    private ImageView imageViewLogoLeft;
+    
+    
     @Inject
     private DataModelTicket modelTicket;
     
@@ -52,6 +60,7 @@ public class MenuPrincipalController {
     @PostConstruct
     public void init(){
         log.info("Ingresando al menú principal");
+        loadImage();
         Platform.runLater(()->{
             try{
                 Connection.initFiscalPrinter();
@@ -72,4 +81,10 @@ public class MenuPrincipalController {
             });
         });
     }
+    
+    private void loadImage(){
+        String f = this.getClass().getResource("/com/tpv/resources/logologin.jpg").toExternalForm();
+        imageViewLogoRight.setImage(new Image(f));
+        imageViewLogoLeft.setImage(new Image(f));
+    }    
 }

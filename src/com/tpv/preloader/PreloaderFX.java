@@ -40,11 +40,12 @@ public class PreloaderFX extends Preloader {
         @Override
         public void init() {
             ImageView splash = new ImageView(new Image(
-                "/com/tpv/resources/LogoLuque.jpg"
+                "/com/tpv/resources/logosplash.jpg"
             ));
             loadProgress = new ProgressBar();
             loadProgress.setPrefWidth(SPLASH_WIDTH - 20);
             progressText = new Label("Cargando sistema . . .");
+            progressText.getStyleClass().add("label_textfield");
             splashLayout = new BorderPane();
             //splashLayout.getChildren().addAll(splash, loadProgress, progressText);
             splashLayout.setCenter(splash);

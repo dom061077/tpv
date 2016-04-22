@@ -1,35 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox fx:id="vboxMenuPrincipal" focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="433.0" prefWidth="719.0" styleClass="label_menu" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <Label styleClass="label_menu" text="1- FACTURACION" textFill="#3062e1">
-         <font>
-            <Font name="Arial" size="64.0" />
-         </font>
-      </Label>
-      <Label styleClass="label_menu" text="2- CONTROLADOR" textFill="#3062e1">
-         <font>
-            <Font name="Arial" size="64.0" />
-         </font>
-      </Label>
-      <Label styleClass="label_menu" text="3- RETIRO DE DINERO" textFill="#3062e1">
-         <font>
-            <Font name="Arial" size="64.0" />
-         </font>
-      </Label>
-      <Label styleClass="label_menu" text="4- FIN" textFill="#3062e1">
-         <font>
-            <Font size="64.0" />
-         </font>
-      </Label>
-      <Button fx:id="buttonFacturacion" mnemonicParsing="false" text="Button" visible="false" />
-      <Button fx:id="buttonControlador" mnemonicParsing="false" text="Button" visible="false" />
-      <Button fx:id="buttonRetirarDinero" mnemonicParsing="false" text="Button" visible="false" />
-      <Button fx:id="buttonError" focusTraversable="false" mnemonicParsing="false" visible="false" />
-   </children>
-</VBox>
+
+<BorderPane xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <VBox fx:id="vboxMenuPrincipal" focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="433.0" prefWidth="719.0" styleClass="label_menu, rounded_corner">
+         <children>
+            <Label styleClass="label_menu" text="1- FACTURACION" textFill="#3062e1">
+               <font>
+                  <Font name="Arial" size="64.0" />
+               </font>
+            </Label>
+            <Label styleClass="label_menu" text="2- CONTROLADOR" textFill="#3062e1">
+               <font>
+                  <Font name="Arial" size="64.0" />
+               </font>
+            </Label>
+            <Label styleClass="label_menu" text="3- RETIRO DE DINERO" textFill="#3062e1">
+               <font>
+                  <Font name="Arial" size="64.0" />
+               </font>
+            </Label>
+            <Label styleClass="label_menu" text="4- FIN" textFill="#3062e1">
+               <font>
+                  <Font size="64.0" />
+               </font>
+            </Label>
+            <Button fx:id="buttonFacturacion" mnemonicParsing="false" text="Button" visible="false" />
+            <Button fx:id="buttonControlador" mnemonicParsing="false" text="Button" visible="false" />
+            <Button fx:id="buttonRetirarDinero" mnemonicParsing="false" text="Button" visible="false" />
+            <Button fx:id="buttonError" focusTraversable="false" mnemonicParsing="false" visible="false" />
+         </children>
+      </VBox>
+   </center>
+   <left>
+      <ImageView fx:id="imageViewLogoRight" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER_RIGHT" />
+   </left>
+   <right>
+      <ImageView fx:id="imageViewLogoLeft" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER_LEFT" />
+   </right>
+</BorderPane>
