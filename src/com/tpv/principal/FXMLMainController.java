@@ -38,6 +38,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -153,7 +155,8 @@ public class FXMLMainController implements Initializable {
     private StackPane stackPaneIngresos;
     
     @FXML
-    private MediaView mediaView;
+    //private MediaView mediaView;
+    private ImageView imageView;
     
     
     @FXML
@@ -323,6 +326,7 @@ public class FXMLMainController implements Initializable {
                         labelProducto.setVisible(true);
                         textFieldProducto.setVisible(true);
 
+
                         modelTicket.setClienteSeleccionado(true);
                     }else{
                         traerCliente();
@@ -415,6 +419,7 @@ public class FXMLMainController implements Initializable {
                         labelProducto.setVisible(false);
                         stackPaneIngresos.setVisible(true);
                         labelSubTituloIngresos.setText(TITULO_INGRESO_CANTIDAD);
+                        stackPaneIngresos.toFront();
                 }
                 
                 if(keyEvent.getCode() ==  KeyCode.F5){
@@ -629,9 +634,8 @@ public class FXMLMainController implements Initializable {
             textFieldProducto.setVisible(true);
             modelTicket.setClienteSeleccionado(true);
             modelTicket.setCliente(cliente);
-            
-            
         }
+
     }
     
     public void traerInfoImpresora(){
@@ -860,18 +864,20 @@ public class FXMLMainController implements Initializable {
     }
     
     private void setBanner(){
-        File f = new File("E:\\JAVA TPV\\luque\\top.mp4");//(this.getClass().getResource("Banner.flv").toExternalForm());
-        Media m = new Media(f.toURI().toString());
-        MediaPlayer mp = new MediaPlayer(m);
-        mediaView.setMediaPlayer(mp);
-        //stackPaneMediaView.getChildren().add(mv);
+//        File f = new File("E:\\JAVA TPV\\luque\\sucursales.mp4");//(this.getClass().getResource("Banner.flv").toExternalForm());
+//        Media m = new Media(f.toURI().toString());
+//        MediaPlayer mp = new MediaPlayer(m);
+//        mediaView.setMediaPlayer(mp);
+//        //stackPaneMediaView.getChildren().add(mv);
+//        
+//       
+//        mp.setAutoPlay(true);
+//        mp.setCycleCount(MediaPlayer.INDEFINITE);
+//        
+//        mp.setRate(0.5);
+        String f = this.getClass().getResource("/com/tpv/resources/sucursales.gif").toExternalForm();
+        imageView.setImage(new Image(f));
         
-       
-        mp.setAutoPlay(true);
-        mp.setCycleCount(MediaPlayer.INDEFINITE);
-        
-        mp.setRate(0.5);
-                
         //mp.play();
     }
            

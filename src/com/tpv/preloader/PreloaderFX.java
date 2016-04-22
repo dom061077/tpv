@@ -14,6 +14,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
@@ -30,7 +31,7 @@ public class PreloaderFX extends Preloader {
         //boolean noLoadingProgress = true;
 
 
-        private Pane splashLayout;
+        private BorderPane splashLayout;
         private ProgressBar loadProgress;
         private Label progressText;
         private static final int SPLASH_WIDTH = 676;
@@ -44,8 +45,12 @@ public class PreloaderFX extends Preloader {
             loadProgress = new ProgressBar();
             loadProgress.setPrefWidth(SPLASH_WIDTH - 20);
             progressText = new Label("Cargando sistema . . .");
-            splashLayout = new VBox();
-            splashLayout.getChildren().addAll(splash, loadProgress, progressText);
+            splashLayout = new BorderPane();
+            //splashLayout.getChildren().addAll(splash, loadProgress, progressText);
+            splashLayout.setCenter(splash);
+            VBox boxLayout = new VBox();
+            boxLayout.getChildren().addAll(loadProgress,progressText);
+            splashLayout.setBottom(boxLayout);
             progressText.setAlignment(Pos.CENTER);
             splashLayout.setStyle(
                 "-fx-padding: 5; "

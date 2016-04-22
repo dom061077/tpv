@@ -315,13 +315,17 @@ public class PagoTicketController {
     
     private void iniciarIngresosVisibles(){
         textFieldTipoPago = new MaskTextField();
+        textFieldTipoPago.getStyleClass().add("textfield_sin_border");
         textFieldTipoPago.setMask("N!");
         textFieldMonto = new MaskTextField();
+        textFieldMonto.getStyleClass().add("textfield_sin_border");
         textFieldMonto.setMask("N!.N!");
         textFieldMonto.setDisable(true);
         textFieldCantidadCuotas = new MaskTextField();
+        textFieldCantidadCuotas.getStyleClass().add("textfield_sin_border");
         textFieldCantidadCuotas.setMask("N!");
         textFieldNroCupon = new MaskTextField();
+        textFieldNroCupon.getStyleClass().add("textfield_sin_border");
         textFieldNroCupon.setMask("N!");
         textFieldNroTarjeta = new MaskTextField();
         textFieldNroTarjeta.setMask("N!");

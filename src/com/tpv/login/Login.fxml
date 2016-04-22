@@ -43,14 +43,14 @@
                <font>
                   <Font name="Arial" size="14.0" />
                </font></Label>
-            <TextField id="xxxx" fx:id="userName" GridPane.columnIndex="2" GridPane.rowIndex="1">
+            <TextField fx:id="userName" styleClass="textfield_sin_border" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <font>
                   <Font name="Arial" size="14.0" />
                </font>
                <opaqueInsets>
                   <Insets />
                </opaqueInsets></TextField>
-            <PasswordField fx:id="password" GridPane.columnIndex="2" GridPane.rowIndex="2">
+            <PasswordField fx:id="password" styleClass="textfield_sin_border" GridPane.columnIndex="2" GridPane.rowIndex="2">
                <font>
                   <Font name="Arial" size="14.0" />
                </font></PasswordField>

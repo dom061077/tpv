@@ -4419,10 +4419,10 @@ to the top and bottom -fx-padding values of the parent toolbar. */
     -fx-border-radius:30 0 30 0;    */
     -fx-background-color: white;
     -fx-background-radius: 15.0;
-    -fx-border-color:transparent;
+    -fx-border-color: transparent;
     //-fx-background-insets: 15.0 15.0 15.0 15.0;
     //-fx-padding: 10;
-    -fx-effect: dropshadow(three-pass-box, #5AA0D0, 20, 0, 0, 0);
+    -fx-effect: dropshadow(three-pass-box, #5AA0D0, 5, 5, 0, 0);
     -fx-hgap: 10;
     -fx-vgap: 10;
 }

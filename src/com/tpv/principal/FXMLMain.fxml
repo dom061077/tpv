@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.media.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.geometry.*?>
@@ -14,9 +15,26 @@
    <center>
       <Pane prefHeight="532.0" prefWidth="1296.0" BorderPane.alignment="CENTER">
          <children>
-            <BorderPane prefHeight="431.0" prefWidth="1242.0">
+            <StackPane layoutX="282.0" layoutY="455.0" prefHeight="100.0" prefWidth="589.0" styleClass="rounded_corner">
+               <children>
+                  <GridPane prefHeight="77.0" prefWidth="491.0" styleClass="rounded_corner">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label fx:id="totalGeneral" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="316.0" styleClass="label_total" textAlignment="RIGHT" GridPane.columnIndex="1" />
+                        <Label fx:id="labelTotalGral" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="620.0" styleClass="label_total" text="TOTAL GRAL.:" textAlignment="RIGHT" />
+                     </children>
+                  </GridPane>
+               </children>
+            </StackPane>
+            <BorderPane prefHeight="450.0" prefWidth="1242.0">
                <center>
-                  <TableView fx:id="tableViewTickets" editable="true" focusTraversable="false" prefHeight="523.0" prefWidth="1243.0" styleClass="tpv-table-view" BorderPane.alignment="CENTER">
+                  <TableView fx:id="tableViewTickets" editable="true" focusTraversable="false" prefHeight="420.0" prefWidth="1242.0" styleClass="tpv-table-view" BorderPane.alignment="CENTER">
                     <columns>
                         <TableColumn fx:id="codigoColumn" minWidth="130.0" prefWidth="62.999969482421875" resizable="false" text="CODIGO" />
                       <TableColumn fx:id="descripcionColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="620.0" resizable="false" sortable="false" text="DESCRIPCION" />
@@ -29,23 +47,8 @@
                      </columnResizePolicy>
                   </TableView>
                </center>
-               <bottom>
-                  <GridPane styleClass="rounded_corner" BorderPane.alignment="CENTER">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <Label fx:id="totalGeneral" prefHeight="17.0" prefWidth="316.0" styleClass="label_total" GridPane.columnIndex="1" />
-                        <Label fx:id="labelTotalGral" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="620.0" styleClass="label_total" text="TOTAL GRAL.:" textAlignment="RIGHT" />
-                     </children>
-                  </GridPane>
-               </bottom>
             </BorderPane>
-            <StackPane fx:id="stackPaneIngresos" layoutX="300.0" layoutY="-50.0" prefHeight="246.0" prefWidth="498.0" styleClass="rounded_corner">
+            <StackPane fx:id="stackPaneIngresos" layoutX="300.0" layoutY="15.0" prefHeight="246.0" prefWidth="498.0" styleClass="rounded_corner">
                <children>
                   <GridPane fx:id="gridPaneIngresos">
                     <columnConstraints>
@@ -115,9 +118,9 @@
    <top>
       <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <StackPane fx:id="stackPaneMediaView" alignment="TOP_CENTER" layoutX="709.0" prefHeight="192.0" prefWidth="624.0">
+            <StackPane fx:id="stackPaneMediaView" alignment="TOP_CENTER" layoutX="900.0" layoutY="18.0" prefHeight="172.0" prefWidth="400.0" styleClass="rounded_corner">
                <children>
-                  <MediaView fx:id="mediaView" fitHeight="180.0" fitWidth="600.0" preserveRatio="false" smooth="false" />
+                  <ImageView fx:id="imageView" fitHeight="159.0" fitWidth="400.0" pickOnBounds="true" smooth="false" StackPane.alignment="CENTER" />
                </children>
             </StackPane>
             <FlowPane prefHeight="82.0" prefWidth="1296.0" rowValignment="TOP">
