@@ -8,6 +8,7 @@ package com.tpv.principal;
 import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.enums.TipoTituloSupervisorEnum;
 import com.tpv.exceptions.TpvException;
+import com.tpv.modelo.Checkout;
 import com.tpv.modelo.Cliente;
 import com.tpv.modelo.FormaPago;
 import com.tpv.modelo.Usuario;
@@ -38,7 +39,8 @@ public class DataModelTicket {
     private FormaPago formaPago = null;
     private TpvException exception;
     private int nroTicket;
-    private int puntoVenta;//checkout
+    private Long puntoVenta;//checkout
+    private Checkout checkout;
     private boolean clienteSelecciondo = false;
     private int codigoProdSelecEnBuscarPorDesc;
     private int codigoClienteSelecEnBuscarPorDesc;
@@ -142,14 +144,14 @@ public class DataModelTicket {
     /**
      * @return the puntoVenta
      */
-    public int getPuntoVenta() {
+    public Long getPuntoVenta() {
         return puntoVenta;
     }
 
     /**
      * @param puntoVenta the puntoVenta to set
      */
-    public void setPuntoVenta(int puntoVenta) {
+    public void setPuntoVenta(Long puntoVenta) {
         this.puntoVenta = puntoVenta;
     }
     
@@ -263,6 +265,21 @@ public class DataModelTicket {
     public void setOrigenPantalla(OrigenPantallaErrorEnum orgienPantalla) {
         this.origenPantalla = orgienPantalla;
     }
+
+    /**
+     * @return the checkout
+     */
+    public Checkout getCheckout() {
+        return checkout;
+    }
+
+    /**
+     * @param checkout the checkout to set
+     */
+    public void setCheckout(Checkout checkout) {
+        this.checkout = checkout;
+    }
+
     
     
     

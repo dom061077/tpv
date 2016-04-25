@@ -5,11 +5,15 @@
  */
 package com.tpv.service;
 
+import com.tpv.modelo.Checkout;
 import com.tpv.modelo.Usuario;
 import com.tpv.util.Connection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
+import javax.persistence.Query;
 import org.apache.log4j.Logger;
 
 /**
@@ -42,20 +46,34 @@ public class UsuarioService {
         return usuario;
     }
     
-    public boolean checkMac(){
+    public Checkout checkMac(){
         String mac = Connection.getMACAddress();
         if(mac!=null){
             EntityManager em = Connection.getEm();
             EntityTransaction tx = em.getTransaction();
             if(!tx.isActive())
                 tx.begin();
+            Query q = em.createQuery("FROM Checkout c WHERE c.placa = :placa").setParameter("placa",mac);    
+            Checkout checkout = null;
+            try{
+                checkout = (Checkout)q.getSingleResult();
+                if(checkout != null)
+                    return checkout;
+            }catch(NoResultException e){
+
+            }catch(NonUniqueResultException e){
+
+            }catch(Exception e){
+
+            }finally{
+                tx.commit();
+                em.clear();
+            }
+                
             
-            
-            tx.commit();
-            em.clear();
            
             
         }
-        return false;
+        return null;
     }
 }

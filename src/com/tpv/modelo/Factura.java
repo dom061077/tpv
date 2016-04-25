@@ -81,7 +81,6 @@ public class Factura {
     @Column(name = "CAJA", nullable = false, columnDefinition = "TINYINT(2)")
     private int caja;
     
-   
     
     @Column(name = "ESTADO",nullable = false)
     @Enumerated(EnumType.STRING)
@@ -103,7 +102,13 @@ public class Factura {
     @JoinColumn(name = "idUSUARIOALTA", referencedColumnName = "idUSUARIOS",nullable=false)
     private Usuario usuario;
     
+    @ManyToOne
+    @JoinColumn(name = "idCHECKOUT", referencedColumnName = "idCHECKOUT",nullable=false)
+    private Checkout checkout;
     
+    @ManyToOne
+    @JoinColumn(name = "idCONDICIONESIVA", referencedColumnName = "idCONDICIONESIVA", nullable=true)
+    private CondicionIva condicionIva;
     
     
     /**
@@ -258,6 +263,76 @@ public class Factura {
      */
     public void setCaja(int caja) {
         this.caja = caja;
+    }
+
+    /**
+     * @return the impuestoInterno
+     */
+    public BigDecimal getImpuestoInterno() {
+        return impuestoInterno;
+    }
+
+    /**
+     * @param impuestoInterno the impuestoInterno to set
+     */
+    public void setImpuestoInterno(BigDecimal impuestoInterno) {
+        this.impuestoInterno = impuestoInterno;
+    }
+
+    /**
+     * @return the bonificaTarjeta
+     */
+    public BigDecimal getBonificaTarjeta() {
+        return bonificaTarjeta;
+    }
+
+    /**
+     * @param bonificaTarjeta the bonificaTarjeta to set
+     */
+    public void setBonificaTarjeta(BigDecimal bonificaTarjeta) {
+        this.bonificaTarjeta = bonificaTarjeta;
+    }
+
+    /**
+     * @return the ivaBonificaTarjeta
+     */
+    public BigDecimal getIvaBonificaTarjeta() {
+        return ivaBonificaTarjeta;
+    }
+
+    /**
+     * @param ivaBonificaTarjeta the ivaBonificaTarjeta to set
+     */
+    public void setIvaBonificaTarjeta(BigDecimal ivaBonificaTarjeta) {
+        this.ivaBonificaTarjeta = ivaBonificaTarjeta;
+    }
+
+    /**
+     * @return the checkout
+     */
+    public Checkout getCheckout() {
+        return checkout;
+    }
+
+    /**
+     * @param checkout the checkout to set
+     */
+    public void setCheckout(Checkout checkout) {
+        this.checkout = checkout;
+    }
+
+    /**
+     * @return the condicionIva
+     */
+    public CondicionIva getCondicionIva() {
+        return condicionIva;
+    }
+
+    /**
+     * @param condicionIva the condicionIva to set
+     */
+    public void setCondicionIva(CondicionIva condicionIva) {
+        this.condicionIva = condicionIva;
     }
 
     

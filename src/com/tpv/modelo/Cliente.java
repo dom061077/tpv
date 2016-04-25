@@ -8,6 +8,8 @@ package com.tpv.modelo;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -29,6 +31,13 @@ public class Cliente {
     
     @Column(name = "CUIT")
     private String cuit;
+    
+    @ManyToOne
+    @JoinColumn(name = "idCONDICIONESIVA", referencedColumnName = "idCONDICIONESIVA", nullable=true)
+    private CondicionIva condicionIva;
+    
+    
+    
     /**
      * @return the id
      */
@@ -83,6 +92,20 @@ public class Cliente {
      */
     public void setCuit(String cuit) {
         this.cuit = cuit;
+    }
+
+    /**
+     * @return the condicionIva
+     */
+    public CondicionIva getCondicionIva() {
+        return condicionIva;
+    }
+
+    /**
+     * @param condicionIva the condicionIva to set
+     */
+    public void setCondicionIva(CondicionIva condicionIva) {
+        this.condicionIva = condicionIva;
     }
     
     

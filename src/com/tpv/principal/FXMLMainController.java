@@ -105,6 +105,9 @@ public class FXMLMainController implements Initializable {
     private Label nombreCliente;
     
     @FXML
+    private Label checkout;
+    
+    @FXML
     private Button button;
     
     @FXML
@@ -148,8 +151,10 @@ public class FXMLMainController implements Initializable {
     private StackPane stackPaneIngresos;
     
     @FXML
-    //private MediaView mediaView;
-    private ImageView imageView;
+    private ImageView imageViewDer;
+    
+    @FXML
+    private ImageView imageViewIzq;
     
     
     @FXML
@@ -298,7 +303,7 @@ public class FXMLMainController implements Initializable {
         
         Platform.runLater(() -> {
             chequearInterfazNegativo();            
-            //traerInfoImpresora();
+            traerInfoImpresora();
             tableViewTickets.setItems(modelTicket.getDetalle());
             calcularTotalGeneral();
             scrollDown();
@@ -352,6 +357,18 @@ public class FXMLMainController implements Initializable {
             
             textFieldProducto.requestFocus();
             textFieldProducto.setOnKeyPressed(keyEvent -> {
+                if(keyEvent.getCode() == KeyCode.ESCAPE){
+                    if(modelTicket.getDetalle().size()==0){
+                        modelTicket.setClienteSeleccionado(false);
+                        labelProducto.setVisible(false);
+                        textFieldProducto.setVisible(false);
+                        stackPaneIngresos.setVisible(true);
+                        textFieldCantidad.setVisible(false);
+                        labelCantidad.setVisible(false);
+                        textFieldCodCliente.setVisible(true);
+                        labelCliente.setVisible(true);
+                    }
+                }
                 if(keyEvent.getCode() == KeyCode.F3){
                     buscarProductoButton.fire();
                     keyEvent.consume();
@@ -362,8 +379,8 @@ public class FXMLMainController implements Initializable {
                 }*/
                 if(keyEvent.getCode() == KeyCode.ENTER){
                     
-                    if(labelCantidad.isVisible()){
-                        labelCantidad.setVisible(false);
+                    if(textFieldCantidad.isVisible()){
+                        textFieldCantidad.setVisible(false);
                     }
                     if(textFieldProducto.getText().trim().length()>0){
 
@@ -414,6 +431,7 @@ public class FXMLMainController implements Initializable {
                         labelSubTituloIngresos.setText(TITULO_INGRESO_CANTIDAD);
                         stackPaneIngresos.toFront();
                 }
+                
                 
                 if(keyEvent.getCode() ==  KeyCode.F5){
                     modelTicket.setTipoTituloSupervisor(TipoTituloSupervisorEnum.HABILITAR_NEGATIVO);
@@ -608,7 +626,10 @@ public class FXMLMainController implements Initializable {
         }else{
             nombreCliente.setVisible(false);
             labelSubTituloIngresos.setText(TITULO_INGRESO_CLIENTE);
-            
+            stackPaneIngresos.setVisible(true);
+            textFieldCodCliente.requestFocus();
+            textFieldProducto.setVisible(false);
+            labelProducto.setVisible(false);
         }
                 
     }
@@ -637,7 +658,8 @@ public class FXMLMainController implements Initializable {
 
                 String retorno[] = impresoraService.getPtoVtaNrosTicket();
                 modelTicket.setNroTicket(Integer.parseInt(retorno[1])+1);
-                modelTicket.setPuntoVenta(Integer.parseInt(retorno[0]));
+                modelTicket.setPuntoVenta(Long.parseLong(retorno[0]));
+
             }catch(TpvException e){
                 log.error(e.getMessage());
                 modelTicket.setException(e);
@@ -650,6 +672,7 @@ public class FXMLMainController implements Initializable {
                             +modelTicket.getNroTicket()
                 //+" Nro. Ticket (A): "+retorno[2]
         );
+        checkout.setText("Checkout: "+modelTicket.getCheckout().getId());
         
 //            Worker<String> worker = new Task<String>(){
 //                @Override
@@ -772,6 +795,10 @@ public class FXMLMainController implements Initializable {
         factura.setTotal(modelTicket.getTotalTicket());
         factura.setEstado(FacturaEstadoEnum.ABIERTA);
         factura.setCliente(modelTicket.getCliente());
+        if(modelTicket.getCliente()!=null)
+            factura.setCondicionIva(modelTicket.getCliente().getCondicionIva());
+        factura.setCheckout(modelTicket.getCheckout());
+        factura.setPrefijoFiscal(modelTicket.getPuntoVenta());
         ListProperty<LineaTicketData> detalle =  modelTicket.getDetalle();
         
         detalle.forEach(item->{
@@ -799,7 +826,7 @@ public class FXMLMainController implements Initializable {
     
     private void agregarDetalleFactura(){
         modelTicket.getDetalle().add(lineaTicketData);                    
-//        if(modelTicket.getDetalle().size()>1){
+//        if(modelTicket.getDetalle()d.size()>1){
 //            agregarDetalleFactura(lineaTicketData);
 //
 //        }
@@ -869,8 +896,8 @@ public class FXMLMainController implements Initializable {
 //        
 //        mp.setRate(0.5);
         String f = this.getClass().getResource("/com/tpv/resources/sucursales.gif").toExternalForm();
-        imageView.setImage(new Image(f));
-        
+        imageViewDer.setImage(new Image(f));
+        imageViewIzq.setImage(new Image(f));
         //mp.play();
     }
            

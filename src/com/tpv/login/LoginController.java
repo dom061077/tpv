@@ -5,21 +5,26 @@
  */
 package com.tpv.login;
 
+import com.tpv.exceptions.TpvException;
+import com.tpv.modelo.Checkout;
 import com.tpv.modelo.Usuario;
 import com.tpv.principal.DataModelTicket;
 import com.tpv.service.UsuarioService;
+import javafx.animation.FadeTransition;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
+import javafx.util.Duration;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import org.apache.log4j.Logger;
 import org.datafx.controller.FXMLController;
 import org.datafx.controller.flow.action.ActionTrigger;
 
@@ -30,15 +35,15 @@ import org.datafx.controller.flow.action.ActionTrigger;
 
 @FXMLController(value="Login.fxml", title = "Ingreso al Sistema")
 public class LoginController {
-    
+    Logger log = Logger.getLogger(LoginController.class);
     UsuarioService usuarioService = new UsuarioService();    
     @FXML
     @ActionTrigger("iniciarSesion")
     private Button buttonLogin;
     
+    
     @FXML
-    @ActionTrigger("goToError")
-    private Button buttonError;
+    private StackPane stackPaneError;
     
     @FXML
     private TextField userName;
@@ -55,6 +60,8 @@ public class LoginController {
     @FXML
     private BorderPane borderPane;
     
+    @FXML
+    private Label labelError;
                       
     
     @Inject
@@ -66,8 +73,29 @@ public class LoginController {
     @PostConstruct
     public void init(){
         loadImage();
-
         Platform.runLater(() -> {
+            Checkout checkout = usuarioService.checkMac();
+            if(checkout == null){
+                log.fatal("La MAC de la PC no coincide con el registro del Checkout");
+                labelError.setText("La PC no está habilitada para este Checkout");
+                FadeTransition fadeInOut;
+                fadeInOut = new FadeTransition(Duration.seconds(1),labelError);
+		fadeInOut.setFromValue(1.0);
+		fadeInOut.setToValue(.20);
+		fadeInOut.setCycleCount(FadeTransition.INDEFINITE);
+		fadeInOut.setAutoReverse(true);
+		fadeInOut.play();
+                
+                
+                stackPaneError.setVisible(true);
+                labelError.setOnKeyPressed(keyEvent -> {
+                    if(keyEvent.getCode() == KeyCode.F11){
+                        System.exit(0);
+                    }
+                });
+                
+            }else
+                modelTicket.setCheckout(checkout);
             userName.requestFocus();            
             userName.setOnKeyPressed(keyEvent->{
                 if(keyEvent.getCode() == KeyCode.ENTER){

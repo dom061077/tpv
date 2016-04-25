@@ -6,6 +6,7 @@
 package com.tpv.service;
 
 import com.tpv.exceptions.TpvException;
+import com.tpv.modelo.CondicionIva;
 import com.tpv.modelo.Factura;
 import com.tpv.modelo.FacturaDetalle;
 import com.tpv.modelo.enums.FacturaEstadoEnum;
@@ -30,7 +31,10 @@ public class FacturacionService  {
         EntityTransaction tx = em.getTransaction();
         try{
             if(!tx.isActive())
-               tx.begin();     
+               tx.begin(); 
+            if(factura.getCliente()==null){
+                factura.setCondicionIva(em.find(CondicionIva.class, 1));
+            }
             em.persist(factura);
             tx.commit();
             em.clear();        

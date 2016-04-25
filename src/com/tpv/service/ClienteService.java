@@ -33,7 +33,8 @@ public class ClienteService {
         try{
             cliente = (Cliente)q.getSingleResult();
         }catch(Exception e){
-            
+            log.error("Error en consulta de cliente, filtroCodigo: "+filtroCodigo);
+            log.error(e.getMessage());
         }
         tx.commit();
         em.clear();

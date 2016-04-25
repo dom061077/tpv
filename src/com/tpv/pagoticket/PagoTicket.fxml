@@ -7,7 +7,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-      <TableView fx:id="tableViewPagos" focusTraversable="false" prefHeight="327.0" prefWidth="1173.0" BorderPane.alignment="CENTER">
+      <TableView fx:id="tableViewPagos" focusTraversable="false" prefHeight="327.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
         <columns>
           <TableColumn fx:id="codigoPagoColumn" prefWidth="126.0" text="Cod. Pago" />
             <TableColumn fx:id="descripcionPagoColumn" prefWidth="254.0" text="Descripción Pago" />
