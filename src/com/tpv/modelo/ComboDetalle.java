@@ -8,20 +8,25 @@ package com.tpv.modelo;
 import java.math.BigDecimal;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  *
  * @author daniel
  */
+
+@Entity
+@Table(name="combosdetalle")
 public class ComboDetalle {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "idCOMBOS")
+    @Column(name = "idCOMBOSDETALLE")
     private Long id;
     
     @Column(name = "CANTIDADPRODUCTOS")
@@ -30,13 +35,18 @@ public class ComboDetalle {
     @Column(name = "PORCENTAJE")
     BigDecimal porcentaje;
         
+
+    @ManyToOne
+    @JoinColumn(name = "idCOMBOS", referencedColumnName = "idCOMBOS", nullable=true)
+    private Combo combo;  
+    
     
     @ManyToOne
     @JoinColumn(name = "idPRODUCTOS", referencedColumnName = "idPRODUCTOS", nullable=true)
     private Producto producto;  
     
     @ManyToOne
-    @JoinColumn(name = "idGRUPRODUCTOS")
+    @JoinColumn(name = "idGRUPRODUCTOS", referencedColumnName = "idGRUPOPRODUCTOS", nullable=true)
     private GrupoProducto grupoProducto;
     
     

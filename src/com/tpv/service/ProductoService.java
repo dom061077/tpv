@@ -99,13 +99,14 @@ public class ProductoService {
     public Producto getProductoPorCodigo(int filtroCodigo){
         EntityManager em = Connection.getEm();
         EntityTransaction tx = em.getTransaction();
-        if(!tx.isActive())
-            tx.begin();
+        //if(!tx.isActive())
         Query q = em.createQuery("FROM Producto p WHERE p.discontinuado = 0 and p.codigoProducto = :codigoProducto").setParameter("codigoProducto", filtroCodigo);
         
         Producto producto = null;
         try{
+            tx.begin();
             producto = (Producto)q.getSingleResult();
+            tx.commit();
         }catch(NoResultException e){
             
         }catch(NonUniqueResultException e){
@@ -113,11 +114,9 @@ public class ProductoService {
         }catch(Exception e){
             
         }finally{
-            
+            em.close();
         }
-        tx.commit();
-        em.clear();
-        //em.close();
+        
         
         return producto;
     }

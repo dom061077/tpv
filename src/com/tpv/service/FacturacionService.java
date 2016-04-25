@@ -6,6 +6,7 @@
 package com.tpv.service;
 
 import com.tpv.exceptions.TpvException;
+import com.tpv.modelo.Combo;
 import com.tpv.modelo.CondicionIva;
 import com.tpv.modelo.Factura;
 import com.tpv.modelo.FacturaDetalle;
@@ -13,9 +14,11 @@ import com.tpv.modelo.enums.FacturaEstadoEnum;
 import com.tpv.principal.LineaTicketData;
 import com.tpv.util.Connection;
 import java.math.BigDecimal;
+import java.util.List;
 import javafx.beans.property.ListProperty;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 import org.apache.log4j.Logger;
 
 /**
@@ -82,40 +85,84 @@ public class FacturacionService  {
     
     public void confirmarFactura(Factura factura)throws TpvException{
         //Factura factura;
+        log.info("Capa de servicios, Guardar Factura");
         EntityManager em = Connection.getEm();
-        EntityTransaction tx = em.getTransaction();
-        if(!tx.isActive())
+        EntityTransaction tx = null;
+        try{
+            tx = em.getTransaction();
             tx.begin();
-        //factura = em.find(Factura.class, id);
-        factura.setEstado(FacturaEstadoEnum.CERRADA);
-        em.merge(factura);
-        tx.commit();
-        em.clear();
-        
+            //factura = em.find(Factura.class, id);
+            factura.setEstado(FacturaEstadoEnum.CERRADA);
+            factura=em.merge(factura);
+            tx.commit();
+            log.info("Factura guardada, id: "+factura.getId());
+            log.info("                      Nro. factura: "+factura.getNumeroComprobante());
+        }catch(RuntimeException e){
+            log.error("Error en capa de servicio, no se pudo confirmar la factura. "+e.getMessage());
+            if( tx != null && tx.isActive()) tx.rollback();
+            throw new TpvException("Error en capa de servicio: "+e.getMessage());
+        }finally{
+            em.close(); 
+        }
     }
     
     public void cancelarFactura(Long id) throws TpvException{
+        log.info("Capa de servicios, cancelar factura");
         Factura factura;
         EntityManager em = Connection.getEm();
-        EntityTransaction tx = em.getTransaction();
-        if(!tx.isActive())
+        EntityTransaction tx = null;
+        try{
+            tx = em.getTransaction();
             tx.begin();
-        factura = em.find(Factura.class, id);
-        factura.setEstado(FacturaEstadoEnum.ANULADA);
-        tx.commit();
-        em.clear();
+            factura = em.find(Factura.class, id);
+            factura.setEstado(FacturaEstadoEnum.ANULADA);
+            tx.commit();
+            log.info("Factura con id: "+factura.getId()+", Nro. factura: "
+                      +factura.getNumeroComprobante());   
+        }catch(RuntimeException e){    
+            log.error("Error en capa de servicio, no se pudo cancelar la factura. "+e.getMessage());
+            if( tx != null && tx.isActive()) tx.rollback();
+            throw new TpvException("Error en capa de servicio: "+e.getMessage());
+        }finally{
+            em.close();
+        }
     }
             
-    public void registrarCombos(Long id){
+//    public void registrarCombos(Long id){
+//        Factura factura;
+//        EntityManager em = Connection.getEm();
+//        EntityTransaction tx = em.getTransaction();
+//        if(!tx.isActive())
+//            tx.begin();
+//        factura = em.find(Factura.class,id );
+//        factura.setEstado(FacturaEstadoEnum.CERRADA);
+//        tx.commit();
+//        em.clear();
+//    }
+    
+    public void calcularCombos(Long id) throws TpvException{
+        log.info("Calculando combos para id factura: "+id);
+        List<Combo> listadoCombos = null;
         Factura factura;
         EntityManager em = Connection.getEm();
-        EntityTransaction tx = em.getTransaction();
-        if(!tx.isActive())
+        EntityTransaction tx = null;
+        Query q = em.createQuery("FROM Combo c WHERE c.fechaHoy BETWEEN c.fechaDesde and c.fechaHasta");
+        try{
+            tx = em.getTransaction();
             tx.begin();
-        factura = em.find(Factura.class,id );
-        factura.setEstado(FacturaEstadoEnum.CERRADA);
-        tx.commit();
-        em.clear();
+            
+            tx.commit();
+        }catch(RuntimeException e){    
+            log.error("Error al calcular el combo para id factura: "+id);
+            throw new TpvException("Error al calcular combo para id factura: "
+                    +id+". "+e.getMessage());
+        }finally{
+            em.close();
+        }
+        
+        
+        
+        
     }
     
     

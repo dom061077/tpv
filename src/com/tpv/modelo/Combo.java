@@ -6,14 +6,20 @@
 package com.tpv.modelo;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
+import org.hibernate.annotations.Formula;
 
 /**
  *
  * @author daniel
  */
+
+@Entity
+@Table(name="combos")
 public class Combo {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,6 +35,9 @@ public class Combo {
     @Column(name = "FECHAHASTA")
     private java.sql.Date fechaHasta;
             
+    @Formula("(SELECT current_date())")
+    private java.sql.Date fechaHoy;
+    
     
     
     
