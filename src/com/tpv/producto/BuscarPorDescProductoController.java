@@ -5,6 +5,8 @@
  */
 package com.tpv.producto;
 
+import com.tpv.enums.OrigenPantallaErrorEnum;
+import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.ListaPrecioProducto;
 import com.tpv.modelo.Producto;
 import com.tpv.principal.DataModelTicket;
@@ -154,7 +156,15 @@ public class BuscarPorDescProductoController {
     
     public void cargarTableView(){
         data = FXCollections.observableArrayList();
-        List<ListaPrecioProducto> productosPrecios = productoService.getProductosPrecio(textFieldFiltroProducto.getText());
+        List<ListaPrecioProducto> productosPrecios = null;
+        try{
+            productoService.getProductosPrecio(textFieldFiltroProducto.getText());
+        }catch(TpvException e){
+            log.error("Error: "+e.getMessage());
+             modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_BUSCARPORDESCPRODUCTO);
+             modelTicket.setException(e);
+        }
+            
         productosPrecios.forEach(lstPrecioProducto->{
             data.add(new ProductoData(
                     lstPrecioProducto.getProducto().getCodigoProducto(),

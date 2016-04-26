@@ -5,6 +5,7 @@
  */
 package com.tpv.service;
 
+import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.GrupoProducto;
 import com.tpv.modelo.ListaPrecioProducto;
 import com.tpv.modelo.Producto;
@@ -40,83 +41,119 @@ public class ProductoService {
      * 
      * 
     */
-    public List getProductos(String filtro){
-        log.info("Filtro de búsqueda: "+filtro);
-        List<Producto> productos;
-        EntityManager em = Connection.getEm();
-        EntityTransaction tx = em.getTransaction();
-        if(!tx.isActive())
-           tx.begin();
+    public List getProductos(String filtro) throws TpvException{
+        log.info("Capa de servicios, Filtro de búsqueda: "+filtro);
+        List<Producto> productos = null;
         int codigoProducto=0;
-        
         try{
             codigoProducto = Integer.parseInt(filtro);
         }catch(Exception e){
             
         }
-        if(filtro==null)
-            filtro="";
-        if(codigoProducto>0){
-            log.info("Busqueda de productos por código");
-            Query q = em.createQuery("FROM Producto p");
-            q.setFirstResult(0);
-            q.setMaxResults(100);
-            productos = em.createQuery("FROM Producto p WHERE p.codigoProducto = :codigoProducto").setParameter("codigoProducto", codigoProducto).getResultList();
-            productos = q.getResultList();
-        }else{
-            log.info("Busqueda de productos por descripción o código de barra");
-            Query q = em.createQuery("FROM Producto p WHERE p.descripcion like  :detalleSuc");
-            q.setParameter("detalleSuc", "%"+filtro+"%");
-            q.setFirstResult(0);
-            q.setMaxResults(100);
-            productos = q.getResultList();
-            
-        }
-        tx.commit();
-        em.clear();
-        //em.close();
-        return productos;
-    }
-    
-    public List getProductosPrecio(String filtro){
         EntityManager em = Connection.getEm();
-        EntityTransaction tx = em.getTransaction();
-        List<ListaPrecioProducto> productosPrecios=null;
-        if(!tx.isActive())
-            tx.begin();
-        Query q = em.createQuery("FROM ListaPrecioProducto lpp WHERE "
-                +" lpp.producto.descripcion like :filtro"
-            ).setParameter("filtro", "%"+filtro+"%");
-        q.setFirstResult(0);
-        q.setMaxResults(100);
-        productosPrecios = q.getResultList();
-        
-        tx.commit();
-        em.clear();
-        return productosPrecios;
-    }
-    
-    public Producto getProductoPorCodigo(int filtroCodigo){
-        EntityManager em = Connection.getEm();
-        EntityTransaction tx = em.getTransaction();
-        //if(!tx.isActive())
-        Query q = em.createQuery("FROM Producto p WHERE p.discontinuado = 0 and p.codigoProducto = :codigoProducto").setParameter("codigoProducto", filtroCodigo);
-        
-        Producto producto = null;
+        EntityTransaction tx = null;
         try{
+            tx = em.getTransaction();
             tx.begin();
-            producto = (Producto)q.getSingleResult();
+
+            if(filtro==null)
+                filtro="";
+            if(codigoProducto>0){
+                log.info("Busqueda de productos por código");
+                Query q = em.createQuery("FROM Producto p");
+                q.setFirstResult(0);
+                q.setMaxResults(100);
+                productos = em.createQuery("FROM Producto p WHERE p.codigoProducto = :codigoProducto").setParameter("codigoProducto", codigoProducto).getResultList();
+                productos = q.getResultList();
+            }else{
+                log.info("Busqueda de productos por descripción o código de barra");
+                Query q = em.createQuery("FROM Producto p WHERE p.descripcion like  :detalleSuc");
+                q.setParameter("detalleSuc", "%"+filtro+"%");
+                q.setFirstResult(0);
+                q.setMaxResults(100);
+                productos = q.getResultList();
+
+            }
             tx.commit();
-        }catch(NoResultException e){
-            
-        }catch(NonUniqueResultException e){
-            
-        }catch(Exception e){
-            
+            log.info("Cantidad de productos recuperados: "+productos.size());
+        }catch(RuntimeException e){
+            String fullTraceStr=e.getMessage()+"\n";
+            for(int i=0;i<=e.getStackTrace().length-1;i++){
+                fullTraceStr+="Clase: "+e.getStackTrace()[i].getClassName()+"; "
+                        +"Archivo: "+e.getStackTrace()[i].getFileName()+"; "
+                        +"Mètodo: "+e.getStackTrace()[i].getMethodName()+"; "
+                        +"Nro. Línea: "+e.getStackTrace()[i].getLineNumber()+"; "
+                        +"\n";
+            }
+            log.error(fullTraceStr);
+            throw new TpvException("Error en la capa de servicios al recuperar listado de productos.");
         }finally{
             em.close();
         }
+        return productos;
+    }
+    
+    public List getProductosPrecio(String filtro) throws TpvException{
+        log.info("Capa de servicios, filtro: "+filtro);
+        EntityManager em = Connection.getEm();
+        EntityTransaction tx = null;
+        List<ListaPrecioProducto> productosPrecios=null;
+        try{
+            tx = em.getTransaction();
+            tx.begin();
+            Query q = em.createQuery("FROM ListaPrecioProducto lpp WHERE "
+                    +" lpp.producto.descripcion like :filtro"
+                ).setParameter("filtro", "%"+filtro+"%");
+            q.setFirstResult(0);
+            q.setMaxResults(100);
+            productosPrecios = q.getResultList();
+            tx.commit();
+            log.info("Productos con precio recuperado: "+productosPrecios.size());
+        }catch(RuntimeException e){
+            String fullTraceStr=e.getMessage()+"\n";
+            for(int i=0;i<=e.getStackTrace().length-1;i++){
+                fullTraceStr+="Clase: "+e.getStackTrace()[i].getClassName()+"; "
+                        +"Archivo: "+e.getStackTrace()[i].getFileName()+"; "
+                        +"Mètodo: "+e.getStackTrace()[i].getMethodName()+"; "
+                        +"Nro. Línea: "+e.getStackTrace()[i].getLineNumber()+"; "
+                        +"\n";
+            }
+            log.error(fullTraceStr);
+            throw new TpvException("Error en la capa de servicios al recuperar listado de productos.");
+        }finally{
+            em.close();
+        }
+
         
+        return productosPrecios;
+    }
+    
+    public Producto getProductoPorCodigo(int filtroCodigo) throws TpvException{
+        log.info("Capa de servicios, filtro "+filtroCodigo);
+        EntityManager em = Connection.getEm();
+        Producto producto = null;
+        EntityTransaction tx = null;
+        try{
+            tx = em.getTransaction();
+            Query q = em.createQuery("FROM Producto p WHERE p.discontinuado = 0 and p.codigoProducto = :codigoProducto").setParameter("codigoProducto", filtroCodigo);
+
+            tx.begin();
+            producto = (Producto)q.getSingleResult();
+            tx.commit();
+        }catch(RuntimeException e){
+            String fullTraceStr=e.getMessage()+"\n";
+            for(int i=0;i<=e.getStackTrace().length-1;i++){
+                fullTraceStr+="Clase: "+e.getStackTrace()[i].getClassName()+"; "
+                        +"Archivo: "+e.getStackTrace()[i].getFileName()+"; "
+                        +"Mètodo: "+e.getStackTrace()[i].getMethodName()+"; "
+                        +"Nro. Línea: "+e.getStackTrace()[i].getLineNumber()+"; "
+                        +"\n";
+            }
+            log.error(fullTraceStr);
+            throw new TpvException("Error en la capa de servicios al recuperar un producto con codigo: "+filtroCodigo);
+        }finally{
+            em.close();
+        }
         
         return producto;
     }
@@ -135,29 +172,40 @@ public class ProductoService {
     }
     
     
-    public BigDecimal getPrecioProducto(int filtroCodigo){
+    public BigDecimal getPrecioProducto(int filtroCodigo) throws TpvException{
+        log.info("Capa de servicios, parámetro de filtro: "+filtroCodigo);
         ListaPrecioProducto lstPrecioProducto=null;
         BigDecimal precio = new BigDecimal(0);
         EntityManager em = Connection.getEm();
-        EntityTransaction tx = em.getTransaction();
-        if(!tx.isActive())
-            tx.begin();
-        Query q = em.createQuery("FROM ListaPrecioProducto lpp WHERE"
-                +" lpp.producto.discontinuado = 0"
-                +" and lpp.producto.codigoProducto = :codigoProducto").setParameter("codigoProducto", filtroCodigo);
         try{
-            lstPrecioProducto = (ListaPrecioProducto)q.getSingleResult();
-            precio = lstPrecioProducto.getPrecioFinal();
-        }catch(NoResultException e){
-            
-        }catch(NonUniqueResultException e){
-            
-        }catch(Exception e){
-            
+            EntityTransaction tx = null;
+            tx = em.getTransaction();
+            tx.begin();
+            Query q = em.createQuery("FROM ListaPrecioProducto lpp WHERE"
+                    +" lpp.producto.discontinuado = 0"
+                    +" and lpp.producto.codigoProducto = :codigoProducto").setParameter("codigoProducto", filtroCodigo);
+                lstPrecioProducto = (ListaPrecioProducto)q.getSingleResult();
+                precio = lstPrecioProducto.getPrecioFinal();
+            tx.commit();
+            log.info("Precio recuperado, codigo de producto: "+filtroCodigo
+                    +", precio "+precio);
+        }catch(RuntimeException e){
+            String fullTraceStr=e.getMessage()+"\n";
+            for(int i=0;i<=e.getStackTrace().length-1;i++){
+                fullTraceStr+="Clase: "+e.getStackTrace()[i].getClassName()+"; "
+                        +"Archivo: "+e.getStackTrace()[i].getFileName()+"; "
+                        +"Mètodo: "+e.getStackTrace()[i].getMethodName()+"; "
+                        +"Nro. Línea: "+e.getStackTrace()[i].getLineNumber()+"; "
+                        +"\n";
+            }
+            log.error(fullTraceStr);
+            throw new TpvException("Error en la capa de servicios al recuperar precio del producto con código: "
+                    +filtroCodigo+"");
+        }finally{
+            em.close();
         }
+
         
-        
-        tx.commit();
         precio = precio.setScale(2,BigDecimal.ROUND_HALF_EVEN);
         return precio;
     }

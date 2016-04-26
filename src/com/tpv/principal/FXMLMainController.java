@@ -529,56 +529,52 @@ public class FXMLMainController implements Initializable {
             
         }
 
-        if(codigoIngresado>0){
-            producto = productoService.getProductoPorCodigo(codigoIngresado); //productoService.getProductoPorCodigo(codigoIngresado);
-        }else{
-            //producto = productoService.getProductoPorCodBarra(textFieldProducto.getText());
-        }
-        if(producto!=null){
-            precio= productoService.getPrecioProducto(codigoIngresado);
-            if(precio.compareTo(BigDecimal.valueOf(0))>0){
-                if(modelTicket.getDetalle().size()==0){
-                    try{
-                        impresoraService.abrirTicket();
-                        //guardarFacturaPrimeraVez();
-                    }catch(TpvException e){
-                        modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
-                        modelTicket.setException(e);
-                        goToErrorButton.fire();
+        try{
+        
+                if(codigoIngresado>0){
+                    producto = productoService.getProductoPorCodigo(codigoIngresado); //productoService.getProductoPorCodigo(codigoIngresado);
+                }else{
+                    //producto = productoService.getProductoPorCodBarra(textFieldProducto.getText());
+                }
+                if(producto!=null){
+
+                    precio= productoService.getPrecioProducto(codigoIngresado);
+                    if(precio.compareTo(BigDecimal.valueOf(0))>0){
+                        if(modelTicket.getDetalle().size()==0){
+                                impresoraService.abrirTicket();
+                                //guardarFacturaPrimeraVez();
+                        }
+                        descripcion = producto.getCodigoProducto()+" "+ producto.getDescripcion();
+
+        //                if(modelTicket.isImprimeComoNegativo())
+        //                    if(!anulaItemIngresado(producto.getCodigoProducto(), cantidad)){
+        //                        textFieldCantidad.setText("");
+        //                        return;
+        //                    }
+                        lineaTicketData = new LineaTicketData(producto.getCodigoProducto()
+                                ,producto.getDescripcion(),cantidad,precio,modelTicket.isImprimeComoNegativo());
+
+                            impresoraService.imprimirLineaTicket(descripcion, cantidad
+                                    ,precio ,producto.getValorImpositivo().getValor() ,modelTicket.isImprimeComoNegativo(), producto.getImpuestoInterno());
+                            if(modelTicket.isImprimeComoNegativo()){
+                                precio = precio.multiply(BigDecimal.valueOf(-1));
+                                cantidad = cantidad.multiply(new BigDecimal(-1));
+                            }                    
+
+
+        //                    modelTicket.getDetalle().add(lineaTicketData);                    
+        //                    if(modelTicket.getDetalle().size()>1){
+        //                            agregarDetalleFactura(lineaTicketData);
+        //
+        //                    }
                     }
                 }
-                descripcion = producto.getCodigoProducto()+" "+ producto.getDescripcion();
-
-//                if(modelTicket.isImprimeComoNegativo())
-//                    if(!anulaItemIngresado(producto.getCodigoProducto(), cantidad)){
-//                        textFieldCantidad.setText("");
-//                        return;
-//                    }
-                lineaTicketData = new LineaTicketData(producto.getCodigoProducto()
-                        ,producto.getDescripcion(),cantidad,precio,modelTicket.isImprimeComoNegativo());
-                
-                try{
-                    impresoraService.imprimirLineaTicket(descripcion, cantidad
-                            ,precio ,producto.getValorImpositivo().getValor() ,modelTicket.isImprimeComoNegativo(), producto.getImpuestoInterno());
-                    if(modelTicket.isImprimeComoNegativo()){
-                        precio = precio.multiply(BigDecimal.valueOf(-1));
-                        cantidad = cantidad.multiply(new BigDecimal(-1));
-                    }                    
-
-                    
-//                    modelTicket.getDetalle().add(lineaTicketData);                    
-//                    if(modelTicket.getDetalle().size()>1){
-//                            agregarDetalleFactura(lineaTicketData);
-//
-//                    }
-                }catch(TpvException e){
-                    modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
-                    modelTicket.setException(e);
-                    goToErrorButton.fire();
-                }
-            }
-            
+        }catch(TpvException e){
+                modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+                modelTicket.setException(e);
+                goToErrorButton.fire();
         }
+        
         textFieldProducto.setText("");
         //(String descripcion,BigDecimal cantidad
         //,BigDecimal precio, BigDecimal iva,BigDecimal impuestoInterno) 
@@ -636,19 +632,25 @@ public class FXMLMainController implements Initializable {
 
     public void traerCliente(){
         
-        
-        Cliente cliente = clienteService.getClientePorCodYDni(Integer.parseInt(textFieldCodCliente.getText()));
-        if(cliente!=null){
-            nombreCliente.setText(cliente.getRazonSocial());
-            nombreCliente.setVisible(true);
-            labelCliente.setVisible(false);
-            textFieldCodCliente.setVisible(false);
-            stackPaneIngresos.setVisible(false);                                    
-            labelProducto.setVisible(true);
-            textFieldProducto.setVisible(true);
-            modelTicket.setClienteSeleccionado(true);
-            modelTicket.setCliente(cliente);
+        try{
+            Cliente cliente = clienteService.getClientePorCodYDni(Integer.parseInt(textFieldCodCliente.getText()));
+            if(cliente!=null){
+                nombreCliente.setText(cliente.getRazonSocial());
+                nombreCliente.setVisible(true);
+                labelCliente.setVisible(false);
+                textFieldCodCliente.setVisible(false);
+                stackPaneIngresos.setVisible(false);                                    
+                labelProducto.setVisible(true);
+                textFieldProducto.setVisible(true);
+                modelTicket.setClienteSeleccionado(true);
+                modelTicket.setCliente(cliente);
+            }
+        }catch(TpvException e){
+                modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+                modelTicket.setException(e);
+                goToErrorButton.fire();
         }
+            
 
     }
     
@@ -803,7 +805,15 @@ public class FXMLMainController implements Initializable {
         
         detalle.forEach(item->{
             FacturaDetalle facturaDetalle = new FacturaDetalle();
-            Producto producto = productoService.getProductoPorCodigo(item.getCodigoProducto());
+            Producto producto = null;
+            try{
+                productoService.getProductoPorCodigo(item.getCodigoProducto());
+            }catch(TpvException e){
+                log.error("Error: "+e.getMessage());
+                modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+                modelTicket.setException(e);
+            }
+
             facturaDetalle.setFactura(factura);
             facturaDetalle.setProducto(producto);
             facturaDetalle.setCantidad(item.getCantidad());

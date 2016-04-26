@@ -5,6 +5,7 @@
  */
 package com.tpv.service;
 
+import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Checkout;
 import com.tpv.modelo.Usuario;
 import com.tpv.util.Connection;
@@ -22,57 +23,73 @@ import org.apache.log4j.Logger;
  */
 public class UsuarioService {
     Logger log = Logger.getLogger(UsuarioService.class);
-    public Usuario authenticar(String nombre,String password){
+    public Usuario authenticar(String nombre,String password) throws TpvException{
         log.info("Autenticando usuario: "+nombre);
         boolean flagReturn=false;
+        Usuario usuario = null;
         EntityManager em = Connection.getEm();
-        EntityTransaction tx = em.getTransaction();
-        if(!tx.isActive())
+        EntityTransaction tx = null;
+        try{
+            tx = em.getTransaction();
             tx.begin();
-        List usuarios = em.createQuery("FROM Usuario u WHERE u.nombre = :nombre").setParameter("nombre", nombre).getResultList();
-        
-        Usuario usuario = (Usuario)usuarios.get(0); 
-        if (usuarios.size()>0) {
-                    usuario = (Usuario)usuarios.get(0);
-            if(usuario.getPassword().equals(password))
-                flagReturn=true;
-        }else
-            flagReturn=false;
-        
-        tx.commit();
-        em.clear();
+            List usuarios = em.createQuery("FROM Usuario u WHERE u.nombre = :nombre").setParameter("nombre", nombre).getResultList();
+            usuario = (Usuario)usuarios.get(0); 
+            if (usuarios.size()>0) {
+                        usuario = (Usuario)usuarios.get(0);
+                if(usuario.getPassword().equals(password))
+                    flagReturn=true;
+            }else
+                flagReturn=false;
+            tx.commit();
+        }catch(RuntimeException e){
+            String fullTraceStr=e.getMessage()+"\n";
+            for(int i=0;i<=e.getStackTrace().length-1;i++){
+                fullTraceStr+="Clase: "+e.getStackTrace()[i].getClassName()+"; "
+                        +"Archivo: "+e.getStackTrace()[i].getFileName()+"; "
+                        +"Mètodo: "+e.getStackTrace()[i].getMethodName()+"; "
+                        +"Nro. Línea: "+e.getStackTrace()[i].getLineNumber()+"; "
+                        +"\n";
+            }
+            log.error(fullTraceStr);
+            throw new TpvException("Error en la capa de servicios al autenticar usuario.");
+        }finally{
+            em.close();
+        }
         
         //emf.close();
         return usuario;
     }
     
-    public Checkout checkMac(){
+    public Checkout checkMac() throws TpvException{
+        log.info("Capa de servicios, recuperando MAC de la PC");
         String mac = Connection.getMACAddress();
+        log.info("MAC recuperada: "+mac);
         if(mac!=null){
             EntityManager em = Connection.getEm();
-            EntityTransaction tx = em.getTransaction();
-            if(!tx.isActive())
-                tx.begin();
-            Query q = em.createQuery("FROM Checkout c WHERE c.placa = :placa").setParameter("placa",mac);    
-            Checkout checkout = null;
+            EntityTransaction tx = null;
             try{
+                tx = em.getTransaction();
+                tx.begin();
+                Query q = em.createQuery("FROM Checkout c WHERE c.placa = :placa").setParameter("placa",mac);    
+                Checkout checkout = null;
                 checkout = (Checkout)q.getSingleResult();
+                log.info("Checkout recuperado: "+checkout.getId());
                 if(checkout != null)
                     return checkout;
-            }catch(NoResultException e){
-
-            }catch(NonUniqueResultException e){
-
-            }catch(Exception e){
-
+            }catch(RuntimeException e){
+                String fullTraceStr=e.getMessage()+"\n";
+                for(int i=0;i<=e.getStackTrace().length-1;i++){
+                    fullTraceStr+="Clase: "+e.getStackTrace()[i].getClassName()+"; "
+                            +"Archivo: "+e.getStackTrace()[i].getFileName()+"; "
+                            +"Mètodo: "+e.getStackTrace()[i].getMethodName()+"; "
+                            +"Nro. Línea: "+e.getStackTrace()[i].getLineNumber()+"; "
+                            +"\n";
+                }
+                log.error(fullTraceStr);
+                throw new TpvException("Error en la capa de servicios al recuperar checkout a través de la MAC.");
             }finally{
-                tx.commit();
-                em.clear();
+                em.close();
             }
-                
-            
-           
-            
         }
         return null;
     }

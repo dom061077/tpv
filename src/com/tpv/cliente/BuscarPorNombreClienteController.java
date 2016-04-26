@@ -7,6 +7,8 @@ package com.tpv.cliente;
  */
 
 
+import com.tpv.enums.OrigenPantallaErrorEnum;
+import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Cliente;
 import com.tpv.principal.DataModelTicket;
 import com.tpv.service.ClienteService;
@@ -131,7 +133,15 @@ public class BuscarPorNombreClienteController  {
     
     public void cargarTableView(String filtro){
         data = FXCollections.observableArrayList();
-        List<Cliente> clientes = clienteService.getClientes(filtro);
+        List<Cliente> clientes = null;
+        try{
+                clienteService.getClientes(filtro);
+        }catch(TpvException e){
+                log.error("Error: "+e.getMessage());
+                modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_BUSCARPORNOMBRECLIENTE);
+                modelTicket.setException(e);
+        }
+                
         clientes.forEach(cliente->{
             data.add(new ClienteData(
                     cliente.getId(),
