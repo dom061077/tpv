@@ -10,6 +10,7 @@ import com.tpv.modelo.Combo;
 import com.tpv.modelo.CondicionIva;
 import com.tpv.modelo.Factura;
 import com.tpv.modelo.FacturaDetalle;
+import com.tpv.modelo.Producto;
 import com.tpv.modelo.enums.FacturaEstadoEnum;
 import com.tpv.principal.LineaTicketData;
 import com.tpv.util.Connection;
@@ -58,7 +59,6 @@ public class FacturacionService  {
         return factura;
     }
     
-    /*Metodo que deberia ser eliminado*/
     public Factura devolverFactura(Long id) throws TpvException{
         Factura factura = null;
         EntityManager em = Connection.getEm();
@@ -82,6 +82,36 @@ public class FacturacionService  {
         }finally{
             em.close();
         }
+        return factura;
+    }
+
+    public Factura devolverFacturaAbiertaPorCheckout(int idCheckout) throws TpvException{
+        Factura factura = null;
+        EntityManager em = Connection.getEm();
+        EntityTransaction tx = null;
+        try{
+            tx = em.getTransaction();
+            Query q = em.createQuery("FROM Factura f WHERE f.estado = :estado and f.checkout.id = :idCheckout")
+                        .setParameter("estado", FacturaEstadoEnum.ABIERTA)
+                        .setParameter("idCheckout", idCheckout);
+            tx.begin();
+            factura = (Factura)q.getSingleResult();
+            tx.commit();
+        }catch(RuntimeException e){
+            String fullTraceStr=e.getMessage()+"\n";
+            for(int i=0;i<=e.getStackTrace().length-1;i++){
+                fullTraceStr+="Clase: "+e.getStackTrace()[i].getClassName()+"; "
+                        +"Archivo: "+e.getStackTrace()[i].getFileName()+"; "
+                        +"Mètodo: "+e.getStackTrace()[i].getMethodName()+"; "
+                        +"Nro. Línea: "+e.getStackTrace()[i].getLineNumber()+"; "
+                        +"\n";
+            }
+            log.error(fullTraceStr);
+            throw new TpvException("Error en la capa de servicios al devolver la factura.");
+        }finally{
+            em.close();
+        }
+        
         return factura;
     }
     

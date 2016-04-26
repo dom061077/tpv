@@ -4,7 +4,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane fx:id="borderPane" focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="571.0" prefWidth="1355.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="borderPane" focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="571.0" prefWidth="1355.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
    <bottom>
       <GridPane BorderPane.alignment="CENTER">
         <columnConstraints>
@@ -16,7 +16,8 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button fx:id="mostrarErrorButton" mnemonicParsing="false" text="Button" visible="false" />
+            <Button fx:id="goToErrorButton" mnemonicParsing="false" text="Button" visible="false" />
+            <Button mnemonicParsing="false" text="Button" />
             <Button fx:id="volverButton" mnemonicParsing="false" text="Button" visible="false" GridPane.columnIndex="1" />
             <Button fx:id="confirmarButton" mnemonicParsing="false" text="Button" visible="false" GridPane.columnIndex="2" />
          </children>

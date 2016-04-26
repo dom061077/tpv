@@ -63,6 +63,19 @@ public class ErrorController implements Initializable {
     private Button confirmarTicketButton;
     
     @FXML
+    @ActionTrigger("buscarcliente")
+    private Button buscarClienteButton; 
+    
+    @FXML
+    @ActionTrigger("buscarproducto")
+    private Button buscarProdButton; 
+
+    @FXML
+    @ActionTrigger("pagoticket")
+    private Button pagoTicketButton; 
+    
+    
+    @FXML
     private BorderPane borderPane;
     
     @FXML
@@ -94,6 +107,15 @@ public class ErrorController implements Initializable {
                             menuButton.fire();
                         if(modelTicket.getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_CONFIRMARTICKET)
                             confirmarTicketButton.fire();
+                        if(modelTicket.getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_BUSCARPORNOMBRECLIENTE)
+                            buscarClienteButton.fire();
+                        if(modelTicket.getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_BUSCARPORDESCPRODUCTO)
+                            buscarProdButton.fire();
+                        if(modelTicket.getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_PAGOTICKET)
+                            pagoTicketButton.fire();
+                        
+                        
+                        
                         
                     }
                     if(keyEvent.getCode()==KeyCode.F12)

@@ -73,7 +73,7 @@ public class ConfirmaPagoTicketController {
    
     @FXML
     @ActionTrigger("mostrarError")
-    private Button mostrarErrorButton;
+    private Button goToErrorButton;
     
     @FXML
     BorderPane borderPane;
@@ -183,7 +183,14 @@ public class ConfirmaPagoTicketController {
             Factura factura = factService.devolverFactura(modelTicket.getIdFactura());
             detallePagosData.forEach(item ->{
                 FacturaFormaPagoDetalle formaPagoDetalle = new FacturaFormaPagoDetalle();
-                formaPagoDetalle.setFormaPago(pagoService.getFormaPago(item.getCodigoPago()));
+                try{
+                    formaPagoDetalle.setFormaPago(pagoService.getFormaPago(item.getCodigoPago()));
+                }catch(TpvException e){
+                        modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CONFIRMARTICKET);
+                        modelTicket.setException(e);
+                        goToErrorButton.fire();
+                }
+                    
                 formaPagoDetalle.setFactura(factura);
                 formaPagoDetalle.setMontoPago(item.getMonto());
                 factura.getDetallePagos().add(formaPagoDetalle);
@@ -201,7 +208,7 @@ public class ConfirmaPagoTicketController {
         }catch(TpvException e){
             modelTicket.setException(e);
             modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CONFIRMARTICKET);
-            mostrarErrorButton.fire();
+            goToErrorButton.fire();
         }catch(NullPointerException e){
             e.printStackTrace();
                     

@@ -5,6 +5,7 @@
  */
 package com.tpv.service;
 
+import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.FormaPago;
 import com.tpv.modelo.Producto;
 import com.tpv.util.Connection;
@@ -22,28 +23,31 @@ import org.apache.log4j.Logger;
 public class PagoService {
     Logger log = Logger.getLogger(PagoService.class);
     
-    public FormaPago getFormaPago(int codigoPago){
+    public FormaPago getFormaPago(int codigoPago) throws TpvException{
+        log.info("Capa de servicios, parametro de busqueda: "+codigoPago);
         EntityManager em = Connection.getEm();
-        EntityTransaction tx = em.getTransaction();
-        if(!tx.isActive())
-            tx.begin();
-        Query q = em.createQuery("FROM FormaPago fp WHERE fp.id = :id").setParameter("id", codigoPago);
-        
-        FormaPago formaPago = null;
+        EntityTransaction tx = null;
+        FormaPago formaPago = null;        
+        tx = em.getTransaction();
         try{
+            tx.begin();
+            Query q = em.createQuery("FROM FormaPago fp WHERE fp.id = :id").setParameter("id", codigoPago);
             formaPago = (FormaPago)q.getSingleResult();
-        }catch(NoResultException e){
-            
-        }catch(NonUniqueResultException e){
-            
-        }catch(Exception e){
-            
+            log.info("Forma de pago recuperada: "+formaPago.toString());
+        }catch(RuntimeException e){
+            String fullTraceStr=e.getMessage()+"\n";
+            for(int i=0;i<=e.getStackTrace().length-1;i++){
+                fullTraceStr+="Clase: "+e.getStackTrace()[i].getClassName()+"; "
+                        +"Archivo: "+e.getStackTrace()[i].getFileName()+"; "
+                        +"Mètodo: "+e.getStackTrace()[i].getMethodName()+"; "
+                        +"Nro. Línea: "+e.getStackTrace()[i].getLineNumber()+"; "
+                        +"\n";
+            }
+            log.error(fullTraceStr);
+            throw new TpvException("Error en la capa de servicios al autenticar usuario.");
         }finally{
-            
+            em.close();
         }
-        tx.commit();
-        em.clear();
-        //em.close();
         return formaPago;
     }
     

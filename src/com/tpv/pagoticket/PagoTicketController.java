@@ -5,6 +5,7 @@
  */
 package com.tpv.pagoticket;
 
+import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Factura;
 import com.tpv.modelo.FacturaDetalle;
@@ -344,7 +345,14 @@ public class PagoTicketController {
     }
     
     private void buscarDescTipoPago(int codigoPago){
-        FormaPago formaPago = pagoService.getFormaPago(codigoPago);
+        FormaPago formaPago = null;
+        try{
+            formaPago = pagoService.getFormaPago(codigoPago);
+        }catch(TpvException e){
+            log.error("Error: "+e.getMessage());
+            modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_PAGOTICKET);
+            modelTicket.setException(e);
+        }            
         if(formaPago!= null){
             labelFormaPagoDescripcion.setText(formaPago.getDetalle());
             if  (formaPago.getMaxiCuotas()>0){

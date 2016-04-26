@@ -5,6 +5,7 @@
  */
 package com.tpv.login;
 
+import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Checkout;
 import com.tpv.modelo.Usuario;
@@ -74,7 +75,14 @@ public class LoginController {
     public void init(){
         loadImage();
         Platform.runLater(() -> {
-            Checkout checkout = usuarioService.checkMac();
+            Checkout checkout = null;
+            try{
+                checkout = usuarioService.checkMac();
+            }catch(TpvException e){
+                log.error("Error: "+e.getMessage());
+                modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+                modelTicket.setException(e);
+            }
             if(checkout == null){
                 log.fatal("La MAC de la PC no coincide con el registro del Checkout");
                 labelError.setText("La PC no está habilitada para este Checkout");
@@ -110,7 +118,14 @@ public class LoginController {
             
             password.setOnKeyPressed(keyEvent->{
                 if(keyEvent.getCode() == KeyCode.ENTER){
-                    Usuario usuario = usuarioService.authenticar(userName.getText(), password.getText());
+                    Usuario usuario = null;
+                    try{
+                        usuario = usuarioService.authenticar(userName.getText(), password.getText());
+                    }catch(TpvException e){
+                        log.error("Error: "+e.getMessage());
+                        modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+                        modelTicket.setException(e);
+                    }                        
                     if(usuario!=null){
                       modelTicket.setUsuario(usuario);
                       buttonLogin.fire();

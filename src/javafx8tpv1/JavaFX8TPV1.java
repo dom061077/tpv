@@ -105,7 +105,10 @@ public class JavaFX8TPV1 extends Application {
                    .withLink(FXMLMainController.class,"habilitarSupervisor",SupervisorController.class)
                    .withLink(SupervisorController.class,"volverFacturacion", FXMLMainController.class)
                    .withLink(ErrorController.class,"menuprincipal", MenuPrincipalController.class)
-                   .withLink(ErrorController.class,"confirmarticket",ConfirmaPagoTicketController.class);
+                   .withLink(ErrorController.class,"confirmarticket",ConfirmaPagoTicketController.class)
+                   .withLink(ErrorController.class,"pagoticket",PagoTicketController.class)
+                   .withLink(ErrorController.class,"buscarproducto", BuscarPorDescProductoController.class)
+                   .withLink(ErrorController.class,"buscarcliente",BuscarPorNombreClienteController.class);
         StackPane root = flow.start();   
         
         Scene scene = new Scene(root);

@@ -812,6 +812,7 @@ public class FXMLMainController implements Initializable {
                 log.error("Error: "+e.getMessage());
                 modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
                 modelTicket.setException(e);
+                goToErrorButton.fire();
             }
 
             facturaDetalle.setFactura(factura);
@@ -824,11 +825,13 @@ public class FXMLMainController implements Initializable {
         try{
             factura.setNumeroComprobante(impresoraService.getNroUltimoTicketBC());
             factura.setUsuario(modelTicket.getUsuario());
+            factura.setCheckout(modelTicket.getCheckout());
             facturaGuardada=factService.registrarFactura(factura);
         }catch(TpvException e){
             log.error("Error: "+e.getMessage());
             modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
             modelTicket.setException(e);
+            goToErrorButton.fire();
         }
         modelTicket.setIdFactura(facturaGuardada.getId());
         log.debug("ID de factura: "+facturaGuardada.getId());
@@ -852,6 +855,7 @@ public class FXMLMainController implements Initializable {
             log.error("Error: "+e.getMessage());
             modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
             modelTicket.setException(e);
+            goToErrorButton.fire();
         }
     }
     
@@ -910,6 +914,21 @@ public class FXMLMainController implements Initializable {
         imageViewIzq.setImage(new Image(f));
         //mp.play();
     }
-           
+            
+    private void verificarTicketAbierto(){
+        log.info("Verificando ticket abierto");
+        Factura factura = null;
+        try{
+            factura = factService.devolverFacturaAbiertaPorCheckout(modelTicket.getCheckout().getId());
+            if(factura != null){
+                log.info("Se encontró factura abierta, se procede a recuperar en pantalla los items vendidos");
+            }
+        }catch(TpvException e){
+            log.error("Error: "+e.getMessage());
+            modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+            modelTicket.setException(e);
+            goToErrorButton.fire();
+        }
+    }       
     
 }
