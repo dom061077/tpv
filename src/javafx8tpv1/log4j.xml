@@ -54,11 +54,11 @@
   <category name='org.apache' additivity='false'>
     <priority value='INFO' />
   </category>
-  <!--category name='com.tpv' additivity='true'>
+  <category name='com.tpv' additivity='true'>
     <priority value='TRACE' />
     <appender-ref ref='APP_LOG' />
-    <appender-ref ref='CONSOLE' />
-  </category -->
+    <!--appender-ref ref='CONSOLE' /-->
+  </category>
   <category name='org.hibernate.SQL' additivity='false'>
     <priority value='TRACE' />
     <appender-ref ref='ORM_SQL_LOG' />

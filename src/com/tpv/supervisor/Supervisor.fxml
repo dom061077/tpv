@@ -28,6 +28,11 @@
       </GridPane>
    </center>
    <bottom>
-      <Button fx:id="volverButton" mnemonicParsing="false" text="Button" visible="false" BorderPane.alignment="CENTER" />
+      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="volverButton" mnemonicParsing="false" text="Button" visible="false" />
+            <Button fx:id="goToError" mnemonicParsing="false" text="Button" visible="false" />
+         </children>
+      </HBox>
    </bottom>
 </BorderPane>

@@ -5,7 +5,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane fx:id="borderPane" prefHeight="430.0" prefWidth="1273.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="borderPane" prefHeight="430.0" prefWidth="1273.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <GridPane alignment="TOP_CENTER" BorderPane.alignment="CENTER">
         <columnConstraints>
@@ -43,6 +43,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
+            <Button fx:id="loginButton" mnemonicParsing="false" text="Button" visible="false" />
             <Button fx:id="buscarClienteButton" mnemonicParsing="false" text="Button" visible="false" />
             <Button fx:id="buscarProdButton" mnemonicParsing="false" text="Button" visible="false" />
             <Button fx:id="pagoTicketButton" mnemonicParsing="false" text="Button" visible="false" />

@@ -110,7 +110,10 @@ public class PagoTicketController {
     @FXML
     @ActionTrigger("confirmarTicket")
     private Button confirmarButton;
-    
+
+    @FXML
+    @ActionTrigger("mostrarError")
+    private Button goToError;
     
     
     @PostConstruct
@@ -183,15 +186,11 @@ public class PagoTicketController {
                         keyEvent.consume();
                         return;
                     }
-                    try{
-                        buscarDescTipoPago(Integer.parseInt(textFieldTipoPago.getText()));
-                        if(labelFormaPagoDescripcion.getText().length()!=0){
-                            textFieldMonto.setDisable(false);
-                            textFieldMonto.requestFocus();
-                            
-                        }
-                    }catch(Exception e){
-                        
+                    buscarDescTipoPago(Integer.parseInt(textFieldTipoPago.getText()));
+                    if(labelFormaPagoDescripcion.getText().length()!=0){
+                        textFieldMonto.setDisable(false);
+                        textFieldMonto.requestFocus();
+
                     }
                     keyEvent.consume();
                     return;
@@ -352,6 +351,7 @@ public class PagoTicketController {
             log.error("Error: "+e.getMessage());
             modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_PAGOTICKET);
             modelTicket.setException(e);
+            goToError.fire();
         }            
         if(formaPago!= null){
             labelFormaPagoDescripcion.setText(formaPago.getDetalle());

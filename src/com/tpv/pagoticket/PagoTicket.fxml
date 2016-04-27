@@ -31,6 +31,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
+            <Button fx:id="goToError" mnemonicParsing="false" text="Button" visible="false" />
             <Button fx:id="confirmarButton" mnemonicParsing="false" text="Button" visible="false" />
             <Button fx:id="volverButton" mnemonicParsing="false" text="Button" visible="false" />
          </children>

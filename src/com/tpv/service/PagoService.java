@@ -44,9 +44,9 @@ public class PagoService {
                         +"\n";
             }
             log.error(fullTraceStr);
-            throw new TpvException("Error en la capa de servicios al autenticar usuario.");
+            throw new TpvException("Error en la capa de servicios al recuperar un pago.");
         }finally{
-            em.close();
+            em.clear();
         }
         return formaPago;
     }

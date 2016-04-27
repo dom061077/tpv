@@ -48,6 +48,10 @@ public class SupervisorController {
     @FXML
     @ActionTrigger("volverFacturacion")
     private Button volverButton;
+
+    @FXML
+    @ActionTrigger("mostrarError")
+    private Button goToError;
     
     
     @Inject
@@ -75,7 +79,7 @@ public class SupervisorController {
                     if(modelTicket.getTipoTituloSupervisor()==TipoTituloSupervisorEnum.HABILITAR_NEGATIVO)
                         habilitarNegativos(true);
                     if(modelTicket.getTipoTituloSupervisor()==TipoTituloSupervisorEnum.CANCELAR_TICKET)
-                        cancelarFacturaCompleta();
+                        cancelarTicketCompleto();
                     keyEvent.consume();
                     volverButton.fire();                    
                 }
@@ -96,7 +100,7 @@ public class SupervisorController {
     }
     
     
-    private void cancelarFacturaCompleta(){
+    private void cancelarTicketCompleto(){
         try{
             impresoraService.cancelarTicket();
             facturaService.cancelarFactura(modelTicket.getIdFactura());
@@ -107,6 +111,7 @@ public class SupervisorController {
         }catch(TpvException e){
             log.info("Error en cancelacion de ticket");
             modelTicket.setException(e);
+            goToError.fire();
         } 
     }
     

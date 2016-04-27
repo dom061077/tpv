@@ -32,6 +32,7 @@
    <bottom>
       <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
+            <Button fx:id="goToErrorButton" mnemonicParsing="false" visible="false" />
             <Label styleClass="label_shorcut" text="F11- Salir del Sistema" />
          </children>
       </HBox>
@@ -39,7 +40,7 @@
    <center>
       <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <GridPane prefHeight="153.0" prefWidth="595.0">
+            <GridPane alignment="CENTER" prefHeight="153.0" prefWidth="595.0">
               <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="206.0" minWidth="10.0" prefWidth="80.0" />
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="256.0" minWidth="10.0" prefWidth="253.0" />

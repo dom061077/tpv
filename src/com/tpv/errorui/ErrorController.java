@@ -74,6 +74,10 @@ public class ErrorController implements Initializable {
     @ActionTrigger("pagoticket")
     private Button pagoTicketButton; 
     
+    @FXML
+    @ActionTrigger("login")
+    private Button loginButton;
+    
     
     @FXML
     private BorderPane borderPane;
@@ -113,6 +117,8 @@ public class ErrorController implements Initializable {
                             buscarProdButton.fire();
                         if(modelTicket.getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_PAGOTICKET)
                             pagoTicketButton.fire();
+                        if(modelTicket.getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_LOGIN)
+                            loginButton.fire();
                         
                         
                         

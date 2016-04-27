@@ -42,6 +42,9 @@ public class LoginController {
     @ActionTrigger("iniciarSesion")
     private Button buttonLogin;
     
+    @FXML
+    @ActionTrigger("mostrarError")
+    private Button goToErrorButton;
     
     @FXML
     private StackPane stackPaneError;
@@ -80,8 +83,9 @@ public class LoginController {
                 checkout = usuarioService.checkMac();
             }catch(TpvException e){
                 log.error("Error: "+e.getMessage());
-                modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+                modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_LOGIN);
                 modelTicket.setException(e);
+                goToErrorButton.fire();
             }
             if(checkout == null){
                 log.fatal("La MAC de la PC no coincide con el registro del Checkout");
@@ -123,8 +127,9 @@ public class LoginController {
                         usuario = usuarioService.authenticar(userName.getText(), password.getText());
                     }catch(TpvException e){
                         log.error("Error: "+e.getMessage());
-                        modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+                        modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_LOGIN);
                         modelTicket.setException(e);
+                        goToErrorButton.fire();
                     }                        
                     if(usuario!=null){
                       modelTicket.setUsuario(usuario);

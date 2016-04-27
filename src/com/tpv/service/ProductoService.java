@@ -77,18 +77,11 @@ public class ProductoService {
             tx.commit();
             log.info("Cantidad de productos recuperados: "+productos.size());
         }catch(RuntimeException e){
-            String fullTraceStr=e.getMessage()+"\n";
-            for(int i=0;i<=e.getStackTrace().length-1;i++){
-                fullTraceStr+="Clase: "+e.getStackTrace()[i].getClassName()+"; "
-                        +"Archivo: "+e.getStackTrace()[i].getFileName()+"; "
-                        +"Mètodo: "+e.getStackTrace()[i].getMethodName()+"; "
-                        +"Nro. Línea: "+e.getStackTrace()[i].getLineNumber()+"; "
-                        +"\n";
-            }
-            log.error(fullTraceStr);
+            tx.rollback();
+            log.error("Error en la capa de servicios al recuperar listado de productos",e);
             throw new TpvException("Error en la capa de servicios al recuperar listado de productos.");
         }finally{
-            em.close();
+            em.clear();
         }
         return productos;
     }
@@ -110,18 +103,11 @@ public class ProductoService {
             tx.commit();
             log.info("Productos con precio recuperado: "+productosPrecios.size());
         }catch(RuntimeException e){
-            String fullTraceStr=e.getMessage()+"\n";
-            for(int i=0;i<=e.getStackTrace().length-1;i++){
-                fullTraceStr+="Clase: "+e.getStackTrace()[i].getClassName()+"; "
-                        +"Archivo: "+e.getStackTrace()[i].getFileName()+"; "
-                        +"Mètodo: "+e.getStackTrace()[i].getMethodName()+"; "
-                        +"Nro. Línea: "+e.getStackTrace()[i].getLineNumber()+"; "
-                        +"\n";
-            }
-            log.error(fullTraceStr);
+            tx.rollback();
+            log.error("Error en la capa de servicios al recuperar listado de productos",e);
             throw new TpvException("Error en la capa de servicios al recuperar listado de productos.");
         }finally{
-            em.close();
+            em.clear();
         }
 
         
@@ -141,18 +127,11 @@ public class ProductoService {
             producto = (Producto)q.getSingleResult();
             tx.commit();
         }catch(RuntimeException e){
-            String fullTraceStr=e.getMessage()+"\n";
-            for(int i=0;i<=e.getStackTrace().length-1;i++){
-                fullTraceStr+="Clase: "+e.getStackTrace()[i].getClassName()+"; "
-                        +"Archivo: "+e.getStackTrace()[i].getFileName()+"; "
-                        +"Mètodo: "+e.getStackTrace()[i].getMethodName()+"; "
-                        +"Nro. Línea: "+e.getStackTrace()[i].getLineNumber()+"; "
-                        +"\n";
-            }
-            log.error(fullTraceStr);
+            tx.rollback();
+            log.error("Error en la capa de servicios al recuperar un producto con codigo: "+filtroCodigo,e);
             throw new TpvException("Error en la capa de servicios al recuperar un producto con codigo: "+filtroCodigo);
         }finally{
-            em.close();
+            em.clear();
         }
         
         return producto;
@@ -166,7 +145,6 @@ public class ProductoService {
         Producto producto = (Producto)q.getSingleResult();
         tx.commit();
         em.clear();
-        em.close();
         
         return producto;
     }
@@ -177,8 +155,9 @@ public class ProductoService {
         ListaPrecioProducto lstPrecioProducto=null;
         BigDecimal precio = new BigDecimal(0);
         EntityManager em = Connection.getEm();
+        EntityTransaction tx = null;
         try{
-            EntityTransaction tx = null;
+            
             tx = em.getTransaction();
             tx.begin();
             Query q = em.createQuery("FROM ListaPrecioProducto lpp WHERE"
@@ -190,19 +169,13 @@ public class ProductoService {
             log.info("Precio recuperado, codigo de producto: "+filtroCodigo
                     +", precio "+precio);
         }catch(RuntimeException e){
-            String fullTraceStr=e.getMessage()+"\n";
-            for(int i=0;i<=e.getStackTrace().length-1;i++){
-                fullTraceStr+="Clase: "+e.getStackTrace()[i].getClassName()+"; "
-                        +"Archivo: "+e.getStackTrace()[i].getFileName()+"; "
-                        +"Mètodo: "+e.getStackTrace()[i].getMethodName()+"; "
-                        +"Nro. Línea: "+e.getStackTrace()[i].getLineNumber()+"; "
-                        +"\n";
-            }
-            log.error(fullTraceStr);
+            tx.rollback();
+            log.error("Error en la capa de servicios al recuperar precio del producto con código: "
+                    +filtroCodigo,e);
             throw new TpvException("Error en la capa de servicios al recuperar precio del producto con código: "
                     +filtroCodigo+"");
         }finally{
-            em.close();
+            em.clear();
         }
 
         

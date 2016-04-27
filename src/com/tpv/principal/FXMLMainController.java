@@ -201,6 +201,7 @@ public class FXMLMainController implements Initializable {
         setBanner();
         asignarEvento();
         configurarAnimacionIngresoNegativo();
+        verificarDetalleTableView();
         tableViewTickets.setRowFactory(new Callback<TableView<LineaTicketData>, TableRow<LineaTicketData>>(){
             @Override
             public TableRow<LineaTicketData> call(TableView<LineaTicketData> paramP) {
@@ -644,7 +645,8 @@ public class FXMLMainController implements Initializable {
                 textFieldProducto.setVisible(true);
                 modelTicket.setClienteSeleccionado(true);
                 modelTicket.setCliente(cliente);
-            }
+            }else
+                textFieldCodCliente.setText("");
         }catch(TpvException e){
                 modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
                 modelTicket.setException(e);
@@ -930,5 +932,11 @@ public class FXMLMainController implements Initializable {
             goToErrorButton.fire();
         }
     }       
+    
+    private void verificarDetalleTableView(){
+        if(modelTicket.getDetalle().size()==0 && 
+                tableViewTickets.getItems().size()>0)
+            tableViewTickets.getItems().clear();
+    }
     
 }

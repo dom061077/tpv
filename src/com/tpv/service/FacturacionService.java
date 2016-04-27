@@ -54,7 +54,7 @@ public class FacturacionService  {
             log.error(fullTraceStr);
             throw new TpvException("Error en la capa de servicios al registrar la factura por primera vez.");
         }finally{
-            em.close();
+            em.clear();
         }
         return factura;
     }
@@ -80,7 +80,7 @@ public class FacturacionService  {
             log.error(fullTraceStr);
             throw new TpvException("Error en la capa de servicios al devolver la factura.");
         }finally{
-            em.close();
+            em.clear();
         }
         return factura;
     }
@@ -109,7 +109,7 @@ public class FacturacionService  {
             log.error(fullTraceStr);
             throw new TpvException("Error en la capa de servicios al devolver la factura.");
         }finally{
-            em.close();
+            em.clear();
         }
         
         return factura;
@@ -139,7 +139,7 @@ public class FacturacionService  {
             log.error(fullTraceStr);
             throw new TpvException("Error en la capa de servicios al agregar detalle de la factura.");
         }finally{
-            em.close();
+            em.clear();
         }
     }
     
@@ -169,7 +169,7 @@ public class FacturacionService  {
             log.error(fullTraceStr);
             throw new TpvException("Error en la capa de servicios al confirmar la factura.");
         }finally{
-            em.close();
+            em.clear();
         }
     }
     
@@ -187,18 +187,11 @@ public class FacturacionService  {
             log.info("Factura con id: "+factura.getId()+", Nro. factura: "
                       +factura.getNumeroComprobante());   
         }catch(RuntimeException e){
-            String fullTraceStr=e.getMessage()+"\n";
-            for(int i=0;i<=e.getStackTrace().length-1;i++){
-                fullTraceStr+="Clase: "+e.getStackTrace()[i].getClassName()+"; "
-                        +"Archivo: "+e.getStackTrace()[i].getFileName()+"; "
-                        +"Mètodo: "+e.getStackTrace()[i].getMethodName()+"; "
-                        +"Nro. Línea: "+e.getStackTrace()[i].getLineNumber()+"; "
-                        +"\n";
-            }
-            log.error(fullTraceStr);
+            tx.rollback();
+            log.error("Error en la capa de servicios al cancelar la factura",e);
             throw new TpvException("Error en la capa de servicios al cancelar la factura.");
         }finally{
-            em.close();
+            em.clear();
         }
     }
             
@@ -227,11 +220,11 @@ public class FacturacionService  {
             
             tx.commit();
         }catch(RuntimeException e){    
-            log.error("Error al calcular el combo para id factura: "+id);
+            log.error("Error al calcular el combo para id factura: "+id,e);
             throw new TpvException("Error al calcular combo para id factura: "
                     +id+". "+e.getMessage());
         }finally{
-            em.close();
+            em.clear();
         }
         
         

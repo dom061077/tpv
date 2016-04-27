@@ -53,7 +53,7 @@ public class UsuarioService {
             log.error(fullTraceStr);
             throw new TpvException("Error en la capa de servicios al autenticar usuario.");
         }finally{
-            em.close();
+            em.clear();
         }
         
         //emf.close();
@@ -73,6 +73,7 @@ public class UsuarioService {
                 Query q = em.createQuery("FROM Checkout c WHERE c.placa = :placa").setParameter("placa",mac);    
                 Checkout checkout = null;
                 checkout = (Checkout)q.getSingleResult();
+                tx.commit();
                 log.info("Checkout recuperado: "+checkout.getId());
                 if(checkout != null)
                     return checkout;
@@ -88,7 +89,7 @@ public class UsuarioService {
                 log.error(fullTraceStr);
                 throw new TpvException("Error en la capa de servicios al recuperar checkout a través de la MAC.");
             }finally{
-                em.close();
+                em.clear();
             }
         }
         return null;

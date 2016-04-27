@@ -84,6 +84,7 @@ public class JavaFX8TPV1 extends Application {
         Flow flow = new Flow(LoginController.class)
                     //--flow ventana buscar cliente
                    .withLink(LoginController.class,"iniciarSesion",MenuPrincipalController.class)
+                   .withLink(LoginController.class,"mostrarError",ErrorController.class)
                    .withLink(MenuPrincipalController.class, "facturacion", FXMLMainController.class)
                    .withLink(MenuPrincipalController.class, "mostrarError", ErrorController.class)
                    .withLink(ErrorController.class,"volverMenuPrincipal",MenuPrincipalController.class)
@@ -95,7 +96,7 @@ public class JavaFX8TPV1 extends Application {
                    .withLink(BuscarPorDescProductoController.class, "seleccionarProducto", FXMLMainController.class)
                    .withLink(FXMLMainController.class, "pagoTicket", PagoTicketController.class)
                    .withLink(PagoTicketController.class,"volverFacturacion",FXMLMainController.class)
-                   //.withLink(PagoTicketController.class,"mostrarError",ErrorController.class)
+                   .withLink(PagoTicketController.class,"mostrarError",ErrorController.class)
                    .withLink(FXMLMainController.class,"mostrarError",ErrorController.class)
                    .withLink(ErrorController.class,"facturacion",FXMLMainController.class)
                    .withLink(PagoTicketController.class, "confirmarTicket", ConfirmaPagoTicketController.class)
@@ -104,11 +105,15 @@ public class JavaFX8TPV1 extends Application {
                    .withLink(ConfirmaPagoTicketController.class,"mostrarError",ErrorController.class)
                    .withLink(FXMLMainController.class,"habilitarSupervisor",SupervisorController.class)
                    .withLink(SupervisorController.class,"volverFacturacion", FXMLMainController.class)
+                   .withLink(SupervisorController.class, "mostrarError", ErrorController.class )
                    .withLink(ErrorController.class,"menuprincipal", MenuPrincipalController.class)
                    .withLink(ErrorController.class,"confirmarticket",ConfirmaPagoTicketController.class)
                    .withLink(ErrorController.class,"pagoticket",PagoTicketController.class)
                    .withLink(ErrorController.class,"buscarproducto", BuscarPorDescProductoController.class)
-                   .withLink(ErrorController.class,"buscarcliente",BuscarPorNombreClienteController.class);
+                   .withLink(ErrorController.class,"buscarcliente",BuscarPorNombreClienteController.class)
+                   .withLink(ErrorController.class,"login",LoginController.class)
+                   .withLink(ErrorController.class,"login",SupervisorController.class);
+                   
         StackPane root = flow.start();   
         
         Scene scene = new Scene(root);
