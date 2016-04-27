@@ -297,5 +297,31 @@ public class ListaPrecioProducto {
                
                return precioAux;
         }
+        
+        @Transient
+        public BigDecimal getPrecioUnitario(){
+               BigDecimal precioAux = new BigDecimal(0);
+               if(fechaInicioEspecial.compareTo(fechaHoy)<=0 &&
+                       fechaFinEspecial.compareTo(fechaHoy)>=0){
+                   precioAux =  precioEspecial;
+               }else{
+                   if(fechaInicioOferta.compareTo(fechaHoy)<=0 &&
+                       fechaFinOferta.compareTo(fechaHoy)>=0)
+                       precioAux = precioOferta;
+                   else
+                       precioAux = precioPublico;
+               }
+               return precioAux;
+        }
+        
+        @Transient
+        public BigDecimal getIva(){
+            BigDecimal valorImpositivo = null;
+            valorImpositivo = getPrecioUnitario().multiply(producto.getValorImpositivo().getValor());
+            valorImpositivo = valorImpositivo.divide(BigDecimal.valueOf(100));
+            return valorImpositivo;
+        }
+
+                
     
 }

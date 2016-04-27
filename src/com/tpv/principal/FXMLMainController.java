@@ -555,7 +555,7 @@ public class FXMLMainController implements Initializable {
                         lineaTicketData = new LineaTicketData(producto.getCodigoProducto()
                                 ,producto.getDescripcion(),cantidad,precio,modelTicket.isImprimeComoNegativo());
 
-                            impresoraService.imprimirLineaTicket(descripcion, cantidad
+                        impresoraService.imprimirLineaTicket(descripcion, cantidad
                                     ,precio ,producto.getValorImpositivo().getValor() ,modelTicket.isImprimeComoNegativo(), producto.getImpuestoInterno());
                             if(modelTicket.isImprimeComoNegativo()){
                                 precio = precio.multiply(BigDecimal.valueOf(-1));
@@ -921,9 +921,10 @@ public class FXMLMainController implements Initializable {
         log.info("Verificando ticket abierto");
         Factura factura = null;
         try{
-            factura = factService.devolverFacturaAbiertaPorCheckout(modelTicket.getCheckout().getId());
+            factura = factService.getFacturaAbiertaPorCheckout(modelTicket.getCheckout().getId());
             if(factura != null){
                 log.info("Se encontró factura abierta, se procede a recuperar en pantalla los items vendidos");
+                
             }
         }catch(TpvException e){
             log.error("Error: "+e.getMessage());
@@ -934,9 +935,28 @@ public class FXMLMainController implements Initializable {
     }       
     
     private void verificarDetalleTableView(){
+        log.info("Verificando detalle de TableView");
         if(modelTicket.getDetalle().size()==0 && 
                 tableViewTickets.getItems().size()>0)
             tableViewTickets.getItems().clear();
+        Factura factura = null;
+        try{
+            factura = factService.getFacturaAbiertaPorCheckout(modelTicket.getCheckout().getId());
+            for(Iterator iterator = factura.getDetalle().iterator();iterator.hasNext();){
+                FacturaDetalle fd = (FacturaDetalle)iterator.next();
+                
+//                LineaTicketData lineaTicketData = new LineaTicketData(fd.getProducto().getCodigoProducto()
+//                                ,fd.getProducto().getDescripcion(),fd.getCantidad()
+//                                ,fd.,modelTicket.isImprimeComoNegativo());                
+            }
+        }catch(TpvException e){
+            log.error("Error en capa controller: "+e.getMessage());
+            modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+            modelTicket.setException(e);
+            goToErrorButton.fire();
+        }
     }
+    
+    
     
 }

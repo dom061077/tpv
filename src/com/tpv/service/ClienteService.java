@@ -40,14 +40,6 @@ public class ClienteService {
             tx.rollback();
         }catch(RuntimeException e){
             tx.rollback();
-//            String fullTraceStr=e.getMessage()+"\n";
-//            for(int i=0;i<=e.getStackTrace().length-1;i++){
-//                fullTraceStr+="Clase: "+e.getStackTrace()[i].getClassName()+"; "
-//                        +"Archivo: "+e.getStackTrace()[i].getFileName()+"; "
-//                        +"Mètodo: "+e.getStackTrace()[i].getMethodName()+"; "
-//                        +"Nro. Línea: "+e.getStackTrace()[i].getLineNumber()+"; "
-//                        +"\n";
-//            }
             log.error("Error en la capa de servicios de cliente al recuperar cliente por cod. o D.N.I",e);
             throw new TpvException("Error en la capa de servicios de cliente al recuperar cliente por cod. o D.N.I.");
         }finally{

@@ -43,15 +43,8 @@ public class FacturacionService  {
             em.persist(factura);
             tx.commit();
         }catch(RuntimeException e){
-            String fullTraceStr=e.getMessage()+"\n";
-            for(int i=0;i<=e.getStackTrace().length-1;i++){
-                fullTraceStr+="Clase: "+e.getStackTrace()[i].getClassName()+"; "
-                        +"Archivo: "+e.getStackTrace()[i].getFileName()+"; "
-                        +"Mètodo: "+e.getStackTrace()[i].getMethodName()+"; "
-                        +"Nro. Línea: "+e.getStackTrace()[i].getLineNumber()+"; "
-                        +"\n";
-            }
-            log.error(fullTraceStr);
+            tx.rollback();
+            log.error("Error en la capa de servicios al registrar la factura por primera vez.",e);
             throw new TpvException("Error en la capa de servicios al registrar la factura por primera vez.");
         }finally{
             em.clear();
@@ -59,7 +52,7 @@ public class FacturacionService  {
         return factura;
     }
     
-    public Factura devolverFactura(Long id) throws TpvException{
+    public Factura getFactura(Long id) throws TpvException{
         Factura factura = null;
         EntityManager em = Connection.getEm();
         EntityTransaction tx = null;
@@ -69,15 +62,8 @@ public class FacturacionService  {
             factura = em.find(Factura.class, id);
             tx.commit();
         }catch(RuntimeException e){
-            String fullTraceStr=e.getMessage()+"\n";
-            for(int i=0;i<=e.getStackTrace().length-1;i++){
-                fullTraceStr+="Clase: "+e.getStackTrace()[i].getClassName()+"; "
-                        +"Archivo: "+e.getStackTrace()[i].getFileName()+"; "
-                        +"Mètodo: "+e.getStackTrace()[i].getMethodName()+"; "
-                        +"Nro. Línea: "+e.getStackTrace()[i].getLineNumber()+"; "
-                        +"\n";
-            }
-            log.error(fullTraceStr);
+            tx.rollback();
+            log.error("Error en la capa de servicios al devolver la factura.",e);
             throw new TpvException("Error en la capa de servicios al devolver la factura.");
         }finally{
             em.clear();
@@ -85,7 +71,7 @@ public class FacturacionService  {
         return factura;
     }
 
-    public Factura devolverFacturaAbiertaPorCheckout(int idCheckout) throws TpvException{
+    public Factura getFacturaAbiertaPorCheckout(int idCheckout) throws TpvException{
         Factura factura = null;
         EntityManager em = Connection.getEm();
         EntityTransaction tx = null;
@@ -98,15 +84,8 @@ public class FacturacionService  {
             factura = (Factura)q.getSingleResult();
             tx.commit();
         }catch(RuntimeException e){
-            String fullTraceStr=e.getMessage()+"\n";
-            for(int i=0;i<=e.getStackTrace().length-1;i++){
-                fullTraceStr+="Clase: "+e.getStackTrace()[i].getClassName()+"; "
-                        +"Archivo: "+e.getStackTrace()[i].getFileName()+"; "
-                        +"Mètodo: "+e.getStackTrace()[i].getMethodName()+"; "
-                        +"Nro. Línea: "+e.getStackTrace()[i].getLineNumber()+"; "
-                        +"\n";
-            }
-            log.error(fullTraceStr);
+            tx.rollback();
+            log.error("Error en la capa de servicios al devolver la factura.",e);
             throw new TpvException("Error en la capa de servicios al devolver la factura.");
         }finally{
             em.clear();
@@ -128,15 +107,8 @@ public class FacturacionService  {
             factura.getDetalle().add(facturaDetalle);
             tx.commit();
         }catch(RuntimeException e){
-            String fullTraceStr=e.getMessage()+"\n";
-            for(int i=0;i<=e.getStackTrace().length-1;i++){
-                fullTraceStr+="Clase: "+e.getStackTrace()[i].getClassName()+"; "
-                        +"Archivo: "+e.getStackTrace()[i].getFileName()+"; "
-                        +"Mètodo: "+e.getStackTrace()[i].getMethodName()+"; "
-                        +"Nro. Línea: "+e.getStackTrace()[i].getLineNumber()+"; "
-                        +"\n";
-            }
-            log.error(fullTraceStr);
+            tx.rollback();
+            log.error("Error en la capa de servicios al agregar detalle de la factura.",e);
             throw new TpvException("Error en la capa de servicios al agregar detalle de la factura.");
         }finally{
             em.clear();
@@ -158,15 +130,8 @@ public class FacturacionService  {
             log.info("Factura guardada, id: "+factura.getId());
             log.info("                      Nro. factura: "+factura.getNumeroComprobante());
         }catch(RuntimeException e){
-            String fullTraceStr=e.getMessage()+"\n";
-            for(int i=0;i<=e.getStackTrace().length-1;i++){
-                fullTraceStr+="Clase: "+e.getStackTrace()[i].getClassName()+"; "
-                        +"Archivo: "+e.getStackTrace()[i].getFileName()+"; "
-                        +"Mètodo: "+e.getStackTrace()[i].getMethodName()+"; "
-                        +"Nro. Línea: "+e.getStackTrace()[i].getLineNumber()+"; "
-                        +"\n";
-            }
-            log.error(fullTraceStr);
+            tx.rollback();
+            log.error("Error en la capa de servicios al confirmar la factura.",e);
             throw new TpvException("Error en la capa de servicios al confirmar la factura.");
         }finally{
             em.clear();

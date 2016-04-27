@@ -33,6 +33,21 @@ public class FacturaDetalle {
     @Column(name = "CANTIDAD")
     private BigDecimal cantidad;
     
+    @Column(name = "VALORUNITARIO")
+    private BigDecimal precioUnitario;
+    
+    @Column(name = "IVA")
+    private BigDecimal iva;
+    
+    @Column(name = "DESCUENTO")
+    private BigDecimal descuento;
+    
+    @Column(name = "IMPUESTOINTERNO")
+    private BigDecimal impuestoInterno;
+    
+    @Column(name = "NETO")
+    private BigDecimal neto;
+    
     @Column(name = "TOTAL")
     private BigDecimal subTotal;
     
@@ -118,6 +133,76 @@ public class FacturaDetalle {
      */
     public void setProducto(Producto producto) {
         this.producto = producto;
+    }
+
+    /**
+     * @return the precioUnitario
+     */
+    public BigDecimal getPrecioUnitario() {
+        return precioUnitario;
+    }
+
+    /**
+     * @param precioUnitario the precioUnitario to set
+     */
+    public void setPrecioUnitario(BigDecimal precioUnitario) {
+        this.precioUnitario = precioUnitario;
+    }
+
+    /**
+     * @return the iva
+     */
+    public BigDecimal getIva() {
+        return iva;
+    }
+
+    /**
+     * @param iva the iva to set
+     */
+    public void setIva(BigDecimal iva) {
+        this.iva = iva;
+    }
+
+    /**
+     * @return the descuento
+     */
+    public BigDecimal getDescuento() {
+        return descuento;
+    }
+
+    /**
+     * @param descuento the descuento to set
+     */
+    public void setDescuento(BigDecimal descuento) {
+        this.descuento = descuento;
+    }
+
+    /**
+     * @return the impuestoInterno
+     */
+    public BigDecimal getImpuestoInterno() {
+        return impuestoInterno;
+    }
+
+    /**
+     * @param impuestoInterno the impuestoInterno to set
+     */
+    public void setImpuestoInterno(BigDecimal impuestoInterno) {
+        this.impuestoInterno = impuestoInterno;
+    }
+
+    /**
+     * @return the neto
+     */
+    public BigDecimal getNeto() {
+        return neto;
+    }
+
+    /**
+     * @param neto the neto to set
+     */
+    public void setNeto(BigDecimal neto) {
+        this.neto = neto;
     }
     
     

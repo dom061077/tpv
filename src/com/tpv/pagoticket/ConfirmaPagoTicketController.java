@@ -180,7 +180,7 @@ public class ConfirmaPagoTicketController {
             impresoraService.cerrarTicket();
             List<FacturaFormaPagoDetalle> pagos = new ArrayList<FacturaFormaPagoDetalle>();
             ListProperty<LineaPagoData> detallePagosData = modelTicket.getPagos();
-            Factura factura = factService.devolverFactura(modelTicket.getIdFactura());
+            Factura factura = factService.getFactura(modelTicket.getIdFactura());
             detallePagosData.forEach(item ->{
                 FacturaFormaPagoDetalle formaPagoDetalle = new FacturaFormaPagoDetalle();
                 try{
