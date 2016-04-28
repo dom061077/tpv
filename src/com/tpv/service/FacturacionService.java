@@ -19,6 +19,7 @@ import java.util.List;
 import javafx.beans.property.ListProperty;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import org.apache.log4j.Logger;
 
@@ -83,6 +84,9 @@ public class FacturacionService  {
             tx.begin();
             factura = (Factura)q.getSingleResult();
             tx.commit();
+        }catch(NoResultException e){
+            tx.rollback();
+            log.info("no se encontró factura abierta, no se toma como error NoResultException");
         }catch(RuntimeException e){
             tx.rollback();
             log.error("Error en la capa de servicios al devolver la factura.",e);
@@ -107,7 +111,8 @@ public class FacturacionService  {
             factura.getDetalle().add(facturaDetalle);
             tx.commit();
         }catch(RuntimeException e){
-            tx.rollback();
+            if(tx.isActive())
+                tx.rollback();
             log.error("Error en la capa de servicios al agregar detalle de la factura.",e);
             throw new TpvException("Error en la capa de servicios al agregar detalle de la factura.");
         }finally{

@@ -168,6 +168,10 @@ public class ProductoService {
             tx.commit();
             log.info("Precio recuperado, codigo de producto: "+filtroCodigo
                     +", precio "+precio);
+        }catch(NoResultException e){    
+            tx.rollback();
+            log.info("No se encontró el código de producto"+filtroCodigo+" en la lista de precios."
+                +" La excepción NoResultException no se considera como error");
         }catch(RuntimeException e){
             tx.rollback();
             log.error("Error en la capa de servicios al recuperar precio del producto con código: "

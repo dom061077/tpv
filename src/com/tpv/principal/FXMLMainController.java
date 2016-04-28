@@ -942,13 +942,14 @@ public class FXMLMainController implements Initializable {
         Factura factura = null;
         try{
             factura = factService.getFacturaAbiertaPorCheckout(modelTicket.getCheckout().getId());
-            for(Iterator iterator = factura.getDetalle().iterator();iterator.hasNext();){
-                FacturaDetalle fd = (FacturaDetalle)iterator.next();
-                
-//                LineaTicketData lineaTicketData = new LineaTicketData(fd.getProducto().getCodigoProducto()
-//                                ,fd.getProducto().getDescripcion(),fd.getCantidad()
-//                                ,fd.,modelTicket.isImprimeComoNegativo());                
-            }
+            if(factura!=null)
+                for(Iterator iterator = factura.getDetalle().iterator();iterator.hasNext();){
+                    FacturaDetalle fd = (FacturaDetalle)iterator.next();
+
+    //                LineaTicketData lineaTicketData = new LineaTicketData(fd.getProducto().getCodigoProducto()
+    //                                ,fd.getProducto().getDescripcion(),fd.getCantidad()
+    //                                ,fd.,modelTicket.isImprimeComoNegativo());                
+                }
         }catch(TpvException e){
             log.error("Error en capa controller: "+e.getMessage());
             modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
