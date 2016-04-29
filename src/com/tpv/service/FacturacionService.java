@@ -15,6 +15,7 @@ import com.tpv.modelo.enums.FacturaEstadoEnum;
 import com.tpv.principal.LineaTicketData;
 import com.tpv.util.Connection;
 import java.math.BigDecimal;
+import java.util.Iterator;
 import java.util.List;
 import javafx.beans.property.ListProperty;
 import javax.persistence.EntityManager;
@@ -180,43 +181,43 @@ public class FacturacionService  {
     public void calcularCombos(Long id) throws TpvException{
         log.info("Calculando combos para id factura: "+id);
         List<Combo> listadoCombos = null;
-        Factura factura;
+        Factura factura = null;
         EntityManager em = Connection.getEm();
-        EntityTransaction tx = null;
-        /*
-         * SELECT fd.* FROM facturasdetalle fd
-INNER JOIN productos p ON fd.idPRODUCTOS=p.idPRODUCTOS AND p.DISCONTINUADO = 0
-LEFT JOIN combosdetalle cd ON fd.idPRODUCTOS = cd.idPRODUCTOS
-LEFT JOIN proveedores_productos pp ON fd.idPRODUCTOS = pp.idPRODUCTOS AND pp.idProveedor=cd.idProveedor
-LEFT JOIN (
-	SELECT gp.idGRUPOPRODUCTOS AS grupohijo
-		,glevel1.idGRUPOPRODUCTOS AS grupopadre FROM grupoproductos gp
-	INNER JOIN grupoproductos glevel1 ON glevel1.idgrupoproductos = gp.padreid
-	
-) grupoprod ON p.idgrupoproductos = grupoprod.grupohijo AND(cd.idgrupoproductos = grupoprod.grupohijo OR 
-		cd.idgrupoproductos = grupoprod.grupopadre)
-WHERE cd.idcombos IS NOT NULL
-
-         * 
-         */
-        Query q = em.createQuery("FROM Combo c WHERE c.fechaHoy BETWEEN c.fechaDesde and c.fechaHasta");
+        factura = em.find(Factura.class, id);
+        Query q = em.createNativeQuery(
+                "SELECT DISTINCT c.* FROM facturasdetalle fd"
+                +" INNER JOIN productos p ON fd.idPRODUCTOS=p.idPRODUCTOS AND p.DISCONTINUADO = 0"
+                +" LEFT JOIN combosdetalle cd ON fd.idPRODUCTOS = cd.idPRODUCTOS"
+                +" LEFT JOIN combos c ON cd.idCOMBOS = c.idCOMBOS"
+                +" LEFT JOIN proveedores_productos pp ON fd.idPRODUCTOS = pp.idPRODUCTOS AND pp.idProveedor=cd.idProveedor"
+                +" LEFT JOIN ("
+                +"        SELECT gp.idGRUPOPRODUCTOS AS grupohijo"
+                +"                ,glevel1.idGRUPOPRODUCTOS AS grupopadre FROM grupoproductos gp"
+                +"        INNER JOIN grupoproductos glevel1 ON glevel1.idgrupoproductos = gp.padreid"
+                +" ) grupoprod ON p.idgrupoproductos = grupoprod.grupohijo AND(cd.idgrupoproductos = grupoprod.grupohijo OR "
+                +"                cd.idgrupoproductos = grupoprod.grupopadre)"
+                +" WHERE cd.idcombos IS NOT NULL AND fd.idFACTURAS = ?1 AND CONVERT(NOW(),DATE) BETWEEN c.FECHADESDE AND c.FECHAHASTA"
+                +" UNION "        
+                +"  SELECT DISTINCT c.* FROM facturasdetalle fd"
+                +"  INNER JOIN productos p ON fd.idPRODUCTOS=p.idPRODUCTOS AND p.DISCONTINUADO = 0"
+                +"  LEFT JOIN combosdetalleliberado cdl ON fd.idPRODUCTOS= cdl.idPRODUCTOS"
+                +"  LEFT JOIN combosliberado cl ON cdl.idCOMBOLIBERADO = cl.idCOMBOLIBERADO"
+                +"  LEFT JOIN combos c ON cl.idCOMBOS = c.idCOMBOS"
+                +"  WHERE c.idcombos IS NOT NULL AND fd.idFACTURAS = ?1 AND CONVERT(NOW(),DATE) BETWEEN c.FECHADESDE AND c.FECHAHASTA"
+                , Combo.class).setParameter(1, id);
         try{
-            tx = em.getTransaction();
-            tx.begin();
-            
-            tx.commit();
+            listadoCombos = q.getResultList();
+            for(Iterator iterator = listadoCombos.iterator();iterator.hasNext();){
+                 
+            }
         }catch(RuntimeException e){    
-            log.error("Error al calcular el combo para id factura: "+id,e);
+            log.error("Error al calcular el combo sin combinaciones para id factura: "+id,e);
             throw new TpvException("Error al calcular combo para id factura: "
                     +id+". "+e.getMessage());
         }finally{
             em.clear();
         }
-        
-        
-        
-        
     }
     
-    
+    private 
 }
