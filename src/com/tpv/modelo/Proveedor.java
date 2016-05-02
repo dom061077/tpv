@@ -17,11 +17,11 @@ import javax.persistence.Table;
  * @author daniel
  */
 @Entity
-@Table(name="facturas")
+@Table(name="proveedor")
 public class Proveedor {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "idFACTURAS")
+    @Column(name = "idProveedor")
     private Long id;
     
     @Column(name = "RAZONSOCIAL")
