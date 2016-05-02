@@ -78,6 +78,10 @@ public class ErrorController implements Initializable {
     @ActionTrigger("login")
     private Button loginButton;
     
+    @FXML
+    @ActionTrigger("error_supervisor")
+    private Button supervisorButton;
+    
     
     @FXML
     private BorderPane borderPane;
@@ -120,7 +124,8 @@ public class ErrorController implements Initializable {
                         if(modelTicket.getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_LOGIN)
                             loginButton.fire();
                         
-                        
+                        if(modelTicket.getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_SUPERVISOR)
+                            supervisorButton.fire();
                         
                         
                     }

@@ -112,7 +112,7 @@ public class JavaFX8TPV1 extends Application {
                    .withLink(ErrorController.class,"buscarproducto", BuscarPorDescProductoController.class)
                    .withLink(ErrorController.class,"buscarcliente",BuscarPorNombreClienteController.class)
                    .withLink(ErrorController.class,"login",LoginController.class)
-                   .withLink(ErrorController.class,"login",SupervisorController.class);
+                   .withLink(ErrorController.class,"error_supervisor",SupervisorController.class);
                    
         StackPane root = flow.start();   
         

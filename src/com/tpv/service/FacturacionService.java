@@ -41,6 +41,11 @@ public class FacturacionService  {
             tx.begin(); 
             if(factura.getCliente()==null){
                 factura.setCondicionIva(em.find(CondicionIva.class, 1));
+                factura.setTotal(BigDecimal.ZERO);
+                factura.setBonificaTarjeta(BigDecimal.ZERO);
+                factura.setIvaBonificaTarjeta(BigDecimal.ZERO);
+                factura.setImpuestoInterno(BigDecimal.ZERO);
+                
             }
             em.persist(factura);
             tx.commit();
@@ -78,18 +83,13 @@ public class FacturacionService  {
         EntityManager em = Connection.getEm();
         EntityTransaction tx = null;
         try{
-            tx = em.getTransaction();
             Query q = em.createQuery("FROM Factura f WHERE f.estado = :estado and f.checkout.id = :idCheckout")
                         .setParameter("estado", FacturaEstadoEnum.ABIERTA)
                         .setParameter("idCheckout", idCheckout);
-            tx.begin();
             factura = (Factura)q.getSingleResult();
-            tx.commit();
         }catch(NoResultException e){
-            tx.rollback();
             log.info("no se encontró factura abierta, no se toma como error NoResultException");
         }catch(RuntimeException e){
-            tx.rollback();
             log.error("Error en la capa de servicios al devolver la factura.",e);
             throw new TpvException("Error en la capa de servicios al devolver la factura.");
         }finally{
@@ -219,5 +219,5 @@ public class FacturacionService  {
         }
     }
     
-    private 
+    //private 
 }

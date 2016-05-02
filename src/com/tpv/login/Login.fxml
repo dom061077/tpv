@@ -84,7 +84,7 @@
             </GridPane>
             <StackPane fx:id="stackPaneError" layoutX="20.0" prefHeight="200.0" prefWidth="800.0" styleClass="rounded_corner" visible="false">
                <children>
-                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                  <BorderPane focusTraversable="true" prefHeight="200.0" prefWidth="200.0">
                      <center>
                         <Label fx:id="labelError" styleClass="label_error" BorderPane.alignment="CENTER" />
                      </center>

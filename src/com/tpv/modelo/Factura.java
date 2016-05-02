@@ -86,7 +86,7 @@ public class Factura {
     @Enumerated(EnumType.STRING)
     private FacturaEstadoEnum estado;
     
-    @OneToMany(cascade = CascadeType.ALL,mappedBy="factura")
+    @OneToMany(cascade = CascadeType.ALL,mappedBy="factura", fetch = FetchType.EAGER)
     //@org.hibernate.annotations.IndexColumn(name = "BID_POSITION")
     private List<FacturaDetalle> detalle = new ArrayList<FacturaDetalle>();
     
@@ -333,6 +333,34 @@ public class Factura {
      */
     public void setCondicionIva(CondicionIva condicionIva) {
         this.condicionIva = condicionIva;
+    }
+
+    /**
+     * @return the neto
+     */
+    public BigDecimal getNeto() {
+        return neto;
+    }
+
+    /**
+     * @param neto the neto to set
+     */
+    public void setNeto(BigDecimal neto) {
+        this.neto = neto;
+    }
+
+    /**
+     * @return the iva
+     */
+    public BigDecimal getIva() {
+        return iva;
+    }
+
+    /**
+     * @param iva the iva to set
+     */
+    public void setIva(BigDecimal iva) {
+        this.iva = iva;
     }
 
     

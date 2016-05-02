@@ -120,6 +120,13 @@ public class LoginController {
                 
             });
             
+            labelError.setOnKeyPressed(keyEventLabelError -> {
+                if(keyEventLabelError.getCode() == KeyCode.ESCAPE){
+                    stackPaneError.setVisible(false);
+                    userName.requestFocus();
+                }
+            });
+            
             password.setOnKeyPressed(keyEvent->{
                 if(keyEvent.getCode() == KeyCode.ENTER){
                     Usuario usuario = null;
@@ -132,10 +139,15 @@ public class LoginController {
                         goToErrorButton.fire();
                     }                        
                     if(usuario!=null){
-                      modelTicket.setUsuario(usuario);
-                      buttonLogin.fire();
-                    }else
-                       ; 
+                        modelTicket.setUsuario(usuario);
+                        buttonLogin.fire();
+                    }else{
+                        labelError.setText("Usuario o contraseña incorrectos");
+                        
+                        stackPaneError.setVisible(true);
+                        labelError.requestFocus();
+                        
+                    }
                     
                 }
                 if(keyEvent.getCode() == KeyCode.ESCAPE){

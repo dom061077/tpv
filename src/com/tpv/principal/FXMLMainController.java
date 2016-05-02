@@ -447,8 +447,15 @@ public class FXMLMainController implements Initializable {
                 }
                 
                 if(keyEvent.getCode() == KeyCode.F7){
-                    modelTicket.setTipoTituloSupervisor(TipoTituloSupervisorEnum.CANCELAR_TICKET);
-                    habilitarSupervisorButton.fire();
+                    if(modelTicket.getIdFactura()!=null){
+                        modelTicket.setTipoTituloSupervisor(TipoTituloSupervisorEnum.CANCELAR_TICKET);
+                        habilitarSupervisorButton.fire();
+                    }else{
+                        log.error("No se puede cancelar un ticket que no está abierto");
+                        modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+                        modelTicket.setException(new TpvException("No se puede cancelar un ticket que no está abierto"));
+                        goToErrorButton.fire();
+                    }
                 }
                     
                 
@@ -821,6 +828,7 @@ public class FXMLMainController implements Initializable {
             facturaDetalle.setProducto(producto);
             facturaDetalle.setCantidad(item.getCantidad());
             facturaDetalle.setSubTotal(item.getSubTotal());
+            facturaDetalle.setDescuento(BigDecimal.ZERO);
             factura.getDetalle().add(facturaDetalle);
         });
         Factura facturaGuardada=null;
@@ -848,6 +856,10 @@ public class FXMLMainController implements Initializable {
         
         FacturaDetalle facturaDetalle = new FacturaDetalle();
         facturaDetalle.setCantidad(lineaTicketData.getCantidad());
+        facturaDetalle.setDescuento(BigDecimal.ZERO);
+        facturaDetalle.setImpuestoInterno(BigDecimal.ZERO);
+        facturaDetalle.setIva(BigDecimal.ZERO);
+        facturaDetalle.setNeto(BigDecimal.ZERO);
         facturaDetalle.setSubTotal(lineaTicketData.getSubTotal());
 
         try{

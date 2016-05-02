@@ -30,34 +30,28 @@ public class UsuarioService {
         EntityManager em = Connection.getEm();
         EntityTransaction tx = null;
         try{
-            tx = em.getTransaction();
-            tx.begin();
-            List usuarios = em.createQuery("FROM Usuario u WHERE u.nombre = :nombre").setParameter("nombre", nombre).getResultList();
-            usuario = (Usuario)usuarios.get(0); 
-            if (usuarios.size()>0) {
-                        usuario = (Usuario)usuarios.get(0);
-                if(usuario.getPassword().equals(password))
+//            tx = em.getTransaction();
+//            tx.begin();
+            usuario = (Usuario)em.createQuery("FROM Usuario u WHERE u.nombre = :nombre").setParameter("nombre", nombre).getSingleResult();
+            if(usuario.getPassword().compareTo(password)==0)
                     flagReturn=true;
-            }else
+            else
                 flagReturn=false;
-            tx.commit();
+//            tx.commit();
+        }catch(NoResultException e){
+            log.info("No se encontró ningún usuario con nombre: "+nombre+" password: "+password);
         }catch(RuntimeException e){
-            String fullTraceStr=e.getMessage()+"\n";
-            for(int i=0;i<=e.getStackTrace().length-1;i++){
-                fullTraceStr+="Clase: "+e.getStackTrace()[i].getClassName()+"; "
-                        +"Archivo: "+e.getStackTrace()[i].getFileName()+"; "
-                        +"Mètodo: "+e.getStackTrace()[i].getMethodName()+"; "
-                        +"Nro. Línea: "+e.getStackTrace()[i].getLineNumber()+"; "
-                        +"\n";
-            }
-            log.error(fullTraceStr);
+            log.error("Error en la capa de servicios al autenticar usuario.",e);
             throw new TpvException("Error en la capa de servicios al autenticar usuario.");
         }finally{
             em.clear();
         }
         
         //emf.close();
-        return usuario;
+        if(flagReturn)
+            return usuario;
+        else
+            return null;
     }
     
     public Checkout checkMac() throws TpvException{
