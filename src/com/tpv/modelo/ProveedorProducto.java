@@ -9,11 +9,16 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  *
  * @author daniel
  */
+
+@Entity
+@Table(name="proveedores_productos")
 public class ProveedorProducto {
     @Embeddable
     public static class Id implements Serializable{

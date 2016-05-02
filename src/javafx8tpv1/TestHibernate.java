@@ -7,6 +7,7 @@ package javafx8tpv1;
 
 import com.tpv.modelo.GrupoProducto;
 import com.tpv.modelo.ListaPrecioProducto;
+import com.tpv.modelo.Producto;
 import com.tpv.service.ImpresoraService;
 import com.tpv.util.Connection;
 import java.math.BigDecimal;
@@ -54,7 +55,31 @@ public class TestHibernate {
 
     }
     
+    static void nativeQuerySQL(){
+        
+        EntityManager em = Connection.getEm();
+        Query q = em.createNativeQuery(
+                    "select 1");
+                    //+" inner join grupoproductos gp on p.idGRUPOPRODUCTOS = gp.idGRUPOPRODUCTOS"
+                //, Producto.class);
+        List listado = null;
+        try{
+            listado = q.getResultList();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+//        listado.forEach(item ->{
+//            System.out.println("Codigo Producto: "+item.getCodigoProducto());
+//            System.out.println("Descripcion Producto: "+item.getDescripcion());
+//        });
+    }
+    
     public static void main(String[] args){
+        try{
+            Connection.initConnections();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
 //        EntityManager em = Connection.getEm();
 //        Query q = em.createQuery("FROM ListaPrecioProducto p");
 //        List<ListaPrecioProducto> lista=null;
@@ -100,7 +125,7 @@ public class TestHibernate {
 //        }catch(Exception e){
 //            e.printStackTrace();
 //        }
-        getMACAddress();
+        nativeQuerySQL();
     }
     
 }

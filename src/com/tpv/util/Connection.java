@@ -111,7 +111,7 @@ public class Connection {
             log.debug("EntityManager está cerrado");
             return false;
         }
-        EntityTransaction tx = em.getTransaction();
+        //EntityTransaction tx = em.getTransaction();
         //tx.begin();
         Query q = em.createNativeQuery("SELECT 1");
         try{
