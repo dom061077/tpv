@@ -46,6 +46,7 @@ public class FacturacionService  {
                 factura.setIvaBonificaTarjeta(BigDecimal.ZERO);
                 factura.setImpuestoInterno(BigDecimal.ZERO);
                 
+                
             }
             em.persist(factura);
             tx.commit();
@@ -62,14 +63,9 @@ public class FacturacionService  {
     public Factura getFactura(Long id) throws TpvException{
         Factura factura = null;
         EntityManager em = Connection.getEm();
-        EntityTransaction tx = null;
         try{
-            tx = em.getTransaction();
-            tx.begin();
             factura = em.find(Factura.class, id);
-            tx.commit();
         }catch(RuntimeException e){
-            tx.rollback();
             log.error("Error en la capa de servicios al devolver la factura.",e);
             throw new TpvException("Error en la capa de servicios al devolver la factura.");
         }finally{
@@ -187,33 +183,28 @@ public class FacturacionService  {
         Query q = em.createNativeQuery(
                 "SELECT DISTINCT c.* FROM facturasdetalle fd"
                 +" INNER JOIN productos p ON fd.idPRODUCTOS=p.idPRODUCTOS AND p.DISCONTINUADO = 0"
-                +" LEFT JOIN combosdetalle cd ON fd.idPRODUCTOS = cd.idPRODUCTOS"
-                +" LEFT JOIN combos c ON cd.idCOMBOS = c.idCOMBOS"
-                +" LEFT JOIN proveedores_productos pp ON fd.idPRODUCTOS = pp.idPRODUCTOS AND pp.idProveedor=cd.idProveedor"
+                +" LEFT JOIN combosgrupodetalle cgd ON fd.idPRODUCTOS = cgd.idproductos"
+                +" LEFT JOIN combosgrupo cg ON cgd.idCOMBOSGRUPO = cg.idCOMBOSGRUPO"
+                +" LEFT JOIN combos c ON cg.idCOMBOS = c.idCOMBOS"
+                +" LEFT JOIN proveedores_productos pp ON fd.idPRODUCTOS = pp.idPRODUCTOS AND pp.idProveedor=cgd.idProveedor"
                 +" LEFT JOIN ("
                 +"        SELECT gp.idGRUPOPRODUCTOS AS grupohijo"
                 +"                ,glevel1.idGRUPOPRODUCTOS AS grupopadre FROM grupoproductos gp"
                 +"        INNER JOIN grupoproductos glevel1 ON glevel1.idgrupoproductos = gp.padreid"
-                +" ) grupoprod ON p.idgrupoproductos = grupoprod.grupohijo AND(cd.idgrupoproductos = grupoprod.grupohijo OR "
-                +"                cd.idgrupoproductos = grupoprod.grupopadre)"
-                +" WHERE cd.idcombos IS NOT NULL AND fd.idFACTURAS = ?1 AND CONVERT(NOW(),DATE) BETWEEN c.FECHADESDE AND c.FECHAHASTA"
-                +" UNION "        
-                +"  SELECT DISTINCT c.* FROM facturasdetalle fd"
-                +"  INNER JOIN productos p ON fd.idPRODUCTOS=p.idPRODUCTOS AND p.DISCONTINUADO = 0"
-                +"  LEFT JOIN combosdetalleliberado cdl ON fd.idPRODUCTOS= cdl.idPRODUCTOS"
-                +"  LEFT JOIN combosliberado cl ON cdl.idCOMBOLIBERADO = cl.idCOMBOLIBERADO"
-                +"  LEFT JOIN combos c ON cl.idCOMBOS = c.idCOMBOS"
-                +"  WHERE c.idcombos IS NOT NULL AND fd.idFACTURAS = ?1 AND CONVERT(NOW(),DATE) BETWEEN c.FECHADESDE AND c.FECHAHASTA"
+                +" ) grupoprod ON p.idgrupoproductos = grupoprod.grupohijo AND(cgd.idgrupoproductos = grupoprod.grupohijo OR "
+                +"                cgd.idgrupoproductos = grupoprod.grupopadre)"
+                +" WHERE c.idcombos IS NOT NULL AND fd.idFACTURAS = ?1 AND CONVERT(NOW(),DATE) BETWEEN c.FECHADESDE AND c.FECHAHASTA"                
                 , Combo.class).setParameter(1, id);
         try{
             listadoCombos = q.getResultList();
             for(Iterator iterator = listadoCombos.iterator();iterator.hasNext();){
-                 
+                log.debug("Combos: "+((Combo)iterator.next()).getDescripcion());
             }
         }catch(RuntimeException e){    
-            log.error("Error al calcular el combo sin combinaciones para id factura: "+id,e);
+            e.printStackTrace();
+            //log.error("Error al calcular el combo sin combinaciones para id factura: ",e);
             throw new TpvException("Error al calcular combo para id factura: "
-                    +id+". "+e.getMessage());
+                    +". "+e.getMessage());
         }finally{
             em.clear();
         }

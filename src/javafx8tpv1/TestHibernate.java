@@ -5,9 +5,11 @@
  */
 package javafx8tpv1;
 
+import com.tpv.modelo.Combo;
 import com.tpv.modelo.GrupoProducto;
 import com.tpv.modelo.ListaPrecioProducto;
 import com.tpv.modelo.Producto;
+import com.tpv.service.FacturacionService;
 import com.tpv.service.ImpresoraService;
 import com.tpv.util.Connection;
 import java.math.BigDecimal;
@@ -59,27 +61,49 @@ public class TestHibernate {
         
         EntityManager em = Connection.getEm();
         Query q = em.createNativeQuery(
-                    "select 1");
-                    //+" inner join grupoproductos gp on p.idGRUPOPRODUCTOS = gp.idGRUPOPRODUCTOS"
-                //, Producto.class);
-        List listado = null;
+                "SELECT DISTINCT c.* FROM facturasdetalle fd"
+                +" INNER JOIN productos p ON fd.idPRODUCTOS=p.idPRODUCTOS AND p.DISCONTINUADO = 0"
+                +" LEFT JOIN combosgrupodetalle cgd ON fd.idPRODUCTOS = cgd.idproductos"
+                +" LEFT JOIN combosgrupo cg ON cgd.idCOMBOSGRUPO = cg.idCOMBOSGRUPO"
+                +" LEFT JOIN combos c ON cg.idCOMBOS = c.idCOMBOS"
+                +" LEFT JOIN proveedores_productos pp ON fd.idPRODUCTOS = pp.idPRODUCTOS AND pp.idProveedor=cgd.idProveedor"
+                +" LEFT JOIN ("
+                +"        SELECT gp.idGRUPOPRODUCTOS AS grupohijo"
+                +"                ,glevel1.idGRUPOPRODUCTOS AS grupopadre FROM grupoproductos gp"
+                +"        INNER JOIN grupoproductos glevel1 ON glevel1.idgrupoproductos = gp.padreid"
+                +" ) grupoprod ON p.idgrupoproductos = grupoprod.grupohijo AND(cgd.idgrupoproductos = grupoprod.grupohijo OR "
+                +"                cgd.idgrupoproductos = grupoprod.grupopadre)"
+                +" WHERE c.idcombos IS NOT NULL AND fd.idFACTURAS = ?1 AND CONVERT(NOW(),DATE) BETWEEN c.FECHADESDE AND c.FECHAHASTA"                
+                , Combo.class).setParameter(1, 303);
+                
+        List<Combo> listado = null;
         try{
             listado = q.getResultList();
         }catch(Exception e){
             e.printStackTrace();
         }
-//        listado.forEach(item ->{
-//            System.out.println("Codigo Producto: "+item.getCodigoProducto());
-//            System.out.println("Descripcion Producto: "+item.getDescripcion());
-//        });
+        listado.forEach(item ->{
+            System.out.println("Combos: "+item);
+        });
+    }
+    
+    static void recuperarCombos(){
+       FacturacionService facturaService = new FacturacionService();
+       try{
+            facturaService.calcularCombos(new Long(303));
+       }catch(Exception e){
+           e.printStackTrace();
+       }
     }
     
     public static void main(String[] args){
+        DOMConfigurator.configure(TestHibernate.class.getResource("log4j.xml"));
         try{
             Connection.initConnections();
         }catch(Exception e){
             e.printStackTrace();
         }
+        nativeQuerySQL();
 //        EntityManager em = Connection.getEm();
 //        Query q = em.createQuery("FROM ListaPrecioProducto p");
 //        List<ListaPrecioProducto> lista=null;
@@ -125,7 +149,8 @@ public class TestHibernate {
 //        }catch(Exception e){
 //            e.printStackTrace();
 //        }
-        nativeQuerySQL();
+        
+        
     }
     
 }

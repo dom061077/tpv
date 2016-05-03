@@ -51,10 +51,7 @@ public class ProductoService {
             
         }
         EntityManager em = Connection.getEm();
-        EntityTransaction tx = null;
         try{
-            tx = em.getTransaction();
-            tx.begin();
 
             if(filtro==null)
                 filtro="";
@@ -74,10 +71,8 @@ public class ProductoService {
                 productos = q.getResultList();
 
             }
-            tx.commit();
             log.info("Cantidad de productos recuperados: "+productos.size());
         }catch(RuntimeException e){
-            tx.rollback();
             log.error("Error en la capa de servicios al recuperar listado de productos",e);
             throw new TpvException("Error en la capa de servicios al recuperar listado de productos.");
         }finally{
@@ -89,21 +84,16 @@ public class ProductoService {
     public List getProductosPrecio(String filtro) throws TpvException{
         log.info("Capa de servicios, filtro: "+filtro);
         EntityManager em = Connection.getEm();
-        EntityTransaction tx = null;
         List<ListaPrecioProducto> productosPrecios=null;
         try{
-            tx = em.getTransaction();
-            tx.begin();
             Query q = em.createQuery("FROM ListaPrecioProducto lpp WHERE "
                     +" lpp.producto.descripcion like :filtro"
                 ).setParameter("filtro", "%"+filtro+"%");
             q.setFirstResult(0);
             q.setMaxResults(100);
             productosPrecios = q.getResultList();
-            tx.commit();
             log.info("Productos con precio recuperado: "+productosPrecios.size());
         }catch(RuntimeException e){
-            tx.rollback();
             log.error("Error en la capa de servicios al recuperar listado de productos",e);
             throw new TpvException("Error en la capa de servicios al recuperar listado de productos.");
         }finally{
@@ -118,16 +108,11 @@ public class ProductoService {
         log.info("Capa de servicios, filtro "+filtroCodigo);
         EntityManager em = Connection.getEm();
         Producto producto = null;
-        EntityTransaction tx = null;
         try{
-            tx = em.getTransaction();
             Query q = em.createQuery("FROM Producto p WHERE p.discontinuado = 0 and p.codigoProducto = :codigoProducto").setParameter("codigoProducto", filtroCodigo);
 
-            tx.begin();
             producto = (Producto)q.getSingleResult();
-            tx.commit();
         }catch(RuntimeException e){
-            tx.rollback();
             log.error("Error en la capa de servicios al recuperar un producto con codigo: "+filtroCodigo,e);
             throw new TpvException("Error en la capa de servicios al recuperar un producto con codigo: "+filtroCodigo);
         }finally{
@@ -155,25 +140,19 @@ public class ProductoService {
         ListaPrecioProducto lstPrecioProducto=null;
         BigDecimal precio = new BigDecimal(0);
         EntityManager em = Connection.getEm();
-        EntityTransaction tx = null;
         try{
             
-            tx = em.getTransaction();
-            tx.begin();
             Query q = em.createQuery("FROM ListaPrecioProducto lpp WHERE"
                     +" lpp.producto.discontinuado = 0"
                     +" and lpp.producto.codigoProducto = :codigoProducto").setParameter("codigoProducto", filtroCodigo);
                 lstPrecioProducto = (ListaPrecioProducto)q.getSingleResult();
                 precio = lstPrecioProducto.getPrecioFinal();
-            tx.commit();
             log.info("Precio recuperado, codigo de producto: "+filtroCodigo
                     +", precio "+precio);
         }catch(NoResultException e){    
-            tx.rollback();
             log.info("No se encontró el código de producto"+filtroCodigo+" en la lista de precios."
                 +" La excepción NoResultException no se considera como error");
         }catch(RuntimeException e){
-            tx.rollback();
             log.error("Error en la capa de servicios al recuperar precio del producto con código: "
                     +filtroCodigo,e);
             throw new TpvException("Error en la capa de servicios al recuperar precio del producto con código: "

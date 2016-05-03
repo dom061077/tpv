@@ -35,7 +35,7 @@ public class ComboGrupo {
     @Column(name = "PORCENTAJE")
     private BigDecimal porcentaje;
 
-    @Column(name = "monto")
+    @Column(name = "MONTO")
     private BigDecimal monto;
     
 
@@ -44,13 +44,6 @@ public class ComboGrupo {
     private Combo combo;  
     
     
-    @ManyToOne
-    @JoinColumn(name = "idPRODUCTOS", referencedColumnName = "idPRODUCTOS", nullable=true)
-    private Producto producto;  
-    
-    @ManyToOne
-    @JoinColumn(name = "idGRUPRODUCTOS", referencedColumnName = "idGRUPOPRODUCTOS", nullable=true)
-    private GrupoProducto grupoProducto;
 
     /**
      * @return the id
@@ -122,33 +115,6 @@ public class ComboGrupo {
         this.combo = combo;
     }
 
-    /**
-     * @return the producto
-     */
-    public Producto getProducto() {
-        return producto;
-    }
-
-    /**
-     * @param producto the producto to set
-     */
-    public void setProducto(Producto producto) {
-        this.producto = producto;
-    }
-
-    /**
-     * @return the grupoProducto
-     */
-    public GrupoProducto getGrupoProducto() {
-        return grupoProducto;
-    }
-
-    /**
-     * @param grupoProducto the grupoProducto to set
-     */
-    public void setGrupoProducto(GrupoProducto grupoProducto) {
-        this.grupoProducto = grupoProducto;
-    }
     
     
     

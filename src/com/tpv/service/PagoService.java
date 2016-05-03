@@ -26,11 +26,8 @@ public class PagoService {
     public FormaPago getFormaPago(int codigoPago) throws TpvException{
         log.info("Capa de servicios, parametro de busqueda: "+codigoPago);
         EntityManager em = Connection.getEm();
-        EntityTransaction tx = null;
         FormaPago formaPago = null;        
-        tx = em.getTransaction();
         try{
-            tx.begin();
             Query q = em.createQuery("FROM FormaPago fp WHERE fp.id = :id").setParameter("id", codigoPago);
             formaPago = (FormaPago)q.getSingleResult();
             log.info("Forma de pago recuperada: "+formaPago.toString());
