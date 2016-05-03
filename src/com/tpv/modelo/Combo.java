@@ -5,12 +5,18 @@
  */
 package com.tpv.modelo;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import org.hibernate.annotations.Formula;
 
 /**
@@ -22,7 +28,6 @@ import org.hibernate.annotations.Formula;
 @Table(name="combos")
 public class Combo {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "idCOMBOS")
     private Long id;
 
@@ -34,10 +39,11 @@ public class Combo {
             
     @Column(name = "FECHAHASTA")
     private java.sql.Date fechaHasta;
-            
-    @Formula("(SELECT current_date())")
-    private java.sql.Date fechaHoy;
+    
+    @OneToMany(cascade = CascadeType.ALL,mappedBy="combo")
+    private List<ComboGrupo> combosGrupo = new ArrayList<ComboGrupo>();
 
+    
     /**
      * @return the id
      */
@@ -95,18 +101,19 @@ public class Combo {
     }
 
     /**
-     * @return the fechaHoy
+     * @return the combosGrupo
      */
-    public java.sql.Date getFechaHoy() {
-        return fechaHoy;
+    public List<ComboGrupo> getCombosGrupo() {
+        return combosGrupo;
     }
 
     /**
-     * @param fechaHoy the fechaHoy to set
+     * @param combosGrupo the combosGrupo to set
      */
-    public void setFechaHoy(java.sql.Date fechaHoy) {
-        this.fechaHoy = fechaHoy;
+    public void setCombosGrupo(List<ComboGrupo> combosGrupo) {
+        this.combosGrupo = combosGrupo;
     }
+
     
     
     

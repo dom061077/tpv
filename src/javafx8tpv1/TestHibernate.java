@@ -76,16 +76,22 @@ public class TestHibernate {
                 +" WHERE c.idcombos IS NOT NULL AND fd.idFACTURAS = ?1 AND CONVERT(NOW(),DATE) BETWEEN c.FECHADESDE AND c.FECHAHASTA"                
                 , Combo.class).setParameter(1, 303);
                 
-        List<Combo> listado = null;
+        List listado = null;
         try{
-            listado = q.getResultList();
+            Combo combo = (Combo)q.getSingleResult();
+            System.out.println("--------------------------------------");
+            System.out.println("COMBO: "+combo.getDescripcion());
+            System.out.println("FECHA desde: "+combo.getFechaDesde());
+            System.out.println("FECHA hasta: "+combo.getFechaHasta());
+            combo.getCombosGrupo().forEach(item->{
+                System.out.println("ITEM: "+item.getPorcentaje());
+            });
+            
         }catch(Exception e){
             e.printStackTrace();
         }
-        listado.forEach(item ->{
-            System.out.println("Combos: "+item);
-        });
     }
+    
     
     static void recuperarCombos(){
        FacturacionService facturaService = new FacturacionService();
@@ -94,6 +100,7 @@ public class TestHibernate {
        }catch(Exception e){
            e.printStackTrace();
        }
+        
     }
     
     public static void main(String[] args){
@@ -103,7 +110,9 @@ public class TestHibernate {
         }catch(Exception e){
             e.printStackTrace();
         }
-        nativeQuerySQL();
+        recuperarCombos();
+        //nativeQuerySQL();
+        //recuperarCombos();
 //        EntityManager em = Connection.getEm();
 //        Query q = em.createQuery("FROM ListaPrecioProducto p");
 //        List<ListaPrecioProducto> lista=null;

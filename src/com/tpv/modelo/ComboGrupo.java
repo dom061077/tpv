@@ -6,6 +6,8 @@
 package com.tpv.modelo;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -29,7 +32,7 @@ public class ComboGrupo {
     @Column(name = "idCOMBOSGRUPO")
     private Long id;
     
-    @Column(name = "CANTIDADPRODUCTOS")
+    @Column(name = "CANTIDADPRODUCTO")
     private BigDecimal cantidad;
             
     @Column(name = "PORCENTAJE")
@@ -43,6 +46,8 @@ public class ComboGrupo {
     @JoinColumn(name = "idCOMBOS", referencedColumnName = "idCOMBOS", nullable=true)
     private Combo combo;  
     
+    @OneToMany(cascade = CascadeType.ALL,mappedBy="comboGrupo")
+    private List<ComboGrupoDetalle> gruposDetalle = new ArrayList<ComboGrupoDetalle>();
     
 
     /**
@@ -113,6 +118,20 @@ public class ComboGrupo {
      */
     public void setCombo(Combo combo) {
         this.combo = combo;
+    }
+
+    /**
+     * @return the gruposDetalle
+     */
+    public List<ComboGrupoDetalle> getGruposDetalle() {
+        return gruposDetalle;
+    }
+
+    /**
+     * @param gruposDetalle the gruposDetalle to set
+     */
+    public void setGruposDetalle(List<ComboGrupoDetalle> gruposDetalle) {
+        this.gruposDetalle = gruposDetalle;
     }
 
     
