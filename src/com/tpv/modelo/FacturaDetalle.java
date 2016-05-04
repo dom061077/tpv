@@ -15,7 +15,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PostLoad;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  *
@@ -51,7 +53,8 @@ public class FacturaDetalle {
     @Column(name = "TOTAL")
     private BigDecimal subTotal;
     
-    
+    @Transient
+    private int cantidadParaCalculos;
     
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "idFACTURAS", referencedColumnName = "idFACTURAS", nullable=false)
@@ -63,8 +66,12 @@ public class FacturaDetalle {
     private Producto producto;
     
 
-    
 
+    @PostLoad
+    protected void initCantidadParaCalculos(){
+        cantidadParaCalculos = cantidad.intValue();
+    }
+    
     /**
      * @return the id
      */
@@ -203,6 +210,24 @@ public class FacturaDetalle {
      */
     public void setNeto(BigDecimal neto) {
         this.neto = neto;
+    }
+
+    /**
+     * @return the cantidadParaCalculos
+     */
+    public int getCantidadParaCalculos() {
+        return cantidadParaCalculos;
+    }
+
+    /**
+     * @param cantidadParaCalculos the cantidadParaCalculos to set
+     */
+    public void setCantidadParaCalculos(int cantidadParaCalculos) {
+        this.cantidadParaCalculos = cantidadParaCalculos;
+    }
+    
+    public void decrementarCantidadParaCalculos(int decremento){
+        this.cantidadParaCalculos-=decremento;
     }
     
     

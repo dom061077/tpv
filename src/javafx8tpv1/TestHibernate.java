@@ -6,6 +6,7 @@
 package javafx8tpv1;
 
 import com.tpv.modelo.Combo;
+import com.tpv.modelo.Factura;
 import com.tpv.modelo.GrupoProducto;
 import com.tpv.modelo.ListaPrecioProducto;
 import com.tpv.modelo.Producto;
@@ -103,14 +104,30 @@ public class TestHibernate {
         
     }
     
+    static void mostrarFacturaDetalle(){
+        EntityManager em = Connection.getEm();
+        try{
+            
+            Factura factura = em.find(Factura.class, new Long(303));
+            factura.getDetalle().forEach(item ->{
+                System.out.println("Producto: "+item.getProducto().getDescripcion());
+                System.out.println("Cantidad: "+item.getCantidad());
+                System.out.println("Cantidad para calculos: "+item.getCantidadParaCalculos());
+            });
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+    
     public static void main(String[] args){
-        DOMConfigurator.configure(TestHibernate.class.getResource("log4j.xml"));
+        //DOMConfigurator.configure(TestHibernate.class.getResource("log4j.xml"));
         try{
             Connection.initConnections();
         }catch(Exception e){
             e.printStackTrace();
         }
-        recuperarCombos();
+        mostrarFacturaDetalle();
+        //recuperarCombos();
         //nativeQuerySQL();
         //recuperarCombos();
 //        EntityManager em = Connection.getEm();

@@ -7,6 +7,8 @@ package com.tpv.service;
 
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Combo;
+import com.tpv.modelo.ComboGrupo;
+import com.tpv.modelo.ComboGrupoDetalle;
 import com.tpv.modelo.CondicionIva;
 import com.tpv.modelo.Factura;
 import com.tpv.modelo.FacturaDetalle;
@@ -197,8 +199,40 @@ public class FacturacionService  {
                 , Combo.class).setParameter(1, id);
         try{
             listadoCombos = q.getResultList();
-            for(Iterator iterator = listadoCombos.iterator();iterator.hasNext();){
-                log.debug("Combos: "+((Combo)iterator.next()).getDescripcion());
+            int cantidadGrupo;
+            BigDecimal total;
+            boolean hayCombo;
+            for(Iterator itCombo = listadoCombos.iterator();itCombo.hasNext();){
+                Combo combo = (Combo)itCombo.next();
+                hayCombo = true;
+                for(Iterator itGrupo = combo.getCombosGrupo().iterator();itGrupo.hasNext();){
+                    ComboGrupo grupo = (ComboGrupo)itGrupo.next();
+                    cantidadGrupo = 0;
+                    total = BigDecimal.ZERO;
+                    for(Iterator itDetFact = factura.getDetalle().iterator();itDetFact.hasNext();){
+                        FacturaDetalle facDet = (FacturaDetalle)itDetFact.next();
+                        for(Iterator itDetalle = grupo.getGruposDetalle().iterator();itDetalle.hasNext();){
+                            ComboGrupoDetalle gDetalle = (ComboGrupoDetalle)itDetalle.next();
+                            if(facDet.getCantidad().compareTo(BigDecimal.ZERO)<0)
+                                continue;
+                            if(gDetalle.getProducto()!=null){
+                                if(gDetalle.getProducto().equals(facDet.getProducto())){
+                                    if(gDetalle.getProveedor()!=null){
+                                        ProveedorProducto provProd = em.find(null, gDetalle)
+                                    }
+                                    if(facDet.getCantidadParaCalculos()>=grupo.getCantidad().intValue()){
+                                        facDet.decrementarCantidadParaCalculos(grupo.getCantidad().intValue());
+                                        total= total.add(facDet.getPrecioUnitario().multiply(grupo.getCantidad()));
+                                    }
+                                }
+                            }else{
+                                    
+                                
+                            }
+                            
+                        }
+                    }
+                }
             }
         }catch(RuntimeException e){    
             e.printStackTrace();
