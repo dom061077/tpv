@@ -13,6 +13,8 @@ import com.tpv.modelo.CondicionIva;
 import com.tpv.modelo.Factura;
 import com.tpv.modelo.FacturaDetalle;
 import com.tpv.modelo.Producto;
+import com.tpv.modelo.Proveedor;
+import com.tpv.modelo.ProveedorProducto;
 import com.tpv.modelo.enums.FacturaEstadoEnum;
 import com.tpv.principal.LineaTicketData;
 import com.tpv.util.Connection;
@@ -176,6 +178,12 @@ public class FacturacionService  {
 //        em.clear();
 //    }
     
+    private boolean tieneEseProveedor(ComboGrupoDetalle gDetalle,FacturaDetalle factDetalle){
+        if(factDetalle.getProducto().getProveedores().contains(gDetalle.getProveedor()))
+            return true;
+        return false;
+    }
+    
     public void calcularCombos(Long id) throws TpvException{
         log.info("Calculando combos para id factura: "+id);
         List<Combo> listadoCombos = null;
@@ -218,15 +226,20 @@ public class FacturacionService  {
                             if(gDetalle.getProducto()!=null){
                                 if(gDetalle.getProducto().equals(facDet.getProducto())){
                                     if(gDetalle.getProveedor()!=null){
-                                        ProveedorProducto provProd = em.find(null, gDetalle)
-                                    }
-                                    if(facDet.getCantidadParaCalculos()>=grupo.getCantidad().intValue()){
-                                        facDet.decrementarCantidadParaCalculos(grupo.getCantidad().intValue());
-                                        total= total.add(facDet.getPrecioUnitario().multiply(grupo.getCantidad()));
+                                        if(tieneEseProveedor(gDetalle, facDet)){
+                                            facDet.decrementarCantidadParaCalculos(grupo.getCantidad().intValue());
+                                            total = total.add(facDet.getPrecioUnitario().multiply(grupo.getCantidad()));
+                                        }
+                                            
+                                    }else{
+                                            facDet.decrementarCantidadParaCalculos(grupo.getCantidad().intValue());
+                                            total = total.add(facDet.getPrecioUnitario().multiply(grupo.getCantidad()));
                                     }
                                 }
                             }else{
-                                    
+//                                if(gDetalle.getGrupoProducto()){
+//                                    
+//                                }
                                 
                             }
                             

@@ -119,6 +119,43 @@ public class TestHibernate {
         }
     }
     
+    static void getProveedorFromProductos(){
+        EntityManager em = Connection.getEm();
+        try{
+            Query q = em.createQuery("FROM Productos p");
+            List<Producto> productos = q.getResultList();
+            productos.forEach(item->{
+                System.out.println("Producto: "+item.getDescripcion());
+                item.getProveedores().forEach(prov_prod->{
+                    //System.out.println("             Proveedor: "+prov_prod.getId().getProveedor().getRazonSocial());
+                });
+            });
+            
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        
+    }
+    
+    static void probarRecursivadaGrupoProducto(){
+        EntityManager em = Connection.getEm();
+        try{
+            GrupoProducto gp = em.find(GrupoProducto.class, new Long(1));
+            Query q = em.createQuery("FROM Producto p ");
+            List<Producto> productos = q.getResultList();
+            productos.forEach(item->{
+                if(item.tieneEsteGrupo(gp)){
+                    System.out.println("PRODUCTO: "+item.getDescripcion()
+                        +" - Grupo Producto: "+item.getGrupoProducto().getDescripcion());
+                    
+                }
+            });
+        }catch(Exception e){
+           e.printStackTrace();
+        }
+    }
+            
+    
     public static void main(String[] args){
         //DOMConfigurator.configure(TestHibernate.class.getResource("log4j.xml"));
         try{
@@ -126,7 +163,8 @@ public class TestHibernate {
         }catch(Exception e){
             e.printStackTrace();
         }
-        mostrarFacturaDetalle();
+        probarRecursivadaGrupoProducto();
+        //mostrarFacturaDetalle();
         //recuperarCombos();
         //nativeQuerySQL();
         //recuperarCombos();

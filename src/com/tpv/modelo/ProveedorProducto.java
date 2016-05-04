@@ -6,10 +6,14 @@
 package com.tpv.modelo;
 
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.Table;
 
 /**
@@ -20,6 +24,35 @@ import javax.persistence.Table;
 @Entity
 @Table(name="proveedores_productos")
 public class ProveedorProducto {
+
+    /**
+     * @return the id
+     */
+    public Id getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(Id id) {
+        this.id = id;
+    }
+
+    /**
+     * @return the producto
+     */
+    public Producto getProducto() {
+        return producto;
+    }
+
+    /**
+     * @param producto the producto to set
+     */
+    public void setProducto(Producto producto) {
+        this.producto = producto;
+    }
+
     @Embeddable
     public static class Id implements Serializable{
         @Column(name = "idProveedor")
@@ -43,5 +76,11 @@ public class ProveedorProducto {
 
     @EmbeddedId
     private Id id = new Id();
+    
+    @MapsId("idPRODUCTOS")
+    @ManyToOne
+    private Producto producto;
+    
+    
     
 }

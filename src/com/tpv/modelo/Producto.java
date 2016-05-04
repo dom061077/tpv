@@ -6,12 +6,14 @@
 package com.tpv.modelo;
 
 import java.math.BigDecimal;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -43,6 +45,13 @@ public class Producto {
             ,referencedColumnName="idVALORESIMPOSITIVOS",nullable=false)
     private ValorImpositivo valorImpositivo;
     
+    @ManyToOne
+    @JoinColumn(name = "idGRUPOPRODUCTOS",
+            referencedColumnName="idGRUPOPRODUCTOS",nullable=false)
+    private GrupoProducto grupoProducto;
+    
+    @OneToMany(mappedBy = "producto")
+    private List<ProveedorProducto> proveedores;
     
 
     /**
@@ -156,6 +165,41 @@ public class Producto {
      */
     public void setImpuestoInterno(BigDecimal impuestoInterno) {
         this.impuestoInterno = impuestoInterno;
+    }
+
+    /**
+     * @return the proveedores
+     */
+    public List<ProveedorProducto> getProveedores() {
+        return proveedores;
+    }
+
+    /**
+     * @param proveedores the proveedores to set
+     */
+    public void setProveedores(List<ProveedorProducto> proveedores) {
+        this.proveedores = proveedores;
+    }
+
+    /**
+     * @return the grupoProducto
+     */
+    public GrupoProducto getGrupoProducto() {
+        return grupoProducto;
+    }
+
+    /**
+     * @param grupoProducto the grupoProducto to set
+     */
+    public void setGrupoProducto(GrupoProducto grupoProducto) {
+        this.grupoProducto = grupoProducto;
+    }
+    
+    public boolean tieneEsteGrupo(GrupoProducto gp){
+        if(gp.equals(grupoProducto))
+            return true;
+        return tieneEsteGrupo(grupoProducto.getGrupoPadre());
+        
     }
          
 }
