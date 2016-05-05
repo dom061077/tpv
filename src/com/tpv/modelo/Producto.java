@@ -200,8 +200,8 @@ public class Producto {
             return false;
         if(gp.equals(grupoProducto))
             return true;
-        tieneEsteGrupo(grupoProducto.getGrupoPadre());        
-        LA RECURSIVIDAD NO FUNCIONA
+        if(gp.equals(grupoProducto.getGrupoPadre()))
+            return true;
         return false;
     }
          
