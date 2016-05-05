@@ -141,7 +141,8 @@ public class TestHibernate {
         EntityManager em = Connection.getEm();
         try{
             GrupoProducto gp = em.find(GrupoProducto.class, new Long(1));
-            Query q = em.createQuery("FROM Producto p ");
+            System.out.println("Grupo: "+gp.getDescripcion());
+            Query q = em.createQuery("FROM Producto p");
             List<Producto> productos = q.getResultList();
             productos.forEach(item->{
                 if(item.tieneEsteGrupo(gp)){

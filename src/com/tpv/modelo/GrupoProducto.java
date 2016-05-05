@@ -33,7 +33,7 @@ public class GrupoProducto {
     private String descripcion;
     
     @ManyToOne
-    @JoinColumn(name = "PadreID", referencedColumnName = "idGRUPOPRODUCTOS", nullable=false)
+    @JoinColumn(name = "PadreID", referencedColumnName = "idGRUPOPRODUCTOS", nullable=true)
     private GrupoProducto grupoPadre;
     
     @OneToMany(mappedBy="grupoPadre")

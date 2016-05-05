@@ -196,10 +196,13 @@ public class Producto {
     }
     
     public boolean tieneEsteGrupo(GrupoProducto gp){
+        if(gp==null)
+            return false;
         if(gp.equals(grupoProducto))
             return true;
-        return tieneEsteGrupo(grupoProducto.getGrupoPadre());
-        
+        tieneEsteGrupo(grupoProducto.getGrupoPadre());        
+        LA RECURSIVIDAD NO FUNCIONA
+        return false;
     }
          
 }
