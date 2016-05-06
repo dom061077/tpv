@@ -53,6 +53,20 @@ public class ProveedorProducto {
         this.producto = producto;
     }
 
+    /**
+     * @return the proveedor
+     */
+    public Proveedor getProveedor() {
+        return proveedor;
+    }
+
+    /**
+     * @param proveedor the proveedor to set
+     */
+    public void setProveedor(Proveedor proveedor) {
+        this.proveedor = proveedor;
+    }
+
     @Embeddable
     public static class Id implements Serializable{
         @Column(name = "idProveedor")
@@ -79,8 +93,12 @@ public class ProveedorProducto {
     
     @MapsId("idPRODUCTOS")
     @ManyToOne
+    @JoinColumn(name = "idPRODUCTOS", referencedColumnName = "idPRODUCTOS", nullable=false)
     private Producto producto;
     
-    
+    @MapsId("idPROVEEDOR")
+    @ManyToOne
+    @JoinColumn(name = "idProveedor", referencedColumnName = "idProveedor", nullable=false)
+    private Proveedor proveedor;    
     
 }

@@ -17,7 +17,7 @@ import javax.persistence.Table;
  * @author daniel
  */
 @Entity
-@Table(name="proveedor")
+@Table(name="proveedores")
 public class Proveedor {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

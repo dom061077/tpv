@@ -50,7 +50,7 @@ public class Producto {
             referencedColumnName="idGRUPOPRODUCTOS",nullable=false)
     private GrupoProducto grupoProducto;
     
-    @OneToMany(mappedBy = "producto")
+    @OneToMany(mappedBy="producto")
     private List<ProveedorProducto> proveedores;
     
 
@@ -170,16 +170,16 @@ public class Producto {
     /**
      * @return the proveedores
      */
-    public List<ProveedorProducto> getProveedores() {
-        return proveedores;
-    }
-
-    /**
-     * @param proveedores the proveedores to set
-     */
-    public void setProveedores(List<ProveedorProducto> proveedores) {
-        this.proveedores = proveedores;
-    }
+//    public List<ProveedorProducto> getProveedores() {
+//        return proveedores;
+//    }
+//
+//    /**
+//     * @param proveedores the proveedores to set
+//     */
+//    public void setProveedores(List<ProveedorProducto> proveedores) {
+//        this.proveedores = proveedores;
+//    }
 
     /**
      * @return the grupoProducto
@@ -195,6 +195,12 @@ public class Producto {
         this.grupoProducto = grupoProducto;
     }
     
+    public boolean tieneEsteProveedor(Proveedor prov){
+        if(getProveedores().contains(prov))
+            return true;
+        return false;
+    }
+    
     public boolean tieneEsteGrupo(GrupoProducto gp){
         if(gp==null)
             return false;
@@ -203,6 +209,20 @@ public class Producto {
         if(gp.equals(grupoProducto.getGrupoPadre()))
             return true;
         return false;
+    }
+
+    /**
+     * @return the proveedores
+     */
+    public List<ProveedorProducto> getProveedores() {
+        return proveedores;
+    }
+
+    /**
+     * @param proveedores the proveedores to set
+     */
+    public void setProveedores(List<ProveedorProducto> proveedores) {
+        this.proveedores = proveedores;
     }
          
 }

@@ -10,6 +10,7 @@ import com.tpv.modelo.Factura;
 import com.tpv.modelo.GrupoProducto;
 import com.tpv.modelo.ListaPrecioProducto;
 import com.tpv.modelo.Producto;
+import com.tpv.modelo.ProveedorProducto;
 import com.tpv.service.FacturacionService;
 import com.tpv.service.ImpresoraService;
 import com.tpv.util.Connection;
@@ -122,12 +123,12 @@ public class TestHibernate {
     static void getProveedorFromProductos(){
         EntityManager em = Connection.getEm();
         try{
-            Query q = em.createQuery("FROM Productos p");
-            List<Producto> productos = q.getResultList();
+            Query q = em.createQuery("FROM Producto p ORDER BY p.descripcion");
+            List<Producto> productos = q.setMaxResults(200).getResultList();
             productos.forEach(item->{
                 System.out.println("Producto: "+item.getDescripcion());
                 item.getProveedores().forEach(prov_prod->{
-                    //System.out.println("             Proveedor: "+prov_prod.getId().getProveedor().getRazonSocial());
+                    System.out.println("             Proveedor: "+prov_prod.getProveedor().getRazonSocial());
                 });
             });
             
@@ -164,7 +165,8 @@ public class TestHibernate {
         }catch(Exception e){
             e.printStackTrace();
         }
-        probarRecursivadaGrupoProducto();
+        getProveedorFromProductos();
+        //probarRecursivadaGrupoProducto();
         //mostrarFacturaDetalle();
         //recuperarCombos();
         //nativeQuerySQL();
