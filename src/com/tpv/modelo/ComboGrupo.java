@@ -18,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  *
@@ -33,7 +34,7 @@ public class ComboGrupo {
     private Long id;
     
     @Column(name = "CANTIDADPRODUCTO")
-    private BigDecimal cantidad;
+    private int cantidad;
             
     @Column(name = "PORCENTAJE")
     private BigDecimal porcentaje;
@@ -41,6 +42,11 @@ public class ComboGrupo {
     @Column(name = "MONTO")
     private BigDecimal monto;
     
+    @Transient
+    private int cantidadAux;
+    
+    @Transient
+    private BigDecimal precioUnitarioEnCombo;
 
     @ManyToOne
     @JoinColumn(name = "idCOMBOS", referencedColumnName = "idCOMBOS", nullable=true)
@@ -67,14 +73,14 @@ public class ComboGrupo {
     /**
      * @return the cantidad
      */
-    public BigDecimal getCantidad() {
+    public int getCantidad() {
         return cantidad;
     }
 
     /**
      * @param cantidad the cantidad to set
      */
-    public void setCantidad(BigDecimal cantidad) {
+    public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
     }
 
@@ -134,7 +140,44 @@ public class ComboGrupo {
         this.gruposDetalle = gruposDetalle;
     }
 
-    
+    /**
+     * @return the cantidadAux
+     */
+    public int getCantidadAux() {
+        return cantidadAux;
+    }
+
+    /**
+     * @param cantidadAux the cantidadAux to set
+     */
+    public void setCantidadAux(int cantidadAux) {
+        this.cantidadAux = cantidadAux;
+    }
+
+    public void incCantidadAux(int inc){
+        this.cantidadAux += inc;
+    }
+
+
+    public int getCantidadGrupos(){
+        if(cantidadAux<cantidad)
+            return 0;
+        return cantidadAux/cantidad;
+    }
+
+    /**
+     * @return the precioUnitarioEnCombo
+     */
+    public BigDecimal getPrecioUnitarioEnCombo() {
+        return precioUnitarioEnCombo;
+    }
+
+    /**
+     * @param precioUnitarioEnCombo the precioUnitarioEnCombo to set
+     */
+    public void setPrecioUnitarioEnCombo(BigDecimal precioUnitarioEnCombo) {
+        this.precioUnitarioEnCombo = precioUnitarioEnCombo;
+    }
     
     
 }

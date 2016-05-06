@@ -203,16 +203,12 @@ public class FacturacionService  {
                 , Combo.class).setParameter(1, id);
         try{
             listadoCombos = q.getResultList();
-            int cantidadGrupo;
-            BigDecimal total;
             boolean hayCombo;
             for(Iterator itCombo = listadoCombos.iterator();itCombo.hasNext();){
                 Combo combo = (Combo)itCombo.next();
                 hayCombo = true;
                 for(Iterator itGrupo = combo.getCombosGrupo().iterator();itGrupo.hasNext();){
                     ComboGrupo grupo = (ComboGrupo)itGrupo.next();
-                    cantidadGrupo = 0;
-                    total = BigDecimal.ZERO;
                     for(Iterator itDetFact = factura.getDetalle().iterator();itDetFact.hasNext();){
                         FacturaDetalle facDet = (FacturaDetalle)itDetFact.next();
                         for(Iterator itDetalle = grupo.getGruposDetalle().iterator();itDetalle.hasNext();){
@@ -223,13 +219,11 @@ public class FacturacionService  {
                                 if(gDetalle.getProducto().equals(facDet.getProducto())){
                                     if(gDetalle.getProveedor()!=null){
                                         if(facDet.getProducto().tieneEsteProveedor(gDetalle.getProveedor())){
-                                            facDet.decrementarCantidadParaCalculos(grupo.getCantidad().intValue());
-                                            total = total.add(facDet.getPrecioUnitario().multiply(grupo.getCantidad()));
+                                            grupo.incCantidadAux(grupo.getCantidad());
                                         }
                                             
                                     }else{
-                                            facDet.decrementarCantidadParaCalculos(grupo.getCantidad().intValue());
-                                            total = total.add(facDet.getPrecioUnitario().multiply(grupo.getCantidad()));
+                                            grupo.incCantidadAux(grupo.getCantidad());
                                     }
                                 }
                             }else{
@@ -237,16 +231,14 @@ public class FacturacionService  {
                                     if(facDet.getProducto().tieneEsteGrupo(gDetalle.getGrupoProducto())){
                                         if(gDetalle.getProveedor()!=null){
                                             if(facDet.getProducto().tieneEsteProveedor(gDetalle.getProveedor())){
-                                                facDet.decrementarCantidadParaCalculos(grupo.getCantidad().intValue());
-                                                total = total.add(facDet.getPrecioUnitario().multiply(grupo.getCantidad()));
+                                                grupo.incCantidadAux(grupo.getCantidad());
                                             }
                                         }
                                     }
                                 }else{
                                     if(gDetalle.getProveedor()!=null){
                                         if(facDet.getProducto().tieneEsteProveedor(gDetalle.getProveedor())){
-                                                facDet.decrementarCantidadParaCalculos(grupo.getCantidad().intValue());
-                                                total = total.add(facDet.getPrecioUnitario().multiply(grupo.getCantidad()));
+                                            grupo.incCantidadAux(grupo.getCantidad());
                                         }
                                     }
                                 }

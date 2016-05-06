@@ -5,6 +5,7 @@
  */
 package com.tpv.modelo;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -44,6 +45,11 @@ public class Combo {
     private List<ComboGrupo> combosGrupo = new ArrayList<ComboGrupo>();
 
     
+    @Transient
+    private BigDecimal totalBonificacion;
+    
+    @Transient
+    private int cantidadCombosEncontrados;
     /**
      * @return the id
      */
@@ -115,7 +121,39 @@ public class Combo {
     }
 
     
+
+    /**
+     * @return the totalBonificacion
+     */
+    public BigDecimal getTotalBonificacion() {
+        return totalBonificacion;
+    }
+
+    /**
+     * @param totalBonificacion the totalBonificacion to set
+     */
+    public void setTotalBonificacion(BigDecimal totalBonificacion) {
+        this.totalBonificacion = totalBonificacion;
+    }
+
+    /**
+     * @return the cantidadCombosEncontrados
+     */
+    public int getCantidadCombosEncontrados() {
+        return cantidadCombosEncontrados;
+    }
+
+    /**
+     * @param cantidadCombosEncontrados the cantidadCombosEncontrados to set
+     */
+    public void setCantidadCombosEncontrados(int cantidadCombosEncontrados) {
+        this.cantidadCombosEncontrados = cantidadCombosEncontrados;
+    }
     
+    public boolean tieneCombos(){
+        //if
+        return false;
+    }
     
     
 }

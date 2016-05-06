@@ -32,6 +32,7 @@ public class GrupoProducto {
     @Column(name = "DESCRIPCION")
     private String descripcion;
     
+    
     @ManyToOne
     @JoinColumn(name = "PadreID", referencedColumnName = "idGRUPOPRODUCTOS", nullable=true)
     private GrupoProducto grupoPadre;

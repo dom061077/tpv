@@ -113,7 +113,7 @@ public class TestHibernate {
             factura.getDetalle().forEach(item ->{
                 System.out.println("Producto: "+item.getProducto().getDescripcion());
                 System.out.println("Cantidad: "+item.getCantidad());
-                System.out.println("Cantidad para calculos: "+item.getCantidadParaCalculos());
+                System.out.println("Cantidad para calculos: "+item.getCantidadAuxCombo());
             });
         }catch(Exception e){
             e.printStackTrace();
@@ -159,13 +159,16 @@ public class TestHibernate {
             
     
     public static void main(String[] args){
+        int a=5,b=2;
+        System.out.println("Resultado division: "+5/2);
         //DOMConfigurator.configure(TestHibernate.class.getResource("log4j.xml"));
-        try{
-            Connection.initConnections();
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        getProveedorFromProductos();
+//        try{
+//            Connection.initConnections();
+//        }catch(Exception e){
+//            e.printStackTrace();
+//        }
+//        getProveedorFromProductos();
+        
         //probarRecursivadaGrupoProducto();
         //mostrarFacturaDetalle();
         //recuperarCombos();

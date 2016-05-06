@@ -7,6 +7,7 @@ package com.tpv.modelo;
 //http://vladmihalcea.com/2015/03/05/a-beginners-guide-to-jpa-and-hibernate-cascade-types/
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -54,7 +55,7 @@ public class FacturaDetalle {
     private BigDecimal subTotal;
     
     @Transient
-    private int cantidadParaCalculos;
+    private int cantidadAuxCombo;
     
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "idFACTURAS", referencedColumnName = "idFACTURAS", nullable=false)
@@ -68,8 +69,8 @@ public class FacturaDetalle {
 
 
     @PostLoad
-    protected void initCantidadParaCalculos(){
-        cantidadParaCalculos = cantidad.intValue();
+    protected void intCantidadAuxCombo(){
+        setCantidadAuxCombo(cantidad.intValue());
     }
     
     /**
@@ -211,26 +212,30 @@ public class FacturaDetalle {
     public void setNeto(BigDecimal neto) {
         this.neto = neto;
     }
+    
+    public void decrementarCantidadAuxCombo(int cantidad){
+        this.setCantidadAuxCombo(this.getCantidadAuxCombo() - cantidad);
+    }
+    
+
+    @Transient
+    public BigDecimal getSubTotal(int cantidad){
+        return this.precioUnitario.multiply(new BigDecimal(cantidad));
+    }
 
     /**
-     * @return the cantidadParaCalculos
+     * @return the cantidadAuxCombo
      */
-    public int getCantidadParaCalculos() {
-        return cantidadParaCalculos;
+    public int getCantidadAuxCombo() {
+        return cantidadAuxCombo;
     }
 
     /**
-     * @param cantidadParaCalculos the cantidadParaCalculos to set
+     * @param cantidadAuxCombo the cantidadAuxCombo to set
      */
-    public void setCantidadParaCalculos(int cantidadParaCalculos) {
-        this.cantidadParaCalculos = cantidadParaCalculos;
+    public void setCantidadAuxCombo(int cantidadAuxCombo) {
+        this.cantidadAuxCombo = cantidadAuxCombo;
     }
-    
-    public void decrementarCantidadParaCalculos(int decremento){
-        this.cantidadParaCalculos-=decremento;
-    }
-    
-    
     
     
 }
