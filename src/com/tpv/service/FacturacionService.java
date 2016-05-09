@@ -233,6 +233,7 @@ public class FacturacionService  {
                                                 grupo.setCantidadAux(cantidadAux);
                                                 grupo.incTotalDescuento(facDet.getPrecioUnitario(), facDet.getCantidadAuxCombo()-resto);
                                                 facDet.decrementarCantidadAuxCombo(cantidadAux * grupo.getCantidad());
+                                                tengo que guardar un detalle de los productos que intervienen en el combo y sus precios unitarios
                                             }
                                         }
                                             
