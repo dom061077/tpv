@@ -219,7 +219,19 @@ public class FacturacionService  {
                                 if(gDetalle.getProducto().equals(facDet.getProducto())){
                                     if(gDetalle.getProveedor()!=null){
                                         if(facDet.getProducto().tieneEsteProveedor(gDetalle.getProveedor())){
-                                            grupo.incCantidadAux(grupo.getCantidad());
+                                            if(grupo.getCantidadAux()+facDet.getCantidadAuxCombo()<=grupo.getCantidad()){
+                                                grupo.incCantidadAux(grupo.getCantidad());
+                                                grupo.incTotalDescuento(facDet.getPrecioUnitario()
+                                                        ,facDet.getCantidad().intValue());
+                                                facDet.setCantidadAuxCombo(0);
+                                            }else{
+                                                int cantidadAux = (grupo.getCantidadAux()+facDet.getCantidadAuxCombo())/grupo.getCantidad();
+                                                int resto = (grupo.getCantidadAux()+facDet.getCantidadAuxCombo()) % grupo.getCantidad();
+                                                cantidadAux = cantidadAux * grupo.getCantidad();
+                                                grupo.setCantidadAux(cantidadAux);
+                                                grupo.incTotalDescuento(facDet.getPrecioUnitario(), facDet.getCantidadAuxCombo()-rexto);
+                                                
+                                            }
                                         }
                                             
                                     }else{
