@@ -156,17 +156,25 @@ public class TestHibernate {
            e.printStackTrace();
         }
     }
+    
+    static void calcularCombos(){
+        EntityManager em = Connection.getEm();
+        FacturacionService facService = new FacturacionService();
+        try{
+            facService.calcularCombos(new Long(303));
+        }catch(Exception e){
+           e.printStackTrace();
+        }
+    }
             
     
     public static void main(String[] args){
-        int a=5,b=2;
-        System.out.println("Resultado division: "+5/2);
         //DOMConfigurator.configure(TestHibernate.class.getResource("log4j.xml"));
-//        try{
-//            Connection.initConnections();
-//        }catch(Exception e){
-//            e.printStackTrace();
-//        }
+        try{
+            Connection.initConnections();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
 //        getProveedorFromProductos();
         
         //probarRecursivadaGrupoProducto();

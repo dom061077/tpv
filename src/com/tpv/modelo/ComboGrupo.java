@@ -159,6 +159,7 @@ public class ComboGrupo {
     }
 
 
+    @Transient
     public int getCantidadGrupos(){
         if(cantidadAux<cantidad)
             return 0;
@@ -184,5 +185,5 @@ public class ComboGrupo {
         totalDescuento = totalDescuento.add(precioUnitario.multiply(new BigDecimal(cantidad)));
     }
     
-    
+
 }

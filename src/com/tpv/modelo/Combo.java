@@ -7,6 +7,7 @@ package com.tpv.modelo;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -48,8 +49,7 @@ public class Combo {
     @Transient
     private BigDecimal totalBonificacion;
     
-    @Transient
-    private int cantidadCombosEncontrados;
+    
     /**
      * @return the id
      */
@@ -136,24 +136,50 @@ public class Combo {
         this.totalBonificacion = totalBonificacion;
     }
 
-    /**
-     * @return the cantidadCombosEncontrados
-     */
-    public int getCantidadCombosEncontrados() {
-        return cantidadCombosEncontrados;
-    }
+    
+ 
 
     /**
-     * @param cantidadCombosEncontrados the cantidadCombosEncontrados to set
+     * @return the cumpleCondicion
      */
-    public void setCantidadCombosEncontrados(int cantidadCombosEncontrados) {
-        this.cantidadCombosEncontrados = cantidadCombosEncontrados;
+    public boolean cumpleCondicion() {
+        
+        for(Iterator<ComboGrupo> iterator = combosGrupo.iterator();iterator.hasNext();){
+            ComboGrupo grupo = iterator.next();
+            if((grupo.getCantidadAux() / grupo.getCantidad())==0){
+                return false;
+            }
+            
+        }
+        return true;
     }
     
-    public boolean tieneCombos(){
-        //if
-        return false;
+    @Transient
+    public int getCantidadCombosArmados(){
+        int cantidadArmados=0;
+        if(getCombosGrupo().size()>0)
+            cantidadArmados = getCombosGrupo().get(0).getCantidadGrupos();
+        for(Iterator<ComboGrupo> iterator = getCombosGrupo().iterator();iterator.hasNext();){
+            ComboGrupo gp = iterator.next();
+            if(cantidadArmados>gp.getCantidadGrupos()){
+                cantidadArmados = gp.getCantidadGrupos();
+            }
+        }
+        return cantidadArmados;
     }
+    
+    @Transient
+    public BigDecimal getBonificacion(){
+        BigDecimal bonificacion= new BigDecimal(0);
+        for(Iterator<ComboGrupo> iterator = getCombosGrupo().iterator();iterator.hasNext();){
+            ComboGrupo gp = iterator.next();
+            if(gp.)
+        }
+        return bonificacion;        
+    }
+    
+    
+
     
     
 }

@@ -90,8 +90,18 @@ public class Factura {
     //@org.hibernate.annotations.IndexColumn(name = "BID_POSITION")
     private List<FacturaDetalle> detalle = new ArrayList<FacturaDetalle>();
     
+    @OneToMany(cascade = CascadeType.ALL,mappedBy="factura", fetch = FetchType.EAGER)
+    //@org.hibernate.annotations.IndexColumn(name = "BID_POSITION")
+    private List<FacturaDetalleCombo> detalleCombos = new ArrayList<FacturaDetalleCombo>();    
+
+    
+    transient private List<FacturaDetalleCombo> detalleCombosAux = new ArrayList<FacturaDetalleCombo>();    
+    
+    
+    
     @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL,mappedBy="factura")
     private List<FacturaFormaPagoDetalle> detallePagos = new ArrayList<FacturaFormaPagoDetalle>();
+
 
     
     @ManyToOne
@@ -361,6 +371,34 @@ public class Factura {
      */
     public void setIva(BigDecimal iva) {
         this.iva = iva;
+    }
+
+    /**
+     * @return the detalleCombos
+     */
+    public List<FacturaDetalleCombo> getDetalleCombos() {
+        return detalleCombos;
+    }
+
+    /**
+     * @param detalleCombos the detalleCombos to set
+     */
+    public void setDetalleCombos(List<FacturaDetalleCombo> detalleCombos) {
+        this.detalleCombos = detalleCombos;
+    }
+
+    /**
+     * @return the detalleCombosAux
+     */
+    public List<FacturaDetalleCombo> getDetalleCombosAux() {
+        return detalleCombosAux;
+    }
+
+    /**
+     * @param detalleCombosAux the detalleCombosAux to set
+     */
+    public void setDetalleCombosAux(List<FacturaDetalleCombo> detalleCombosAux) {
+        this.detalleCombosAux = detalleCombosAux;
     }
 
     

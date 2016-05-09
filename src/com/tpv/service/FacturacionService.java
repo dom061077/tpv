@@ -12,6 +12,7 @@ import com.tpv.modelo.ComboGrupoDetalle;
 import com.tpv.modelo.CondicionIva;
 import com.tpv.modelo.Factura;
 import com.tpv.modelo.FacturaDetalle;
+import com.tpv.modelo.FacturaDetalleCombo;
 import com.tpv.modelo.Producto;
 import com.tpv.modelo.Proveedor;
 import com.tpv.modelo.ProveedorProducto;
@@ -186,6 +187,7 @@ public class FacturacionService  {
         Factura factura = null;
         EntityManager em = Connection.getEm();
         factura = em.find(Factura.class, id);
+        factura.getDetalleCombosAux().clear();
         Query q = em.createNativeQuery(
                 "SELECT DISTINCT c.* FROM facturasdetalle fd"
                 +" INNER JOIN productos p ON fd.idPRODUCTOS=p.idPRODUCTOS AND p.DISCONTINUADO = 0"
@@ -213,7 +215,7 @@ public class FacturacionService  {
                         FacturaDetalle facDet = (FacturaDetalle)itDetFact.next();
                         for(Iterator itDetalle = grupo.getGruposDetalle().iterator();itDetalle.hasNext();){
                             ComboGrupoDetalle gDetalle = (ComboGrupoDetalle)itDetalle.next();
-                            if(facDet.getCantidad().compareTo(BigDecimal.ZERO)<0)
+                            if(facDet.getCantidadAuxCombo()<=0)
                                 continue;
                             if(gDetalle.getProducto()!=null){
                                 if(gDetalle.getProducto().equals(facDet.getProducto())){
@@ -259,6 +261,13 @@ public class FacturacionService  {
                             
                         }
                     }
+                }
+                if(combo.cumpleCondicion()){
+                    FacturaDetalleCombo fd = new FacturaDetalleCombo();
+                    fd.setCombo(combo);
+                    fd.setCantidad(combo.getCantidadCombosArmados());
+                    fd.setBonificacion(BigDecimal.ZERO);
+                    factura.getDetalleCombosAux().add(new FacturaDetalleCombo());
                 }
             }
         }catch(RuntimeException e){    
