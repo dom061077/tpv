@@ -46,7 +46,7 @@ public class ComboGrupo {
     private int cantidadAux;
     
     @Transient
-    private BigDecimal precioUnitarioEnCombo;
+    private BigDecimal totalDescuento;
 
     @ManyToOne
     @JoinColumn(name = "idCOMBOS", referencedColumnName = "idCOMBOS", nullable=true)
@@ -165,18 +165,23 @@ public class ComboGrupo {
         return cantidadAux/cantidad;
     }
 
+
     /**
-     * @return the precioUnitarioEnCombo
+     * @return the totalDescuento
      */
-    public BigDecimal getPrecioUnitarioEnCombo() {
-        return precioUnitarioEnCombo;
+    public BigDecimal getTotalDescuento() {
+        return totalDescuento;
     }
 
     /**
-     * @param precioUnitarioEnCombo the precioUnitarioEnCombo to set
+     * @param totalDescuento the totalDescuento to set
      */
-    public void setPrecioUnitarioEnCombo(BigDecimal precioUnitarioEnCombo) {
-        this.precioUnitarioEnCombo = precioUnitarioEnCombo;
+    public void setTotalDescuento(BigDecimal totalDescuento) {
+        this.totalDescuento = totalDescuento;
+    }
+    
+    public void incTotalDescuento(BigDecimal precioUnitario,int cantidad){
+        totalDescuento = totalDescuento.add(precioUnitario.multiply(new BigDecimal(cantidad)));
     }
     
     

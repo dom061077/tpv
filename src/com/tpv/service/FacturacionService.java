@@ -229,8 +229,8 @@ public class FacturacionService  {
                                                 int resto = (grupo.getCantidadAux()+facDet.getCantidadAuxCombo()) % grupo.getCantidad();
                                                 cantidadAux = cantidadAux * grupo.getCantidad();
                                                 grupo.setCantidadAux(cantidadAux);
-                                                grupo.incTotalDescuento(facDet.getPrecioUnitario(), facDet.getCantidadAuxCombo()-rexto);
-                                                
+                                                grupo.incTotalDescuento(facDet.getPrecioUnitario(), facDet.getCantidadAuxCombo()-resto);
+                                                facDet.decrementarCantidadAuxCombo(cantidadAux * grupo.getCantidad());
                                             }
                                         }
                                             
