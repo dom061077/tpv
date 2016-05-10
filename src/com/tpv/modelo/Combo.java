@@ -46,8 +46,6 @@ public class Combo {
     private List<ComboGrupo> combosGrupo = new ArrayList<ComboGrupo>();
 
     
-    @Transient
-    private BigDecimal totalBonificacion;
     
     
     /**
@@ -122,19 +120,6 @@ public class Combo {
 
     
 
-    /**
-     * @return the totalBonificacion
-     */
-    public BigDecimal getTotalBonificacion() {
-        return totalBonificacion;
-    }
-
-    /**
-     * @param totalBonificacion the totalBonificacion to set
-     */
-    public void setTotalBonificacion(BigDecimal totalBonificacion) {
-        this.totalBonificacion = totalBonificacion;
-    }
 
     
  

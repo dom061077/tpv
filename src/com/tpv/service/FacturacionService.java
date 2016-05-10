@@ -247,8 +247,9 @@ public class FacturacionService  {
                             if(hayDetalleGrupo){
                                 if(grupo.getCantidadAcumulada()+facDet.getCantidadAuxCombo()<=grupo.getCantidad()){
                                     //grupo.incCantidadAux(grupo.getCantidad());
-                                    grupo.addDetallePrecioProducto(grupo.getCantidad()
-                                            , facDet.getPrecioUnitario(), facDet.getProducto());
+                                    grupo.addDetallePrecioProducto(facDet.getCantidadAuxCombo()
+                                            , facDet.getPrecioUnitario(), facDet.getProducto()
+                                            , facDet);
                                     facDet.setCantidadAuxCombo(0);
                                 }else{
                                     //int cantidadAux = (grupo.getCantidadAcumulada()+facDet.getCantidadAuxCombo())/grupo.getCantidad();
@@ -256,7 +257,8 @@ public class FacturacionService  {
                                     //cantidadAux = cantidadAux * grupo.getCantidad();
                                     //grupo.setCantidadAux(cantidadAux);
                                     grupo.addDetallePrecioProducto(facDet.getCantidadAuxCombo()-resto
-                                            , facDet.getPrecioUnitario(), facDet.getProducto());
+                                            , facDet.getPrecioUnitario(), facDet.getProducto()
+                                            , facDet);
                                     facDet.decrementarCantidadAuxCombo(facDet.getCantidadAuxCombo()-resto);
                                 }
                             }
@@ -269,10 +271,22 @@ public class FacturacionService  {
                     FacturaDetalleCombo fd = new FacturaDetalleCombo();
                     fd.setCombo(combo);
                     fd.setCantidad(combo.getCantidadCombosArmados());
-                    fd.setBonificacion(BigDecimal.ZERO);
-                    factura.getDetalleCombosAux().add(new FacturaDetalleCombo());
+                    fd.setBonificacion(combo.getBonificacion());
+                    factura.getDetalleCombosAux().add(fd);
                 }
             }
+            
+            factura.getDetalleCombosAux().forEach(item ->{
+                System.out.println("Combo armado: "+item.getCombo().getDescripcion());
+                System.out.println("Bonificación: "+item.getCombo().getBonificacion());
+                System.out.println("Cantidad Combos: "+item.getCombo().getCantidadCombosArmados());
+                System.out.println("");
+                item.getCombo().getCombosGrupo().forEach(itemg->{
+                    System.out.println("            Grupo condicion de cantidad: "+itemg.getCantidad());
+                    System.out.println("            Grupo cantidad Acumulada: "+itemg.getCantidadAcumulada());
+                });
+            });
+            
         }catch(RuntimeException e){    
             e.printStackTrace();
             //log.error("Error al calcular el combo sin combinaciones para id factura: ",e);
@@ -283,5 +297,4 @@ public class FacturacionService  {
         }
     }
     
-    //private 
 }

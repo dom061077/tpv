@@ -6,6 +6,7 @@
 package com.tpv.modelo;
 
 import java.math.BigDecimal;
+import javax.persistence.Transient;
 
 /**
  *
@@ -17,6 +18,8 @@ public class ComboGrupoDetallePrecioProducto {
     private BigDecimal precioProducto;
     
     private Producto producto;
+    
+    private FacturaDetalle factDetalle;
 
     /**
      * @return the cantidad
@@ -58,6 +61,28 @@ public class ComboGrupoDetallePrecioProducto {
      */
     public void setProducto(Producto producto) {
         this.producto = producto;
+    }
+    
+    public BigDecimal getSubTotal(){
+        return getPrecioProducto().multiply(new BigDecimal(cantidad));
+    }
+    
+    public void recuperarCantFacDetlleSinCombo(){
+        
+    }
+
+    /**
+     * @return the factDetalle
+     */
+    public FacturaDetalle getFactDetalle() {
+        return factDetalle;
+    }
+
+    /**
+     * @param factDetalle the factDetalle to set
+     */
+    public void setFactDetalle(FacturaDetalle factDetalle) {
+        this.factDetalle = factDetalle;
     }
     
 }

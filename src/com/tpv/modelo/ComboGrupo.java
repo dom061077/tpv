@@ -6,6 +6,7 @@
 package com.tpv.modelo;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -148,11 +149,13 @@ public class ComboGrupo {
         return detallePreciosProductos;
     }
     
-    public void addDetallePrecioProducto(int cantidad,BigDecimal precioProducto,Producto producto){
+    public void addDetallePrecioProducto(int cantidad,BigDecimal precioProducto,Producto producto
+        ,FacturaDetalle factDetalle){
         ComboGrupoDetallePrecioProducto gdProd = new ComboGrupoDetallePrecioProducto();
         gdProd.setCantidad(cantidad);
         gdProd.setPrecioProducto(precioProducto);
         gdProd.setProducto(producto);
+        gdProd.setFactDetalle(factDetalle);
         detallePreciosProductos.add(gdProd);
     }
     
@@ -176,8 +179,13 @@ public class ComboGrupo {
     
     @Transient
     public BigDecimal getBonificacion(){
-        BigDecimal bonificacion 
-                
+        BigDecimal bonificacion = new BigDecimal(BigInteger.ZERO);
+        int cantidadCombos = combo.getCantidadCombosArmados();
+        for(Iterator<ComboGrupoDetallePrecioProducto> iterator = getDetallePreciosProductos().iterator();iterator.hasNext();){
+            ComboGrupoDetallePrecioProducto cGDetPrecioProducto = iterator.next();
+            bonificacion = bonificacion.add(cGDetPrecioProducto.getSubTotal().multiply(this.getPorcentaje().add(new BigDecimal(100))));
+        }
+        return bonificacion;
     }
     
 

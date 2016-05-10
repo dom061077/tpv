@@ -9,6 +9,7 @@ import com.tpv.modelo.enums.FacturaEstadoEnum;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -24,6 +25,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  *
@@ -94,8 +96,8 @@ public class Factura {
     //@org.hibernate.annotations.IndexColumn(name = "BID_POSITION")
     private List<FacturaDetalleCombo> detalleCombos = new ArrayList<FacturaDetalleCombo>();    
 
-    
-    transient private List<FacturaDetalleCombo> detalleCombosAux = new ArrayList<FacturaDetalleCombo>();    
+    @Transient
+    private List<FacturaDetalleCombo> detalleCombosAux = new ArrayList<FacturaDetalleCombo>();    
     
     
     
@@ -401,5 +403,12 @@ public class Factura {
         this.detalleCombosAux = detalleCombosAux;
     }
 
+    public void recuperoCantidadFueraDeCombo(){
+        for(Iterator<FacturaDetalleCombo> itFactDetalle=this.getDetalleCombosAux().iterator();
+                itFactDetalle.hasNext();){
+            FacturaDetalleCombo fdc = itFactDetalle.next();
+            QUEDE AQUI
+        }
+    }
     
 }
