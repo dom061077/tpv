@@ -146,7 +146,7 @@ public class Combo {
         
         for(Iterator<ComboGrupo> iterator = combosGrupo.iterator();iterator.hasNext();){
             ComboGrupo grupo = iterator.next();
-            if((grupo.getCantidadAux() / grupo.getCantidad())==0){
+            if((grupo.getCantidadAcumulada() / grupo.getCantidad())==0){
                 return false;
             }
             
@@ -173,7 +173,7 @@ public class Combo {
         BigDecimal bonificacion= new BigDecimal(0);
         for(Iterator<ComboGrupo> iterator = getCombosGrupo().iterator();iterator.hasNext();){
             ComboGrupo gp = iterator.next();
-            if(gp.)
+            //if(gp.)
         }
         return bonificacion;        
     }

@@ -7,6 +7,7 @@ package com.tpv.modelo;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -42,11 +43,7 @@ public class ComboGrupo {
     @Column(name = "MONTO")
     private BigDecimal monto;
     
-    @Transient
-    private int cantidadAux;
     
-    @Transient
-    private BigDecimal totalDescuento;
 
     @ManyToOne
     @JoinColumn(name = "idCOMBOS", referencedColumnName = "idCOMBOS", nullable=true)
@@ -54,6 +51,9 @@ public class ComboGrupo {
     
     @OneToMany(cascade = CascadeType.ALL,mappedBy="comboGrupo")
     private List<ComboGrupoDetalle> gruposDetalle = new ArrayList<ComboGrupoDetalle>();
+    
+    @Transient
+    private List<ComboGrupoDetallePrecioProducto> detallePreciosProductos = new ArrayList<ComboGrupoDetallePrecioProducto>();
     
 
     /**
@@ -140,49 +140,44 @@ public class ComboGrupo {
         this.gruposDetalle = gruposDetalle;
     }
 
-    /**
-     * @return the cantidadAux
-     */
-    public int getCantidadAux() {
-        return cantidadAux;
-    }
 
     /**
-     * @param cantidadAux the cantidadAux to set
+     * @return the detallePreciosProductos
      */
-    public void setCantidadAux(int cantidadAux) {
-        this.cantidadAux = cantidadAux;
-    }
-
-    public void incCantidadAux(int inc){
-        this.cantidadAux += inc;
-    }
-
-
-    @Transient
-    public int getCantidadGrupos(){
-        if(cantidadAux<cantidad)
-            return 0;
-        return cantidadAux/cantidad;
-    }
-
-
-    /**
-     * @return the totalDescuento
-     */
-    public BigDecimal getTotalDescuento() {
-        return totalDescuento;
-    }
-
-    /**
-     * @param totalDescuento the totalDescuento to set
-     */
-    public void setTotalDescuento(BigDecimal totalDescuento) {
-        this.totalDescuento = totalDescuento;
+    public List<ComboGrupoDetallePrecioProducto> getDetallePreciosProductos() {
+        return detallePreciosProductos;
     }
     
-    public void incTotalDescuento(BigDecimal precioUnitario,int cantidad){
-        totalDescuento = totalDescuento.add(precioUnitario.multiply(new BigDecimal(cantidad)));
+    public void addDetallePrecioProducto(int cantidad,BigDecimal precioProducto,Producto producto){
+        ComboGrupoDetallePrecioProducto gdProd = new ComboGrupoDetallePrecioProducto();
+        gdProd.setCantidad(cantidad);
+        gdProd.setPrecioProducto(precioProducto);
+        gdProd.setProducto(producto);
+        detallePreciosProductos.add(gdProd);
+    }
+    
+    @Transient
+    public int getCantidadAcumulada(){
+        int cantAcumulada = 0;
+        for(Iterator<ComboGrupoDetallePrecioProducto> iterator = getDetallePreciosProductos().iterator();
+                iterator.hasNext();){
+            ComboGrupoDetallePrecioProducto cGrupoDet = iterator.next();
+            cantAcumulada+=cGrupoDet.getCantidad();
+        }
+        return cantAcumulada;
+    }
+    
+    @Transient
+    public int getCantidadGrupos(){
+        if(getCantidadAcumulada()<cantidad)
+            return 0;
+        return getCantidadAcumulada()/cantidad;
+    }    
+    
+    @Transient
+    public BigDecimal getBonificacion(){
+        BigDecimal bonificacion 
+                
     }
     
 
