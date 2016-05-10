@@ -205,14 +205,14 @@ public class FacturacionService  {
                 , Combo.class).setParameter(1, id);
         try{
             listadoCombos = q.getResultList();
-            boolean hayCombo;
+            boolean hayDetalleGrupo;
             for(Iterator itCombo = listadoCombos.iterator();itCombo.hasNext();){
                 Combo combo = (Combo)itCombo.next();
-                hayCombo = true;
                 for(Iterator itGrupo = combo.getCombosGrupo().iterator();itGrupo.hasNext();){
                     ComboGrupo grupo = (ComboGrupo)itGrupo.next();
                     for(Iterator itDetFact = factura.getDetalle().iterator();itDetFact.hasNext();){
                         FacturaDetalle facDet = (FacturaDetalle)itDetFact.next();
+                        hayDetalleGrupo=false;
                         for(Iterator itDetalle = grupo.getGruposDetalle().iterator();itDetalle.hasNext();){
                             ComboGrupoDetalle gDetalle = (ComboGrupoDetalle)itDetalle.next();
                             if(facDet.getCantidadAuxCombo()<=0)
@@ -221,24 +221,10 @@ public class FacturacionService  {
                                 if(gDetalle.getProducto().equals(facDet.getProducto())){
                                     if(gDetalle.getProveedor()!=null){
                                         if(facDet.getProducto().tieneEsteProveedor(gDetalle.getProveedor())){
-                                            if(grupo.getCantidadAux()+facDet.getCantidadAuxCombo()<=grupo.getCantidad()){
-                                                grupo.incCantidadAux(grupo.getCantidad());
-                                                grupo.incTotalDescuento(facDet.getPrecioUnitario()
-                                                        ,facDet.getCantidad().intValue());
-                                                facDet.setCantidadAuxCombo(0);
-                                            }else{
-                                                int cantidadAux = (grupo.getCantidadAux()+facDet.getCantidadAuxCombo())/grupo.getCantidad();
-                                                int resto = (grupo.getCantidadAux()+facDet.getCantidadAuxCombo()) % grupo.getCantidad();
-                                                cantidadAux = cantidadAux * grupo.getCantidad();
-                                                grupo.setCantidadAux(cantidadAux);
-                                                grupo.incTotalDescuento(facDet.getPrecioUnitario(), facDet.getCantidadAuxCombo()-resto);
-                                                facDet.decrementarCantidadAuxCombo(cantidadAux * grupo.getCantidad());
-                                                tengo que guardar un detalle de los productos que intervienen en el combo y sus precios unitarios
-                                            }
+                                            hayDetalleGrupo = true;
                                         }
-                                            
                                     }else{
-                                            grupo.incCantidadAux(grupo.getCantidad());
+                                            hayDetalleGrupo= true;
                                     }
                                 }
                             }else{
@@ -246,22 +232,38 @@ public class FacturacionService  {
                                     if(facDet.getProducto().tieneEsteGrupo(gDetalle.getGrupoProducto())){
                                         if(gDetalle.getProveedor()!=null){
                                             if(facDet.getProducto().tieneEsteProveedor(gDetalle.getProveedor())){
-                                                grupo.incCantidadAux(grupo.getCantidad());
+                                                hayDetalleGrupo = true;
                                             }
                                         }
                                     }
                                 }else{
                                     if(gDetalle.getProveedor()!=null){
                                         if(facDet.getProducto().tieneEsteProveedor(gDetalle.getProveedor())){
-                                            grupo.incCantidadAux(grupo.getCantidad());
+                                            hayDetalleGrupo = true;
                                         }
                                     }
                                 }
-                                
                             }
-                            
+                            if(hayDetalleGrupo){
+                                if(grupo.getCantidadAcumulada()+facDet.getCantidadAuxCombo()<=grupo.getCantidad()){
+                                    //grupo.incCantidadAux(grupo.getCantidad());
+                                    grupo.addDetallePrecioProducto(grupo.getCantidad()
+                                            , facDet.getPrecioUnitario(), facDet.getProducto());
+                                    facDet.setCantidadAuxCombo(0);
+                                }else{
+                                    //int cantidadAux = (grupo.getCantidadAcumulada()+facDet.getCantidadAuxCombo())/grupo.getCantidad();
+                                    int resto = (grupo.getCantidadAcumulada()+facDet.getCantidadAuxCombo()) % grupo.getCantidad();
+                                    //cantidadAux = cantidadAux * grupo.getCantidad();
+                                    //grupo.setCantidadAux(cantidadAux);
+                                    grupo.addDetallePrecioProducto(facDet.getCantidadAuxCombo()-resto
+                                            , facDet.getPrecioUnitario(), facDet.getProducto());
+                                    facDet.decrementarCantidadAuxCombo(facDet.getCantidadAuxCombo()-resto);
+                                }
+                            }
                         }
                     }
+
+                    
                 }
                 if(combo.cumpleCondicion()){
                     FacturaDetalleCombo fd = new FacturaDetalleCombo();

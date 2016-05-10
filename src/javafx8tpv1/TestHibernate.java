@@ -175,6 +175,7 @@ public class TestHibernate {
         }catch(Exception e){
             e.printStackTrace();
         }
+        calcularCombos();
 //        getProveedorFromProductos();
         
         //probarRecursivadaGrupoProducto();

@@ -158,7 +158,7 @@ public class BuscarPorDescProductoController {
         data = FXCollections.observableArrayList();
         List<ListaPrecioProducto> productosPrecios = null;
         try{
-            productoService.getProductosPrecio(textFieldFiltroProducto.getText());
+            productosPrecios = productoService.getProductosPrecio(textFieldFiltroProducto.getText());
         }catch(TpvException e){
             log.error("Error: "+e.getMessage());
              modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_BUSCARPORDESCPRODUCTO);
