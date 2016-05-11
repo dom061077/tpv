@@ -183,7 +183,9 @@ public class ComboGrupo {
         int cantidadCombos = combo.getCantidadCombosArmados();
         for(Iterator<ComboGrupoDetallePrecioProducto> iterator = getDetallePreciosProductos().iterator();iterator.hasNext();){
             ComboGrupoDetallePrecioProducto cGDetPrecioProducto = iterator.next();
-            bonificacion = bonificacion.add(cGDetPrecioProducto.getSubTotal().multiply(this.getPorcentaje().add(new BigDecimal(100))));
+            //bonificacion = bonificacion.add(cGDetPrecioProducto.getSubTotal().multiply(this.getPorcentaje()).divide(new BigDecimal(100)));
+            bonificacion = cGDetPrecioProducto.getBonificacion();
+            
         }
         return bonificacion;
     }

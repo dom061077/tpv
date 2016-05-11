@@ -245,22 +245,22 @@ public class FacturacionService  {
                                 }
                             }
                             if(hayDetalleGrupo){
-                                if(grupo.getCantidadAcumulada()+facDet.getCantidadAuxCombo()<=grupo.getCantidad()){
-                                    //grupo.incCantidadAux(grupo.getCantidad());
-                                    grupo.addDetallePrecioProducto(facDet.getCantidadAuxCombo()
+//                                if(grupo.getCantidadAcumulada()+facDet.getCantidadAuxCombo()<=grupo.getCantidad()){
+//                                    grupo.addDetallePrecioProducto(facDet.getCantidadAuxCombo()
+//                                            , facDet.getPrecioUnitario(), facDet.getProducto()
+//                                            , facDet);
+//                                    facDet.setCantidadAuxCombo(0);
+//                                }else{
+//                                    int resto = (grupo.getCantidadAcumulada()+facDet.getCantidadAuxCombo()) % grupo.getCantidad();
+//                                    grupo.addDetallePrecioProducto(facDet.getCantidadAuxCombo()-resto
+//                                            , facDet.getPrecioUnitario(), facDet.getProducto()
+//                                            , facDet);
+//                                    facDet.decrementarCantidadAuxCombo(facDet.getCantidadAuxCombo()-resto);
+//                                }
+                                grupo.addDetallePrecioProducto(facDet.getCantidadAuxCombo()
                                             , facDet.getPrecioUnitario(), facDet.getProducto()
                                             , facDet);
-                                    facDet.setCantidadAuxCombo(0);
-                                }else{
-                                    //int cantidadAux = (grupo.getCantidadAcumulada()+facDet.getCantidadAuxCombo())/grupo.getCantidad();
-                                    int resto = (grupo.getCantidadAcumulada()+facDet.getCantidadAuxCombo()) % grupo.getCantidad();
-                                    //cantidadAux = cantidadAux * grupo.getCantidad();
-                                    //grupo.setCantidadAux(cantidadAux);
-                                    grupo.addDetallePrecioProducto(facDet.getCantidadAuxCombo()-resto
-                                            , facDet.getPrecioUnitario(), facDet.getProducto()
-                                            , facDet);
-                                    facDet.decrementarCantidadAuxCombo(facDet.getCantidadAuxCombo()-resto);
-                                }
+                                facDet.setCantidadAuxCombo(0);
                             }
                         }
                     }

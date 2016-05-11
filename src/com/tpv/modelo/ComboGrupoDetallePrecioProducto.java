@@ -20,6 +20,8 @@ public class ComboGrupoDetallePrecioProducto {
     private Producto producto;
     
     private FacturaDetalle factDetalle;
+    
+    private ComboGrupo comboGrupo;
 
     /**
      * @return the cantidad
@@ -64,8 +66,14 @@ public class ComboGrupoDetallePrecioProducto {
     }
     
     public BigDecimal getSubTotal(){
+        BigDecimal value = new BigDecimal(comboGrupo.getCombo().getCantidadCombosArmados());
         return getPrecioProducto().multiply(new BigDecimal(cantidad));
     }
+    
+    public BigDecimal getBonificacion(){
+        return getPrecioProducto().multiply(getComboGrupo().getPorcentaje()).divide(new BigDecimal(100));
+    }
+    
     
     public void recuperarCantFacDetlleSinCombo(int cantRecuperada){
         factDetalle.decrementarCantidadAuxCombo(cantidad);
@@ -84,5 +92,20 @@ public class ComboGrupoDetallePrecioProducto {
     public void setFactDetalle(FacturaDetalle factDetalle) {
         this.factDetalle = factDetalle;
     }
+
+    /**
+     * @return the comboGrupo
+     */
+    public ComboGrupo getComboGrupo() {
+        return comboGrupo;
+    }
+
+    /**
+     * @param comboGrupo the comboGrupo to set
+     */
+    public void setComboGrupo(ComboGrupo comboGrupo) {
+        this.comboGrupo = comboGrupo;
+    }
+
     
 }
