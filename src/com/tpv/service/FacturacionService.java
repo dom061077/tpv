@@ -274,6 +274,7 @@ public class FacturacionService  {
                     fd.setBonificacion(combo.getBonificacion());
                     factura.getDetalleCombosAux().add(fd);
                 }
+                factura.recuperoCantidadFueraDeCombo();
             }
             
             factura.getDetalleCombosAux().forEach(item ->{

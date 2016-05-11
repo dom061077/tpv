@@ -67,8 +67,8 @@ public class ComboGrupoDetallePrecioProducto {
         return getPrecioProducto().multiply(new BigDecimal(cantidad));
     }
     
-    public void recuperarCantFacDetlleSinCombo(){
-        
+    public void recuperarCantFacDetlleSinCombo(int cantRecuperada){
+        factDetalle.decrementarCantidadAuxCombo(cantidad);
     }
 
     /**

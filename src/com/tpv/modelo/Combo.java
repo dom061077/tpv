@@ -158,8 +158,13 @@ public class Combo {
         BigDecimal bonificacion= new BigDecimal(0);
         for(Iterator<ComboGrupo> iterator = getCombosGrupo().iterator();iterator.hasNext();){
             ComboGrupo gp = iterator.next();
-            //if(gp.)
+            for(Iterator<ComboGrupoDetallePrecioProducto> comboGrupoDetPPIterator = gp.getDetallePreciosProductos().iterator()
+                    ;comboGrupoDetPPIterator.hasNext();){
+                ComboGrupoDetallePrecioProducto comboGrupoDetPP = comboGrupoDetPPIterator.next();
+                bonificacion = bonificacion.add(comboGrupoDetPP.getSubTotal().multiply(gp.getPorcentaje()).divide(new BigDecimal(100)));
+            }
         }
+        bonificacion = bonificacion.multiply(new BigDecimal(getCantidadCombosArmados()));
         return bonificacion;        
     }
     

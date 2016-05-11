@@ -217,6 +217,10 @@ public class FacturaDetalle {
         this.setCantidadAuxCombo(this.getCantidadAuxCombo() - cantidad);
     }
     
+    public void incrementarCantidadAuxCombo(int cantidad){
+        this.setCantidadAuxCombo(this.getCantidadAuxCombo()+ cantidad);
+    }
+    
 
     @Transient
     public BigDecimal getSubTotal(int cantidad){

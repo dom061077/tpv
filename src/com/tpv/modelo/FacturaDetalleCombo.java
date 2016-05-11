@@ -19,6 +19,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  *
@@ -115,6 +116,13 @@ public class FacturaDetalleCombo {
      */
     public void setCombo(Combo combo) {
         this.combo = combo;
+    }
+    
+    @Transient
+    public BigDecimal getBonificacionCalculada(){
+        BigDecimal bonificacionCalculada = BigDecimal.ZERO;
+        
+        return bonificacionCalculada;
     }
     
     

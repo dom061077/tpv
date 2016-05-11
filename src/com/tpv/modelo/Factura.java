@@ -404,11 +404,56 @@ public class Factura {
     }
 
     public void recuperoCantidadFueraDeCombo(){
-        for(Iterator<FacturaDetalleCombo> itFactDetalle=this.getDetalleCombosAux().iterator();
-                itFactDetalle.hasNext();){
-            FacturaDetalleCombo fdc = itFactDetalle.next();
-            QUEDE AQUI
+        for(Iterator<FacturaDetalleCombo> itFactDetCombo=this.getDetalleCombosAux().iterator();
+                itFactDetCombo.hasNext();){
+            FacturaDetalleCombo fdc = itFactDetCombo.next();
+            for(Iterator<ComboGrupo> itCombo = fdc.getCombo().getCombosGrupo().iterator()
+                    ;itCombo.hasNext();){
+                ComboGrupo cg = itCombo.next();
+                int cantProductos = cg.getCombo().getCantidadCombosArmados()*cg.getCantidad();
+                int acumulador = 0;
+                int difCantidadFueradeCombo=0;
+                for(Iterator<ComboGrupoDetallePrecioProducto> itComboGDetPP=cg.getDetallePreciosProductos().iterator()
+                        ;itComboGDetPP.hasNext();){
+                    ComboGrupoDetallePrecioProducto comboGDetPP = itComboGDetPP.next();
+                    if(acumulador+comboGDetPP.getCantidad()<=cantProductos){
+                        acumulador+=comboGDetPP.getCantidad();
+                    }else{
+                        if(acumulador+comboGDetPP.getCantidad()==cantProductos){
+                            acumulador+=comboGDetPP.getCantidad();
+                        }else{
+                            if(acumulador==cantProductos){
+                                difCantidadFueradeCombo = comboGDetPP.getCantidad();
+                            }else{
+                                difCantidadFueradeCombo = acumulador+comboGDetPP.getCantidad()-cantProductos;
+                            }
+                            comboGDetPP.getFactDetalle().incrementarCantidadAuxCombo(difCantidadFueradeCombo);
+                        }
+                    }
+                }
+            }
         }
+    }
+    
+    @Transient
+    public BigDecimal getBonificacionCombosAux(){
+        BigDecimal totalBonificado = BigDecimal.ZERO;
+        for(Iterator<FacturaDetalleCombo> iterator = getDetalleCombosAux().iterator();iterator.hasNext();){
+            FacturaDetalleCombo fdc = iterator.next();
+            totalBonificado.add(fdc.getBonificacionCalculada());
+        }
+        return totalBonificado;
+    }
+    
+    @Transient
+    public BigDecimal getBonificacionCombos(){
+        BigDecimal totalBonificado = BigDecimal.ZERO;
+        for(Iterator<FacturaDetalleCombo> iterator = getDetalleCombos().iterator();iterator.hasNext();){
+            FacturaDetalleCombo fdc = iterator.next();
+            totalBonificado.add(fdc.getBonificacion());
+        }
+        return totalBonificado;
+
     }
     
 }
