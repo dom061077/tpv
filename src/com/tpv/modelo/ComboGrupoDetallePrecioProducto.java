@@ -66,11 +66,11 @@ public class ComboGrupoDetallePrecioProducto {
     }
     
     public BigDecimal getSubTotal(){
-        BigDecimal value = new BigDecimal(comboGrupo.getCombo().getCantidadCombosArmados());
+        BigDecimal value = new BigDecimal(getComboGrupo().getCombo().getCantidadCombosArmados());
         return getPrecioProducto().multiply(new BigDecimal(cantidad));
     }
     
-    public BigDecimal getBonificacion(){
+    public BigDecimal getBonificacionPorPrecioProducto(){
         return getPrecioProducto().multiply(getComboGrupo().getPorcentaje()).divide(new BigDecimal(100));
     }
     

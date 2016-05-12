@@ -156,6 +156,7 @@ public class ComboGrupo {
         gdProd.setPrecioProducto(precioProducto);
         gdProd.setProducto(producto);
         gdProd.setFactDetalle(factDetalle);
+        gdProd.setComboGrupo(this);
         detallePreciosProductos.add(gdProd);
     }
     
@@ -181,10 +182,11 @@ public class ComboGrupo {
     public BigDecimal getBonificacion(){
         BigDecimal bonificacion = new BigDecimal(BigInteger.ZERO);
         int cantidadCombos = combo.getCantidadCombosArmados();
-        for(Iterator<ComboGrupoDetallePrecioProducto> iterator = getDetallePreciosProductos().iterator();iterator.hasNext();){
+        for(Iterator<ComboGrupoDetallePrecioProducto> iterator = getDetallePreciosProductos().iterator()
+                ;iterator.hasNext();){
             ComboGrupoDetallePrecioProducto cGDetPrecioProducto = iterator.next();
             //bonificacion = bonificacion.add(cGDetPrecioProducto.getSubTotal().multiply(this.getPorcentaje()).divide(new BigDecimal(100)));
-            bonificacion = cGDetPrecioProducto.getBonificacion();
+            bonificacion = cGDetPrecioProducto.getBonificacionPorPrecioProducto();
             
         }
         return bonificacion;
