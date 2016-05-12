@@ -42,6 +42,12 @@ public class Combo {
     @Column(name = "FECHAHASTA")
     private java.sql.Date fechaHasta;
     
+    //@Column(name = "PRIORIDAD")
+    //private 
+    
+    @Column(name = "COMBINARPRODCTOS")
+    private boolean combinarProductos;
+    
     @OneToMany(cascade = CascadeType.ALL,mappedBy="combo")
     private List<ComboGrupo> combosGrupo = new ArrayList<ComboGrupo>();
 
@@ -190,6 +196,20 @@ public class Combo {
             }
         }
         return bonificacion;        
+    }
+
+    /**
+     * @return the combinarProductos
+     */
+    public boolean isCombinarProductos() {
+        return combinarProductos;
+    }
+
+    /**
+     * @param combinarProductos the combinarProductos to set
+     */
+    public void setCombinarProductos(boolean combinarProductos) {
+        this.combinarProductos = combinarProductos;
     }
     
     

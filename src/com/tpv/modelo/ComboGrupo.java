@@ -151,13 +151,27 @@ public class ComboGrupo {
     
     public void addDetallePrecioProducto(int cantidad,BigDecimal precioProducto,Producto producto
         ,FacturaDetalle factDetalle){
-        ComboGrupoDetallePrecioProducto gdProd = new ComboGrupoDetallePrecioProducto();
-        gdProd.setCantidad(cantidad);
-        gdProd.setPrecioProducto(precioProducto);
-        gdProd.setProducto(producto);
-        gdProd.setFactDetalle(factDetalle);
-        gdProd.setComboGrupo(this);
-        detallePreciosProductos.add(gdProd);
+        boolean agregar = true;
+        if(factDetalle == null){
+            for(Iterator<ComboGrupoDetallePrecioProducto> it = detallePreciosProductos.iterator();it.hasNext();){
+                ComboGrupoDetallePrecioProducto gpp = it.next();
+                if(gpp.getPrecioProducto().equals(producto)){
+                   gpp.setCantidad(gpp.getCantidad()+cantidad);
+                   agregar = false;
+                }
+            }
+        }
+        
+        if(agregar){
+            ComboGrupoDetallePrecioProducto gdProd = new ComboGrupoDetallePrecioProducto();
+            gdProd.setCantidad(cantidad);
+            gdProd.setPrecioProducto(precioProducto);
+            gdProd.setProducto(producto);
+            gdProd.setFactDetalle(factDetalle);
+            gdProd.setComboGrupo(this);
+            detallePreciosProductos.add(gdProd);
+        }
+        
     }
     
     @Transient

@@ -191,17 +191,17 @@ public class FacturacionService  {
         Query q = em.createNativeQuery(
                 "SELECT DISTINCT c.* FROM facturasdetalle fd"
                 +" INNER JOIN productos p ON fd.idPRODUCTOS=p.idPRODUCTOS AND p.DISCONTINUADO = 0"
-                +" LEFT JOIN combosgrupodetalle cgd ON fd.idPRODUCTOS = cgd.idproductos"
+                +" LEFT JOIN ("
+                +"       SELECT gp.idGRUPOPRODUCTOS AS grupohijo"
+                +"                ,glevel1.idGRUPOPRODUCTOS AS grupopadre FROM grupoproductos gp"
+                +"        INNER JOIN grupoproductos glevel1 ON glevel1.idgrupoproductos = gp.padreid"
+                +" ) grupoprod ON (p.idgrupoproductos = grupoprod.grupohijo OR p.idgrupoproductos = grupoprod.grupopadre)"
+                +" LEFT JOIN combosgrupodetalle cgd ON fd.idPRODUCTOS = cgd.idproductos OR grupoprod.grupohijo = cgd.idGRUPOPRODUCTOS"
+		+"		OR grupoprod.grupopadre = cgd.idGRUPOPRODUCTOS"
                 +" LEFT JOIN combosgrupo cg ON cgd.idCOMBOSGRUPO = cg.idCOMBOSGRUPO"
                 +" LEFT JOIN combos c ON cg.idCOMBOS = c.idCOMBOS"
                 +" LEFT JOIN proveedores_productos pp ON fd.idPRODUCTOS = pp.idPRODUCTOS AND pp.idProveedor=cgd.idProveedor"
-                +" LEFT JOIN ("
-                +"        SELECT gp.idGRUPOPRODUCTOS AS grupohijo"
-                +"                ,glevel1.idGRUPOPRODUCTOS AS grupopadre FROM grupoproductos gp"
-                +"        INNER JOIN grupoproductos glevel1 ON glevel1.idgrupoproductos = gp.padreid"
-                +" ) grupoprod ON p.idgrupoproductos = grupoprod.grupohijo AND(cgd.idgrupoproductos = grupoprod.grupohijo OR "
-                +"                cgd.idgrupoproductos = grupoprod.grupopadre)"
-                +" WHERE c.idcombos IS NOT NULL AND fd.idFACTURAS = ?1 AND CONVERT(NOW(),DATE) BETWEEN c.FECHADESDE AND c.FECHAHASTA"                
+                +" WHERE c.idcombos IS NOT NULL AND fd.idFACTURAS = ?1 AND CONVERT(NOW(),DATE) BETWEEN c.FECHADESDE AND c.FECHAHASTA"
                 , Combo.class).setParameter(1, id);
         try{
             listadoCombos = q.getResultList();
@@ -234,6 +234,8 @@ public class FacturacionService  {
                                             if(facDet.getProducto().tieneEsteProveedor(gDetalle.getProveedor())){
                                                 hayDetalleGrupo = true;
                                             }
+                                        }else{
+                                            hayDetalleGrupo = true;
                                         }
                                     }
                                 }else{
@@ -257,10 +259,14 @@ public class FacturacionService  {
 //                                            , facDet);
 //                                    facDet.decrementarCantidadAuxCombo(facDet.getCantidadAuxCombo()-resto);
 //                                }
-                                grupo.addDetallePrecioProducto(facDet.getCantidadAuxCombo()
-                                            , facDet.getPrecioUnitario(), facDet.getProducto()
-                                            , facDet);
+                                if(combo.isCombinarProductos()){
+                                    grupo.addDetallePrecioProducto(facDet.getCantidadAuxCombo()
+                                                , facDet.getPrecioUnitario(), facDet.getProducto()
+                                                , facDet);
+                                }else
+                                    quede aqui
                                 facDet.setCantidadAuxCombo(0);
+                                
                             }
                         }
                     }
@@ -274,7 +280,7 @@ public class FacturacionService  {
                     fd.setBonificacion(combo.getBonificacion());
                     factura.getDetalleCombosAux().add(fd);
                 }
-                factura.recuperoCantidadFueraDeCombo();
+                
             }
             
             factura.getDetalleCombosAux().forEach(item ->{
