@@ -45,7 +45,7 @@ public class Combo {
     //@Column(name = "PRIORIDAD")
     //private 
     
-    @Column(name = "COMBINARPRODCTOS")
+    @Column(name = "COMBINARPRODUCTOS", columnDefinition = "TINYINT(1)") 
     private boolean combinarProductos;
     
     @OneToMany(cascade = CascadeType.ALL,mappedBy="combo")
@@ -189,7 +189,9 @@ public class Combo {
                             .multiply(gp.getPorcentaje()).divide(new BigDecimal(100)));    
                     
                     acumulador = cantReferenciaGrupo;
-                    comboGrupoDetPP.getFactDetalle().incrementarCantidadAuxCombo(diferencia);
+                    if(gp.getCombo().isCombinarProductos())
+                        comboGrupoDetPP.getFactDetalle().incrementarCantidadAuxCombo(diferencia);
+                    else;
                 }
                     
                 

@@ -263,8 +263,11 @@ public class FacturacionService  {
                                     grupo.addDetallePrecioProducto(facDet.getCantidadAuxCombo()
                                                 , facDet.getPrecioUnitario(), facDet.getProducto()
                                                 , facDet);
-                                }else
-                                    quede aqui
+                                }else{
+                                    grupo.addDetallePrecioProducto(facDet.getCantidadAuxCombo()
+                                            , facDet.getPrecioUnitario(),facDet.getProducto(), null);
+                                }
+                                    
                                 facDet.setCantidadAuxCombo(0);
                                 
                             }
