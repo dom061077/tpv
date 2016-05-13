@@ -155,7 +155,7 @@ public class ComboGrupo {
         if(factDetalle == null){
             for(Iterator<ComboGrupoDetallePrecioProducto> it = detallePreciosProductos.iterator();it.hasNext();){
                 ComboGrupoDetallePrecioProducto gpp = it.next();
-                if(gpp.getPrecioProducto().equals(producto)){
+                if(gpp.getProducto().equals(producto)){
                    gpp.setCantidad(gpp.getCantidad()+cantidad);
                    agregar = false;
                 }

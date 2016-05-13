@@ -107,5 +107,13 @@ public class ComboGrupoDetallePrecioProducto {
         this.comboGrupo = comboGrupo;
     }
 
+    public BigDecimal getBonificacion(){
+        BigDecimal bonif = precioProducto;
+        int cantReferencia = cantidad / comboGrupo.getCantidad();
+        cantReferencia = cantReferencia * comboGrupo.getCantidad();
+        bonif = bonif.multiply(BigDecimal.valueOf(cantReferencia));
+        bonif = bonif.multiply(comboGrupo.getPorcentaje()).divide(BigDecimal.valueOf(100));
+        return bonif;
+    }
     
 }
