@@ -173,7 +173,7 @@ public class Combo {
                     ;comboGrupoDetPPIterator.hasNext();){
                 ComboGrupoDetallePrecioProducto comboGrupoDetPP = comboGrupoDetPPIterator.next();
                 if(acumulador == cantReferenciaGrupo){
-                    comboGrupoDetPP.getFactDetalle().incrementarCantidadAuxCombo(comboGrupoDetPP.getCantidad());
+                    //comboGrupoDetPP.getFactDetalle().incrementarCantidadAuxCombo(comboGrupoDetPP.getCantidad());
                     continue;
                 }
                 
