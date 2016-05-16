@@ -220,5 +220,12 @@ public class ComboGrupo {
         return bonificacion;
     }
     
+    public void initCantidadDetPrecioProductoAux(){
+        for(Iterator<ComboGrupoDetallePrecioProducto> it= getDetallePreciosProductos().iterator();it.hasNext(); ){
+            ComboGrupoDetallePrecioProducto cgDPP = it.next();
+            cgDPP.initCantidadAux();
+        }
+            
+    }
 
 }

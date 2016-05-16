@@ -280,7 +280,7 @@ public class FacturacionService  {
                     FacturaDetalleCombo fd = new FacturaDetalleCombo();
                     fd.setCombo(combo);
                     fd.setCantidad(combo.getCantidadCombosArmados());
-                    fd.setBonificacion(combo.getBonificacion());
+                    fd.setBonificacion(combo.getBonificacionSinCombinacion());
                     factura.getDetalleCombosAux().add(fd);
                 }
                 

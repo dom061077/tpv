@@ -144,23 +144,91 @@ public class Combo {
         return true;
     }
     
+    private void initCantidadAuxGrupoPrecioProducto(){
+        for(Iterator<ComboGrupo> it = getCombosGrupo().iterator();it.hasNext();){
+            ComboGrupo cg = it.next();
+            cg.initCantidadDetPrecioProductoAux();
+        }
+    }
+    
     @Transient
     public int getCantidadCombosArmados(){
         int cantidadArmados=0;
-        if(getCombosGrupo().size()>0)
-            cantidadArmados = getCombosGrupo().get(0).getCantidadGrupos();
-        for(Iterator<ComboGrupo> iterator = getCombosGrupo().iterator();iterator.hasNext();){
-            ComboGrupo gp = iterator.next();
-            if(cantidadArmados>gp.getCantidadGrupos()){
-                cantidadArmados = gp.getCantidadGrupos();
+        if(isCombinarProductos()){
+            if(getCombosGrupo().size()>0)
+                cantidadArmados = getCombosGrupo().get(0).getCantidadGrupos();
+            for(Iterator<ComboGrupo> iterator = getCombosGrupo().iterator();iterator.hasNext();){
+                ComboGrupo gp = iterator.next();
+                if(cantidadArmados>gp.getCantidadGrupos()){
+                    cantidadArmados = gp.getCantidadGrupos();
+                }
+            }
+        }else{
+            boolean hacerBucle=true,hayCombo;
+            initCantidadAuxGrupoPrecioProducto();
+            while(hacerBucle){
+                hayCombo=true;
+                for(Iterator<ComboGrupo> itG = getCombosGrupo().iterator();itG.hasNext();){
+                    ComboGrupo cg = itG.next();
+                    for(Iterator<ComboGrupoDetallePrecioProducto> itGPP = cg.getDetallePreciosProductos().iterator();itGPP.hasNext();){
+                        ComboGrupoDetallePrecioProducto cdPP = itGPP.next();
+                        if(cdPP.getCantidadAux()>=cdPP.getComboGrupo().getCantidad()){
+                            cdPP.decrementarCantAux(cg.getCantidad());
+                            break;
+                        }
+                        hayCombo=false;
+                    }
+                }
+                if(hayCombo)
+                    cantidadArmados+=1;
+                else{
+                    hacerBucle = false;
+                    break;
+                }
+                
             }
         }
         return cantidadArmados;
     }
     
     @Transient
+    public BigDecimal getBonificacionSinCombinacion(){
+        BigDecimal bonificacion = BigDecimal.ZERO, bonificacionAux = BigDecimal.ZERO;
+        
+            boolean hacerBucle=true,hayCombo;
+            initCantidadAuxGrupoPrecioProducto();
+            while(hacerBucle){
+                hayCombo=true;
+                for(Iterator<ComboGrupo> itG = getCombosGrupo().iterator();itG.hasNext();){
+                    ComboGrupo cg = itG.next();
+                    for(Iterator<ComboGrupoDetallePrecioProducto> itGPP = cg.getDetallePreciosProductos().iterator();itGPP.hasNext();){
+                        ComboGrupoDetallePrecioProducto cdPP = itGPP.next();
+                        if(cdPP.getCantidadAux()>=cdPP.getComboGrupo().getCantidad()){
+                            cdPP.decrementarCantAux(cg.getCantidad());
+                            bonificacionAux = cdPP.getPrecioProducto().multiply(cg.getPorcentaje().divide(BigDecimal.valueOf(100)));
+                            bonificacionAux = bonificacionAux.multiply(BigDecimal.valueOf(cg.getCantidad()));
+                            break;
+                        }
+                        hayCombo=false;
+                    }
+                }
+                if(hayCombo)
+                    bonificacion = bonificacion.add(bonificacionAux);
+                else{
+                    hacerBucle = false;
+                    break;
+                }
+                
+            }
+        
+        
+        return bonificacion;
+    }
+    
+    
+    @Transient
     public BigDecimal getBonificacion(){
-        BigDecimal bonificacion= new BigDecimal(0);
+        BigDecimal bonificacion= BigDecimal.ZERO;
         int cantCombosArmados = this.getCantidadCombosArmados();
         int cantReferenciaGrupo = 0;
         int acumulador = 0;
@@ -194,7 +262,7 @@ public class Combo {
                         else;
                     }
                 }else{
-                    bonificacion = bonificacion.add(comboGrupoDetPP.getBonificacion());
+                   // bonificacion = bonificacion.add(comboGrupoDetPP.getBonificacion());
                 }    
                 
             }

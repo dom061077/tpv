@@ -15,6 +15,8 @@ import javax.persistence.Transient;
 public class ComboGrupoDetallePrecioProducto {
     private int cantidad;
     
+    private int cantidadAux;
+    
     private BigDecimal precioProducto;
     
     private Producto producto;
@@ -114,6 +116,28 @@ public class ComboGrupoDetallePrecioProducto {
         bonif = bonif.multiply(BigDecimal.valueOf(cantReferencia));
         bonif = bonif.multiply(comboGrupo.getPorcentaje()).divide(BigDecimal.valueOf(100));
         return bonif;
+    }
+    
+    public void initCantidadAux(){
+        setCantidadAux(cantidad);
+    }
+    
+    public void decrementarCantAux(int decremento){
+        this.setCantidadAux(getCantidadAux() - decremento);
+    }
+
+    /**
+     * @return the cantidadAux
+     */
+    public int getCantidadAux() {
+        return cantidadAux;
+    }
+
+    /**
+     * @param cantidadAux the cantidadAux to set
+     */
+    public void setCantidadAux(int cantidadAux) {
+        this.cantidadAux = cantidadAux;
     }
     
 }
