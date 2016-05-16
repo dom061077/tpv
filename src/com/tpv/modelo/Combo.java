@@ -134,13 +134,12 @@ public class Combo {
      * @return the cumpleCondicion
      */
     public boolean cumpleCondicion() {
-        
         for(Iterator<ComboGrupo> iterator = combosGrupo.iterator();iterator.hasNext();){
             ComboGrupo grupo = iterator.next();
-            if((grupo.getCantidadAcumulada() / grupo.getCantidad())==0){
+            if(grupo.getCantidadGrupos()==0){
                 return false;
             }
-            
+
         }
         return true;
     }
