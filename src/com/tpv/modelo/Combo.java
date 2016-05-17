@@ -193,35 +193,28 @@ public class Combo {
     
     @Transient
     public BigDecimal getBonificacionSinCombinacion(){
-        BigDecimal bonificacion = BigDecimal.ZERO, bonificacionAux = BigDecimal.ZERO;
+        BigDecimal bonificacion = BigDecimal.ZERO,bonificacionAux = BigDecimal.ZERO;
         
-            boolean hacerBucle=true,hayCombo;
-            initCantidadAuxGrupoPrecioProducto();
-            while(hacerBucle){
-                hayCombo=true;
-                for(Iterator<ComboGrupo> itG = getCombosGrupo().iterator();itG.hasNext();){
-                    ComboGrupo cg = itG.next();
-                    for(Iterator<ComboGrupoDetallePrecioProducto> itGPP = cg.getDetallePreciosProductos().iterator();itGPP.hasNext();){
-                        ComboGrupoDetallePrecioProducto cdPP = itGPP.next();
-                        if(cdPP.getCantidadAux()>=cdPP.getComboGrupo().getCantidad()){
-                            cdPP.decrementarCantAux(cg.getCantidad());
-                            bonificacionAux = cdPP.getPrecioProducto().multiply(cg.getPorcentaje().divide(BigDecimal.valueOf(100)));
-                            bonificacionAux = bonificacionAux.multiply(BigDecimal.valueOf(cg.getCantidad()));
-                            break;
-                        }
-                        hayCombo=false;
-                    }
+        int cantidadMinimaPorGrupo=getCantidadMinimaPorGrupo();
+        int contadorCantPorGrupo;
+        initCantidadAuxGrupoPrecioProducto();
+        for(Iterator<ComboGrupo> itG = getCombosGrupo().iterator();itG.hasNext();){
+            ComboGrupo cg = itG.next();
+            contadorCantPorGrupo=0;
+            while(contadorCantPorGrupo<cantidadMinimaPorGrupo){
+                for(Iterator<ComboGrupoDetallePrecioProducto> itGPP = cg.getDetallePreciosProductos().iterator();itGPP.hasNext();){
+                    if(contadorCantPorGrupo>cantidadMinimaPorGrupo)
+                        break;
+                    ComboGrupoDetallePrecioProducto cdPP = itGPP.next();
+                    cdPP.decrementarCantAux(cg.getCantidad());
+                    contadorCantPorGrupo++;
+                    bonificacionAux = cdPP.getPrecioProducto().multiply(cg.getPorcentaje().divide(BigDecimal.valueOf(100)));
+                    bonificacionAux = bonificacionAux.multiply(BigDecimal.valueOf(cdPP.getCantidadAux()));
+                    bonificacion=bonificacion.add(bonificacionAux);
                 }
-                if(hayCombo)
-                    bonificacion = bonificacion.add(bonificacionAux);
-                else{
-                    hacerBucle = false;
-                    break;
-                }
-                
             }
-        
-        
+            
+        }
         return bonificacion;
     }
     
@@ -269,6 +262,21 @@ public class Combo {
         }
         return bonificacion;        
     }
+    
+    @Transient
+    private int getCantidadMinimaPorGrupo(){
+        int cantidadMinima = 0;
+        if(getCombosGrupo().size()==0)
+            return cantidadMinima;
+        cantidadMinima = getCombosGrupo().get(0).getCantidadGrupos();
+        for(Iterator<ComboGrupo> it = getCombosGrupo().iterator();it.hasNext();){
+            ComboGrupo cg = it.next();
+            if(cantidadMinima>cg.getCantidadGrupos())
+                cantidadMinima=cg.getCantidadGrupos();
+        }
+        return cantidadMinima;
+    }
+    
 
     /**
      * @return the combinarProductos

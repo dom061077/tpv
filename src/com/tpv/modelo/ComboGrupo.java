@@ -195,11 +195,9 @@ public class ComboGrupo {
             else
                 cantGruposArmados = getCantidadAcumulada()/cantidad;
         }else{
-            if(getDetallePreciosProductos().size()>0)
-                cantGruposArmados = getDetallePreciosProductos().get(0).getCantidad()/cantidad;
             for(Iterator<ComboGrupoDetallePrecioProducto> it = getDetallePreciosProductos().iterator();it.hasNext();){
                 ComboGrupoDetallePrecioProducto cgdPP = it.next();
-                cantGruposArmados = cgdPP.getCantidad()/cantidad;
+                cantGruposArmados += cgdPP.getCantidad()/cantidad;
             }
         }
         

@@ -280,7 +280,10 @@ public class FacturacionService  {
                     FacturaDetalleCombo fd = new FacturaDetalleCombo();
                     fd.setCombo(combo);
                     fd.setCantidad(combo.getCantidadCombosArmados());
-                    fd.setBonificacion(combo.getBonificacionSinCombinacion());
+                    if(combo.isCombinarProductos())
+                        fd.setBonificacion(combo.getBonificacion());
+                    else    
+                        fd.setBonificacion(combo.getBonificacionSinCombinacion());
                     factura.getDetalleCombosAux().add(fd);
                 }
                 
@@ -288,8 +291,8 @@ public class FacturacionService  {
             
             factura.getDetalleCombosAux().forEach(item ->{
                 System.out.println("Combo armado: "+item.getCombo().getDescripcion());
-                System.out.println("Bonificación: "+item.getCombo().getBonificacion());
-                System.out.println("Cantidad Combos: "+item.getCombo().getCantidadCombosArmados());
+                System.out.println("Bonificación: "+item.getBonificacion());
+                System.out.println("Cantidad Combos: "+item.getCantidad());
                 System.out.println("");
                 item.getCombo().getCombosGrupo().forEach(itemg->{
                     System.out.println("            Grupo condicion de cantidad: "+itemg.getCantidad());
