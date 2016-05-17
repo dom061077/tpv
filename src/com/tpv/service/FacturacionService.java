@@ -14,6 +14,7 @@ import com.tpv.modelo.Factura;
 import com.tpv.modelo.FacturaDetalle;
 import com.tpv.modelo.FacturaDetalleCombo;
 import com.tpv.modelo.Producto;
+import com.tpv.modelo.ProductoAgrupadoEnFactura;
 import com.tpv.modelo.Proveedor;
 import com.tpv.modelo.ProveedorProducto;
 import com.tpv.modelo.enums.FacturaEstadoEnum;
@@ -187,6 +188,16 @@ public class FacturacionService  {
         Factura factura = null;
         EntityManager em = Connection.getEm();
         factura = em.find(Factura.class, id);
+        factura.agruparProductosEnFactura();
+        for(Iterator<ProductoAgrupadoEnFactura> it = factura.getProductosAgrupados().iterator();it.hasNext();){
+            ProductoAgrupadoEnFactura paf = it.next();
+            System.out.println("Producto: "+paf.getProducto().getDescripcion());
+            System.out.println("Cantidad Acumulada; "+paf.getCantidad());
+            System.out.println("Precio del producto: "+paf.getPrecioUnitario());
+        }
+        if(factura!=null)
+            return;
+        
         factura.getDetalleCombosAux().clear();
         Query q = em.createNativeQuery(
                 "SELECT DISTINCT c.* FROM facturasdetalle fd"

@@ -97,7 +97,10 @@ public class Factura {
     private List<FacturaDetalleCombo> detalleCombos = new ArrayList<FacturaDetalleCombo>();    
 
     @Transient
-    private List<FacturaDetalleCombo> detalleCombosAux = new ArrayList<FacturaDetalleCombo>();    
+    private List<FacturaDetalleCombo> detalleCombosAux = new ArrayList<FacturaDetalleCombo>();   
+    
+    @Transient
+    private List<ProductoAgrupadoEnFactura> productosAgrupados = new ArrayList<ProductoAgrupadoEnFactura>();
     
     
     
@@ -454,6 +457,42 @@ public class Factura {
         }
         return totalBonificado;
 
+    }
+
+    private void addProductoAgrupadoEnFactura(FacturaDetalle fd){
+        for(Iterator<ProductoAgrupadoEnFactura> it = getProductosAgrupados().iterator();it.hasNext();){
+            ProductoAgrupadoEnFactura paf = it.next();
+            if(paf.getProducto().equals(fd.getProducto())){
+                paf.incCantidad(fd.getCantidad().intValue());
+                return;
+            }
+        }
+        ProductoAgrupadoEnFactura paf = new ProductoAgrupadoEnFactura();
+        paf.setPrecioUnitario(fd.getPrecioUnitario());
+        paf.setProducto(fd.getProducto());
+        paf.setCantidad(fd.getCantidad().intValue());
+        getProductosAgrupados().add(paf);
+    }
+    
+    public void agruparProductosEnFactura(){
+        for(Iterator<FacturaDetalle> it = getDetalle().iterator();it.hasNext(); ){
+            FacturaDetalle fd = it.next();
+            addProductoAgrupadoEnFactura(fd);
+        }
+    }
+
+    /**
+     * @return the productosAgrupados
+     */
+    public List<ProductoAgrupadoEnFactura> getProductosAgrupados() {
+        return productosAgrupados;
+    }
+
+    /**
+     * @param productosAgrupados the productosAgrupados to set
+     */
+    public void setProductosAgrupados(List<ProductoAgrupadoEnFactura> productosAgrupados) {
+        this.productosAgrupados = productosAgrupados;
     }
     
 }

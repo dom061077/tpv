@@ -203,13 +203,13 @@ public class Combo {
             contadorCantPorGrupo=0;
             while(contadorCantPorGrupo<cantidadMinimaPorGrupo){
                 for(Iterator<ComboGrupoDetallePrecioProducto> itGPP = cg.getDetallePreciosProductos().iterator();itGPP.hasNext();){
-                    if(contadorCantPorGrupo>cantidadMinimaPorGrupo)
+                    if(contadorCantPorGrupo>=cantidadMinimaPorGrupo)
                         break;
                     ComboGrupoDetallePrecioProducto cdPP = itGPP.next();
                     cdPP.decrementarCantAux(cg.getCantidad());
                     contadorCantPorGrupo++;
                     bonificacionAux = cdPP.getPrecioProducto().multiply(cg.getPorcentaje().divide(BigDecimal.valueOf(100)));
-                    bonificacionAux = bonificacionAux.multiply(BigDecimal.valueOf(cdPP.getCantidadAux()));
+                    bonificacionAux = bonificacionAux.multiply(BigDecimal.valueOf(cg.getCantidad()));
                     bonificacion=bonificacion.add(bonificacionAux);
                 }
             }
