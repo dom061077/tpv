@@ -17,11 +17,7 @@ public class ComboGrupoDetallePrecioProducto {
     
     private int cantidadAux;
     
-    private BigDecimal precioProducto;
-    
-    private Producto producto;
-    
-    private FacturaDetalle factDetalle;
+    private ProductoAgrupadoEnFactura paf;
     
     private ComboGrupo comboGrupo;
 
@@ -39,61 +35,11 @@ public class ComboGrupoDetallePrecioProducto {
         this.cantidad = cantidad;
     }
 
-    /**
-     * @return the precioProducto
-     */
-    public BigDecimal getPrecioProducto() {
-        return precioProducto;
-    }
 
-    /**
-     * @param precioProducto the precioProducto to set
-     */
-    public void setPrecioProducto(BigDecimal precioProducto) {
-        this.precioProducto = precioProducto;
-    }
-
-    /**
-     * @return the producto
-     */
-    public Producto getProducto() {
-        return producto;
-    }
-
-    /**
-     * @param producto the producto to set
-     */
-    public void setProducto(Producto producto) {
-        this.producto = producto;
-    }
-    
-    public BigDecimal getSubTotal(){
-        BigDecimal value = new BigDecimal(getComboGrupo().getCombo().getCantidadCombosArmados());
-        return getPrecioProducto().multiply(new BigDecimal(cantidad));
-    }
-    
-    public BigDecimal getBonificacionPorPrecioProducto(){
-        return getPrecioProducto().multiply(getComboGrupo().getPorcentaje()).divide(new BigDecimal(100));
-    }
     
     
-    public void recuperarCantFacDetlleSinCombo(int cantRecuperada){
-        factDetalle.decrementarCantidadAuxCombo(cantidad);
-    }
+    
 
-    /**
-     * @return the factDetalle
-     */
-    public FacturaDetalle getFactDetalle() {
-        return factDetalle;
-    }
-
-    /**
-     * @param factDetalle the factDetalle to set
-     */
-    public void setFactDetalle(FacturaDetalle factDetalle) {
-        this.factDetalle = factDetalle;
-    }
 
     /**
      * @return the comboGrupo
@@ -110,7 +56,7 @@ public class ComboGrupoDetallePrecioProducto {
     }
 
     public BigDecimal getBonificacion(){
-        BigDecimal bonif = precioProducto;
+        BigDecimal bonif =  paf.getPrecioUnitario();
         int cantReferencia = cantidad / comboGrupo.getCantidad();
         cantReferencia = cantReferencia * comboGrupo.getCantidad();
         bonif = bonif.multiply(BigDecimal.valueOf(cantReferencia));
@@ -138,6 +84,20 @@ public class ComboGrupoDetallePrecioProducto {
      */
     public void setCantidadAux(int cantidadAux) {
         this.cantidadAux = cantidadAux;
+    }
+
+    /**
+     * @return the paf
+     */
+    public ProductoAgrupadoEnFactura getPaf() {
+        return paf;
+    }
+
+    /**
+     * @param paf the paf to set
+     */
+    public void setPaf(ProductoAgrupadoEnFactura paf) {
+        this.paf = paf;
     }
     
 }

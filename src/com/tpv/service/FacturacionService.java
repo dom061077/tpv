@@ -189,14 +189,14 @@ public class FacturacionService  {
         EntityManager em = Connection.getEm();
         factura = em.find(Factura.class, id);
         factura.agruparProductosEnFactura();
-        for(Iterator<ProductoAgrupadoEnFactura> it = factura.getProductosAgrupados().iterator();it.hasNext();){
-            ProductoAgrupadoEnFactura paf = it.next();
-            System.out.println("Producto: "+paf.getProducto().getDescripcion());
-            System.out.println("Cantidad Acumulada; "+paf.getCantidad());
-            System.out.println("Precio del producto: "+paf.getPrecioUnitario());
-        }
-        if(factura!=null)
-            return;
+//        for(Iterator<ProductoAgrupadoEnFactura> it = factura.getProductosAgrupados().iterator();it.hasNext();){
+//            ProductoAgrupadoEnFactura paf = it.next();
+//            System.out.println("Producto: "+paf.getProducto().getDescripcion());
+//            System.out.println("Cantidad Acumulada; "+paf.getCantidad());
+//            System.out.println("Precio del producto: "+paf.getPrecioUnitario());
+//        }
+//        if(factura!=null)
+//            return;
         
         factura.getDetalleCombosAux().clear();
         Query q = em.createNativeQuery(
@@ -221,17 +221,17 @@ public class FacturacionService  {
                 Combo combo = (Combo)itCombo.next();
                 for(Iterator itGrupo = combo.getCombosGrupo().iterator();itGrupo.hasNext();){
                     ComboGrupo grupo = (ComboGrupo)itGrupo.next();
-                    for(Iterator itDetFact = factura.getDetalle().iterator();itDetFact.hasNext();){
-                        FacturaDetalle facDet = (FacturaDetalle)itDetFact.next();
+                    for(Iterator<ProductoAgrupadoEnFactura> itAg = factura.getProductosAgrupados().iterator();itAg.hasNext();){
+                        ProductoAgrupadoEnFactura paf = itAg.next();
                         hayDetalleGrupo=false;
                         for(Iterator itDetalle = grupo.getGruposDetalle().iterator();itDetalle.hasNext();){
                             ComboGrupoDetalle gDetalle = (ComboGrupoDetalle)itDetalle.next();
-                            if(facDet.getCantidadAuxCombo()<=0)
+                            if(paf.getCantidad()<=0)
                                 continue;
                             if(gDetalle.getProducto()!=null){
-                                if(gDetalle.getProducto().equals(facDet.getProducto())){
+                                if(gDetalle.getProducto().equals(paf.getProducto())){
                                     if(gDetalle.getProveedor()!=null){
-                                        if(facDet.getProducto().tieneEsteProveedor(gDetalle.getProveedor())){
+                                        if(paf.getProducto().tieneEsteProveedor(gDetalle.getProveedor())){
                                             hayDetalleGrupo = true;
                                         }
                                     }else{
@@ -240,9 +240,9 @@ public class FacturacionService  {
                                 }
                             }else{
                                 if(gDetalle.getGrupoProducto()!=null){
-                                    if(facDet.getProducto().tieneEsteGrupo(gDetalle.getGrupoProducto())){
+                                    if(paf.getProducto().tieneEsteGrupo(gDetalle.getGrupoProducto())){
                                         if(gDetalle.getProveedor()!=null){
-                                            if(facDet.getProducto().tieneEsteProveedor(gDetalle.getProveedor())){
+                                            if(paf.getProducto().tieneEsteProveedor(gDetalle.getProveedor())){
                                                 hayDetalleGrupo = true;
                                             }
                                         }else{
@@ -251,41 +251,26 @@ public class FacturacionService  {
                                     }
                                 }else{
                                     if(gDetalle.getProveedor()!=null){
-                                        if(facDet.getProducto().tieneEsteProveedor(gDetalle.getProveedor())){
+                                        if(paf.getProducto().tieneEsteProveedor(gDetalle.getProveedor())){
                                             hayDetalleGrupo = true;
                                         }
                                     }
                                 }
                             }
                             if(hayDetalleGrupo){
-//                                if(grupo.getCantidadAcumulada()+facDet.getCantidadAuxCombo()<=grupo.getCantidad()){
-//                                    grupo.addDetallePrecioProducto(facDet.getCantidadAuxCombo()
-//                                            , facDet.getPrecioUnitario(), facDet.getProducto()
-//                                            , facDet);
-//                                    facDet.setCantidadAuxCombo(0);
-//                                }else{
-//                                    int resto = (grupo.getCantidadAcumulada()+facDet.getCantidadAuxCombo()) % grupo.getCantidad();
-//                                    grupo.addDetallePrecioProducto(facDet.getCantidadAuxCombo()-resto
-//                                            , facDet.getPrecioUnitario(), facDet.getProducto()
-//                                            , facDet);
-//                                    facDet.decrementarCantidadAuxCombo(facDet.getCantidadAuxCombo()-resto);
-//                                }
                                 if(combo.isCombinarProductos()){
-                                    grupo.addDetallePrecioProducto(facDet.getCantidadAuxCombo()
-                                                , facDet.getPrecioUnitario(), facDet.getProducto()
-                                                , facDet);
+                                    grupo.addDetallePrecioProducto(
+                                                paf.getPrecioUnitario(), paf
+                                                );
                                 }else{
-                                    grupo.addDetallePrecioProducto(facDet.getCantidadAuxCombo()
-                                            , facDet.getPrecioUnitario(),facDet.getProducto(), null);
+                                    grupo.addDetallePrecioProducto(
+                                             paf.getPrecioUnitario(),paf);
                                 }
                                     
-                                facDet.setCantidadAuxCombo(0);
                                 
                             }
                         }
                     }
-
-                    
                 }
                 if(combo.cumpleCondicion()){
                     FacturaDetalleCombo fd = new FacturaDetalleCombo();
@@ -307,7 +292,6 @@ public class FacturacionService  {
                 System.out.println("");
                 item.getCombo().getCombosGrupo().forEach(itemg->{
                     System.out.println("            Grupo condicion de cantidad: "+itemg.getCantidad());
-                    System.out.println("            Grupo cantidad Acumulada: "+itemg.getCantidadAcumulada());
                 });
             });
             

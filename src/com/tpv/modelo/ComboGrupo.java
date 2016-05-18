@@ -149,33 +149,25 @@ public class ComboGrupo {
         return detallePreciosProductos;
     }
     
-    public void addDetallePrecioProducto(int cantidad,BigDecimal precioProducto,Producto producto
-        ,FacturaDetalle factDetalle){
-        boolean agregar = true;
-        if(factDetalle == null){
-            for(Iterator<ComboGrupoDetallePrecioProducto> it = detallePreciosProductos.iterator();it.hasNext();){
-                ComboGrupoDetallePrecioProducto gpp = it.next();
-                if(gpp.getProducto().equals(producto)){
-                   gpp.setCantidad(gpp.getCantidad()+cantidad);
-                   agregar = false;
-                }
+    public void addDetallePrecioProducto(BigDecimal precioProducto,ProductoAgrupadoEnFactura paf){
+        for(Iterator<ComboGrupoDetallePrecioProducto> it = detallePreciosProductos.iterator();it.hasNext();){
+            ComboGrupoDetallePrecioProducto gpp = it.next();
+            if(gpp.getPaf().getProducto().equals(paf.getProducto())){
+               gpp.setCantidad(paf.getCantidad());
+               return;
             }
         }
-        
-        if(agregar){
-            ComboGrupoDetallePrecioProducto gdProd = new ComboGrupoDetallePrecioProducto();
-            gdProd.setCantidad(cantidad);
-            gdProd.setPrecioProducto(precioProducto);
-            gdProd.setProducto(producto);
-            gdProd.setFactDetalle(factDetalle);
-            gdProd.setComboGrupo(this);
-            detallePreciosProductos.add(gdProd);
-        }
+        ComboGrupoDetallePrecioProducto gdProd = new ComboGrupoDetallePrecioProducto();
+        gdProd.setCantidad(paf.getCantidad());
+        //gdProd.setPrecioProducto(precioProducto);
+        gdProd.setPaf(paf);
+        gdProd.setComboGrupo(this);
+        detallePreciosProductos.add(gdProd);
         
     }
     
     @Transient
-    public int getCantidadAcumulada(){
+    private int getCantidadEnCombinacion(){
         int cantAcumulada = 0;
         for(Iterator<ComboGrupoDetallePrecioProducto> iterator = getDetallePreciosProductos().iterator();
                 iterator.hasNext();){
@@ -190,10 +182,10 @@ public class ComboGrupo {
         int cantGruposArmados = 0;
        
         if(getCombo().isCombinarProductos()){
-            if(getCantidadAcumulada()<cantidad)
+            if(getCantidadEnCombinacion()<cantidad)
                 cantGruposArmados = 0;
             else
-                cantGruposArmados = getCantidadAcumulada()/cantidad;
+                cantGruposArmados = getCantidadEnCombinacion()/cantidad;
         }else{
             for(Iterator<ComboGrupoDetallePrecioProducto> it = getDetallePreciosProductos().iterator();it.hasNext();){
                 ComboGrupoDetallePrecioProducto cgdPP = it.next();
@@ -207,14 +199,14 @@ public class ComboGrupo {
     @Transient
     public BigDecimal getBonificacion(){
         BigDecimal bonificacion = new BigDecimal(BigInteger.ZERO);
-        int cantidadCombos = combo.getCantidadCombosArmados();
-        for(Iterator<ComboGrupoDetallePrecioProducto> iterator = getDetallePreciosProductos().iterator()
-                ;iterator.hasNext();){
-            ComboGrupoDetallePrecioProducto cGDetPrecioProducto = iterator.next();
-            //bonificacion = bonificacion.add(cGDetPrecioProducto.getSubTotal().multiply(this.getPorcentaje()).divide(new BigDecimal(100)));
-            bonificacion = cGDetPrecioProducto.getBonificacionPorPrecioProducto();
-            
-        }
+//        int cantidadCombos = combo.getCantidadCombosArmados();
+//        for(Iterator<ComboGrupoDetallePrecioProducto> iterator = getDetallePreciosProductos().iterator()
+//                ;iterator.hasNext();){
+//            ComboGrupoDetallePrecioProducto cGDetPrecioProducto = iterator.next();
+//            //bonificacion = bonificacion.add(cGDetPrecioProducto.getSubTotal().multiply(this.getPorcentaje()).divide(new BigDecimal(100)));
+//            bonificacion = cGDetPrecioProducto.getBonificacionPorPrecioProducto();
+//            
+//        }
         return bonificacion;
     }
     

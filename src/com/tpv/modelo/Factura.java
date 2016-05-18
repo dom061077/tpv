@@ -407,35 +407,35 @@ public class Factura {
     }
 
     public void recuperoCantidadFueraDeCombo(){
-        for(Iterator<FacturaDetalleCombo> itFactDetCombo=this.getDetalleCombosAux().iterator();
-                itFactDetCombo.hasNext();){
-            FacturaDetalleCombo fdc = itFactDetCombo.next();
-            for(Iterator<ComboGrupo> itCombo = fdc.getCombo().getCombosGrupo().iterator()
-                    ;itCombo.hasNext();){
-                ComboGrupo cg = itCombo.next();
-                int cantProductos = cg.getCombo().getCantidadCombosArmados()*cg.getCantidad();
-                int acumulador = 0;
-                int difCantidadFueradeCombo=0;
-                for(Iterator<ComboGrupoDetallePrecioProducto> itComboGDetPP=cg.getDetallePreciosProductos().iterator()
-                        ;itComboGDetPP.hasNext();){
-                    ComboGrupoDetallePrecioProducto comboGDetPP = itComboGDetPP.next();
-                    if(acumulador+comboGDetPP.getCantidad()<=cantProductos){
-                        acumulador+=comboGDetPP.getCantidad();
-                    }else{
-                        if(acumulador+comboGDetPP.getCantidad()==cantProductos){
-                            acumulador+=comboGDetPP.getCantidad();
-                        }else{
-                            if(acumulador==cantProductos){
-                                difCantidadFueradeCombo = comboGDetPP.getCantidad();
-                            }else{
-                                difCantidadFueradeCombo = acumulador+comboGDetPP.getCantidad()-cantProductos;
-                            }
-                            comboGDetPP.getFactDetalle().incrementarCantidadAuxCombo(difCantidadFueradeCombo);
-                        }
-                    }
-                }
-            }
-        }
+//        for(Iterator<FacturaDetalleCombo> itFactDetCombo=this.getDetalleCombosAux().iterator();
+//                itFactDetCombo.hasNext();){
+//            FacturaDetalleCombo fdc = itFactDetCombo.next();
+//            for(Iterator<ComboGrupo> itCombo = fdc.getCombo().getCombosGrupo().iterator()
+//                    ;itCombo.hasNext();){
+//                ComboGrupo cg = itCombo.next();
+//                int cantProductos = cg.getCombo().getCantidadCombosArmados()*cg.getCantidad();
+//                int acumulador = 0;
+//                int difCantidadFueradeCombo=0;
+//                for(Iterator<ComboGrupoDetallePrecioProducto> itComboGDetPP=cg.getDetallePreciosProductos().iterator()
+//                        ;itComboGDetPP.hasNext();){
+//                    ComboGrupoDetallePrecioProducto comboGDetPP = itComboGDetPP.next();
+//                    if(acumulador+comboGDetPP.getCantidad()<=cantProductos){
+//                        acumulador+=comboGDetPP.getCantidad();
+//                    }else{
+//                        if(acumulador+comboGDetPP.getCantidad()==cantProductos){
+//                            acumulador+=comboGDetPP.getCantidad();
+//                        }else{
+//                            if(acumulador==cantProductos){
+//                                difCantidadFueradeCombo = comboGDetPP.getCantidad();
+//                            }else{
+//                                difCantidadFueradeCombo = acumulador+comboGDetPP.getCantidad()-cantProductos;
+//                            }
+//                            comboGDetPP.getFactDetalle().incrementarCantidadAuxCombo(difCantidadFueradeCombo);
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
     
     @Transient
