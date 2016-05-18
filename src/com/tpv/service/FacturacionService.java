@@ -213,9 +213,18 @@ public class FacturacionService  {
                 +" LEFT JOIN combos c ON cg.idCOMBOS = c.idCOMBOS"
                 +" LEFT JOIN proveedores_productos pp ON fd.idPRODUCTOS = pp.idPRODUCTOS AND pp.idProveedor=cgd.idProveedor"
                 +" WHERE c.idcombos IS NOT NULL AND fd.idFACTURAS = ?1 AND CONVERT(NOW(),DATE) BETWEEN c.FECHADESDE AND c.FECHAHASTA"
+                +" ORDER BY c.PRIORIDAD"
                 , Combo.class).setParameter(1, id);
         try{
             listadoCombos = q.getResultList();
+//            if(listadoCombos.size()>0){
+//                for(Iterator<Combo> it = listadoCombos.iterator();it.hasNext(); ){
+//                    Combo c = it.next();
+//                    System.out.println("Combo: "+c.getDescripcion()+" Prioridad: "
+//                            +c.getPrioridad());
+//                }
+//                return;
+//            }
             boolean hayDetalleGrupo;
             for(Iterator itCombo = listadoCombos.iterator();itCombo.hasNext();){
                 Combo combo = (Combo)itCombo.next();
@@ -294,6 +303,13 @@ public class FacturacionService  {
                     System.out.println("            Grupo condicion de cantidad: "+itemg.getCantidad());
                 });
             });
+            System.out.println("---------------------------------------------------------");
+            for(Iterator<ProductoAgrupadoEnFactura> it = factura.getProductosAgrupados().iterator();it.hasNext();){
+                ProductoAgrupadoEnFactura paf = it.next();
+                System.out.println("Producto: "+paf.getProducto().getCodigoProducto()+"-"+paf.getProducto().getDescripcion());
+                System.out.println("Cantidad Sobrante: "+paf.getCantidad());
+            }
+            
             
         }catch(RuntimeException e){    
             e.printStackTrace();

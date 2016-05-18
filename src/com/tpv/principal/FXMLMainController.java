@@ -829,7 +829,7 @@ public class FXMLMainController implements Initializable {
             facturaDetalle.setCantidad(item.getCantidad());
             facturaDetalle.setSubTotal(item.getSubTotal());
             facturaDetalle.setDescuento(BigDecimal.ZERO);
-            facturaDetalle.setPrecioUnitario(BigDecimal.ZERO);
+            facturaDetalle.setPrecioUnitario(item.getPrecioUnitario());
             factura.getDetalle().add(facturaDetalle);
         });
         Factura facturaGuardada=null;
@@ -861,7 +861,7 @@ public class FXMLMainController implements Initializable {
         facturaDetalle.setImpuestoInterno(BigDecimal.ZERO);
         facturaDetalle.setIva(BigDecimal.ZERO);
         facturaDetalle.setNeto(BigDecimal.ZERO);
-        facturaDetalle.setPrecioUnitario(BigDecimal.ZERO);
+        facturaDetalle.setPrecioUnitario(lineaTicketData.getPrecioUnitario());
         facturaDetalle.setSubTotal(lineaTicketData.getSubTotal());
 
         try{
