@@ -213,7 +213,7 @@ public class FXMLMainController implements Initializable {
                             if(item.getSubTotal().compareTo(BigDecimal.valueOf(0))<0){
                                 setStyle("-fx-background-color: red");
                             }else{
-                                setStyle("-fx-background-color: white");
+                                //setStyle("-fx-background-color: white");
                             }
                         }
                         setItem(item);
@@ -960,9 +960,10 @@ public class FXMLMainController implements Initializable {
                 for(Iterator iterator = factura.getDetalle().iterator();iterator.hasNext();){
                     FacturaDetalle fd = (FacturaDetalle)iterator.next();
 
-    //                LineaTicketData lineaTicketData = new LineaTicketData(fd.getProducto().getCodigoProducto()
-    //                                ,fd.getProducto().getDescripcion(),fd.getCantidad()
-    //                                ,fd.,modelTicket.isImprimeComoNegativo());                
+                    LineaTicketData lineaTicketData = new LineaTicketData(fd.getProducto().getCodigoProducto()
+                                    ,fd.getProducto().getDescripcion(),fd.getCantidad()
+                                    ,fd.getPrecioUnitario(),modelTicket.isImprimeComoNegativo());   
+                    modelTicket.getDetalle().add(lineaTicketData);
                 }
         }catch(TpvException e){
             log.error("Error en capa controller: "+e.getMessage());

@@ -112,6 +112,8 @@ public class ProductoService {
             Query q = em.createQuery("FROM Producto p WHERE p.discontinuado = 0 and p.codigoProducto = :codigoProducto").setParameter("codigoProducto", filtroCodigo);
 
             producto = (Producto)q.getSingleResult();
+        }catch(NoResultException e){
+            log.warn("No se pudo encontrar el producto con el código: "+filtroCodigo);
         }catch(RuntimeException e){
             log.error("Error en la capa de servicios al recuperar un producto con codigo: "+filtroCodigo,e);
             throw new TpvException("Error en la capa de servicios al recuperar un producto con codigo: "+filtroCodigo);

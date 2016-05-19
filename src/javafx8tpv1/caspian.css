@@ -2104,7 +2104,7 @@
      */
     -fx-table-header-border-color: #959595; 
 /*    -fx-table-header-background-color: linear (0%,0%) to (0%,100%) stops (80%, #bbbbbb) (10%, #f6f6f6);*/
-    -fx-table-cell-border-color: #bbbbbb;
+    -fx-table-cell-border-color: #317DAF  ; //CAMBIADO#bbbbbb;
     -fx-box-border:transparent;//AGREGADO
     
 }
@@ -2154,7 +2154,7 @@
 }
 
 .table-row-cell:odd {
-    -fx-background-color: -fx-table-cell-border-color, derive(-fx-control-inner-background,-5%);
+    -fx-background-color: -fx-table-cell-border-color,derive(-fx-control-inner-background,-5%);
     -fx-background-insets: 0, 0 0 1 0;
 }
 
@@ -2203,7 +2203,7 @@
 .table-row-cell:filled:selected,
 .tree-table-row-cell:filled:selected:focused, 
 .tree-table-row-cell:filled:selected {
-    -fx-background-color:  lightgray;
+    -fx-background-color:  #5AA0D0;//lightgray;
     -fx-text-fill: -fx-selection-bar-text;
 }
 

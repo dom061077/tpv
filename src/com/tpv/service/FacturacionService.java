@@ -27,6 +27,7 @@ import javafx.beans.property.ListProperty;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 import org.apache.log4j.Logger;
 
@@ -89,6 +90,9 @@ public class FacturacionService  {
                         .setParameter("estado", FacturaEstadoEnum.ABIERTA)
                         .setParameter("idCheckout", idCheckout);
             factura = (Factura)q.getSingleResult();
+        }catch(NonUniqueResultException e){    
+            log.error("Hay más de una factura abierta",e);
+            
         }catch(NoResultException e){
             log.info("no se encontró factura abierta, no se toma como error NoResultException");
         }catch(RuntimeException e){
