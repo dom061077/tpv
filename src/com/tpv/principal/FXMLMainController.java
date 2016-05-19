@@ -151,6 +151,9 @@ public class FXMLMainController implements Initializable {
     private StackPane stackPaneIngresos;
     
     @FXML
+    private StackPane stackPaneCombos;
+    
+    @FXML
     private ImageView imageViewDer;
     
     @FXML
@@ -201,7 +204,12 @@ public class FXMLMainController implements Initializable {
         setBanner();
         asignarEvento();
         configurarAnimacionIngresoNegativo();
+        
         verificarDetalleTableView();
+        
+        labelCantidad.setText(LABEL_CANTIDAD);
+        iniciaIngresosVisibles();
+        
         tableViewTickets.setRowFactory(new Callback<TableView<LineaTicketData>, TableRow<LineaTicketData>>(){
             @Override
             public TableRow<LineaTicketData> call(TableView<LineaTicketData> paramP) {
@@ -226,8 +234,6 @@ public class FXMLMainController implements Initializable {
 
         });
         
-        labelCantidad.setText(LABEL_CANTIDAD);
-        iniciaIngresosVisibles();
         
         
         codigoColumn.setCellValueFactory(new PropertyValueFactory<LineaTicketData,Integer>("codigoProducto"));
@@ -610,7 +616,7 @@ public class FXMLMainController implements Initializable {
         textFieldCodCliente.getStyleClass().add("textfield_sin_border");
         
         labelCantidadIngresada.setVisible(false);
-        
+        stackPaneCombos.setVisible(false);
         
 //        gridPaneCodigoProducto.add(textFieldCodCliente,1,1);
         gridPaneCodigoProducto.add(textFieldProducto,1,1);
@@ -950,6 +956,9 @@ public class FXMLMainController implements Initializable {
     
     private void verificarDetalleTableView(){
         log.info("Verificando detalle de TableView");
+        if(modelTicket.isReinicioVerificado()){
+            return;
+        }
         if(modelTicket.getDetalle().size()==0 && 
                 tableViewTickets.getItems().size()>0)
             tableViewTickets.getItems().clear();
@@ -963,7 +972,12 @@ public class FXMLMainController implements Initializable {
                     LineaTicketData lineaTicketData = new LineaTicketData(fd.getProducto().getCodigoProducto()
                                     ,fd.getProducto().getDescripcion(),fd.getCantidad()
                                     ,fd.getPrecioUnitario(),modelTicket.isImprimeComoNegativo());   
+                    if(factura.getCliente()!=null){
+                        modelTicket.setCliente(factura.getCliente());
+                    }
+                    modelTicket.setClienteSeleccionado(true);
                     modelTicket.getDetalle().add(lineaTicketData);
+                    modelTicket.setReinicioVerificado(true);
                 }
         }catch(TpvException e){
             log.error("Error en capa controller: "+e.getMessage());

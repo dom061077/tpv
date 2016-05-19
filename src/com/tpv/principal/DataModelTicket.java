@@ -48,6 +48,7 @@ public class DataModelTicket {
     private TipoTituloSupervisorEnum tipoTituloSupervisor;
     private Long idFactura;
     private OrigenPantallaErrorEnum origenPantalla;
+    private boolean reinicioVerificado=false;
     
     
     public DataModelTicket(){
@@ -278,6 +279,20 @@ public class DataModelTicket {
      */
     public void setCheckout(Checkout checkout) {
         this.checkout = checkout;
+    }
+
+    /**
+     * @return the reinicioVerificado
+     */
+    public boolean isReinicioVerificado() {
+        return reinicioVerificado;
+    }
+
+    /**
+     * @param reinicioVerificado the reinicioVerificado to set
+     */
+    public void setReinicioVerificado(boolean reinicioVerificado) {
+        this.reinicioVerificado = reinicioVerificado;
     }
 
     
