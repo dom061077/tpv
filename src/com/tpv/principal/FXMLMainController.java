@@ -11,6 +11,7 @@ import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Cliente;
 import com.tpv.modelo.Factura;
 import com.tpv.modelo.FacturaDetalle;
+import com.tpv.modelo.FacturaDetalleCombo;
 import com.tpv.modelo.Producto;
 import com.tpv.modelo.enums.FacturaEstadoEnum;
 import com.tpv.print.event.FiscalPrinterEvent;
@@ -27,6 +28,9 @@ import java.util.ResourceBundle;
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -114,6 +118,9 @@ public class FXMLMainController implements Initializable {
     private TableView tableViewTickets;
     
     @FXML
+    private TableView tableViewCombos;
+    
+    @FXML
     private TableColumn codigoColumn;
     
     @FXML
@@ -128,6 +135,14 @@ public class FXMLMainController implements Initializable {
     @FXML
     private TableColumn subTotalColumn;
     
+    @FXML
+    private TableColumn codigoComboColumn;
+    
+    @FXML
+    private TableColumn descripcionComboColumn;
+    
+    @FXML
+    private TableColumn subTotalComboColumn;
     
     @FXML
     private Label ingresoNegativoHabilitado;
@@ -210,93 +225,6 @@ public class FXMLMainController implements Initializable {
         labelCantidad.setText(LABEL_CANTIDAD);
         iniciaIngresosVisibles();
         
-        tableViewTickets.setRowFactory(new Callback<TableView<LineaTicketData>, TableRow<LineaTicketData>>(){
-            @Override
-            public TableRow<LineaTicketData> call(TableView<LineaTicketData> paramP) {
-                return new TableRow<LineaTicketData>() {
-                    @Override
-                    protected void updateItem(LineaTicketData item, boolean paramBoolean) {
-                        super.updateItem(item, paramBoolean);
-                        if (item!=null){
-                            if(item.getSubTotal().compareTo(BigDecimal.valueOf(0))<0){
-                                setStyle("-fx-background-color: red");
-                            }else{
-                                //setStyle("-fx-background-color: white");
-                            }
-                        }
-                        setItem(item);
-                        
-                    }
-                };
-            }
-            
-          
-
-        });
-        
-        
-        
-        codigoColumn.setCellValueFactory(new PropertyValueFactory<LineaTicketData,Integer>("codigoProducto"));
-        codigoColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
-        descripcionColumn.setCellValueFactory(new PropertyValueFactory("descripcion"));
-        cantidadColumn.setCellValueFactory(new PropertyValueFactory("cantidad"));
-        cantidadColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
-        precioUnitarioColumn.setCellValueFactory(new PropertyValueFactory("precioUnitario"));
-        precioUnitarioColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
-        precioUnitarioColumn.setCellFactory(col -> {
-            TableCell<LineaTicketData,BigDecimal> cell = new TableCell<LineaTicketData,BigDecimal>(){
-                @Override
-                public void updateItem(BigDecimal item,boolean empty){
-                    super.updateItem(item, empty);
-                    this.setText(null);
-                    this.setGraphic(null);
-                    if (!empty) {
-                            //String formattedDob = De
-                            DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
-                                    
-                            this.setText(df.format(item));
-                    }
-                }
-            };
-            return cell;
-        });
-        subTotalColumn.setCellValueFactory(new PropertyValueFactory("subTotal"));
-        subTotalColumn.setCellFactory(col->{
-            TableCell<LineaTicketData,BigDecimal> cell = new TableCell<LineaTicketData,BigDecimal>(){
-                @Override
-                public void updateItem(BigDecimal item, boolean empty){
-                    super.updateItem(item, empty);
-                    this.setText(null);
-                    this.setGraphic(null);
-                    if (!empty) {
-                            //String formattedDob = De
-                            DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
-                                    
-                            this.setText(df.format(item));
-                    }
-                }
-            };
-            return cell;
-        });
-        subTotalColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
-        
-        subTotalColumn.setCellFactory(col -> {
-            TableCell<LineaTicketData,BigDecimal>cell = new TableCell<LineaTicketData,BigDecimal>(){
-                @Override
-                public void updateItem(BigDecimal item,boolean empty){
-                    super.updateItem(item, empty);
-                    this.setText(null);
-                    this.setGraphic(null);
-                    if (!empty) {
-                            //String formattedDob = De
-                            DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
-                                    
-                            this.setText(df.format(item));
-                    }
-                }
-            };
-            return cell;
-        });
         if(modelTicket.getCodigoProdSelecEnBuscarPorDesc()>0){
             textFieldProducto.setText(modelTicket.getCodigoProdSelecEnBuscarPorDesc()+"");
             modelTicket.setCodigoProdSelecEnBuscarPorDesc(0);
@@ -306,7 +234,8 @@ public class FXMLMainController implements Initializable {
             modelTicket.setCodigoClienteSelecEnBuscarPorDesc(0);
         }
         
-        
+        initTableViewTickets();        
+        initTableViewCombos();
         
         Platform.runLater(() -> {
             chequearInterfazNegativo();            
@@ -359,6 +288,12 @@ public class FXMLMainController implements Initializable {
                         stackPaneIngresos.setVisible(false);
                     }
                     
+                }
+            });
+            
+            tableViewCombos.setOnKeyPressed(keyEvent->{
+                if(keyEvent.getCode() == KeyCode.ESCAPE){
+                    stackPaneCombos.setVisible(true);
                 }
             });
             
@@ -462,6 +397,10 @@ public class FXMLMainController implements Initializable {
                         modelTicket.setException(new TpvException("No se puede cancelar un ticket que no está abierto"));
                         goToErrorButton.fire();
                     }
+                }
+                
+                if(keyEvent.getCode() == KeyCode.F8){
+                    verCombos();
                 }
                     
                 
@@ -881,6 +820,122 @@ public class FXMLMainController implements Initializable {
         }
     }
     
+    
+    private void initTableViewTickets(){
+        tableViewTickets.setRowFactory(new Callback<TableView<LineaTicketData>, TableRow<LineaTicketData>>(){
+            @Override
+            public TableRow<LineaTicketData> call(TableView<LineaTicketData> paramP) {
+                return new TableRow<LineaTicketData>() {
+                    @Override
+                    protected void updateItem(LineaTicketData item, boolean paramBoolean) {
+                        super.updateItem(item, paramBoolean);
+                        if (item!=null){
+                            if(item.getSubTotal().compareTo(BigDecimal.valueOf(0))<0){
+                                setStyle("-fx-background-color: red");
+                            }else{
+                                //setStyle("-fx-background-color: white");
+                            }
+                        }
+                        setItem(item);
+                        
+                    }
+                };
+            }
+        });
+        
+        
+        
+        codigoColumn.setCellValueFactory(new PropertyValueFactory<LineaTicketData,Integer>("codigoProducto"));
+        codigoColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+        descripcionColumn.setCellValueFactory(new PropertyValueFactory("descripcion"));
+        cantidadColumn.setCellValueFactory(new PropertyValueFactory("cantidad"));
+        cantidadColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+        precioUnitarioColumn.setCellValueFactory(new PropertyValueFactory("precioUnitario"));
+        precioUnitarioColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+        precioUnitarioColumn.setCellFactory(col -> {
+            TableCell<LineaTicketData,BigDecimal> cell = new TableCell<LineaTicketData,BigDecimal>(){
+                @Override
+                public void updateItem(BigDecimal item,boolean empty){
+                    super.updateItem(item, empty);
+                    this.setText(null);
+                    this.setGraphic(null);
+                    if (!empty) {
+                            //String formattedDob = De
+                            DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
+                                    
+                            this.setText(df.format(item));
+                    }
+                }
+            };
+            return cell;
+        });
+        subTotalColumn.setCellValueFactory(new PropertyValueFactory("subTotal"));
+        subTotalColumn.setCellFactory(col->{
+            TableCell<LineaTicketData,BigDecimal> cell = new TableCell<LineaTicketData,BigDecimal>(){
+                @Override
+                public void updateItem(BigDecimal item, boolean empty){
+                    super.updateItem(item, empty);
+                    this.setText(null);
+                    this.setGraphic(null);
+                    if (!empty) {
+                            //String formattedDob = De
+                            DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
+                                    
+                            this.setText(df.format(item));
+                    }
+                }
+            };
+            return cell;
+        });
+        subTotalColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+        
+        subTotalColumn.setCellFactory(col -> {
+            TableCell<LineaTicketData,BigDecimal>cell = new TableCell<LineaTicketData,BigDecimal>(){
+                @Override
+                public void updateItem(BigDecimal item,boolean empty){
+                    super.updateItem(item, empty);
+                    this.setText(null);
+                    this.setGraphic(null);
+                    if (!empty) {
+                            //String formattedDob = De
+                            DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
+                                    
+                            this.setText(df.format(item));
+                    }
+                }
+            };
+            return cell;
+        });
+        
+    }
+   
+    private void initTableViewCombos(){
+        codigoComboColumn.setCellValueFactory(new PropertyValueFactory<FacturaDetalleComboData,Integer>("codigo"));
+        codigoComboColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+        descripcionComboColumn.setCellValueFactory(new PropertyValueFactory<FacturaDetalleComboData,String>("descripcion"));
+        cantidadColumn.setCellValueFactory(new PropertyValueFactory<FacturaDetalleComboData,Integer>("cantidad"));
+        cantidadColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+        subTotalColumn.setCellValueFactory(new PropertyValueFactory<FacturaDetalleComboData,BigDecimal>("subTotal"));
+        subTotalColumn.setCellFactory(col -> {
+            TableCell<LineaTicketData,BigDecimal> cell = new TableCell<LineaTicketData,BigDecimal>(){
+                @Override
+                public void updateItem(BigDecimal item,boolean empty){
+                    super.updateItem(item, empty);
+                    this.setText(null);
+                    this.setGraphic(null);
+                    if (!empty) {
+                            //String formattedDob = De
+                            DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
+                                    
+                            this.setText(df.format(item));
+                    }
+                }
+            };
+            return cell;
+        });
+        
+    }
+    
     private void asignarEvento(){
         this.fiscalPrinterEvent = new FiscalPrinterEvent(){
             @Override
@@ -985,6 +1040,37 @@ public class FXMLMainController implements Initializable {
             modelTicket.setException(e);
             goToErrorButton.fire();
         }
+    }
+    
+    private void verCombos(){
+        ObservableList<FacturaDetalleComboData> combosItems = FXCollections.observableArrayList();
+        ListProperty<FacturaDetalleComboData> listCombos = new SimpleListProperty<>(combosItems);
+        try{
+            Factura factura = factService.calcularCombos(modelTicket.getIdFactura());
+            for(Iterator<FacturaDetalleCombo> it = factura.getDetalleCombosAux().iterator();it.hasNext();){
+                FacturaDetalleCombo fdc = it.next();
+                FacturaDetalleComboData fdcd = new FacturaDetalleComboData(
+                            fdc.getCombo().getCodigoCombo(),
+                            fdc.getCombo().getDescripcion(),
+                            fdc.getCantidad(),
+                            fdc.getBonificacion()
+                        );
+                listCombos.add(fdcd);
+                
+            }
+        tableViewCombos.getItems().clear();
+        tableViewCombos.setItems(listCombos);
+            
+            
+        }catch(TpvException e){
+            log.error("Error en capa controller: "+e.getMessage());
+            modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+            modelTicket.setException(e);
+            goToErrorButton.fire();
+        }
+        
+        stackPaneCombos.setVisible(true);
+        tableViewCombos.requestFocus();
     }
     
     

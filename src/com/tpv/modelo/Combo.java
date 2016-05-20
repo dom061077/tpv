@@ -50,6 +50,9 @@ public class Combo {
     @Column(name = "FECHAHASTA")
     private java.sql.Date fechaHasta;
     
+    @Column(name = "CODIGOCOMBO")
+    private int codigoCombo;
+    
     
     
     @Column(name = "COMBINARPRODUCTOS", columnDefinition = "TINYINT(1)") 
@@ -320,6 +323,20 @@ public class Combo {
      */
     public void setPrioridad(ComboPrioridadEnum prioridad) {
         this.prioridad = prioridad;
+    }
+
+    /**
+     * @return the codigoCombo
+     */
+    public int getCodigoCombo() {
+        return codigoCombo;
+    }
+
+    /**
+     * @param codigoCombo the codigoCombo to set
+     */
+    public void setCodigoCombo(int codigoCombo) {
+        this.codigoCombo = codigoCombo;
     }
 
   
