@@ -161,7 +161,7 @@ public class TestHibernate {
         EntityManager em = Connection.getEm();
         FacturacionService facService = new FacturacionService();
         try{
-            facService.calcularCombos(new Long(303));
+            facService.calcularCombos(new Long(307));
         }catch(Exception e){
            e.printStackTrace();
         }

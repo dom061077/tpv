@@ -186,7 +186,7 @@ public class FacturacionService  {
     
 
     
-    public void calcularCombos(Long id) throws TpvException{
+    public Factura calcularCombos(Long id) throws TpvException{
         log.info("Calculando combos para id factura: "+id);
         List<Combo> listadoCombos = null;
         Factura factura = null;
@@ -298,21 +298,21 @@ public class FacturacionService  {
                 
             }
             
-            factura.getDetalleCombosAux().forEach(item ->{
-                System.out.println("Combo armado: "+item.getCombo().getDescripcion());
-                System.out.println("Bonificación: "+item.getBonificacion());
-                System.out.println("Cantidad Combos: "+item.getCantidad());
-                System.out.println("");
-                item.getCombo().getCombosGrupo().forEach(itemg->{
-                    System.out.println("            Grupo condicion de cantidad: "+itemg.getCantidad());
-                });
-            });
-            System.out.println("---------------------------------------------------------");
-            for(Iterator<ProductoAgrupadoEnFactura> it = factura.getProductosAgrupados().iterator();it.hasNext();){
-                ProductoAgrupadoEnFactura paf = it.next();
-                System.out.println("Producto: "+paf.getProducto().getCodigoProducto()+"-"+paf.getProducto().getDescripcion());
-                System.out.println("Cantidad Sobrante: "+paf.getCantidad());
-            }
+//            factura.getDetalleCombosAux().forEach(item ->{
+//                System.out.println("Combo armado: "+item.getCombo().getDescripcion());
+//                System.out.println("Bonificación: "+item.getBonificacion());
+//                System.out.println("Cantidad Combos: "+item.getCantidad());
+//                System.out.println("");
+//                item.getCombo().getCombosGrupo().forEach(itemg->{
+//                    System.out.println("            Grupo condicion de cantidad: "+itemg.getCantidad());
+//                });
+//            });
+//            System.out.println("---------------------------------------------------------");
+//            for(Iterator<ProductoAgrupadoEnFactura> it = factura.getProductosAgrupados().iterator();it.hasNext();){
+//                ProductoAgrupadoEnFactura paf = it.next();
+//                System.out.println("Producto: "+paf.getProducto().getCodigoProducto()+"-"+paf.getProducto().getDescripcion());
+//                System.out.println("Cantidad Sobrante: "+paf.getCantidad());
+//            }
             
             
         }catch(RuntimeException e){    
@@ -323,6 +323,7 @@ public class FacturacionService  {
         }finally{
             em.clear();
         }
+        return factura;
     }
     
 }
