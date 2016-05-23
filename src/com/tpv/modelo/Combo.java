@@ -221,6 +221,7 @@ public class Combo {
                     //cdPP.decrementarCantAux(cg.getCantidad());
                     if(cdPP.getPaf().getCantidad()>= cg.getCantidad()){
                         cdPP.getPaf().decCantidad(cg.getCantidad());
+                        
                         bonificacionAux = cdPP.getPaf().getPrecioUnitario().multiply(cg.getPorcentaje().divide(BigDecimal.valueOf(100)));
                         bonificacionAux = bonificacionAux.multiply(BigDecimal.valueOf(cg.getCantidad()));
                         bonificacion=bonificacion.add(bonificacionAux);
@@ -230,7 +231,9 @@ public class Combo {
                     
                 }
             }
-            
+            if(cg.getMonto().compareTo(BigDecimal.ZERO)>0){
+                bonificacion = bonificacion.add(cg.getMonto().multiply(BigDecimal.valueOf(cantidadMinimaPorGrupo)));
+            }
         }
         return bonificacion;
     }
@@ -242,10 +245,10 @@ public class Combo {
         int cantCombosArmados = this.getCantidadCombosArmados();
         int cantReferenciaGrupo = 0;
         int acumulador = 0;
+        
         for(Iterator<ComboGrupo> iterator = getCombosGrupo().iterator();iterator.hasNext();){
             ComboGrupo gp = iterator.next();
             cantReferenciaGrupo = cantCombosArmados * gp.getCantidad();
-            
             for(Iterator<ComboGrupoDetallePrecioProducto> comboGrupoDetPPIterator = gp.getDetallePreciosProductos().iterator()
                     ;comboGrupoDetPPIterator.hasNext();){
                 ComboGrupoDetallePrecioProducto comboGrupoDetPP = comboGrupoDetPPIterator.next();
@@ -256,26 +259,34 @@ public class Combo {
                     }
 
                     if(acumulador + comboGrupoDetPP.getCantidad()<=cantReferenciaGrupo){
+                        //if(gp.getMonto().equals(BigDecimal.ZERO)){
                             bonificacion = bonificacion.add(comboGrupoDetPP.getPaf().getPrecioUnitario()
                                     .multiply(BigDecimal.valueOf(comboGrupoDetPP.getCantidad()))
                                     .multiply(gp.getPorcentaje()).divide(new BigDecimal(100)));    
                             acumulador+=comboGrupoDetPP.getCantidad();
-                            comboGrupoDetPP.getPaf().decCantidad(comboGrupoDetPP.getCantidad());
+                        //}else{
+                        //}    
+                        comboGrupoDetPP.getPaf().decCantidad(comboGrupoDetPP.getCantidad());
                     }else{
                         int diferencia = acumulador + comboGrupoDetPP.getCantidad() - cantReferenciaGrupo;
-                        bonificacion = bonificacion.add(comboGrupoDetPP.getPaf().getPrecioUnitario()
-                                .multiply(BigDecimal.valueOf(comboGrupoDetPP.getCantidad()-diferencia))
-                                .multiply(gp.getPorcentaje()).divide(new BigDecimal(100)));    
-                        acumulador = cantReferenciaGrupo;
-                        if(gp.getCombo().isCombinarProductos())
-                            comboGrupoDetPP.getPaf().setCantidad(diferencia);
-                        else;
+                        //if(gp.getMonto().equals(BigDecimal.ZERO)){
+                            bonificacion = bonificacion.add(comboGrupoDetPP.getPaf().getPrecioUnitario()
+                                    .multiply(BigDecimal.valueOf(comboGrupoDetPP.getCantidad()-diferencia))
+                                    .multiply(gp.getPorcentaje()).divide(new BigDecimal(100)));    
+                            acumulador = cantReferenciaGrupo;
+                        //}else{
+                        //}
+                        comboGrupoDetPP.getPaf().setCantidad(diferencia);
+                        
                     }
                 }else{
                    // bonificacion = bonificacion.add(comboGrupoDetPP.getBonificacion());
                 }    
                 
             }
+            if(gp.getMonto().compareTo(BigDecimal.ZERO)>0)
+                bonificacion = bonificacion.add(gp.getMonto().multiply(BigDecimal.valueOf(cantCombosArmados)));
+
         }
         return bonificacion;        
     }

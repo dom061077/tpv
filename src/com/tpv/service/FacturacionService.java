@@ -310,7 +310,7 @@ public class FacturacionService  {
             System.out.println("---------------------------------------------------------");
             for(Iterator<ProductoAgrupadoEnFactura> it = factura.getProductosAgrupados().iterator();it.hasNext();){
                 ProductoAgrupadoEnFactura paf = it.next();
-                System.out.println("Producto: "+paf.getProducto().getCodigoProducto()+"-"+paf.getProducto().getDescripcion());
+                System.out.println("Producto: "+paf.getProducto().getIdProducto()+" "+paf.getProducto().getCodigoProducto()+"-"+paf.getProducto().getDescripcion());
                 System.out.println("Cantidad Sobrante: "+paf.getCantidad());
             }
             

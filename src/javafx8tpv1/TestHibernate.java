@@ -138,6 +138,32 @@ public class TestHibernate {
         
     }
     
+    static void getProveedorFromCombo(){
+        EntityManager em = Connection.getEm();
+        try{
+            Query q = em.createQuery("FROM Combo c WHERE c.id = 1");
+            List<Combo> combos = q.getResultList();
+            combos.forEach(it ->{
+                System.out.println("Combo: "+it.getDescripcion());
+                it.getCombosGrupo().forEach(itcg->{
+                    itcg.getGruposDetalle().forEach(itcgd->{
+                        System.out.println("Proveedor de Grupo: "
+                                +itcgd.getProveedor().getId()
+                                +" "
+                                +itcgd.getProveedor().getNombreFantasia());
+                    });
+                    
+                });
+            });
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+            
+        
+        
+    }
+            
+    
     static void probarRecursivadaGrupoProducto(){
         EntityManager em = Connection.getEm();
         try{
@@ -161,7 +187,7 @@ public class TestHibernate {
         EntityManager em = Connection.getEm();
         FacturacionService facService = new FacturacionService();
         try{
-            facService.calcularCombos(new Long(307));
+            facService.calcularCombos(new Long(303));
         }catch(Exception e){
            e.printStackTrace();
         }
@@ -175,6 +201,7 @@ public class TestHibernate {
         }catch(Exception e){
             e.printStackTrace();
         }
+        //getProveedorFromCombo();
         calcularCombos();
 //        getProveedorFromProductos();
         

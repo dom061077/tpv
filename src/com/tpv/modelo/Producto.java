@@ -6,6 +6,7 @@
 package com.tpv.modelo;
 
 import java.math.BigDecimal;
+import java.util.Iterator;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -196,8 +197,13 @@ public class Producto {
     }
     
     public boolean tieneEsteProveedor(Proveedor prov){
-        if(getProveedores().contains(prov))
-            return true;
+        for(Iterator<ProveedorProducto> it = getProveedores().iterator();it.hasNext();){
+            ProveedorProducto pp = it.next();
+            if(pp.getProveedor().equals(prov)){
+                return true;
+            }
+                
+        }
         return false;
     }
     

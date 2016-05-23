@@ -129,6 +129,10 @@ public class FXMLMainController implements Initializable {
     @FXML
     private TableColumn cantidadColumn;
     
+    
+    @FXML
+    private TableColumn cantidadComboColumn;
+    
     @FXML
     private TableColumn precioUnitarioColumn;
     
@@ -1058,17 +1062,14 @@ public class FXMLMainController implements Initializable {
                 listCombos.add(fdcd);
                 
             }
-        tableViewCombos.getItems().clear();
-        tableViewCombos.setItems(listCombos);
-            
-            
+            tableViewCombos.getItems().clear();
+            tableViewCombos.setItems(listCombos);
         }catch(TpvException e){
             log.error("Error en capa controller: "+e.getMessage());
             modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
             modelTicket.setException(e);
             goToErrorButton.fire();
         }
-        
         stackPaneCombos.setVisible(true);
         tableViewCombos.requestFocus();
     }
