@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.tpv.principal;
+package com.tpv.combos;
 
 import java.math.BigDecimal;
 import javafx.beans.property.IntegerProperty;

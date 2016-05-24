@@ -6,6 +6,7 @@
 package javafx8tpv1;
 
 import com.tpv.cliente.BuscarPorNombreClienteController;
+import com.tpv.combos.CombosController;
 import com.tpv.errorui.ErrorController;
 import com.tpv.exceptions.TpvException;
 import com.tpv.login.LoginController;
@@ -101,6 +102,8 @@ public class JavaFX8TPV1 extends Application {
                    .withLink(ErrorController.class,"facturacion",FXMLMainController.class)
                    .withLink(PagoTicketController.class, "confirmarTicket", ConfirmaPagoTicketController.class)
                    .withLink(ConfirmaPagoTicketController.class,"facturacion", FXMLMainController.class)
+                   .withLink(FXMLMainController.class, "combos", CombosController.class)
+                   .withLink(CombosController.class,"volverFacturacion",FXMLMainController.class)
                    .withLink(ConfirmaPagoTicketController.class,"volverPagoTicket", PagoTicketController.class)
                    .withLink(ConfirmaPagoTicketController.class,"mostrarError",ErrorController.class)
                    .withLink(FXMLMainController.class,"habilitarSupervisor",SupervisorController.class)

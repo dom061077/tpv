@@ -11,7 +11,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <Pane prefHeight="532.0" prefWidth="1296.0" BorderPane.alignment="CENTER">
          <children>
@@ -68,54 +68,9 @@
                   </GridPane>
                </children>
             </StackPane>
-            <StackPane fx:id="stackPaneCombos" prefHeight="425.0" prefWidth="711.0" styleClass="rounded_corner">
-               <children>
-                  <BorderPane prefHeight="200.0" prefWidth="200.0">
-                     <top>
-                        <Label text="Ofertas que tiene su Compra" BorderPane.alignment="CENTER" />
-                     </top>
-                     <center>
-                        <TableView fx:id="tableViewCombos" prefHeight="200.0" prefWidth="200.0" styleClass="tpv-table-view" BorderPane.alignment="CENTER">
-                          <columns>
-                              <TableColumn fx:id="codigoComboColumn" prefWidth="75.0" text="Column X" />
-                            <TableColumn fx:id="descripcionComboColumn" prefWidth="143.0" text="Descripción" />
-                            <TableColumn fx:id="cantidadComboColumn" minWidth="7.0" prefWidth="226.0" text="Cantidad" />
-                              <TableColumn fx:id="subTotalComboColumn" prefWidth="162.0" text="\$ Total" />
-                          </columns>
-                        </TableView>
-                     </center>
-                     <bottom>
-                        <GridPane BorderPane.alignment="CENTER">
-                          <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
-                           <children>
-                              <Label alignment="TOP_RIGHT" prefHeight="17.0" prefWidth="345.0" styleClass="label_total" text="Total Descuentos:" />
-                              <Label fx:id="totalDescuentos" prefHeight="17.0" prefWidth="322.0" styleClass="label_total" text="Label" GridPane.columnIndex="1" />
-                           </children>
-                        </GridPane>
-                     </bottom>
-                  </BorderPane>
-               </children>
-            </StackPane>
          </children>
       </Pane>
    </center>
-   <right>
-      <VBox prefHeight="483.0" prefWidth="6.0" BorderPane.alignment="CENTER">
-         <children>
-            <Button fx:id="goToErrorButton" mnemonicParsing="false" text="Button" visible="false" />
-            <Button fx:id="volverMenuPrincipalButton" focusTraversable="false" mnemonicParsing="false" text="Button" visible="false" />
-            <Button id="ButtonCliente" fx:id="buscarProductoButton" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" prefHeight="5.0" prefWidth="151.0" styleClass="tpvbutton" text="Buscar por descripcion" visible="false" />
-            <Button fx:id="pagoTicketButton" mnemonicParsing="false" prefHeight="33.0" prefWidth="77.0" styleClass="tpvbutton" text="Button" visible="false" />
-            <Button fx:id="clienteButton" focusTraversable="false" prefHeight="21.0" prefWidth="151.0" styleClass="tpvbutton" text="Cliente  F2" visible="false" wrapText="true" />
-         </children>
-      </VBox>
-   </right>
    <bottom>
       <GridPane BorderPane.alignment="CENTER">
         <columnConstraints>
@@ -130,6 +85,7 @@
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <Label styleClass="label_shorcut" text="F2-Cliente" />
@@ -145,12 +101,19 @@
             <Label styleClass="label_shorcut" text="F6- Deshabilita Negativo" GridPane.columnIndex="4" />
             <Label styleClass="label_shorcut" text="F8- Ver Ofertas" GridPane.columnIndex="6" />
             <Label styleClass="label_shorcut" text="F7- Cancelar Ticket Completo" GridPane.columnIndex="5" />
+            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="8" GridPane.rowIndex="1">
+               <children>
+                  <Button fx:id="combosButton" mnemonicParsing="false" text="Button" visible="false" />
+                  <Button fx:id="goToErrorButton" mnemonicParsing="false" prefHeight="2.0" prefWidth="52.0" text="Button" visible="false" />
+                  <Button fx:id="volverMenuPrincipalButton" focusTraversable="false" mnemonicParsing="false" text="Button" visible="false" />
+                  <Button id="ButtonCliente" fx:id="buscarProductoButton" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" prefHeight="5.0" prefWidth="151.0" styleClass="tpvbutton" text="Buscar por descripcion" visible="false" />
+                  <Button fx:id="pagoTicketButton" mnemonicParsing="false" prefHeight="33.0" prefWidth="77.0" styleClass="tpvbutton" text="Button" visible="false" />
+                  <Button fx:id="clienteButton" focusTraversable="false" prefHeight="21.0" prefWidth="151.0" styleClass="tpvbutton" text="Cliente  F2" visible="false" wrapText="true" />
+               </children>
+            </HBox>
          </children>
       </GridPane>
    </bottom>
-   <left>
-      <VBox prefHeight="532.0" prefWidth="28.0" BorderPane.alignment="CENTER" />
-   </left>
    <top>
       <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <left>

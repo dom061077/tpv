@@ -5,6 +5,7 @@
  */
 package com.tpv.principal;
 
+import com.tpv.combos.FacturaDetalleComboData;
 import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.enums.TipoTituloSupervisorEnum;
 import com.tpv.exceptions.TpvException;
@@ -117,8 +118,6 @@ public class FXMLMainController implements Initializable {
     @FXML
     private TableView tableViewTickets;
     
-    @FXML
-    private TableView tableViewCombos;
     
     @FXML
     private TableColumn codigoColumn;
@@ -130,8 +129,6 @@ public class FXMLMainController implements Initializable {
     private TableColumn cantidadColumn;
     
     
-    @FXML
-    private TableColumn cantidadComboColumn;
     
     @FXML
     private TableColumn precioUnitarioColumn;
@@ -139,14 +136,7 @@ public class FXMLMainController implements Initializable {
     @FXML
     private TableColumn subTotalColumn;
     
-    @FXML
-    private TableColumn codigoComboColumn;
     
-    @FXML
-    private TableColumn descripcionComboColumn;
-    
-    @FXML
-    private TableColumn subTotalComboColumn;
     
     @FXML
     private Label ingresoNegativoHabilitado;
@@ -169,8 +159,6 @@ public class FXMLMainController implements Initializable {
     @FXML
     private StackPane stackPaneIngresos;
     
-    @FXML
-    private StackPane stackPaneCombos;
     
     @FXML
     private ImageView imageViewDer;
@@ -194,6 +182,10 @@ public class FXMLMainController implements Initializable {
     @FXML
     @ActionTrigger("pagoTicket")
     private Button pagoTicketButton;
+    
+    @FXML
+    @ActionTrigger("combos")
+    private Button combosButton;
     
     @FXML
     @ActionTrigger("volverMenuPrincipal")
@@ -239,7 +231,7 @@ public class FXMLMainController implements Initializable {
         }
         
         initTableViewTickets();        
-        initTableViewCombos();
+        
         
         Platform.runLater(() -> {
             chequearInterfazNegativo();            
@@ -295,11 +287,6 @@ public class FXMLMainController implements Initializable {
                 }
             });
             
-            tableViewCombos.setOnKeyPressed(keyEvent->{
-                if(keyEvent.getCode() == KeyCode.ESCAPE){
-                    stackPaneCombos.setVisible(true);
-                }
-            });
             
             textFieldProducto.requestFocus();
             textFieldProducto.setOnKeyPressed(keyEvent -> {
@@ -404,7 +391,7 @@ public class FXMLMainController implements Initializable {
                 }
                 
                 if(keyEvent.getCode() == KeyCode.F8){
-                    verCombos();
+                    combosButton.fire();
                 }
                     
                 
@@ -559,7 +546,6 @@ public class FXMLMainController implements Initializable {
         textFieldCodCliente.getStyleClass().add("textfield_sin_border");
         
         labelCantidadIngresada.setVisible(false);
-        stackPaneCombos.setVisible(false);
         
 //        gridPaneCodigoProducto.add(textFieldCodCliente,1,1);
         gridPaneCodigoProducto.add(textFieldProducto,1,1);
@@ -913,32 +899,7 @@ public class FXMLMainController implements Initializable {
         
     }
    
-    private void initTableViewCombos(){
-        codigoComboColumn.setCellValueFactory(new PropertyValueFactory<FacturaDetalleComboData,Integer>("codigo"));
-        codigoComboColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
-        descripcionComboColumn.setCellValueFactory(new PropertyValueFactory<FacturaDetalleComboData,String>("descripcion"));
-        cantidadColumn.setCellValueFactory(new PropertyValueFactory<FacturaDetalleComboData,Integer>("cantidad"));
-        cantidadColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
-        subTotalColumn.setCellValueFactory(new PropertyValueFactory<FacturaDetalleComboData,BigDecimal>("subTotal"));
-        subTotalColumn.setCellFactory(col -> {
-            TableCell<LineaTicketData,BigDecimal> cell = new TableCell<LineaTicketData,BigDecimal>(){
-                @Override
-                public void updateItem(BigDecimal item,boolean empty){
-                    super.updateItem(item, empty);
-                    this.setText(null);
-                    this.setGraphic(null);
-                    if (!empty) {
-                            //String formattedDob = De
-                            DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
-                                    
-                            this.setText(df.format(item));
-                    }
-                }
-            };
-            return cell;
-        });
-        
-    }
+
     
     private void asignarEvento(){
         this.fiscalPrinterEvent = new FiscalPrinterEvent(){
@@ -1024,7 +985,7 @@ public class FXMLMainController implements Initializable {
         Factura factura = null;
         try{
             factura = factService.getFacturaAbiertaPorCheckout(modelTicket.getCheckout().getId());
-            if(factura!=null)
+            if(factura!=null){
                 for(Iterator iterator = factura.getDetalle().iterator();iterator.hasNext();){
                     FacturaDetalle fd = (FacturaDetalle)iterator.next();
 
@@ -1036,19 +997,22 @@ public class FXMLMainController implements Initializable {
                     }
                     modelTicket.setClienteSeleccionado(true);
                     modelTicket.getDetalle().add(lineaTicketData);
-                    modelTicket.setReinicioVerificado(true);
                 }
+                modelTicket.setIdFactura(factura.getId());
+            }
         }catch(TpvException e){
             log.error("Error en capa controller: "+e.getMessage());
             modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
             modelTicket.setException(e);
             goToErrorButton.fire();
         }
+        modelTicket.setReinicioVerificado(true);        
     }
     
     private void verCombos(){
         ObservableList<FacturaDetalleComboData> combosItems = FXCollections.observableArrayList();
         ListProperty<FacturaDetalleComboData> listCombos = new SimpleListProperty<>(combosItems);
+        
         try{
             Factura factura = factService.calcularCombos(modelTicket.getIdFactura());
             for(Iterator<FacturaDetalleCombo> it = factura.getDetalleCombosAux().iterator();it.hasNext();){
@@ -1062,16 +1026,12 @@ public class FXMLMainController implements Initializable {
                 listCombos.add(fdcd);
                 
             }
-            tableViewCombos.getItems().clear();
-            tableViewCombos.setItems(listCombos);
         }catch(TpvException e){
             log.error("Error en capa controller: "+e.getMessage());
             modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
             modelTicket.setException(e);
             goToErrorButton.fire();
         }
-        stackPaneCombos.setVisible(true);
-        tableViewCombos.requestFocus();
     }
     
     
