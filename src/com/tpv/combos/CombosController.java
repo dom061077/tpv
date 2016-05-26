@@ -102,7 +102,7 @@ public class CombosController{
     
     
     private void initTableViewCombos(){
-        codigoColumn.setCellValueFactory(new PropertyValueFactory<LineaTicketData,Integer>("codigoProducto"));
+        codigoColumn.setCellValueFactory(new PropertyValueFactory<FacturaDetalleComboData,Integer>("codigo"));
         codigoColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
         descripcionColumn.setCellValueFactory(new PropertyValueFactory("descripcion"));
         cantidadColumn.setCellValueFactory(new PropertyValueFactory("cantidad"));
@@ -110,7 +110,7 @@ public class CombosController{
         
         subTotalColumn.setCellValueFactory(new PropertyValueFactory("subTotal"));
         subTotalColumn.setCellFactory(col->{
-            TableCell<LineaTicketData,BigDecimal> cell = new TableCell<LineaTicketData,BigDecimal>(){
+            TableCell<FacturaDetalleComboData,BigDecimal> cell = new TableCell<FacturaDetalleComboData,BigDecimal>(){
                 @Override
                 public void updateItem(BigDecimal item, boolean empty){
                     super.updateItem(item, empty);
@@ -129,7 +129,7 @@ public class CombosController{
         subTotalColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
         
         subTotalColumn.setCellFactory(col -> {
-            TableCell<LineaTicketData,BigDecimal>cell = new TableCell<LineaTicketData,BigDecimal>(){
+            TableCell<FacturaDetalleComboData,BigDecimal>cell = new TableCell<FacturaDetalleComboData,BigDecimal>(){
                 @Override
                 public void updateItem(BigDecimal item,boolean empty){
                     super.updateItem(item, empty);

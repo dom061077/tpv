@@ -35,28 +35,28 @@ public class FacturaDetalleComboData {
     /**
      * @return the codigo
      */
-    public IntegerProperty getCodigoProperty() {
+    public IntegerProperty codigoProperty() {
         return getCodigo();
     }
 
     /**
      * @return the descripcion
      */
-    public StringProperty getDescripcionProperty() {
+    public StringProperty descripcionProperty() {
         return getDescripcion();
     }
 
     /**
      * @return the cantidad
      */
-    public IntegerProperty getCantidadProperty() {
+    public IntegerProperty cantidadProperty() {
         return getCantidad();
     }
 
     /**
      * @return the subTotal
      */
-    public ObjectProperty<BigDecimal> getSubTotalProperty() {
+    public ObjectProperty<BigDecimal> subTotalProperty() {
         return getSubTotal();
     }
 
