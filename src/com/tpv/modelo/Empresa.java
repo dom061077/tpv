@@ -36,10 +36,10 @@ public class Empresa {
     private BigDecimal porcentajeEspecial;
     
     @Column(name = "ESTADO", columnDefinition = "TINYINT(1)") 
-    private BigDecimal estado;
+    private boolean estado;
 
     @Column(name = "CONDICION")
-    private BigDecimal condicion;
+    private String condicion;
 
     /**
      * @return the id
@@ -114,31 +114,20 @@ public class Empresa {
     /**
      * @return the estado
      */
-    public BigDecimal getEstado() {
+    public boolean isEstado() {
         return estado;
-    }
-
-    /**
-     * @param estado the estado to set
-     */
-    public void setEstado(BigDecimal estado) {
-        this.estado = estado;
     }
 
     /**
      * @return the condicion
      */
-    public BigDecimal getCondicion() {
+    public String getCondicion() {
         return condicion;
     }
 
-    /**
-     * @param condicion the condicion to set
-     */
-    public void setCondicion(BigDecimal condicion) {
-        this.condicion = condicion;
-    }
-    
+
+
+
     
     
     

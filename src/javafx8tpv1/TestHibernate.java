@@ -13,6 +13,7 @@ import com.tpv.modelo.Producto;
 import com.tpv.modelo.ProveedorProducto;
 import com.tpv.service.FacturacionService;
 import com.tpv.service.ImpresoraService;
+import com.tpv.service.ProductoService;
 import com.tpv.util.Connection;
 import java.math.BigDecimal;
 import java.net.InetAddress;
@@ -192,6 +193,16 @@ public class TestHibernate {
            e.printStackTrace();
         }
     }
+    
+    static void getBonificacion(){
+        EntityManager em = Connection.getEm();
+        ProductoService ps = new ProductoService();
+        try{
+            BigDecimal resultado = ps.getPrecioConDescPersonal(1, BigDecimal.valueOf(10.10));
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
             
     
     public static void main(String[] args){
@@ -201,8 +212,9 @@ public class TestHibernate {
         }catch(Exception e){
             e.printStackTrace();
         }
+        getBonificacion();
         //getProveedorFromCombo();
-        calcularCombos();
+        //calcularCombos();
 //        getProveedorFromProductos();
         
         //probarRecursivadaGrupoProducto();

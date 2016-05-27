@@ -235,7 +235,7 @@ public class ListaPrecioProducto {
         @Formula("(SELECT current_date())")
         private java.sql.Date fechaHoy;
         
-        @Formula("(SELECT )")
+      
         
         @ManyToOne
         @JoinColumn(name = "idPRODUCTOS",insertable=false ,updatable = false)

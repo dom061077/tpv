@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -36,6 +37,11 @@ public class Cliente {
     @JoinColumn(name = "idCONDICIONESIVA", referencedColumnName = "idCONDICIONESIVA", nullable=true)
     private CondicionIva condicionIva;
     
+    @ManyToOne
+    @JoinColumn(name = "idEMPRESA", referencedColumnName = "idEMPRESA",nullable = false)
+    private Empresa empresa;
+    
+
     
     
     /**
@@ -106,6 +112,13 @@ public class Cliente {
      */
     public void setCondicionIva(CondicionIva condicionIva) {
         this.condicionIva = condicionIva;
+    }
+
+    /**
+     * @return the empresa
+     */
+    public Empresa getEmpresa() {
+        return empresa;
     }
     
     

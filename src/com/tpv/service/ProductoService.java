@@ -6,6 +6,8 @@
 package com.tpv.service;
 
 import com.tpv.exceptions.TpvException;
+import com.tpv.modelo.BonificacionCliente;
+import com.tpv.modelo.Cliente;
 import com.tpv.modelo.GrupoProducto;
 import com.tpv.modelo.ListaPrecioProducto;
 import com.tpv.modelo.Producto;
@@ -149,6 +151,8 @@ public class ProductoService {
                     +" and lpp.producto.codigoProducto = :codigoProducto").setParameter("codigoProducto", filtroCodigo);
                 lstPrecioProducto = (ListaPrecioProducto)q.getSingleResult();
                 precio = lstPrecioProducto.getPrecioFinal();
+                
+                
             log.info("Precio recuperado, codigo de producto: "+filtroCodigo
                     +", precio "+precio);
         }catch(NoResultException e){    
@@ -166,6 +170,33 @@ public class ProductoService {
         
         precio = precio.setScale(2,BigDecimal.ROUND_HALF_EVEN);
         return precio;
+    }
+    
+    public BigDecimal getPrecioConDescPersonal(int clienteId,BigDecimal precio) throws TpvException{
+        log.info("Capa de Servicios, parametros filtro: "
+                +" Código de cliente: "+clienteId);
+        EntityManager em = Connection.getEm();
+        Cliente cliente = em.find(Cliente.class, clienteId);
+        if(cliente.getEmpresa().isEstado()){
+            try{
+                Query q = em.createQuery("FROM BonificacionCliente bc WHERE bc.cliente.id = :clienteId "
+                        +" AND mesAnio = mesAnioCalc")
+                        .setParameter("clienteId", clienteId);
+                BonificacionCliente bc = (BonificacionCliente)q.getSingleResult();
+        }catch(NoResultException e){    
+            log.info("No se encontró ninguna bonificación para el cliente con código: "+clienteId);
+        }catch(RuntimeException e){
+            log.error("Error en la capa de servicios al recuperar la bonificación del cliente con código: "
+                    +clienteId,e);
+            throw new TpvException("Error en la capa de servicios al recuperar la bonificación del cliente con código: "
+                    +clienteId);
+        }finally{
+            em.clear();
+        }
+        
+        }
+        return null;
+        
     }
     
     public BigDecimal getPrecioProducto(ListaPrecioProducto lstPrecioProducto){
