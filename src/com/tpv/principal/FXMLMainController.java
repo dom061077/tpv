@@ -482,7 +482,8 @@ public class FXMLMainController implements Initializable {
                 }
                 if(producto!=null){
 
-                    precio= productoService.getPrecioProducto(codigoIngresado);
+                    precio= productoService.getPrecioProducto(codigoIngresado,modelTicket.getCliente());
+                    
                     if(precio.compareTo(BigDecimal.valueOf(0))>0){
                         if(modelTicket.getDetalle().size()==0){
                                 impresoraService.abrirTicket();

@@ -139,8 +139,9 @@ public class ProductoService {
     }
     
     
-    public BigDecimal getPrecioProducto(int filtroCodigo) throws TpvException{
-        log.info("Capa de servicios, parámetro de filtro: "+filtroCodigo);
+    public BigDecimal getPrecioProducto(int filtroCodigo,Cliente cliente) throws TpvException{
+        log.info("Capa de servicios, parámetro de filtro producto: "+filtroCodigo
+                +", cliente: "+(cliente!=null?cliente.getId():0));
         ListaPrecioProducto lstPrecioProducto=null;
         BigDecimal precio = new BigDecimal(0);
         EntityManager em = Connection.getEm();
@@ -151,6 +152,24 @@ public class ProductoService {
                     +" and lpp.producto.codigoProducto = :codigoProducto").setParameter("codigoProducto", filtroCodigo);
                 lstPrecioProducto = (ListaPrecioProducto)q.getSingleResult();
                 precio = lstPrecioProducto.getPrecioFinal();
+                
+            if(cliente!= null && cliente.getEmpresa().isEstado()){
+                    q = em.createQuery("FROM BonificacionCliente bc WHERE bc.cliente.id = :clienteId "
+                            +" AND mesAnio = mesAnioCalc")
+                            .setParameter("clienteId", cliente.getId());
+                    BonificacionCliente bc = (BonificacionCliente)q.getSingleResult();
+                    BigDecimal descuento = precio.multiply(cliente.getEmpresa()
+                            .getPorcentajeDescuento()).divide(BigDecimal.valueOf(100));
+                    BigDecimal precioConDescuento = precio.subtract(descuento);
+                    BigDecimal totalAcumulado = bc.getMontoAcumulado().add(precioConDescuento);
+                    if(bc!=null){
+                        if(cliente.getEmpresa().getTopeDescuento()
+                            .compareTo(totalAcumulado)<0){
+                            log.info("El precio del producto tiene descuento de personal");
+                            precio = precioConDescuento;
+                        }
+                    }
+            }
                 
                 
             log.info("Precio recuperado, codigo de producto: "+filtroCodigo
@@ -172,32 +191,7 @@ public class ProductoService {
         return precio;
     }
     
-    public BigDecimal getPrecioConDescPersonal(int clienteId,BigDecimal precio) throws TpvException{
-        log.info("Capa de Servicios, parametros filtro: "
-                +" Código de cliente: "+clienteId);
-        EntityManager em = Connection.getEm();
-        Cliente cliente = em.find(Cliente.class, clienteId);
-        if(cliente.getEmpresa().isEstado()){
-            try{
-                Query q = em.createQuery("FROM BonificacionCliente bc WHERE bc.cliente.id = :clienteId "
-                        +" AND mesAnio = mesAnioCalc")
-                        .setParameter("clienteId", clienteId);
-                BonificacionCliente bc = (BonificacionCliente)q.getSingleResult();
-        }catch(NoResultException e){    
-            log.info("No se encontró ninguna bonificación para el cliente con código: "+clienteId);
-        }catch(RuntimeException e){
-            log.error("Error en la capa de servicios al recuperar la bonificación del cliente con código: "
-                    +clienteId,e);
-            throw new TpvException("Error en la capa de servicios al recuperar la bonificación del cliente con código: "
-                    +clienteId);
-        }finally{
-            em.clear();
-        }
-        
-        }
-        return null;
-        
-    }
+    
     
     public BigDecimal getPrecioProducto(ListaPrecioProducto lstPrecioProducto){
         BigDecimal precio=new BigDecimal(0);

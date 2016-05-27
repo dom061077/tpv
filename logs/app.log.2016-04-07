@@ -1,8 +1,0 @@
-2016-04-07 23:58:23,708 INFO  [UsuarioService                ]      Autenticando usuario: daniel
-2016-04-07 23:58:24,682 INFO  [MenuPrincipalController       ]      Ingresando al menú principal
-2016-04-07 23:58:27,880 DEBUG [MenuPrincipalController       ]      Tecla pulsada: END
-2016-04-07 23:58:31,640 DEBUG [MenuPrincipalController       ]      Tecla pulsada: ALT
-2016-04-07 23:58:33,915 DEBUG [MenuPrincipalController       ]      Tecla pulsada: ALT
-2016-04-07 23:58:55,902 DEBUG [MenuPrincipalController       ]      Tecla pulsada: NUM_LOCK
-2016-04-07 23:58:56,639 DEBUG [MenuPrincipalController       ]      Tecla pulsada: NUM_LOCK
-2016-04-07 23:58:57,924 DEBUG [MenuPrincipalController       ]      Tecla pulsada: NUMPAD1

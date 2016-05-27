@@ -6,7 +6,6 @@
 package com.tpv.modelo;
 
 import com.tpv.modelo.enums.ComboPrioridadEnum;
-import com.tpv.modelo.enums.FacturaEstadoEnum;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,14 +15,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import org.hibernate.annotations.Formula;
 
 /**
  *

@@ -194,25 +194,17 @@ public class TestHibernate {
         }
     }
     
-    static void getBonificacion(){
-        EntityManager em = Connection.getEm();
-        ProductoService ps = new ProductoService();
-        try{
-            BigDecimal resultado = ps.getPrecioConDescPersonal(1, BigDecimal.valueOf(10.10));
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-    }
+
             
     
     public static void main(String[] args){
-        //DOMConfigurator.configure(TestHibernate.class.getResource("log4j.xml"));
+        DOMConfigurator.configure(TestHibernate.class.getResource("log4j.xml"));
         try{
             Connection.initConnections();
         }catch(Exception e){
             e.printStackTrace();
         }
-        getBonificacion();
+        
         //getProveedorFromCombo();
         //calcularCombos();
 //        getProveedorFromProductos();

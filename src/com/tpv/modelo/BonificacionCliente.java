@@ -32,7 +32,7 @@ public class BonificacionCliente {
     @Column(name = "MONTOACUMULADO")
     private BigDecimal montoAcumulado;
     
-    @Formula("SELECT (DATE_FORMAT(NOW(),'%m%Y'))")
+    @Formula("(SELECT (DATE_FORMAT(NOW(),'%m%Y')))")
     private String mesAnioCalc;
     
     
