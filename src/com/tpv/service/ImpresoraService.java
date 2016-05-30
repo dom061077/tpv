@@ -6,9 +6,12 @@
 package com.tpv.service;
 
 import com.tpv.exceptions.TpvException;
+import com.tpv.modelo.Factura;
+import com.tpv.modelo.FacturaDetalleCombo;
 import com.tpv.util.Connection;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Iterator;
 import org.apache.log4j.Logger;
 import org.tpv.print.fiscal.FiscalPacket;
 import org.tpv.print.fiscal.exception.FiscalPrinterIOException;
@@ -215,23 +218,41 @@ public class ImpresoraService {
         
     }
     
-    public void cerrarTicket() throws TpvException{
+    public void cerrarTicket(Factura factura) throws TpvException{
         //HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
         FiscalPacket request;
         FiscalPacket response;
-        FiscalMessages fMsg;
+        
+        for(Iterator<FacturaDetalleCombo> it = factura.getDetalleCombosAux().iterator();it.hasNext();){
+            FacturaDetalleCombo fdc = it.next();
+            request = getHfp().cmdReturnRecharge(fdc.getCombo().getDescripcion(),
+                            fdc.getBonificacion(),
+                            BigDecimal.valueOf(21), true,
+                            BigDecimal.ZERO, false, 0, "B");
+            try{
+                response = getHfp().execute(request);
+            }catch(FiscalPrinterStatusError e){
+                log.error("Error en estado fiscal de la impresora al cerrar el ticket fiscal",e);
+                throw new TpvException("Error al imprimir bonificación de combos "+e.getMessage());
+            
+            }catch(FiscalPrinterIOException e){
+                log.error("Error de entrada/salida en la impresora fical",e);
+                throw new TpvException("Error de entrada/salida en la impresora fical "
+                    +e.getFullMessage());
+            }
+          
+        }
+                        
         request = getHfp().cmdCloseFiscalReceipt(null);
         try{
           response = getHfp().execute(request);
         }catch(FiscalPrinterStatusError e){
-            fMsg = getHfp().getMessages();
-            log.error(fMsg.getErrorsAsString());
-            throw new TpvException("Error en el estado de la impresora: "
-                +fMsg.getErrorsAsString());
+            log.error("Error en estado fiscal de la impresora al cerrar el ticket fiscal",e);
+            throw new TpvException("Error al cerrar el ticket fiscal "+e.getMessage());
             
         }catch(FiscalPrinterIOException e){
-            log.error(e.getFullMessage());
-            throw new TpvException("Error al obtener datos de la impresora. "
+            log.error("Error de entrada/salida en la impresora fical",e);
+            throw new TpvException("Error de entrada/salida en la impresora fical "
                 +e.getFullMessage());
         }
         

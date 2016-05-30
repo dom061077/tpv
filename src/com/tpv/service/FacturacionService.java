@@ -135,7 +135,7 @@ public class FacturacionService  {
         try{
             tx = em.getTransaction();
             tx.begin();
-            //factura = em.find(Factura.class, id);
+            
             factura.setEstado(FacturaEstadoEnum.CERRADA);
             factura=em.merge(factura);
             tx.commit();

@@ -53,6 +53,7 @@ public class PagoTicketController {
     private DataModelTicket modelTicket;
     
     PagoService pagoService = new PagoService();
+    FacturacionService factService = new FacturacionService();
     
     @FXML
     private Label labelFormaPagoDescripcion;
@@ -68,6 +69,9 @@ public class PagoTicketController {
     
     @FXML
     private Label saldoPagar;
+    
+    @FXML
+    private Label bonificaciones;
     
     @FXML
     private TableView tableViewPagos;
@@ -134,8 +138,18 @@ public class PagoTicketController {
         DecimalFormat df = new DecimalFormat("##,###,##0.00");
         totalGral.setText(df.format(modelTicket.getTotalTicket()));
         //saldoPagar.setText(df.format(modelTicket.getTotalTicket().subtract(modelTicket.getTotalPagos())));
-        saldoPagar.setText(modelTicket.getFormatSaldo());
-        
+
+        try{
+            Factura factura = factService.calcularCombos(modelTicket.getIdFactura());
+            modelTicket.setBonificaciones(factura.getBonificacionCombosAux());
+        }catch(TpvException e)    {
+            log.error("Error en capa controller "+e.getMessage());
+            modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_PAGOTICKET);
+            modelTicket.setException(e);
+            goToError.fire();
+        }
+        bonificaciones.setText(df.format(modelTicket.getBonificaciones()));
+        saldoPagar.setText(modelTicket.getFormatSaldo());        
         montoPagoColumn.setCellFactory(col -> {
             TableCell<LineaPagoData,BigDecimal> cell = new TableCell<LineaPagoData,BigDecimal>(){
                 @Override

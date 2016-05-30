@@ -108,6 +108,7 @@ public class ErrorController implements Initializable {
             Platform.runLater(()->{
                 textAreaError.setOnKeyPressed(keyEvent->{
                     if(keyEvent.getCode()==KeyCode.ESCAPE){
+                        log.debug("Tecla Escape pulsada");
                         recuperarFallo();
                         if(modelTicket.getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_FACTURACION)
                             facturacionButton.fire();

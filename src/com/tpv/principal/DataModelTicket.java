@@ -49,6 +49,7 @@ public class DataModelTicket {
     private Long idFactura;
     private OrigenPantallaErrorEnum origenPantalla;
     private boolean reinicioVerificado=false;
+    private BigDecimal bonificaciones = BigDecimal.ZERO;
     
     
     public DataModelTicket(){
@@ -96,6 +97,7 @@ public class DataModelTicket {
     
     public BigDecimal getSaldo(){
         BigDecimal saldo = getTotalTicket().subtract(getTotalPagos());
+        saldo = saldo.subtract(getBonificaciones());
         saldo = saldo.setScale(2,BigDecimal.ROUND_HALF_EVEN);
         return saldo;
     }
@@ -293,6 +295,20 @@ public class DataModelTicket {
      */
     public void setReinicioVerificado(boolean reinicioVerificado) {
         this.reinicioVerificado = reinicioVerificado;
+    }
+
+    /**
+     * @return the bonificaciones
+     */
+    public BigDecimal getBonificaciones() {
+        return bonificaciones;
+    }
+
+    /**
+     * @param bonificaciones the bonificaciones to set
+     */
+    public void setBonificaciones(BigDecimal bonificaciones) {
+        this.bonificaciones = bonificaciones;
     }
 
     

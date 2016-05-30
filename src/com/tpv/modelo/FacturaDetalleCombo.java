@@ -121,7 +121,6 @@ public class FacturaDetalleCombo {
     @Transient
     public BigDecimal getBonificacionCalculada(){
         BigDecimal bonificacionCalculada = BigDecimal.ZERO;
-        
         return bonificacionCalculada;
     }
     

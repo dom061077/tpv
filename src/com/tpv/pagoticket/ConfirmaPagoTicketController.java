@@ -8,6 +8,7 @@ package com.tpv.pagoticket;
 import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Factura;
+import com.tpv.modelo.FacturaDetalleCombo;
 import com.tpv.modelo.FacturaFormaPagoDetalle;
 import com.tpv.principal.DataModelTicket;
 import com.tpv.print.event.FiscalPrinterEvent;
@@ -18,6 +19,7 @@ import com.tpv.service.ProductoService;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
@@ -113,6 +115,9 @@ public class ConfirmaPagoTicketController {
     
     @FXML
     private Label totalPagosLabel;
+    
+    @FXML
+    private Label totalBonificacionesLabel;
 
     @Inject
     private DataModelTicket modelTicket;
@@ -151,6 +156,7 @@ public class ConfirmaPagoTicketController {
             DecimalFormat df = new DecimalFormat("##,##0.00");
             
             totalPagosLabel.setText(df.format(modelTicket.getTotalPagos()));
+            totalBonificacionesLabel.setText(df.format(modelTicket.getBonificaciones()));
             totalTicketLabel.setText(df.format(modelTicket.getTotalTicket()));
             cambioLabel.setText(df.format(modelTicket.getSaldo().abs()));
             
@@ -164,7 +170,6 @@ public class ConfirmaPagoTicketController {
                     if(keyEvent.getCode() == KeyCode.ENTER){
                         confirmarFactura();
 
-                        confirmarButton.fire();
                     }
                     keyEvent.consume();
                 });
@@ -177,35 +182,20 @@ public class ConfirmaPagoTicketController {
     public void confirmarFactura(){
         try{
             log.info("Cerrando y confirmando factura ");
-            impresoraService.cerrarTicket();
-            List<FacturaFormaPagoDetalle> pagos = new ArrayList<FacturaFormaPagoDetalle>();
-            ListProperty<LineaPagoData> detallePagosData = modelTicket.getPagos();
-            Factura factura = factService.getFactura(modelTicket.getIdFactura());
-            detallePagosData.forEach(item ->{
-                FacturaFormaPagoDetalle formaPagoDetalle = new FacturaFormaPagoDetalle();
-                try{
-                    formaPagoDetalle.setFormaPago(pagoService.getFormaPago(item.getCodigoPago()));
-                }catch(TpvException e){
-                        modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CONFIRMARTICKET);
-                        modelTicket.setException(e);
-                        goToErrorButton.fire();
-                }
-                    
-                formaPagoDetalle.setFactura(factura);
-                formaPagoDetalle.setMontoPago(item.getMonto());
-                factura.getDetallePagos().add(formaPagoDetalle);
-            });
+            Factura factura = factService.calcularCombos(modelTicket.getIdFactura());
+            for(Iterator<FacturaDetalleCombo> it = factura.getDetalleCombosAux().iterator();it.hasNext();){
+                FacturaDetalleCombo fdc = it.next();
+                //TODO en las bonificaciones de los combos
+                //impresoraService.imprimirLineaTicket(fdc.getCombo().getDescripcion(), fdc.getCantidad()
+                //            ,fdc.getBonificacion() ,producto.getValorImpositivo().getValor() ,modelTicket.isImprimeComoNegativo(), producto.getImpuestoInterno());
+                
+            }
             
-            factService.confirmarFactura(factura);
-            modelTicket.setCliente(null);
-            modelTicket.setClienteSeleccionado(false);
-            modelTicket.setNroTicket(modelTicket.getNroTicket()+1);
-            modelTicket.getDetalle().clear();
-            modelTicket.getPagos().clear();
-            modelTicket.setImprimeComoNegativo(false);
-            log.info("Factura cerrada y confirmada");
+            impresoraService.cerrarTicket(factura);
+            confirmarButton.fire();
 
         }catch(TpvException e){
+            log.error("Error en controlador llamando al método cerrarTicket de ImpresoraService",e);
             modelTicket.setException(e);
             modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CONFIRMARTICKET);
             goToErrorButton.fire();
@@ -221,8 +211,57 @@ public class ConfirmaPagoTicketController {
             @Override
             public void commandExecuted(FiscalPrinter source, FiscalPacket command, FiscalPacket response){
                 log.debug("Se ejecutó correctamente el siguiente comando:");
-                if(command.getCommandCode()==HasarCommands.CMD_OPEN_FISCAL_RECEIPT){
-                    log.debug("     CMD_OPEN_FISCAL_RECEIPT: ");
+                if(command.getCommandCode()==HasarCommands.CMD_CLOSE_FISCAL_RECEIPT){
+                    try{
+                            log.info("El cierre del ticket para el id de Factura : "+modelTicket.getIdFactura()
+                                +" en la impresora fiscal fue correcto. A continuación se cierra el ticket en la base de datos");
+                            List<FacturaFormaPagoDetalle> pagos = new ArrayList<FacturaFormaPagoDetalle>();
+                            ListProperty<LineaPagoData> detallePagosData = modelTicket.getPagos();
+                            Factura factura = factService.calcularCombos(modelTicket.getIdFactura());
+                            log.info("Cantidad de combos a guardar en la base de datos: "+factura.getDetalleCombosAux().size());
+                            for(Iterator<FacturaDetalleCombo> it = factura.getDetalleCombosAux().iterator();it.hasNext();){
+                                FacturaDetalleCombo fdc = it.next();
+                                factura.getDetalleCombos().add(fdc);
+                                fdc.setFactura(factura);
+                                log.info("          Combo: "+fdc.getCombo().getDescripcion());
+                            }
+                            
+                            //Factura factura = factService.getFactura(modelTicket.getIdFactura());
+                            log.info("Cantidad de formas de pago: "+detallePagosData.size());
+                            for(Iterator<LineaPagoData> it = detallePagosData.iterator();it.hasNext();){
+                                LineaPagoData item = it.next();
+                                FacturaFormaPagoDetalle formaPagoDetalle = new FacturaFormaPagoDetalle();
+                                try{
+                                    formaPagoDetalle.setFormaPago(pagoService.getFormaPago(item.getCodigoPago()));
+                                }catch(TpvException e){
+                                        modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CONFIRMARTICKET);
+                                        modelTicket.setException(e);
+                                        goToErrorButton.fire();
+                                }
+
+                                formaPagoDetalle.setFactura(factura);
+                                formaPagoDetalle.setMontoPago(item.getMonto());
+                                factura.getDetallePagos().add(formaPagoDetalle);
+                                log.info("                  Código forma: "+item.getCodigoPago());
+                            }
+                            
+                            factService.confirmarFactura(factura);
+                            modelTicket.setCliente(null);
+                            modelTicket.setClienteSeleccionado(false);
+                            modelTicket.setNroTicket(modelTicket.getNroTicket()+1);
+                            modelTicket.getDetalle().clear();
+                            modelTicket.getPagos().clear();
+                            modelTicket.setImprimeComoNegativo(false);
+                            log.info("Factura cerrada y confirmada");
+                    }catch(TpvException e){
+                        modelTicket.setException(e);
+                        modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CONFIRMARTICKET);
+                        goToErrorButton.fire();
+                    }catch(NullPointerException e){
+                        e.printStackTrace();
+                    }  
+                    
+                    
                 }
                 log.debug("Mensajes de error: ");
                 source.getMessages().getErrorMsgs().forEach(item->{

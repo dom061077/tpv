@@ -53,10 +53,12 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label fx:id="totalGral" prefHeight="17.0" prefWidth="242.0" styleClass="label_total" GridPane.columnIndex="1" />
+                        <Label fx:id="bonificaciones" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="245.0" styleClass="label_total" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label styleClass="label_textfield" text="Saldo a Pagar:" GridPane.rowIndex="2" />
+                        <Label fx:id="totalGral" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="242.0" styleClass="label_total" GridPane.columnIndex="1" />
                         <Label prefHeight="17.0" prefWidth="203.0" styleClass="label_textfield" text="Total Gral." />
-                        <Label prefHeight="17.0" prefWidth="203.0" styleClass="label_textfield" text="Saldo a Pagar:" GridPane.rowIndex="1" />
-                        <Label fx:id="saldoPagar" prefHeight="17.0" prefWidth="245.0" styleClass="label_total" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label prefHeight="17.0" prefWidth="203.0" styleClass="label_textfield" text="Bonificaciones:" GridPane.rowIndex="1" />
+                        <Label fx:id="saldoPagar" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="245.0" styleClass="label_total" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                      </children>
                   </GridPane>
                </children>

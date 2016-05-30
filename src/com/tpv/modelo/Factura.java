@@ -443,7 +443,7 @@ public class Factura {
         BigDecimal totalBonificado = BigDecimal.ZERO;
         for(Iterator<FacturaDetalleCombo> iterator = getDetalleCombosAux().iterator();iterator.hasNext();){
             FacturaDetalleCombo fdc = iterator.next();
-            totalBonificado.add(fdc.getBonificacionCalculada());
+            totalBonificado = totalBonificado.add(fdc.getBonificacion());
         }
         return totalBonificado;
     }
