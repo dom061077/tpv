@@ -150,6 +150,7 @@ public class CombosController{
     
     
     private void traerCombos(){
+        DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
         
         try{
             Factura factura = factService.calcularCombos(modelTicket.getIdFactura());
@@ -164,12 +165,12 @@ public class CombosController{
                         );
                 totalBonificado = totalBonificado.add(fdc.getBonificacion());
                 listCombos.add(fdcd);
-                DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
                 totalBonificaciones.setText(df.format(totalBonificado));
-                totalTicket.setText(df.format(modelTicket.getTotalTicket()));
-                terminaPagando.setText(df.format(modelTicket.getTotalTicket().subtract(totalBonificado)));
                 
             }
+                totalTicket.setText(df.format(modelTicket.getTotalTicket()));
+                terminaPagando.setText(df.format(modelTicket.getTotalTicket().subtract(totalBonificado)));
+            
         }catch(TpvException e){
             log.error("Error en capa controller: "+e.getMessage());
             modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);

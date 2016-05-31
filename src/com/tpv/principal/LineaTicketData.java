@@ -39,7 +39,7 @@ public class LineaTicketData {
         this.Cantidad = new SimpleObjectProperty(cantidad);
         this.PrecioUnitario = new SimpleObjectProperty(precioUnitario);
         this.Devuelto = new SimpleBooleanProperty(devuelto);
-        if(cantidad.compareTo(new BigDecimal(0))<0)
+        if(devuelto)
             cantidad = cantidad.multiply(new BigDecimal(-1));
         //this.SubTotal = new SimpleObjectProperty(new BigDecimal(precioUnitario.doubleValue()*cantidad));
         this.SubTotal = new SimpleObjectProperty(precioUnitario.multiply(cantidad));

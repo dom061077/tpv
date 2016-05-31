@@ -188,6 +188,8 @@ public class FacturacionService  {
     
     public Factura calcularCombos(Long id) throws TpvException{
         log.info("Calculando combos para id factura: "+id);
+        if(id==null)
+            return null;
         List<Combo> listadoCombos = null;
         Factura factura = null;
         EntityManager em = Connection.getEm();
