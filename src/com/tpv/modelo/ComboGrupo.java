@@ -44,6 +44,8 @@ public class ComboGrupo {
     @Column(name = "MONTO")
     private BigDecimal monto;
     
+    @Column(name = "BONIFICACION_EN_MENOR_PRECIO", columnDefinition = "TINYINT(1)")
+    private boolean tomarMenorPrecio;
     
 
     @ManyToOne
@@ -216,6 +218,13 @@ public class ComboGrupo {
             cgDPP.initCantidadAux();
         }
             
+    }
+
+    /**
+     * @return the tomarMenorPrecio
+     */
+    public boolean isTomarMenorPrecio() {
+        return tomarMenorPrecio;
     }
 
 }

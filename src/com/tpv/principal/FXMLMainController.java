@@ -459,6 +459,7 @@ public class FXMLMainController implements Initializable {
     
     private void enviarComandoLineaTicket(){
         int codigoIngresado=0;
+        String codBarra="";
         BigDecimal cantidad = new BigDecimal(1);
         String descripcion="";
         Producto producto = null;
@@ -470,20 +471,25 @@ public class FXMLMainController implements Initializable {
         }
         try{
             codigoIngresado = Integer.parseInt(textFieldProducto.getText());
+            log.debug("Codigo a consultar en productoService");
         }catch(Exception e){
-            
+            codBarra = textFieldProducto.getText();
         }
 
         try{
         
                 if(codigoIngresado>0){
+                    log.debug("Antes de buscar en productoService");
                     producto = productoService.getProductoPorCodigo(codigoIngresado); //productoService.getProductoPorCodigo(codigoIngresado);
-                }else{
                     //producto = productoService.getProductoPorCodBarra(textFieldProducto.getText());
+                }else{
+                    producto = productoService.getProductoPorCodBarra(codBarra);
                 }
+                        
+                        
                 if(producto!=null){
-
-                    precio= productoService.getPrecioProducto(codigoIngresado,modelTicket.getCliente());
+                    log.debug("Producto encontrado: "+producto.getDescripcion());
+                    precio= productoService.getPrecioProducto(producto.getCodigoProducto(),modelTicket.getCliente());
                     
                     if(precio.compareTo(BigDecimal.valueOf(0))>0){
                         if(modelTicket.getDetalle().size()==0){
@@ -708,15 +714,15 @@ public class FXMLMainController implements Initializable {
                   totalCantidad = totalCantidad.add(lineaTicket.getCantidad());
                 
             }
-            if(lineaTicket.getCodigoProducto()==codigo && 
-                lineaTicket.getCantidad().compareTo(cantidad) >= 0 && 
-                lineaTicket.getDevuelto()==false &&
-                itemEncontrado == false
-                    ){  
-                lineaTicket.setDevuelto(true);
-                itemEncontrado=true;
-                break;
-            }
+//            if(lineaTicket.getCodigoProducto()==codigo && 
+//                lineaTicket.getCantidad().compareTo(cantidad) >= 0 && 
+//                lineaTicket.getDevuelto()==false &&
+//                itemEncontrado == false
+//                    ){  
+//                lineaTicket.setDevuelto(true);
+//                itemEncontrado=true;
+//                break;
+//            }
         }
 //        if(totalCantidad.compareTo(cantidad) >= 0 && itemEncontrado==false){
 //            Iterator segundoIterator = tableViewTickets.getItems().iterator();
@@ -733,7 +739,7 @@ public class FXMLMainController implements Initializable {
 //                }
 //            }
 //        }
-        if(totalCantidad.compareTo(cantidad)>=0 && itemEncontrado == true){
+        if(totalCantidad.compareTo(cantidad)>=0 /*&& itemEncontrado == true*/){
             
             return true;
         }else{

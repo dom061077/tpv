@@ -107,11 +107,13 @@ public class ProductoService {
     }
     
     public Producto getProductoPorCodigo(int filtroCodigo) throws TpvException{
-        log.info("Capa de servicios, filtro "+filtroCodigo);
+        log.info("Capa de servicios búsqueda por código, filtro "+filtroCodigo);
         EntityManager em = Connection.getEm();
         Producto producto = null;
         try{
-            Query q = em.createQuery("FROM Producto p WHERE p.discontinuado = 0 and p.codigoProducto = :codigoProducto").setParameter("codigoProducto", filtroCodigo);
+            Query q = em.createQuery("FROM Producto p WHERE p.discontinuado = 0 "
+                    +" and p.codigoProducto = :codigoProducto")
+                    .setParameter("codigoProducto", filtroCodigo);
 
             producto = (Producto)q.getSingleResult();
         }catch(NoResultException e){
@@ -126,15 +128,22 @@ public class ProductoService {
         return producto;
     }
     
-    public Producto getProductoPorCodBarra(String codigoBarra){
+    public Producto getProductoPorCodBarra(String codigoBarra) throws TpvException{
+        log.info("Capa de servicios búsqueda por código de barra, filtro: "+codigoBarra);
         EntityManager em = Connection.getEm();
-        EntityTransaction tx = em.getTransaction();
-        tx.begin();
-        Query q = em.createQuery("FROM Producto p WHERE p.discontinuado = 0 and p.codBarra = :codBarra").setParameter("codBarra", codigoBarra);
-        Producto producto = (Producto)q.getSingleResult();
-        tx.commit();
-        em.clear();
-        
+        Producto producto = null;
+        try{
+            Query q = em.createQuery("FROM Producto p WHERE p.discontinuado = 0 and p.codBarra = :codBarra")
+                    .setParameter("codBarra", codigoBarra);
+            producto = (Producto)q.getSingleResult();
+        }catch(NoResultException e){
+            log.warn("No se puedo encontrar el producto con el código de barra: "+codigoBarra);
+        }catch(RuntimeException e){
+            log.error("Error en la capa de servicios al recuperar un producto con código de barra: "+codigoBarra,e);
+            throw new TpvException("Error en la capa de servicios al recuperar un producto con codigo: "+codigoBarra);
+        }finally{
+            em.clear();
+        }
         return producto;
     }
     

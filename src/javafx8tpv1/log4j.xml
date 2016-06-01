@@ -55,12 +55,12 @@
     <priority value='INFO' />
   </category>
   <category name='com.tpv' additivity='true'>
-    <priority value='INFO' />
+    <priority value='DEBUG' />
     <appender-ref ref='APP_LOG' />
     <!--appender-ref ref='CONSOLE' /-->
   </category>
   <category name='org.hibernate.SQL' additivity='false'>
-    <priority value='DEBUG' />
+    <priority value='INFO' />
     <appender-ref ref='ORM_SQL_LOG' />
   </category>
 
@@ -83,7 +83,7 @@
         <appender-ref ref="CONSOLE"/>
   </category-->
   <root>
-    <priority value='INFO' />
+    <priority value='debug' />
     <appender-ref ref='CONSOLE' />
   </root>
 </log4j:configuration>

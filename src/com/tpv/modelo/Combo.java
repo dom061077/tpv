@@ -233,6 +233,22 @@ public class Combo {
         return bonificacion;
     }
     
+   
+    private boolean isMenorPrecioEnGrupo(ComboGrupo gp,ProductoAgrupadoEnFactura pafParam){
+        ProductoAgrupadoEnFactura paf=null;
+        if(gp.getDetallePreciosProductos().size()>0)
+            paf = gp.getDetallePreciosProductos().get(0).getPaf();
+        
+        for(Iterator<ComboGrupoDetallePrecioProducto> it = gp.getDetallePreciosProductos().iterator();it.hasNext();){
+            ComboGrupoDetallePrecioProducto comboGrupoDetPP = it.next();
+            if(comboGrupoDetPP.getPaf().getPrecioUnitario().compareTo(paf.getPrecioUnitario())<0){
+               paf = comboGrupoDetPP.getPaf();
+            }
+        }
+        if(pafParam.getProducto().equals(paf.getProducto()))    
+            return true;
+        return false;
+    }
     
     @Transient
     public BigDecimal getBonificacion(){
@@ -254,25 +270,34 @@ public class Combo {
                     }
 
                     if(acumulador + comboGrupoDetPP.getCantidad()<=cantReferenciaGrupo){
-                        //if(gp.getMonto().equals(BigDecimal.ZERO)){
-                            bonificacion = bonificacion.add(comboGrupoDetPP.getPaf().getPrecioUnitario()
-                                    .multiply(BigDecimal.valueOf(comboGrupoDetPP.getCantidad()))
-                                    .multiply(gp.getPorcentaje()).divide(new BigDecimal(100)));    
-                            acumulador+=comboGrupoDetPP.getCantidad();
-                        //}else{
-                        //}    
+                        if(gp.isTomarMenorPrecio()){
+                            if(isMenorPrecioEnGrupo(gp, comboGrupoDetPP.getPaf())){
+                                bonificacion = bonificacion.add(comboGrupoDetPP.getPaf().getPrecioUnitario()
+                                        .multiply(BigDecimal.valueOf(comboGrupoDetPP.getCantidad()))
+                                        .multiply(gp.getPorcentaje()).divide(new BigDecimal(100)));    
+                            }
+                        }else{
+                                bonificacion = bonificacion.add(comboGrupoDetPP.getPaf().getPrecioUnitario()
+                                        .multiply(BigDecimal.valueOf(comboGrupoDetPP.getCantidad()))
+                                        .multiply(gp.getPorcentaje()).divide(new BigDecimal(100)));    
+                        }
+                        acumulador+=comboGrupoDetPP.getCantidad();
                         comboGrupoDetPP.getPaf().decCantidad(comboGrupoDetPP.getCantidad());
                     }else{
                         int diferencia = acumulador + comboGrupoDetPP.getCantidad() - cantReferenciaGrupo;
-                        //if(gp.getMonto().equals(BigDecimal.ZERO)){
-                            bonificacion = bonificacion.add(comboGrupoDetPP.getPaf().getPrecioUnitario()
-                                    .multiply(BigDecimal.valueOf(comboGrupoDetPP.getCantidad()-diferencia))
-                                    .multiply(gp.getPorcentaje()).divide(new BigDecimal(100)));    
-                            acumulador = cantReferenciaGrupo;
-                        //}else{
-                        //}
+                        if(gp.isTomarMenorPrecio()){
+                            if(isMenorPrecioEnGrupo(gp, comboGrupoDetPP.getPaf())){
+                                bonificacion = bonificacion.add(comboGrupoDetPP.getPaf().getPrecioUnitario()
+                                        .multiply(BigDecimal.valueOf(comboGrupoDetPP.getCantidad()-diferencia))
+                                        .multiply(gp.getPorcentaje()).divide(new BigDecimal(100)));    
+                            }
+                        }else{
+                                bonificacion = bonificacion.add(comboGrupoDetPP.getPaf().getPrecioUnitario()
+                                        .multiply(BigDecimal.valueOf(comboGrupoDetPP.getCantidad()-diferencia))
+                                        .multiply(gp.getPorcentaje()).divide(new BigDecimal(100)));    
+                        }
+                        acumulador = cantReferenciaGrupo;
                         comboGrupoDetPP.getPaf().setCantidad(diferencia);
-                        
                     }
                 }else{
                    // bonificacion = bonificacion.add(comboGrupoDetPP.getBonificacion());

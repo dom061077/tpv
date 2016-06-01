@@ -102,6 +102,10 @@ public class SupervisorController {
     
     private void cancelarTicketCompleto(){
         try{
+            
+            FALTA COMPLETAR BIEN LA CANCELACION DEL TICKET
+                    COLOCANDO EN LA BASE DE DATOS EL ESTADO ANULADO AL REGISTRO
+                            DE LA TABLA FACTURA
             impresoraService.cancelarTicket();
             facturaService.cancelarFactura(modelTicket.getIdFactura());
             modelTicket.setCliente(null);
