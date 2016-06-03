@@ -60,7 +60,7 @@
     <!--appender-ref ref='CONSOLE' /-->
   </category>
   <category name='org.hibernate.SQL' additivity='false'>
-    <priority value='INFO' />
+    <priority value='DEBUG' />
     <appender-ref ref='ORM_SQL_LOG' />
   </category>
 

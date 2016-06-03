@@ -48,7 +48,8 @@ public class Combo {
     @Column(name = "CODIGOCOMBO")
     private int codigoCombo;
     
-    
+    @Column(name = "CANTIDADMAXIMAPORPERSONA")
+    private int cantidadMaxima;
     
     @Column(name = "COMBINARPRODUCTOS", columnDefinition = "TINYINT(1)") 
     private boolean combinarProductos;
@@ -193,7 +194,10 @@ public class Combo {
 //                
 //            }
 //        }
-        return cantidadArmados;
+        if(getCantidadMaxima()>0 && getCantidadMaxima()<cantidadArmados)
+            return getCantidadMaxima();
+        else
+            return cantidadArmados;
     }
     
     @Transient
@@ -373,6 +377,20 @@ public class Combo {
      */
     public void setCodigoCombo(int codigoCombo) {
         this.codigoCombo = codigoCombo;
+    }
+
+    /**
+     * @return the cantidadMaxima
+     */
+    public int getCantidadMaxima() {
+        return cantidadMaxima;
+    }
+
+    /**
+     * @param cantidadMaxima the cantidadMaxima to set
+     */
+    public void setCantidadMaxima(int cantidadMaxima) {
+        this.cantidadMaxima = cantidadMaxima;
     }
 
   

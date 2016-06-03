@@ -477,7 +477,8 @@ public class Factura {
     public void agruparProductosEnFactura(){
         for(Iterator<FacturaDetalle> it = getDetalle().iterator();it.hasNext(); ){
             FacturaDetalle fd = it.next();
-            addProductoAgrupadoEnFactura(fd);
+            if(fd.getSubTotal().compareTo(BigDecimal.ZERO)>0)
+                addProductoAgrupadoEnFactura(fd);
         }
     }
 

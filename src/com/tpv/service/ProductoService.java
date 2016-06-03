@@ -11,6 +11,7 @@ import com.tpv.modelo.Cliente;
 import com.tpv.modelo.GrupoProducto;
 import com.tpv.modelo.ListaPrecioProducto;
 import com.tpv.modelo.Producto;
+import com.tpv.modelo.Proveedor;
 import com.tpv.util.Connection;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -163,19 +164,24 @@ public class ProductoService {
                 precio = lstPrecioProducto.getPrecioFinal();
                 
             if(cliente!= null && cliente.getEmpresa().isEstado()){
-                    q = em.createQuery("FROM BonificacionCliente bc WHERE bc.cliente.id = :clienteId "
-                            +" AND mesAnio = mesAnioCalc")
-                            .setParameter("clienteId", cliente.getId());
-                    BonificacionCliente bc = (BonificacionCliente)q.getSingleResult();
-                    BigDecimal descuento = precio.multiply(cliente.getEmpresa()
-                            .getPorcentajeDescuento()).divide(BigDecimal.valueOf(100));
-                    BigDecimal precioConDescuento = precio.subtract(descuento);
-                    BigDecimal totalAcumulado = bc.getMontoAcumulado().add(precioConDescuento);
-                    if(bc!=null){
-                        if(cliente.getEmpresa().getTopeDescuento()
-                            .compareTo(totalAcumulado)<0){
-                            log.info("El precio del producto tiene descuento de personal");
-                            precio = precioConDescuento;
+                    q = em.createQuery("SELECT pp.proveedor FROM ProveedorProducto pp WHERE pp.producto.codigoProducto = :productoId")
+                            .setParameter("productoId", filtroCodigo);
+                    Proveedor proveedor = (Proveedor)q.getSingleResult();
+                    if(proveedor.getId().equals(Long.parseLong("418"))){
+                        q = em.createQuery("FROM BonificacionCliente bc WHERE bc.cliente.id = :clienteId "
+                                +" AND mesAnio = mesAnioCalc")
+                                .setParameter("clienteId", cliente.getId());
+                        BonificacionCliente bc = (BonificacionCliente)q.getSingleResult();
+                        BigDecimal descuento = precio.multiply(cliente.getEmpresa()
+                                .getPorcentajeDescuento()).divide(BigDecimal.valueOf(100));
+                        BigDecimal precioConDescuento = precio.subtract(descuento);
+                        BigDecimal totalAcumulado = bc.getMontoAcumulado().add(precioConDescuento);
+                        if(bc!=null){
+                            if(cliente.getEmpresa().getTopeDescuento()
+                                .compareTo(totalAcumulado)<0){
+                                log.info("El precio del producto tiene descuento de personal");
+                                precio = precioConDescuento;
+                            }
                         }
                     }
             }
@@ -183,6 +189,7 @@ public class ProductoService {
                 
             log.info("Precio recuperado, codigo de producto: "+filtroCodigo
                     +", precio "+precio);
+            catch(NonUniqueResultException:)
         }catch(NoResultException e){    
             log.info("No se encontró el código de producto"+filtroCodigo+" en la lista de precios."
                 +" La excepción NoResultException no se considera como error");
