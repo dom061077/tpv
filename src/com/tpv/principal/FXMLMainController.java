@@ -969,22 +969,6 @@ public class FXMLMainController implements Initializable {
         //mp.play();
     }
             
-    private void verificarTicketAbierto(){
-        log.info("Verificando ticket abierto");
-        Factura factura = null;
-        try{
-            factura = factService.getFacturaAbiertaPorCheckout(modelTicket.getCheckout().getId());
-            if(factura != null){
-                log.info("Se encontró factura abierta, se procede a recuperar en pantalla los items vendidos");
-                
-            }
-        }catch(TpvException e){
-            log.error("Error: "+e.getMessage());
-            modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
-            modelTicket.setException(e);
-            goToErrorButton.fire();
-        }
-    }       
     
     private void verificarDetalleTableView(){
         log.info("Verificando detalle de TableView");
@@ -996,7 +980,8 @@ public class FXMLMainController implements Initializable {
             tableViewTickets.getItems().clear();
         Factura factura = null;
         try{
-            factura = factService.getFacturaAbiertaPorCheckout(modelTicket.getCheckout().getId());
+            factura = factService.getFacturaAbiertaPorCheckout(modelTicket.getCheckout().getId()
+                    ,modelTicket.getUsuario().getIdUsuario());
             if(factura!=null){
                 for(Iterator iterator = factura.getDetalle().iterator();iterator.hasNext();){
                     FacturaDetalle fd = (FacturaDetalle)iterator.next();

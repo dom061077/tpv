@@ -81,12 +81,14 @@ public class FacturacionService  {
         return factura;
     }
 
-    public Factura getFacturaAbiertaPorCheckout(int idCheckout) throws TpvException{
+    public Factura getFacturaAbiertaPorCheckout(int idCheckout, int usuarioId) throws TpvException{
         Factura factura = null;
         EntityManager em = Connection.getEm();
         EntityTransaction tx = null;
         try{
-            Query q = em.createQuery("FROM Factura f WHERE f.estado = :estado and f.checkout.id = :idCheckout")
+            Query q = em.createQuery("FROM Factura f WHERE f.estado = :estado and f.checkout.id = :idCheckout "
+                        +" and f.usuario.id = :usuarioId")
+                        .setParameter("usuarioId",usuarioId)
                         .setParameter("estado", FacturaEstadoEnum.ABIERTA)
                         .setParameter("idCheckout", idCheckout);
             factura = (Factura)q.getSingleResult();

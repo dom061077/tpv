@@ -189,10 +189,11 @@ public class ProductoService {
                 
             log.info("Precio recuperado, codigo de producto: "+filtroCodigo
                     +", precio "+precio);
-            catch(NonUniqueResultException:)
+        }catch(NonUniqueResultException e){
+            log.warn("Se econtró mas de un registro en la consulta de único resultado: "+e.getMessage());
         }catch(NoResultException e){    
-            log.info("No se encontró el código de producto"+filtroCodigo+" en la lista de precios."
-                +" La excepción NoResultException no se considera como error");
+            log.warn("No se encontró el código de producto"+filtroCodigo+" en la lista de precios."
+                +" La excepción NoResultException no se considera como error. "+e.getMessage());
         }catch(RuntimeException e){
             log.error("Error en la capa de servicios al recuperar precio del producto con código: "
                     +filtroCodigo,e);

@@ -15,14 +15,14 @@ import javax.persistence.Table;
  * @author daniel
  */
 @Entity
-@Table(name="usuarios")
+@Table(name="tablausuarios")
 public class Usuario {
     @Id
-    @Column(name="idUSUARIOS")
+    @Column(name="idUSUARIO")
     private int idUsuario;
-    @Column(name="NOMBRE")
+    @Column(name="Login")
     private String nombre;
-    @Column(name="PASSWORD")
+    @Column(name="CampoPassword")
     private String password;
 
     /**
