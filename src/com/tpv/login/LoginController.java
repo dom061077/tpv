@@ -82,7 +82,7 @@ public class LoginController {
             try{
                 checkout = usuarioService.checkMac();
             }catch(TpvException e){
-                log.error("Error: "+e.getMessage());
+                log.error("Error: "+e.getMessage(),e);
                 modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_LOGIN);
                 modelTicket.setException(e);
                 goToErrorButton.fire();

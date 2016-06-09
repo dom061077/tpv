@@ -9,6 +9,7 @@ import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Checkout;
 import com.tpv.modelo.Usuario;
 import com.tpv.util.Connection;
+import java.net.SocketException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -56,7 +57,13 @@ public class UsuarioService {
     
     public Checkout checkMac() throws TpvException{
         log.info("Capa de servicios, recuperando MAC de la PC");
-        String mac = Connection.getMACAddress();
+        String mac = "";
+        try{
+                mac=Connection.getMACAddress();
+        }catch(SocketException e){
+            log.error("Error en la capa de servicios al recuperar la MAC",e);
+            throw new TpvException("Error en la capa de servicios al recuperar la MAC");
+        }
         log.info("MAC recuperada: "+mac);
         if(mac!=null){
             EntityManager em = Connection.getEm();
@@ -72,15 +79,7 @@ public class UsuarioService {
                 if(checkout != null)
                     return checkout;
             }catch(RuntimeException e){
-                String fullTraceStr=e.getMessage()+"\n";
-                for(int i=0;i<=e.getStackTrace().length-1;i++){
-                    fullTraceStr+="Clase: "+e.getStackTrace()[i].getClassName()+"; "
-                            +"Archivo: "+e.getStackTrace()[i].getFileName()+"; "
-                            +"Mètodo: "+e.getStackTrace()[i].getMethodName()+"; "
-                            +"Nro. Línea: "+e.getStackTrace()[i].getLineNumber()+"; "
-                            +"\n";
-                }
-                log.error(fullTraceStr);
+                log.error("Error recuperando MAC: "+mac,e);
                 throw new TpvException("Error en la capa de servicios al recuperar checkout a través de la MAC.");
             }finally{
                 em.clear();

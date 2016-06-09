@@ -13,6 +13,9 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx8tpv1.JavaFX8TPV1;
@@ -142,6 +145,42 @@ public class Connection {
         return stcpStatus;
     }
     
+    
+    public static String getMACAddress() throws SocketException {
+        String firstInterface = null;        
+        Map<String, String> addressByNetwork = new HashMap<>();
+        Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+
+        while(networkInterfaces.hasMoreElements()){
+            NetworkInterface network = networkInterfaces.nextElement();
+
+            byte[] bmac = network.getHardwareAddress();
+            if(bmac != null){
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < bmac.length; i++){
+                    sb.append(String.format("%02X%s", bmac[i], (i < bmac.length - 1) ? "-" : ""));        
+                }
+
+                if(sb.toString().isEmpty()==false){
+                    addressByNetwork.put(network.getName(), sb.toString());
+                    System.out.println("Address = "+sb.toString()+" @ ["+network.getName()+"] "+network.getDisplayName());
+                }
+
+                if(sb.toString().isEmpty()==false && firstInterface == null){
+                    firstInterface = network.getName();
+                }
+            }
+        }
+
+        if(firstInterface != null){
+            return (addressByNetwork.get(firstInterface)).replace("-", "");
+        }
+
+        return null;
+    }
+    
+    
+    /*
     public static String getMACAddress(){
         InetAddress ip;
         try{
@@ -161,12 +200,12 @@ public class Connection {
             return sb.toString().replace("-", "");
 	} catch (UnknownHostException e) {
 		
-		log.error("Error desconocido al intentar obtener la MAC ");
+		log.error("Error desconocido al intentar obtener la MAC ",e);
                 log.error(e.getMessage());
 		
 	} catch (SocketException e){
 			
-		log.error("Error de Sockeet al intentar obtener la MAC ");
+		log.error("Error de Sockeet al intentar obtener la MAC ",e);
                 log.error(e.getMessage());
 
 			
@@ -174,6 +213,6 @@ public class Connection {
         return null;
 
     }
-    
+    */
     
 }

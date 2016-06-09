@@ -200,7 +200,8 @@ public class TestHibernate {
     public static void main(String[] args){
         DOMConfigurator.configure(TestHibernate.class.getResource("log4j.xml"));
         try{
-            Connection.initConnections();
+            //Connection.initConnections();
+            System.out.println("Direccion MAC: "+Connection.getMACAddress());
         }catch(Exception e){
             e.printStackTrace();
         }

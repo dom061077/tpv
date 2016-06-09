@@ -74,7 +74,7 @@
   </category>
 
   <category name='com.mchange' additivity='false'>
-    <priority value='INFO' />
+    <priority value='DEBUG' />
     <appender-ref ref='CACHE_LOG' />
   </category>
   
