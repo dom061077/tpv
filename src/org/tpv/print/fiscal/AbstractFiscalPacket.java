@@ -397,7 +397,7 @@ public abstract class AbstractFiscalPacket implements FiscalPacket
 		setText(field, text, length, optional);
 	}
 	
-	public void setNumber(int field, BigDecimal number, int integerPart, int decimalPart, boolean optional) {
+	public void setNumber(int field, BigDecimal number, int integerPart, int decimalPart, boolean optional,String opCharacter) {
 		String numStr = number.toString(); 
 		if(getFiscalPrinter() != null)
 			numStr = getFiscalPrinter().formatNumber(number, integerPart, decimalPart);
@@ -405,7 +405,7 @@ public abstract class AbstractFiscalPacket implements FiscalPacket
 		if(optional)
 			setOptionalField(field, numStr);
 		else
-			setString(field, numStr);
+			setString(field, opCharacter+numStr);
 	}
 	
 	public void setNumber(int field, BigDecimal number, boolean optional) {

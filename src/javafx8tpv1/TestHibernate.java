@@ -20,6 +20,7 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.text.DecimalFormat;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -195,27 +196,43 @@ public class TestHibernate {
     }
     
 
+	public static String formatNumber(BigDecimal number, int integerPart, int decimalPart) {
+		String num = number.toString();
+		int pointIndex = num.indexOf('.');
+		if(pointIndex == -1) {
+			num = number + ".";
+			for(int i = 1; i <= decimalPart; num += "0", i++);
+		} else{ 
+                        System.out.println("Substring: "+num.substring(pointIndex + 1));
+                        int repetirceros = decimalPart- num.substring(pointIndex + 1).length();
+                        for(int i = 1; i<=repetirceros; num+= "0", i++);
+                    
+                }
+                
+		return num;
+	}
             
     
     public static void main(String[] args){
         DOMConfigurator.configure(TestHibernate.class.getResource("log4j.xml"));
         try{
-            //Connection.initConnections();
-            System.out.println("Direccion MAC: "+Connection.getMACAddress());
+            Connection.initConnections();
+            //System.out.println("Direccion MAC: "+Connection.getMACAddress());
         }catch(Exception e){
             e.printStackTrace();
         }
         
+        
         //getProveedorFromCombo();
         //calcularCombos();
-//        getProveedorFromProductos();
         
         //probarRecursivadaGrupoProducto();
         //mostrarFacturaDetalle();
         //recuperarCombos();
         //nativeQuerySQL();
         //recuperarCombos();
-//        EntityManager em = Connection.getEm();
+        getProveedorFromProductos();
+        
 //        Query q = em.createQuery("FROM ListaPrecioProducto p");
 //        List<ListaPrecioProducto> lista=null;
 //        try{

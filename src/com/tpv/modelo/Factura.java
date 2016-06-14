@@ -463,7 +463,10 @@ public class Factura {
         for(Iterator<ProductoAgrupadoEnFactura> it = getProductosAgrupados().iterator();it.hasNext();){
             ProductoAgrupadoEnFactura paf = it.next();
             if(paf.getProducto().equals(fd.getProducto())){
-                paf.incCantidad(fd.getCantidad().intValue());
+                if(fd.getSubTotal().compareTo(BigDecimal.ZERO)<0)
+                    paf.decCantidad(fd.getCantidad().intValue());
+                else
+                    paf.incCantidad(fd.getCantidad().intValue());
                 return;
             }
         }
@@ -477,7 +480,7 @@ public class Factura {
     public void agruparProductosEnFactura(){
         for(Iterator<FacturaDetalle> it = getDetalle().iterator();it.hasNext(); ){
             FacturaDetalle fd = it.next();
-            if(fd.getSubTotal().compareTo(BigDecimal.ZERO)>0)
+            //if(fd.getSubTotal().compareTo(BigDecimal.ZERO)>0)
                 addProductoAgrupadoEnFactura(fd);
         }
     }

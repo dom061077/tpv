@@ -214,9 +214,9 @@ public abstract class HasarFiscalPrinter extends BasicFiscalPrinter implements H
 		int i = 1;
 		cmd.setBoolean(i++, printConfigReport, "P", "x", false);
 		cmd.setBoolean(i++, loadDefaultData, "P", "x", false);
-		cmd.setNumber(i++, finalConsumerLimit, 9, 2, true);
-		cmd.setNumber(i++, ticketInvoiceLimit, 9, 2, true);
-		cmd.setNumber(i++, ivaNonInscript, 2, 2, true);
+		cmd.setNumber(i++, finalConsumerLimit, 9, 2, true,"");
+		cmd.setNumber(i++, ticketInvoiceLimit, 9, 2, true,"");
+		cmd.setNumber(i++, ivaNonInscript, 2, 2, true,"");
 		cmd.setNumber(i++, copies, true);
 		cmd.setBoolean(i++, printChange, "P", "x", true);
 		cmd.setBoolean(i++, printLabels, "P", "x", true);
@@ -233,7 +233,7 @@ public abstract class HasarFiscalPrinter extends BasicFiscalPrinter implements H
 		FiscalPacket cmd = createFiscalPacket(CMD_GENERAL_DISCOUNT);
 		int i = 1;
 		cmd.setText(i++, description, 50, false);
-		cmd.setNumber(i++, amount, 9, 2, false);
+		cmd.setNumber(i++, amount, 9, 2, false,"");
 		cmd.setBoolean(i++, substract, "m", "M", false);
 		cmd.setNumber(i++, display, true);
 		cmd.setBoolean(i++, baseAmount, "x", "T", false);
@@ -320,7 +320,7 @@ public abstract class HasarFiscalPrinter extends BasicFiscalPrinter implements H
 		if(alicuotaIVA == null)
 			cmd.setText(i++, "**.**", false);
 		else
-			cmd.setNumber(i++, alicuotaIVA, 2, 2, false);
+			cmd.setNumber(i++, alicuotaIVA, 2, 2, false,"");
 		cmd.setText(i++, description, 20,false);
 		cmd.setAmount(i++, amount, false, false);
 		return cmd;
@@ -332,8 +332,8 @@ public abstract class HasarFiscalPrinter extends BasicFiscalPrinter implements H
 		cmd.setDate(i++, date);
 		cmd.setText(i++, docNumber, 20, false);
 		cmd.setText(i++, description, 60, false);
-		cmd.setNumber(i++, debitAmount, 9, 2, false);
-		cmd.setNumber(i++, creditAmount, 9, 2, false);
+		cmd.setNumber(i++, debitAmount, 9, 2, false,"");
+		cmd.setNumber(i++, creditAmount, 9, 2, false,"");
 		cmd.setNumber(i++, display, true);
 		return cmd;
 	}
@@ -366,14 +366,14 @@ public abstract class HasarFiscalPrinter extends BasicFiscalPrinter implements H
 		FiscalPacket cmd = createFiscalPacket(CMD_PRINT_LINE_ITEM);
 		int i = 1;
 		cmd.setText(i++, description, descMaxLength, false);
-		cmd.setNumber(i++, quantity,3,8, false);
+		cmd.setNumber(i++, quantity,10,8, false,"");
 		cmd.setAmount(i++, price, false, true);
 		if(ivaPercent == null)
 			cmd.setText(i++, "**.**", false);
 		else
-			cmd.setNumber(i++, ivaPercent, 2, 2, false);		
+			cmd.setNumber(i++, ivaPercent, 2, 2, false,"");		
 		cmd.setBoolean(i++, substract, "m", "M", false);
-		cmd.setNumber(i++, internalTaxes, 6, 8, false);
+		cmd.setNumber(i++, internalTaxes, 10, 8, false,"$");
 		cmd.setNumber(i++, display, true);
 		cmd.setBoolean(i++, basePrice, "x", "T", false);
 		return cmd;
@@ -482,7 +482,7 @@ public abstract class HasarFiscalPrinter extends BasicFiscalPrinter implements H
 		FiscalPacket cmd = createFiscalPacket(CMD_TOTAL_TENDER);
 		int i = 1;
 		cmd.setText(i++, description, 80, false);
-		cmd.setNumber(i++, amount, 9, 2, false);
+		cmd.setNumber(i++, amount, 9, 2, false,"");
 		cmd.setBoolean(i++, cancel, "C", "T");
 		cmd.setNumber(i++, display, true);
 		return cmd;
@@ -505,13 +505,13 @@ public abstract class HasarFiscalPrinter extends BasicFiscalPrinter implements H
 		FiscalPacket cmd = createFiscalPacket(CMD_RETURN_RECHARGE);
 		int i = 1;
 		cmd.setText(i++, description, descMaxLength, false);
-		cmd.setNumber(i++, amount, 9, 2, false);
+		cmd.setNumber(i++, amount, 9, 2, false,"");
 		if(ivaPercent == null){
 			ivaPercent = BigDecimal.ZERO;
 		}
-		cmd.setNumber(i++, ivaPercent, 2, 2, false);		
+		cmd.setNumber(i++, ivaPercent, 2, 2, false,"");		
 		cmd.setBoolean(i++, subtract, "m", "M", false);
-		cmd.setNumber(i++, internalTaxes, 6, 8, false);
+		cmd.setNumber(i++, internalTaxes, 6, 8, false,"$");
 		cmd.setNumber(i++, display, true);
 		cmd.setBoolean(i++, baseAmount, "x", "T", false);
 		cmd.setText(i++, operation, false);

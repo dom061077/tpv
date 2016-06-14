@@ -212,6 +212,7 @@ public class FXMLMainController implements Initializable {
     
     @PostConstruct
     public void init(){
+        
         setBanner();
         asignarEvento();
         configurarAnimacionIngresoNegativo();
@@ -497,6 +498,9 @@ public class FXMLMainController implements Initializable {
                                 //guardarFacturaPrimeraVez();
                         }
                         descripcion = producto.getCodigoProducto()+" "+ producto.getDescripcion();
+                        if(producto.isProductoVilleco()){
+                            descripcion="#"+descripcion;
+                        }
 
                         if(modelTicket.isImprimeComoNegativo())
                             if(!anulaItemIngresado(producto.getCodigoProducto(), cantidad)){

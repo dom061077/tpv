@@ -57,21 +57,26 @@
   <category name='com.tpv' additivity='true'>
     <priority value='DEBUG' />
     <appender-ref ref='APP_LOG' />
-    <!--appender-ref ref='CONSOLE' /-->
   </category>
+
+  <category name='com.sun.javafx' additivity='true'>
+    <priority value='DEBUG' />
+    <appender-ref ref='APP_LOG' />
+  </category>
+  
   <category name='org.hibernate.SQL' additivity='false'>
     <priority value='DEBUG' />
     <appender-ref ref='ORM_SQL_LOG' />
   </category>
 
-  <category name='org.hibernate.jpa' additivity='false'>
+  <category name='org.hibernate' additivity='false'>
     <priority value='INFO' />
     <appender-ref ref='ORM_LOG' />
   </category>
-  <category name='openjpa' additivity='false'>
+  <!--category name='openjpa' additivity='false'>
     <priority value='INFO' />
     <appender-ref ref='ORM_LOG' />
-  </category>
+  </category-->
 
   <category name='com.mchange' additivity='false'>
     <priority value='DEBUG' />
@@ -83,7 +88,8 @@
         <appender-ref ref="CONSOLE"/>
   </category-->
   <root>
-    <priority value='debug' />
+    <priority value='info' />
     <appender-ref ref='CONSOLE' />
+    <appender-ref ref='APP_LOG' />
   </root>
 </log4j:configuration>

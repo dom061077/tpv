@@ -11,6 +11,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -51,7 +52,7 @@ public class Producto {
             referencedColumnName="idGRUPOPRODUCTOS",nullable=false)
     private GrupoProducto grupoProducto;
     
-    @OneToMany(mappedBy="producto")
+    @OneToMany(mappedBy="producto" , fetch = FetchType.EAGER)
     private List<ProveedorProducto> proveedores;
     
 
@@ -229,6 +230,16 @@ public class Producto {
      */
     public void setProveedores(List<ProveedorProducto> proveedores) {
         this.proveedores = proveedores;
+    }
+    
+    public boolean isProductoVilleco(){
+        for(Iterator<ProveedorProducto> it=proveedores.iterator();it.hasNext();){
+            ProveedorProducto pp = it.next();
+            if(pp.getProveedor().getId().equals(Long.valueOf(418))){
+                return true;
+            }
+        }
+        return false;
     }
          
 }

@@ -24,6 +24,8 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -43,6 +45,14 @@ public class JavaFX8TPV1 extends Application {
     BooleanProperty ready = new SimpleBooleanProperty(false);
     @Override
     public void start(Stage stage) throws Exception {
+        Thread.currentThread().setUncaughtExceptionHandler((thread, throwable) -> {
+            //System.out.println("Handler caught exception: "+throwable.getMessage());
+            
+            Alert alert = new Alert(AlertType.ERROR,"Error no controlado: "+throwable.getMessage());
+            alert.showAndWait();
+            
+            log.error("Excepción no controlada",throwable);
+        });        
         
        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
@@ -135,8 +145,8 @@ public class JavaFX8TPV1 extends Application {
             
         }   catch(Exception e){
             
-            log.error("Error general de conexiòn a la base de datos");
-            e.printStackTrace();
+            log.error("Error general de conexiòn a la base de datos",e);
+            
         }
         
         ready.setValue(Boolean.TRUE);
