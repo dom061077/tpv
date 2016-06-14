@@ -249,7 +249,7 @@ public interface FiscalPacket extends Serializable
 	 * @param decimalPart: decimal part digist count.
 	 * @param optional: the field is optional.
 	 */
-	public void setNumber(int field, BigDecimal number, int integerPart, int decimalPart, boolean optional);
+	public void setNumber(int field, BigDecimal number, int integerPart, int decimalPart, boolean optional,String opCharacter);
 	
 	/**
 	 * Set a numeric field.
