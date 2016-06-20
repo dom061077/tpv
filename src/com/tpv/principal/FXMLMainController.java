@@ -20,6 +20,7 @@ import com.tpv.service.ClienteService;
 import com.tpv.service.FacturacionService;
 import com.tpv.service.ImpresoraService;
 import com.tpv.service.ProductoService;
+import com.tpv.util.Connection;
 import com.tpv.util.ui.MaskTextField;
 import java.math.BigDecimal;
 import java.net.URL;
@@ -34,7 +35,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -47,6 +51,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import javax.annotation.PostConstruct;
@@ -217,8 +222,7 @@ public class FXMLMainController implements Initializable {
         asignarEvento();
         configurarAnimacionIngresoNegativo();
         
-        verificarDetalleTableView();
-        
+        //verificarDetalleTableView();
         labelCantidad.setText(LABEL_CANTIDAD);
         iniciaIngresosVisibles();
         
@@ -231,8 +235,8 @@ public class FXMLMainController implements Initializable {
             modelTicket.setCodigoClienteSelecEnBuscarPorDesc(0);
         }
         
-        initTableViewTickets();        
-        
+                
+        initTableViewTickets();
         
         Platform.runLater(() -> {
             chequearInterfazNegativo();            
@@ -249,6 +253,7 @@ public class FXMLMainController implements Initializable {
                 } 
                 
                 if(keyEvent.getCode()== KeyCode.ENTER){
+                    verificarDetalleTableView();
                     if(textFieldCodCliente.getText().trim().equals("")){
                         labelCliente.setVisible(false);
                         textFieldCodCliente.setVisible(false);
@@ -265,8 +270,16 @@ public class FXMLMainController implements Initializable {
                     } 
                     
                 }
-                if(keyEvent.getCode()==KeyCode.F11){
-                    volverMenuPrincipalButton.fire();
+                if(keyEvent.getCode()==KeyCode.F11 ){
+                    if(modelTicket.getDetalle().size()==0)
+                        volverMenuPrincipalButton.fire();
+                    else{
+                        Alert alert = new Alert(AlertType.WARNING,
+                            "No se puede volver al menú principal cuando hay un ticket abierto"
+                            , ButtonType.OK);
+                        alert.showAndWait();
+                    }
+                        
                 }
             });
             
@@ -322,7 +335,15 @@ public class FXMLMainController implements Initializable {
                         enviarComandoLineaTicket();
                         scrollDown();
                     }else{
-                        pagoTicketButton.fire();
+                        if(modelTicket.getDetalle().size()>0)
+                            pagoTicketButton.fire();
+                        else{
+                            Alert alert = new Alert(AlertType.WARNING
+                                    ,"No es posible ir al pago con un ticket sin Productos"
+                                    ,ButtonType.OK);
+                            alert.showAndWait();
+                        }
+                            
                     }
                 }
                 int index=0;
@@ -354,7 +375,18 @@ public class FXMLMainController implements Initializable {
                 }
                 
                 if(keyEvent.getCode() == KeyCode.F11){
-                    volverMenuPrincipalButton.fire();
+                    if(modelTicket.getDetalle().size()==0)
+                        volverMenuPrincipalButton.fire();
+                    else{
+                        
+                        Alert alert = new Alert(AlertType.WARNING,
+                            "No se puede volver al menú principal cuando hay un ticket abierto"
+                            , ButtonType.OK);
+//                        alert.getDialogPane().getStylesheets().add(Connection.getCss());
+//                        alert.getDialogPane().getStyleClass().add("dialog-pane");
+                        alert.getDialogPane().getScene().getStylesheets().add(Connection.getCss());
+                        alert.showAndWait();
+                    }
                 }
                 if(keyEvent.getCode() == KeyCode.F4){
                         textFieldCantidad.setVisible(true);
@@ -393,7 +425,8 @@ public class FXMLMainController implements Initializable {
                 }
                 
                 if(keyEvent.getCode() == KeyCode.F8){
-                    combosButton.fire();
+                    if(modelTicket.getDetalle().getSize()>0)
+                        combosButton.fire();
                 }
                     
                 
@@ -484,6 +517,7 @@ public class FXMLMainController implements Initializable {
                     producto = productoService.getProductoPorCodigo(codigoIngresado); //productoService.getProductoPorCodigo(codigoIngresado);
                     //producto = productoService.getProductoPorCodBarra(textFieldProducto.getText());
                 }else{
+                    
                     producto = productoService.getProductoPorCodBarra(codBarra);
                 }
                         
@@ -832,15 +866,30 @@ public class FXMLMainController implements Initializable {
             @Override
             public TableRow<LineaTicketData> call(TableView<LineaTicketData> paramP) {
                 return new TableRow<LineaTicketData>() {
+                    
                     @Override
                     protected void updateItem(LineaTicketData item, boolean paramBoolean) {
                         super.updateItem(item, paramBoolean);
                         if (item!=null){
+                            
                             if(item.getSubTotal().compareTo(BigDecimal.valueOf(0))<0){
-                                setStyle("-fx-background-color: red");
+                                setStyle(
+                                     "-fx-background-color: red;"   
+                                    +"-fx-background-insets: 0, 0 0 1 0;"
+                                    +"-fx-padding: 0.0em;"
+                                    +"-fx-text-fill: black;"
+                                );
+                                
                             }else{
-                                //setStyle("-fx-background-color: white");
+                                setStyle(
+                                    "-fx-background-insets: 0, 0 0 1 0;"
+                                    +"-fx-padding: 0.0em;"
+                                    +"-fx-text-fill: -fx-text-inner-color;"
+                                );
+
                             }
+                        }else{
+                            getStyleClass().remove("table-row-cell-negativo");
                         }
                         setItem(item);
                         
@@ -868,7 +917,6 @@ public class FXMLMainController implements Initializable {
                     if (!empty) {
                             //String formattedDob = De
                             DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
-                                    
                             this.setText(df.format(item));
                     }
                 }
@@ -886,7 +934,10 @@ public class FXMLMainController implements Initializable {
                     if (!empty) {
                             //String formattedDob = De
                             DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
-                                    
+//                            if(item.compareTo(BigDecimal.ZERO)<0)
+//                                this.setStyle("-fx-text-fill: red");
+//                            else
+//                                this.setStyle("-fx-text-fill: black");
                             this.setText(df.format(item));
                     }
                 }
@@ -895,23 +946,23 @@ public class FXMLMainController implements Initializable {
         });
         subTotalColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
         
-        subTotalColumn.setCellFactory(col -> {
-            TableCell<LineaTicketData,BigDecimal>cell = new TableCell<LineaTicketData,BigDecimal>(){
-                @Override
-                public void updateItem(BigDecimal item,boolean empty){
-                    super.updateItem(item, empty);
-                    this.setText(null);
-                    this.setGraphic(null);
-                    if (!empty) {
-                            //String formattedDob = De
-                            DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
-                                    
-                            this.setText(df.format(item));
-                    }
-                }
-            };
-            return cell;
-        });
+//        subTotalColumn.setCellFactory(col -> {
+//            TableCell<LineaTicketData,BigDecimal>cell = new TableCell<LineaTicketData,BigDecimal>(){
+//                @Override
+//                public void updateItem(BigDecimal item,boolean empty){
+//                    super.updateItem(item, empty);
+//                    this.setText(null);
+//                    this.setGraphic(null);
+//                    if (!empty) {
+//                            //String formattedDob = De
+//                            DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
+//                                    
+//                            this.setText(df.format(item));
+//                    }
+//                }
+//            };
+//            return cell;
+//        });
         
     }
    
@@ -935,19 +986,19 @@ public class FXMLMainController implements Initializable {
                 if(command.getCommandCode()==HasarCommands.CMD_PRINT_LINE_ITEM){
                     agregarDetalleFactura();
                 }
-                log.debug("Mensajes de error: ");
-                source.getMessages().getErrorMsgs().forEach(item->{
-                    log.debug("     Código de Error: "+item.getCode());
-                    log.debug("     Titulo: "+item.getTitle());
-                    log.debug("     Descripción: "+item.getDescription());
-                });
-                log.debug("Mensajes: ");
-                source.getMessages().getMsgs().forEach(item->{
-                    log.debug("     Código de Msg: "+item.getCode());
-                    log.debug("     Titulo: "+item.getTitle());
-                    log.debug("     Descripción: "+item.getDescription());
-                    
-                });
+//                log.debug("Mensajes de error: ");
+//                source.getMessages().getErrorMsgs().forEach(item->{
+//                    log.debug("     Código de Error: "+item.getCode());
+//                    log.debug("     Titulo: "+item.getTitle());
+//                    log.debug("     Descripción: "+item.getDescription());
+//                });
+//                log.debug("Mensajes: ");
+//                source.getMessages().getMsgs().forEach(item->{
+//                    log.debug("     Código de Msg: "+item.getCode());
+//                    log.debug("     Titulo: "+item.getTitle());
+//                    log.debug("     Descripción: "+item.getDescription());
+//                    
+//                });
                 
             }
         };
@@ -1001,13 +1052,24 @@ public class FXMLMainController implements Initializable {
                 }
                 modelTicket.setIdFactura(factura.getId());
             }
+            modelTicket.setReinicioVerificado(true);                    
         }catch(TpvException e){
             log.error("Error en capa controller: "+e.getMessage());
-            modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
-            modelTicket.setException(e);
-            goToErrorButton.fire();
+            Alert alert = new Alert(AlertType.ERROR
+                    , "Hay un o más tickets abiertos para el checkout y el usuario en curso"
+                    , ButtonType.OK);
+                        alert.showAndWait().ifPresent(response ->{
+                            if(response == ButtonType.OK){
+                                volverMenuPrincipalButton.fire();
+                            }
+                        });
+              
+//            modelTicket.setCliente(null);
+//            modelTicket.setClienteSeleccionado(false);
+//            modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+//            modelTicket.setException(e);
+//            goToErrorButton.fire();
         }
-        modelTicket.setReinicioVerificado(true);        
     }
     
     private void verCombos(){

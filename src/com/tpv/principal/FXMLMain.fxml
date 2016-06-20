@@ -59,7 +59,7 @@
    <top>
       <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <left>
-            <StackPane fx:id="stackPaneMediaViewIzq" prefHeight="172.0" prefWidth="400.0" styleClass="rounded_corner" BorderPane.alignment="CENTER">
+            <StackPane fx:id="stackPaneMediaViewIzq" prefHeight="172.0" prefWidth="400.0" styleClass="rounded_corner" visible="false" BorderPane.alignment="CENTER">
                <children>
                   <ImageView fx:id="imageViewIzq" fitHeight="149.0" fitWidth="390.0" pickOnBounds="true" />
                </children>

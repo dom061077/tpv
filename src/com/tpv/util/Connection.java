@@ -43,6 +43,7 @@ public class Connection {
     private static Logger log = Logger.getLogger(Connection.class);
     private static Button buttonFlowFire=null;
     private static boolean buttonEventFired = false;
+    private static String css = "";
     
     /**
      * Este método cumple la función de obligar a la creación de la instancia
@@ -179,6 +180,13 @@ public class Connection {
         return null;
     }
     
+    public static String getCss(){
+        return css;
+    }
+    
+    public static void setCss(String cssParam){
+        css = cssParam;
+    }
     
     /*
     public static String getMACAddress(){

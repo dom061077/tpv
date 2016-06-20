@@ -94,7 +94,8 @@ public class FacturacionService  {
             factura = (Factura)q.getSingleResult();
         }catch(NonUniqueResultException e){    
             log.error("Hay más de una factura abierta",e);
-            
+            throw new TpvException("Hay más de una factura abierta para el checkout y usuario. Administración "
+                                    +" debe solucionar el problema");
         }catch(NoResultException e){
             log.info("no se encontró factura abierta, no se toma como error NoResultException");
         }catch(RuntimeException e){
@@ -294,9 +295,9 @@ public class FacturacionService  {
                     fd.setCombo(combo);
                     fd.setCantidad(combo.getCantidadCombosArmados());
                     if(combo.isCombinarProductos())
-                        fd.setBonificacion(combo.getBonificacion());
+                        fd.setBonificacion(combo.getBonificacion().setScale(2,BigDecimal.ROUND_HALF_EVEN));
                     else    
-                        fd.setBonificacion(combo.getBonificacionSinCombinacion());
+                        fd.setBonificacion(combo.getBonificacionSinCombinacion().setScale(2,BigDecimal.ROUND_HALF_EVEN));
                     factura.getDetalleCombosAux().add(fd);
                 }
                 

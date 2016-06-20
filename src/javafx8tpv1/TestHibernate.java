@@ -214,15 +214,15 @@ public class TestHibernate {
             
     
     public static void main(String[] args){
-        DOMConfigurator.configure(TestHibernate.class.getResource("log4j.xml"));
-        try{
-            Connection.initConnections();
-            //System.out.println("Direccion MAC: "+Connection.getMACAddress());
-        }catch(Exception e){
-            e.printStackTrace();
-        }
+//        DOMConfigurator.configure(TestHibernate.class.getResource("log4j.xml"));
+//        try{
+//            Connection.initConnections();
+//            //System.out.println("Direccion MAC: "+Connection.getMACAddress());
+//        }catch(Exception e){
+//            e.printStackTrace();
+//        }
         
-        
+        System.out.println(formatNumber(BigDecimal.valueOf(38.35),9,4));    
         //getProveedorFromCombo();
         //calcularCombos();
         
@@ -231,7 +231,7 @@ public class TestHibernate {
         //recuperarCombos();
         //nativeQuerySQL();
         //recuperarCombos();
-        getProveedorFromProductos();
+        //getProveedorFromProductos();
         
 //        Query q = em.createQuery("FROM ListaPrecioProducto p");
 //        List<ListaPrecioProducto> lista=null;

@@ -13,7 +13,9 @@ import com.tpv.principal.DataModelTicket;
 import com.tpv.principal.LineaTicketData;
 import com.tpv.service.ProductoService;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javafx.application.Platform;
@@ -157,8 +159,9 @@ public class BuscarPorDescProductoController {
     public void cargarTableView(){
         data = FXCollections.observableArrayList();
         List<ListaPrecioProducto> productosPrecios = null;
+        
         try{
-            productosPrecios = productoService.getProductosPrecio(textFieldFiltroProducto.getText());
+              productosPrecios = productoService.getProductosPrecio(textFieldFiltroProducto.getText());
         }catch(TpvException e){
             log.error("Error: "+e.getMessage());
              modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_BUSCARPORDESCPRODUCTO);

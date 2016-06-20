@@ -74,6 +74,10 @@ public class MenuPrincipalController {
             vboxMenuPrincipal.setOnKeyPressed(keyEvent->{
                 log.debug("Tecla pulsada: "+keyEvent.getCode());
                 if(keyEvent.getCode()==KeyCode.NUMPAD1)
+                    modelTicket.setCliente(null);
+                    modelTicket.setClienteSeleccionado(false);
+                    modelTicket.setReinicioVerificado(false);
+                    modelTicket.getDetalle().clear();
                     buttonFacturacion.fire();
                 if(keyEvent.getCode()==KeyCode.NUMPAD4)
                     System.exit(0);

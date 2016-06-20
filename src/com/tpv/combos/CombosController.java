@@ -86,7 +86,7 @@ public class CombosController{
     
     
     @PostConstruct
-    public void init(){
+    public void init() {
         Platform.runLater(() -> {
             initTableViewCombos();
             tableViewCombos.setOnKeyPressed(keyEvent->{

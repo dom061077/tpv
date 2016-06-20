@@ -264,6 +264,15 @@
         -fx-dark-text-color  59%,
         -fx-mid-text-color   60%
     );
+    
+    -fx-text-inner-color-negativo: ladder(
+        red,
+        -fx-light-text-color 45%,
+        -fx-dark-text-color  46%,
+        -fx-dark-text-color  59%,
+        -fx-mid-text-color   60%
+    );
+    
 
     /* The color to use for small mark-like objects such as checks on check
      * boxes, filled in circles in radio buttons, arrows on scroll bars, etc.
@@ -2146,6 +2155,13 @@
 
 /* Each row in the table is a table-row-cell. Inside a table-row-cell is any
    number of table-cell. */
+
+.table-row-cell-negativo{
+  -fx-text-fill: -fx-text-inner-color;
+  -fx-background-color: red;
+  -fx-background-insets: 0, 2 0 0 0;
+    
+}
 .table-row-cell {
     -fx-background-color: -fx-table-cell-border-color, -fx-control-inner-background;
     -fx-background-insets: 0, 0 0 1 0;
@@ -4230,6 +4246,7 @@ to the top and bottom -fx-padding values of the parent toolbar. */
 
 .dialog-pane > .content {
     -fx-padding: 0.833em; /* 10 */
+    -fx-font-size: 18px;
 }
 
 .dialog-pane:no-header .graphic-container {

@@ -76,13 +76,25 @@ public abstract class BasicFiscalPrinter implements FiscalPrinter {
 	}
 	
 	public String formatNumber(BigDecimal number, int integerPart, int decimalPart) {
+//		String num = number.toString();
+//		int pointIndex = num.indexOf('.');
+//		if(pointIndex == -1) {
+//			num = number + ".";
+//			for(int i = 1; i <= decimalPart; num += "0", i++);
+//		} else if (num.substring(pointIndex + 1).length() > decimalPart)
+//			num = num.substring(0, num.indexOf('.') + decimalPart);
 		String num = number.toString();
 		int pointIndex = num.indexOf('.');
 		if(pointIndex == -1) {
 			num = number + ".";
 			for(int i = 1; i <= decimalPart; num += "0", i++);
-		} else if (num.substring(pointIndex + 1).length() > decimalPart)
-			num = num.substring(0, num.indexOf('.') + decimalPart);
+		} else{ 
+                        System.out.println("Substring: "+num.substring(pointIndex + 1));
+                        int repetirceros = decimalPart- num.substring(pointIndex + 1).length();
+                        for(int i = 1; i<=repetirceros; num+= "0", i++);
+                    
+                }
+            
 		return num;
 	}
 

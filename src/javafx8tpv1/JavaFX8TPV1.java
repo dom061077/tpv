@@ -23,6 +23,7 @@ import javafx.application.Preloader.StateChangeNotification;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.EventHandler;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -46,11 +47,9 @@ public class JavaFX8TPV1 extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         Thread.currentThread().setUncaughtExceptionHandler((thread, throwable) -> {
-            //System.out.println("Handler caught exception: "+throwable.getMessage());
-            
             Alert alert = new Alert(AlertType.ERROR,"Error no controlado: "+throwable.getMessage());
             alert.showAndWait();
-            
+            alert.getDialogPane().getStylesheets().add(Connection.getCss());
             log.error("Excepción no controlada",throwable);
         });        
         
@@ -131,10 +130,10 @@ public class JavaFX8TPV1 extends Application {
         
         Scene scene = new Scene(root);
         
-//        scene.setCursor(Cursor.NONE);
+        scene.setCursor(Cursor.NONE);
         String css = this.getClass().getResource("caspian.css").toExternalForm(); 
         scene.getStylesheets().add(css);        
-        //stage.setFullScreen(true); //full screen without borders (no program menu bars)
+        stage.setFullScreen(true); //full screen without borders (no program menu bars)
         stage.setFullScreenExitHint(""); //Don't show "Press ESC to exit full screen"
         stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         stage.setScene(scene);

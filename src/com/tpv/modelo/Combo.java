@@ -261,12 +261,19 @@ public class Combo {
         int cantReferenciaGrupo = 0;
         int acumulador = 0;
         
+        BigDecimal menorPrecio = BigDecimal.ZERO;
+        int cantidadMenor = 0;
+        
         for(Iterator<ComboGrupo> iterator = getCombosGrupo().iterator();iterator.hasNext();){
             ComboGrupo gp = iterator.next();
             cantReferenciaGrupo = cantCombosArmados * gp.getCantidad();
             for(Iterator<ComboGrupoDetallePrecioProducto> comboGrupoDetPPIterator = gp.getDetallePreciosProductos().iterator()
                     ;comboGrupoDetPPIterator.hasNext();){
                 ComboGrupoDetallePrecioProducto comboGrupoDetPP = comboGrupoDetPPIterator.next();
+//                if(comboGrupoDetPP.getPaf().getPrecioUnitario().compareTo(menorPrecio)<0){
+//                    menorPrecio = comboGrupoDetPP.getPaf().getPrecioUnitario();
+//                }
+                
                 if(isCombinarProductos()){
                     if(acumulador == cantReferenciaGrupo){
                         //comboGrupoDetPP.getFactDetalle().incrementarCantidadAuxCombo(comboGrupoDetPP.getCantidad());
@@ -279,6 +286,7 @@ public class Combo {
                                 bonificacion = bonificacion.add(comboGrupoDetPP.getPaf().getPrecioUnitario()
                                         .multiply(BigDecimal.valueOf(comboGrupoDetPP.getCantidad()))
                                         .multiply(gp.getPorcentaje()).divide(new BigDecimal(100)));    
+                                
                             }
                         }else{
                                 bonificacion = bonificacion.add(comboGrupoDetPP.getPaf().getPrecioUnitario()

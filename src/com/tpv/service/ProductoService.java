@@ -8,12 +8,14 @@ package com.tpv.service;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.BonificacionCliente;
 import com.tpv.modelo.Cliente;
+import com.tpv.modelo.Combo;
 import com.tpv.modelo.GrupoProducto;
 import com.tpv.modelo.ListaPrecioProducto;
 import com.tpv.modelo.Producto;
 import com.tpv.modelo.Proveedor;
 import com.tpv.util.Connection;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -86,12 +88,31 @@ public class ProductoService {
     
     public List getProductosPrecio(String filtro) throws TpvException{
         log.info("Capa de servicios, filtro: "+filtro);
+        
+        int codigoIngresado=0;
+        BigInteger codBarra=BigInteger.ZERO;
+        try{
+            codigoIngresado = Integer.parseInt(filtro);
+            log.debug("Codigo a consultar en productoService");
+        }catch(Exception e){
+            try{
+                codBarra = new BigInteger(filtro) ;
+            }catch(Exception ex){
+                
+            }
+        }
+        
+        
         EntityManager em = Connection.getEm();
         List<ListaPrecioProducto> productosPrecios=null;
         try{
             Query q = em.createQuery("FROM ListaPrecioProducto lpp WHERE "
-                    +" lpp.producto.descripcion like :filtro"
-                ).setParameter("filtro", "%"+filtro+"%");
+                    +" lpp.producto.descripcion like :filtro "
+                    +" or lpp.producto.codigoProducto = :codigoProducto"
+                    +" or lpp.producto.codBarra = :codBarra"
+                ).setParameter("filtro", "%"+filtro+"%")
+                .setParameter("codigoProducto", codigoIngresado)
+                .setParameter("codBarra", codBarra.toString().trim());
             q.setFirstResult(0);
             q.setMaxResults(100);
             productosPrecios = q.getResultList();
@@ -148,6 +169,43 @@ public class ProductoService {
         return producto;
     }
     
+    private boolean isProductoEnCombo(int filtroCodigo) throws TpvException{
+        EntityManager em = Connection.getEm();
+        List<Combo> combos = null;
+        Query q = em.createNativeQuery(
+                " SELECT c.* FROM productos p "
+                +" LEFT JOIN ("
+                +"       SELECT gp.idGRUPOPRODUCTOS AS grupohijo"
+                +"                ,glevel1.idGRUPOPRODUCTOS AS grupopadre FROM grupoproductos gp"
+                +"        INNER JOIN grupoproductos glevel1 ON glevel1.idgrupoproductos = gp.padreid"
+                +" ) grupoprod ON (p.idgrupoproductos = grupoprod.grupohijo OR p.idgrupoproductos = grupoprod.grupopadre)"
+                +" LEFT JOIN combosgrupodetalle cgd ON p.idPRODUCTOS = cgd.idproductos OR grupoprod.grupohijo = cgd.idGRUPOPRODUCTOS"
+                +"		OR grupoprod.grupopadre = cgd.idGRUPOPRODUCTOS"
+                +" LEFT JOIN combosgrupo cg ON cgd.idCOMBOSGRUPO = cg.idCOMBOSGRUPO"
+                +" LEFT JOIN combos c ON cg.idCOMBOS = c.idCOMBOS"
+                +" LEFT JOIN proveedores_productos pp ON p.idPRODUCTOS = pp.idPRODUCTOS AND pp.idProveedor=cgd.idProveedor"
+                +" WHERE c.idcombos IS NOT NULL AND p.codigoProducto = ?1 AND CONVERT(NOW(),DATE) BETWEEN c.FECHADESDE AND c.FECHAHASTA"
+                +" AND p.DISCONTINUADO = 0"
+                , Combo.class).setParameter(1, filtroCodigo);
+        try{
+            combos = q.getResultList();
+        }catch(NoResultException e){    
+            log.warn("No se encontró el código de producto"+filtroCodigo+" en la lista de precios."
+                +" La excepción NoResultException no se considera como error. "+e.getMessage());
+        }catch(RuntimeException e){
+            log.error("Error en la capa de servicios al recuperar precio del producto con código: "
+                    +filtroCodigo,e);
+            throw new TpvException("Error en la capa de servicios al recuperar precio del producto con código: "
+                    +filtroCodigo+"");
+        }finally{
+            em.clear();
+        }
+        if(combos==null)
+            return false;
+        if(combos.size()==0)
+            return false;
+        return true;            
+    }
     
     public BigDecimal getPrecioProducto(int filtroCodigo,Cliente cliente) throws TpvException{
         log.info("Capa de servicios, parámetro de filtro producto: "+filtroCodigo
@@ -156,7 +214,6 @@ public class ProductoService {
         BigDecimal precio = new BigDecimal(0);
         EntityManager em = Connection.getEm();
         try{
-            
             Query q = em.createQuery("FROM ListaPrecioProducto lpp WHERE"
                     +" lpp.producto.discontinuado = 0"
                     +" and lpp.producto.codigoProducto = :codigoProducto").setParameter("codigoProducto", filtroCodigo);
@@ -164,10 +221,20 @@ public class ProductoService {
                 precio = lstPrecioProducto.getPrecioFinal();
                 
             if(cliente!= null && cliente.getEmpresa().isEstado()){
-                    q = em.createQuery("SELECT pp.proveedor FROM ProveedorProducto pp WHERE pp.producto.codigoProducto = :productoId")
-                            .setParameter("productoId", filtroCodigo);
-                    Proveedor proveedor = (Proveedor)q.getSingleResult();
-                    if(proveedor.getId().equals(Long.parseLong("418"))){
+                    q = em.createQuery("SELECT pp.proveedor FROM ProveedorProducto pp WHERE pp.producto.codigoProducto = :productoId"
+                                        +" and pp.proveedor.id = :proveedorId"
+                                        ).setParameter("productoId", filtroCodigo)
+                                        .setParameter("proveedorId",Long.parseLong("418"));
+                    Proveedor proveedor = null;
+                    try{
+                        proveedor = (Proveedor)q.getSingleResult();
+                    }catch(NoResultException e){
+                        log.debug("No se encontro relacion entre el producto : "+filtroCodigo
+                                    +" y el proveedor 418");
+                    }
+                    
+                    if(proveedor==null && !isProductoEnCombo(filtroCodigo)){
+                        log.debug("el proveedor es null ");
                         q = em.createQuery("FROM BonificacionCliente bc WHERE bc.cliente.id = :clienteId "
                                 +" AND mesAnio = mesAnioCalc")
                                 .setParameter("clienteId", cliente.getId());
@@ -178,7 +245,7 @@ public class ProductoService {
                         BigDecimal totalAcumulado = bc.getMontoAcumulado().add(precioConDescuento);
                         if(bc!=null){
                             if(cliente.getEmpresa().getTopeDescuento()
-                                .compareTo(totalAcumulado)<0){
+                                .compareTo(totalAcumulado)>0){
                                 log.info("El precio del producto tiene descuento de personal");
                                 precio = precioConDescuento;
                             }

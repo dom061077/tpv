@@ -69,6 +69,7 @@ public class ImpresoraService {
             request = getHfp().cmdGetInitData();
             response = getHfp().execute(request);
         }catch(FiscalPrinterIOException e){
+            log.warn("Error al obtener el Nro de punto de venta",e);
             throw new TpvException("Error al obtener datos de la impresora. "
                 +e.getFullMessage());
         }
@@ -100,8 +101,8 @@ public class ImpresoraService {
             request = getHfp().cmdStatusRequest();
             response = getHfp().execute(request);
         }catch(FiscalPrinterIOException e){
-            throw new TpvException("Error al obtener datos de la impresora. "
-                +e.getFullMessage());
+            log.warn("Error al obtener el ultimo Nro de Ticket",e);
+            throw new TpvException(e.getMessage());
         }
         return response.getString(3);
     }
@@ -118,8 +119,8 @@ public class ImpresoraService {
             request = getHfp().cmdStatusRequest();
             response = getHfp().execute(request);
         }catch(FiscalPrinterIOException e){
-            throw new TpvException("Error al obtener datos de la impresora. "
-                +e.getFullMessage());
+            log.warn("Error al obtener el ultimo Nro de ticket A",e);
+            throw new TpvException(e.getMessage());
         }
 
         return response.getString(5);
@@ -136,8 +137,8 @@ public class ImpresoraService {
             response = getHfp().execute(request);
             
         }catch(FiscalPrinterIOException e){
-            throw new TpvException("Error al obtener datos de la impresora. "
-                +e.getFullMessage());
+            log.warn("Error al obtener Pto de Venta y Nros de ticket",e);
+            throw new TpvException(e.getMessage());
         }catch(IllegalStateException e){
             throw new TpvException(e.getMessage());
         }
@@ -149,8 +150,7 @@ public class ImpresoraService {
            request = getHfp().cmdGetInitData();
            response = getHfp().execute(request);
         }catch(FiscalPrinterIOException e){
-            throw new TpvException("Error al obtener datos de la impresora  "
-                    +e.getFullMessage());
+            throw new TpvException(e.getMessage());
         }
         retorno[0]=response.getString(7);
         
@@ -172,13 +172,11 @@ public class ImpresoraService {
             response = getHfp().execute(request);
         }catch(FiscalPrinterStatusError e){
             fMsg = getHfp().getMessages();
-            log.error(fMsg.getErrorsAsString());
-            throw new TpvException("Error en el estado de la impresora: "
-                +fMsg.getErrorsAsString());
+            log.warn("Error fiscal al abrir el ticket",e);
+            throw new TpvException(e.getMessage());
         }catch(FiscalPrinterIOException e){
-            log.error(e.getFullMessage());
-            throw new TpvException("Error al obtener datos de la impresora. "
-                +e.getFullMessage());
+            log.warn("Error de Impresora al abrir el ticket",e);
+            throw new TpvException(e.getMessage());
         }
         
         
@@ -205,14 +203,12 @@ public class ImpresoraService {
             response = getHfp().execute(request2daLineaDetalle);
         }catch(FiscalPrinterStatusError e){
             fMsg = getHfp().getMessages();
-            log.error(fMsg.getErrorsAsString());
-            throw new TpvException("Error en el estado de la impresora: "
-                +fMsg.getErrorsAsString());
+            log.warn("Error fiscal al imprimir linea de ticket",e);
+            throw new TpvException(e.getMessage());
             
         }catch(FiscalPrinterIOException e){
-            log.error(e.getFullMessage());
-            throw new TpvException("Error al obtener datos de la impresora. "
-                +e.getFullMessage());
+            log.warn("Error de Impresora al imprimir linea de ticket",e);
+            throw new TpvException(e.getMessage());
         }
         
         
@@ -232,13 +228,12 @@ public class ImpresoraService {
             try{
                 response = getHfp().execute(request);
             }catch(FiscalPrinterStatusError e){
-                log.error("Error en estado fiscal de la impresora al cerrar el ticket fiscal",e);
-                throw new TpvException("Error al imprimir bonificación de combos "+e.getMessage());
+                log.warn("Error en estado fiscal de la impresora al cerrar el ticket fiscal",e);
+                throw new TpvException(e.getMessage());
             
             }catch(FiscalPrinterIOException e){
                 log.error("Error de entrada/salida en la impresora fical",e);
-                throw new TpvException("Error de entrada/salida en la impresora fical "
-                    +e.getFullMessage());
+                throw new TpvException(e.getMessage());
             }
           
         }
@@ -247,13 +242,12 @@ public class ImpresoraService {
         try{
           response = getHfp().execute(request);
         }catch(FiscalPrinterStatusError e){
-            log.error("Error en estado fiscal de la impresora al cerrar el ticket fiscal",e);
-            throw new TpvException("Error al cerrar el ticket fiscal "+e.getMessage());
+            log.warn("Error en estado fiscal de la impresora al cerrar el ticket fiscal",e);
+            throw new TpvException(e.getMessage());
             
         }catch(FiscalPrinterIOException e){
-            log.error("Error de entrada/salida en la impresora fical",e);
-            throw new TpvException("Error de entrada/salida en la impresora fical "
-                +e.getFullMessage());
+            log.warn("Error de entrada/salida en la impresora fical",e);
+            throw new TpvException(e.getMessage());
         }
         
         
@@ -269,14 +263,12 @@ public class ImpresoraService {
           response = getHfp().execute(request);
         }catch(FiscalPrinterStatusError e){
             fMsg = getHfp().getMessages();
-            log.error(fMsg.getErrorsAsString());
-            throw new TpvException("Error en el estado de la impresora: "
-                +fMsg.getErrorsAsString());
+            log.warn("Error fiscal al cancelar el ticket",e);
+            throw new TpvException(e.getMessage());
             
         }catch(FiscalPrinterIOException e){
-            log.error(e.getFullMessage());
-            throw new TpvException("Error al obtener datos de la impresora. "
-                +e.getFullMessage());
+            log.warn("Error de impresora al cancelar el ticket",e);
+            throw new TpvException(e.getMessage());
         }        
     }
 
@@ -305,13 +297,11 @@ public class ImpresoraService {
         }catch(FiscalPrinterStatusError e){
             fMsg = getHfp().getMessages();
             log.error(fMsg.getErrorsAsString());
-            throw new TpvException("Error en el estado de la impresora: "
-                +fMsg.getErrorsAsString());
+            throw new TpvException(e.getMessage());
             
         }catch(FiscalPrinterIOException e){
             log.error(e.getFullMessage());
-            throw new TpvException("Error al obtener datos de la impresora. "
-                +e.getFullMessage());
+            throw new TpvException(e.getMessage());
         }        
     }
     
