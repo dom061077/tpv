@@ -130,6 +130,8 @@ public class ConfirmaPagoTicketController {
             //labelError.setText(model.getTpvException().getMessage());
             modelTicket = context.getRegisteredObject(DataModelTicket.class);
             codigoPagoColumn.setCellValueFactory(new PropertyValueFactory<LineaPagoData,Integer>("codigoPago"));
+            cantidadCuotaColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+            cantidadCuotaColumn.setCellValueFactory(new PropertyValueFactory<LineaPagoData,Integer>("cantidadCuotas"));
             codigoPagoColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
             descripcionPagoColumn.setCellValueFactory(new PropertyValueFactory("descripcion"));
             nroTarjetaColumn.setCellValueFactory(new PropertyValueFactory("nroTarjeta"));

@@ -5,14 +5,14 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="617.0" prefWidth="1156.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="617.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <TableView fx:id="tableViewCombos" prefHeight="200.0" prefWidth="200.0" styleClass="tpv-table-view" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn fx:id="codigoColumn" prefWidth="141.0" text="Código" />
-          <TableColumn fx:id="descripcionColumn" prefWidth="685.0" text="Descripción" />
-            <TableColumn fx:id="cantidadColumn" minWidth="3.0" prefWidth="126.0" text="Cantidad" />
-            <TableColumn fx:id="subTotalColumn" prefWidth="143.0" text="SubTotal" />
+          <TableColumn fx:id="codigoColumn" prefWidth="100.0" text="Código" />
+          <TableColumn fx:id="descripcionColumn" prefWidth="400.0" text="Descripción" />
+            <TableColumn fx:id="cantidadColumn" minWidth="3.0" prefWidth="120.0" text="Cantidad" />
+            <TableColumn fx:id="subTotalColumn" prefWidth="120.0" text="SubTotal" />
         </columns>
       </TableView>
    </center>

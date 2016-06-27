@@ -216,11 +216,11 @@ public class FacturacionService  {
                 +"                ,glevel1.idGRUPOPRODUCTOS AS grupopadre FROM grupoproductos gp"
                 +"        INNER JOIN grupoproductos glevel1 ON glevel1.idgrupoproductos = gp.padreid"
                 +" ) grupoprod ON (p.idgrupoproductos = grupoprod.grupohijo OR p.idgrupoproductos = grupoprod.grupopadre)"
+                +" LEFT JOIN proveedores_productos pp ON fd.idPRODUCTOS = pp.idPRODUCTOS"        
                 +" LEFT JOIN combosgrupodetalle cgd ON fd.idPRODUCTOS = cgd.idproductos OR grupoprod.grupohijo = cgd.idGRUPOPRODUCTOS"
-		+"		OR grupoprod.grupopadre = cgd.idGRUPOPRODUCTOS"
+		+"		OR grupoprod.grupopadre = cgd.idGRUPOPRODUCTOS OR pp.idProveedor=cgd.idProveedor"
                 +" LEFT JOIN combosgrupo cg ON cgd.idCOMBOSGRUPO = cg.idCOMBOSGRUPO"
                 +" LEFT JOIN combos c ON cg.idCOMBOS = c.idCOMBOS"
-                +" LEFT JOIN proveedores_productos pp ON fd.idPRODUCTOS = pp.idPRODUCTOS AND pp.idProveedor=cgd.idProveedor"
                 +" WHERE c.idcombos IS NOT NULL AND fd.idFACTURAS = ?1 AND CONVERT(NOW(),DATE) BETWEEN c.FECHADESDE AND c.FECHAHASTA"
                 +" ORDER BY c.PRIORIDAD"
                 , Combo.class).setParameter(1, id);

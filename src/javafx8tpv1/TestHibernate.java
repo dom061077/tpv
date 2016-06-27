@@ -212,7 +212,17 @@ public class TestHibernate {
 		return num;
 	}
             
-    
+    public static void formatCodigoBarra(){
+        String codigoBarra = "2097289000003";
+        System.out.println("Inicio de codigo: "+codigoBarra.substring(0,2));
+        System.out.println("Codigo dentro el codigo de barra: "+codigoBarra.substring(2,7));
+        System.out.println("Peso o precio: "+codigoBarra.substring(7, 13));
+        String precio = codigoBarra.substring(7,9)+"."+codigoBarra.substring(9, 13);
+        System.out.println("String de precio armado: "+precio);
+        BigDecimal precioFinal = BigDecimal.valueOf(Double.parseDouble(precio)).setScale(3,BigDecimal.ROUND_HALF_EVEN);
+        System.out.println("BigDecimal final: "+precioFinal);
+    }
+        
     public static void main(String[] args){
 //        DOMConfigurator.configure(TestHibernate.class.getResource("log4j.xml"));
 //        try{
@@ -222,7 +232,7 @@ public class TestHibernate {
 //            e.printStackTrace();
 //        }
         
-        System.out.println(formatNumber(BigDecimal.valueOf(38.35),9,4));    
+       formatCodigoBarra();    
         //getProveedorFromCombo();
         //calcularCombos();
         

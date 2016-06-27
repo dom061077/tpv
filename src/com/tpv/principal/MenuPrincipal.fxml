@@ -6,42 +6,113 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<BorderPane xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-      <VBox fx:id="vboxMenuPrincipal" focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="433.0" prefWidth="719.0" styleClass="label_menu, rounded_corner">
+      <GridPane alignment="TOP_CENTER" BorderPane.alignment="CENTER">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+         </rowConstraints>
          <children>
-            <Label styleClass="label_menu" text="1- FACTURACION" textFill="#3062e1">
-               <font>
-                  <Font name="Arial" size="64.0" />
-               </font>
-            </Label>
-            <Label styleClass="label_menu" text="2- CONTROLADOR" textFill="#3062e1">
-               <font>
-                  <Font name="Arial" size="64.0" />
-               </font>
-            </Label>
-            <Label styleClass="label_menu" text="3- RETIRO DE DINERO" textFill="#3062e1">
-               <font>
-                  <Font name="Arial" size="64.0" />
-               </font>
-            </Label>
-            <Label styleClass="label_menu" text="4- FIN" textFill="#3062e1">
-               <font>
-                  <Font size="64.0" />
-               </font>
-            </Label>
-            <Button fx:id="buttonFacturacion" mnemonicParsing="false" text="Button" visible="false" />
-            <Button fx:id="buttonControlador" mnemonicParsing="false" text="Button" visible="false" />
-            <Button fx:id="buttonRetirarDinero" mnemonicParsing="false" text="Button" visible="false" />
-            <Button fx:id="buttonError" focusTraversable="false" mnemonicParsing="false" visible="false" />
+            <VBox fx:id="vboxMenuPrincipal" focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="433.0" prefWidth="719.0" styleClass="label_menu, rounded_corner">
+               <children>
+                  <Label styleClass="label_menu" text="1- FACTURACION" textFill="#3062e1">
+                     <font>
+                        <Font name="Arial" size="64.0" />
+                     </font>
+                  </Label>
+                  <Label styleClass="label_menu" text="2- CONTROLADOR" textFill="#3062e1">
+                     <font>
+                        <Font name="Arial" size="64.0" />
+                     </font>
+                  </Label>
+                  <Label styleClass="label_menu" text="3- RETIRO DE DINERO" textFill="#3062e1">
+                     <font>
+                        <Font name="Arial" size="64.0" />
+                     </font>
+                  </Label>
+                  <Label styleClass="label_menu" text="4- FIN" textFill="#3062e1">
+                     <font>
+                        <Font size="64.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="buttonFacturacion" mnemonicParsing="false" text="Button" visible="false" />
+                  <Button fx:id="buttonControlador" mnemonicParsing="false" text="Button" visible="false" />
+                  <Button fx:id="buttonRetirarDinero" mnemonicParsing="false" text="Button" visible="false" />
+                  <Button fx:id="buttonError" focusTraversable="false" mnemonicParsing="false" visible="false" />
+               </children>
+            </VBox>
          </children>
-      </VBox>
+      </GridPane>
    </center>
    <left>
-      <ImageView fx:id="imageViewLogoRight" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER_RIGHT" />
+      <GridPane prefHeight="442.0" prefWidth="150.0" BorderPane.alignment="CENTER_RIGHT">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="206.0" minHeight="10.0" prefHeight="124.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="198.0" minHeight="10.0" prefHeight="133.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="135.0" minHeight="10.0" prefHeight="135.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <ImageView fx:id="imageViewLogoRight1" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <ImageView fx:id="imageViewLogoRight3" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+            <ImageView fx:id="imageViewLogoRight2" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.rowIndex="2" />
+         </children>
+      </GridPane>
    </left>
    <right>
-      <ImageView fx:id="imageViewLogoLeft" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER_LEFT" />
+      <GridPane prefWidth="120.0" BorderPane.alignment="CENTER_LEFT">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="205.0" minHeight="10.0" prefHeight="136.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="188.0" minHeight="10.0" prefHeight="122.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="177.0" minHeight="10.0" prefHeight="135.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <ImageView fx:id="imageViewLogoLeft1" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <ImageView fx:id="imageViewLogoLeft2" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+            <ImageView fx:id="imageViewLogoLeft3" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+         </children>
+      </GridPane>
    </right>
+   <top>
+      <GridPane prefHeight="120.0" visible="false" BorderPane.alignment="CENTER">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <ImageView fx:id="imageViewLogoTop1" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <ImageView fx:id="imageViewLogoTop2" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <ImageView fx:id="imageViewLogoTop3" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+         </children>
+      </GridPane>
+   </top>
+   <bottom>
+      <GridPane prefHeight="120.0" BorderPane.alignment="CENTER">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <ImageView fx:id="imageViewLogoBottom1" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <ImageView fx:id="imageViewLogoBottom2" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <ImageView fx:id="imageViewLogoBottom3" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+         </children>
+      </GridPane>
+   </bottom>
 </BorderPane>

@@ -138,6 +138,9 @@ public class ProductoService {
                     .setParameter("codigoProducto", filtroCodigo);
 
             producto = (Producto)q.getSingleResult();
+            producto.getProveedores().forEach(item->{
+                item.getProveedor().getId();
+            });
         }catch(NoResultException e){
             log.warn("No se pudo encontrar el producto con el código: "+filtroCodigo);
         }catch(RuntimeException e){

@@ -8,8 +8,10 @@ package com.tpv.pagoticket;
 import com.mchange.v2.codegen.bean.SimpleProperty;
 import java.math.BigDecimal;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.LongProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -23,21 +25,21 @@ public class LineaPagoData {
     private StringProperty Descripcion;
     private ObjectProperty<BigDecimal> Monto;
     private IntegerProperty CantidadCuotas;
-    private IntegerProperty CodigoCupon;
-    private IntegerProperty NroTarjeta;
+    private LongProperty CodigoCupon;
+    private LongProperty NroTarjeta;
     
     public LineaPagoData(){
         
     }
     
     public LineaPagoData(int codigoPago,String descripcion,BigDecimal monto
-            ,int cantidadCuotas,int nroTarjeta, int codigoCupon){
+            ,int cantidadCuotas,long nroTarjeta, long codigoCupon){
         this.CodigoPago = new SimpleIntegerProperty(codigoPago);
         this.Descripcion = new SimpleStringProperty(descripcion);
         this.Monto = new SimpleObjectProperty(monto);
         this.CantidadCuotas = new SimpleIntegerProperty(cantidadCuotas);
-        this.CodigoCupon = new SimpleIntegerProperty(codigoCupon);
-        this.NroTarjeta = new SimpleIntegerProperty(nroTarjeta);
+        this.CodigoCupon = new SimpleLongProperty(codigoCupon);
+        this.NroTarjeta = new SimpleLongProperty(nroTarjeta);
     }
 
     /**
@@ -75,14 +77,14 @@ public class LineaPagoData {
     /**
      * @return the CodigoCupon
      */
-    public IntegerProperty codigoCuponProperty() {
+    public LongProperty codigoCuponProperty() {
         return CodigoCupon;
     }
     
     /**
      * 
      */
-    public IntegerProperty nroTarjetaProperty(){
+    public LongProperty nroTarjetaProperty(){
         return NroTarjeta;
     }
 
@@ -117,11 +119,11 @@ public class LineaPagoData {
     /**
      * @return the CodigoCupon
      */
-    public int getCodigoCupon() {
+    public long getCodigoCupon() {
         return codigoCuponProperty().get();
     }
 
-    public int getNroTarjeta(){
+    public long getNroTarjeta(){
         return nroTarjetaProperty().get();
     }
     

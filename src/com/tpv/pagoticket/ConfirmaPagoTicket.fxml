@@ -4,7 +4,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane fx:id="borderPane" focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1355.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="borderPane" focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
    <bottom>
       <GridPane BorderPane.alignment="CENTER">
         <columnConstraints>
@@ -26,16 +26,16 @@
    <center>
       <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <center>
-            <TableView fx:id="tableViewPagos" prefHeight="352.0" prefWidth="1355.0" BorderPane.alignment="CENTER">
+            <TableView fx:id="tableViewPagos" prefHeight="352.0" prefWidth="1355.0" styleClass="tpv-table-view" BorderPane.alignment="CENTER">
               <columns>
-                  <TableColumn fx:id="codigoPagoColumn" prefWidth="79.00003051757812" text="Cod." />
-                <TableColumn fx:id="descripcionPagoColumn" prefWidth="253.0" text="Descripción" />
-                <TableColumn fx:id="montoPagoColumn" prefWidth="180.0" text="Monto Pago" />
-                  <TableColumn fx:id="cantidadCuotaColumn" prefWidth="154.0" text="Cuotas" />
+                  <TableColumn fx:id="codigoPagoColumn" text="Cod." visible="false" />
+                <TableColumn fx:id="descripcionPagoColumn" prefWidth="200.0" text="Descripción" />
+                <TableColumn fx:id="montoPagoColumn" prefWidth="100.0" text="Monto" />
+                  <TableColumn fx:id="cantidadCuotaColumn" prefWidth="100.0" text="Cuotas" />
                   <TableColumn fx:id="nroTarjetaColumn" prefWidth="168.0" text="Nº Tarjeta" />
-                  <TableColumn fx:id="codigoCuponColumn" prefWidth="198.0" text="Nº Cupón" />
-                  <TableColumn fx:id="interesTarjetaColumn" prefWidth="171.0" text="Interés Tarjeta" />
-                  <TableColumn fx:id="bonificacionTarjetaColumn" prefWidth="147.0" text="Bonif. Tarjeta" />
+                  <TableColumn fx:id="codigoCuponColumn" prefWidth="168.0" text="Nº Cupón" />
+                  <TableColumn fx:id="interesTarjetaColumn" prefWidth="100.0" text="Int. Tarj." />
+                  <TableColumn fx:id="bonificacionTarjetaColumn" prefWidth="130.0" text="Bonif. Tarjeta" />
               </columns>
             </TableView>
          </center>

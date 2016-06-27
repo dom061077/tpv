@@ -343,6 +343,7 @@ public class PagoTicketController {
         textFieldNroCupon.setMask("N!");
         textFieldNroTarjeta = new MaskTextField();
         textFieldNroTarjeta.setMask("N!");
+        textFieldNroTarjeta.getStyleClass().add("textfield_sin_border");
         
         gridPanePagos.add(textFieldTipoPago,1,1);
         gridPanePagos.add(textFieldMonto,1,2);
@@ -404,8 +405,8 @@ public class PagoTicketController {
         //if(pagoParcial.compareTo(modelTicket.getTotalTicket())==1)
         //    return;
             
-        int codigoPago = 0;int cantidadCuotas=0;int codigoCupon=0;
-        int nroTarjeta = 0;
+        int codigoPago = 0;int cantidadCuotas=0;long codigoCupon=0;
+        long nroTarjeta = 0;
         BigDecimal monto = new BigDecimal(0);
 //(int codigoPago,String descripcion,BigDecimal monto
             //,int cantidadCuotas, int codigoCupon)        
@@ -417,18 +418,23 @@ public class PagoTicketController {
             cantidadCuotas = 0;
         }
         try{
-            codigoCupon = Integer.parseInt(textFieldNroCupon.getText());
+            codigoCupon = Long.parseLong(textFieldNroCupon.getText());
         }catch(Exception e){
             codigoCupon = 0;
         }
         try{
-            nroTarjeta = Integer.parseInt(textFieldNroTarjeta.getText());
+            nroTarjeta = Long.parseLong(textFieldNroTarjeta.getText());
         }catch(Exception e){
             nroTarjeta = 0;
         }
             
         
-        
+        log.debug("Datos de Linea de pago :");
+        log.debug("         Codigo Pago: "+codigoPago);
+        log.debug("         Monto Pago: "+monto);
+        log.debug("         Cantidad cuotas: "+cantidadCuotas);
+        log.debug("         Nro tarjeta: "+nroTarjeta);
+        log.debug("         Codigo Cupon: "+codigoCupon);
         modelTicket.getPagos().add(new LineaPagoData(
             codigoPago,labelFormaPagoDescripcion.getText(),monto
             ,cantidadCuotas,nroTarjeta,codigoCupon));
@@ -447,6 +453,10 @@ public class PagoTicketController {
         textFieldNroTarjeta.setVisible(false);
         tableViewPagos.getSelectionModel().selectLast();
         saldoPagar.setText(null);
+        
+        labelCantidadCuotas.setVisible(false);
+        labelNroCuponTarjeta.setVisible(false);
+        labelNroTarjeta.setVisible(false);
     }
  
     private void eliminarLineaPago(){

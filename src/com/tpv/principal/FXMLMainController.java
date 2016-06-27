@@ -23,6 +23,7 @@ import com.tpv.service.ProductoService;
 import com.tpv.util.Connection;
 import com.tpv.util.ui.MaskTextField;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.Iterator;
@@ -168,9 +169,9 @@ public class FXMLMainController implements Initializable {
     @FXML
     private ImageView imageViewDer;
     
-    @FXML
-    private ImageView imageViewIzq;
-    
+//    @FXML
+//    private ImageView imageViewIzq;
+//    
     
     @FXML
     @ActionTrigger("mostrarError")
@@ -497,6 +498,7 @@ public class FXMLMainController implements Initializable {
         BigDecimal cantidad = new BigDecimal(1);
         String descripcion="";
         Producto producto = null;
+        BigDecimal precioOPeso = BigDecimal.ZERO;
         BigDecimal precio = BigDecimal.valueOf(0);
         try{
             cantidad = new BigDecimal(textFieldCantidad.getText());
@@ -517,15 +519,30 @@ public class FXMLMainController implements Initializable {
                     producto = productoService.getProductoPorCodigo(codigoIngresado); //productoService.getProductoPorCodigo(codigoIngresado);
                     //producto = productoService.getProductoPorCodBarra(textFieldProducto.getText());
                 }else{
-                    
-                    producto = productoService.getProductoPorCodBarra(codBarra);
+                    if(codBarra.substring(0, 2).equals("20")){
+                        codigoIngresado = Integer.parseInt(codBarra.substring(2,7));
+                        precioOPeso = BigDecimal
+                                .valueOf(Double.parseDouble(codBarra.substring(7,9)+"."+codBarra.substring(9, 13))) ;
+                        precioOPeso = precioOPeso.setScale(3,BigDecimal.ROUND_HALF_EVEN);
+                        producto = productoService.getProductoPorCodigo(codigoIngresado);
+                    }else{
+                        producto = productoService.getProductoPorCodBarra(codBarra);
+                    }
                 }
                         
                         
                 if(producto!=null){
                     log.debug("Producto encontrado: "+producto.getDescripcion());
                     precio= productoService.getPrecioProducto(producto.getCodigoProducto(),modelTicket.getCliente());
-                    
+                    if(producto.isProductoVilleco()){
+                        if(precioOPeso.compareTo(BigDecimal.ZERO)>0){
+                           cantidad = precioOPeso.divide(precio).setScale(2, RoundingMode.HALF_EVEN);
+                        }
+                    }else{
+                        if(precioOPeso.compareTo(BigDecimal.ZERO)>0){
+                            cantidad = precioOPeso.setScale(2, RoundingMode.HALF_EVEN);
+                        }
+                    }
                     if(precio.compareTo(BigDecimal.valueOf(0))>0){
                         if(modelTicket.getDetalle().size()==0){
                                 impresoraService.abrirTicket();
@@ -1020,7 +1037,7 @@ public class FXMLMainController implements Initializable {
 //        mp.setRate(0.5);
         String f = this.getClass().getResource("/com/tpv/resources/sucursales.gif").toExternalForm();
         imageViewDer.setImage(new Image(f));
-        imageViewIzq.setImage(new Image(f));
+//        imageViewIzq.setImage(new Image(f));
         //mp.play();
     }
             

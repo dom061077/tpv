@@ -12,7 +12,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
    <bottom>
       <GridPane BorderPane.alignment="CENTER">
         <columnConstraints>
@@ -58,13 +58,6 @@
    </bottom>
    <top>
       <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <left>
-            <StackPane fx:id="stackPaneMediaViewIzq" prefHeight="172.0" prefWidth="400.0" styleClass="rounded_corner" visible="false" BorderPane.alignment="CENTER">
-               <children>
-                  <ImageView fx:id="imageViewIzq" fitHeight="149.0" fitWidth="390.0" pickOnBounds="true" />
-               </children>
-            </StackPane>
-         </left>
          <right>
             <StackPane fx:id="stackPaneMediaViewDer" alignment="TOP_CENTER" prefHeight="172.0" prefWidth="400.0" styleClass="rounded_corner" BorderPane.alignment="CENTER">
                <children>
@@ -124,23 +117,23 @@
       </BorderPane>
    </top>
    <center>
-      <BorderPane prefHeight="450.0" prefWidth="1296.0" BorderPane.alignment="CENTER">
+      <BorderPane prefHeight="450.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
          <center>
-            <Pane prefHeight="400.0" prefWidth="1296.0" BorderPane.alignment="CENTER">
+            <Pane prefHeight="400.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
                <children>
-                  <TableView fx:id="tableViewTickets" editable="true" focusTraversable="false" prefHeight="400.0" prefWidth="1296.0" styleClass="tpv-table-view">
+                  <TableView fx:id="tableViewTickets" editable="true" focusTraversable="false" prefHeight="400.0" prefWidth="1024.0" styleClass="tpv-table-view">
                     <columns>
-                        <TableColumn fx:id="codigoColumn" minWidth="108.0" prefWidth="108.0" resizable="false" text="CODIGO" />
-                      <TableColumn fx:id="descripcionColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="699.0000152587891" resizable="false" sortable="false" text="DESCRIPCION" />
-                      <TableColumn fx:id="cantidadColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="143.0" resizable="false" sortable="false" text="CANTIDAD" />
-                        <TableColumn fx:id="precioUnitarioColumn" minWidth="100.0" prefWidth="174.0" resizable="false" text="\$ UNIDAD" />
+                        <TableColumn fx:id="codigoColumn" minWidth="108.0" prefWidth="100.0" resizable="false" text="CODIGO" />
+                      <TableColumn fx:id="descripcionColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="440.0" resizable="false" sortable="false" text="DESCRIPCION" />
+                      <TableColumn fx:id="cantidadColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="150.0" resizable="false" sortable="false" text="CANTIDAD" />
+                        <TableColumn fx:id="precioUnitarioColumn" minWidth="100.0" prefWidth="150.0" resizable="false" text="\$/UNIDAD" />
                         <TableColumn fx:id="subTotalColumn" minWidth="100.0" prefWidth="163.0" resizable="false" text="SUBTOTAL" />
                     </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                   </TableView>
-                  <StackPane layoutX="350.0" layoutY="420.0" prefHeight="100.0" prefWidth="600.0" styleClass="rounded_corner">
+                  <StackPane layoutX="200.0" layoutY="420.0" prefHeight="100.0" prefWidth="600.0" styleClass="rounded_corner">
                      <children>
                         <GridPane prefHeight="77.0" prefWidth="491.0" styleClass="rounded_corner">
                           <columnConstraints>
@@ -157,12 +150,12 @@
                         </GridPane>
                      </children>
                   </StackPane>
-                  <StackPane fx:id="stackPaneIngresos" layoutX="350.0" layoutY="50.0" prefHeight="246.0" prefWidth="510.0" styleClass="rounded_corner">
+                  <StackPane fx:id="stackPaneIngresos" layoutX="250.0" layoutY="50.0" prefHeight="246.0" prefWidth="510.0" styleClass="rounded_corner">
                      <children>
                         <GridPane fx:id="gridPaneIngresos">
                           <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="299.0" minWidth="10.0" prefWidth="266.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="245.0" minWidth="10.0" prefWidth="244.0" />
                           </columnConstraints>
                           <rowConstraints>
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -170,7 +163,7 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Label fx:id="labelCliente" prefHeight="17.0" prefWidth="179.0" styleClass="label_textfield" text="Cliente:" GridPane.rowIndex="1" />
+                              <Label fx:id="labelCliente" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="301.0" styleClass="label_textfield" text="Cliente:" textAlignment="RIGHT" GridPane.rowIndex="1" />
                               <Label fx:id="labelCantidad" prefHeight="17.0" prefWidth="256.0" styleClass="label_textfield" text="Cantidad:" visible="false" GridPane.rowIndex="1" />
                               <Label fx:id="labelSubTituloIngresos" prefHeight="17.0" prefWidth="503.0" styleClass="label_sub_titulo" text="Label" GridPane.columnSpan="2" />
                            </children>
@@ -181,7 +174,7 @@
             </Pane>
          </center>
          <BorderPane.margin>
-            <Insets left="30.0" />
+            <Insets />
          </BorderPane.margin>
       </BorderPane>
    </center>

@@ -224,6 +224,7 @@ public class Producto {
     public List<ProveedorProducto> getProveedores() {
         return proveedores;
     }
+    
 
     /**
      * @param proveedores the proveedores to set

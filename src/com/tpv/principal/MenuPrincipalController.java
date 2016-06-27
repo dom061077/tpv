@@ -48,9 +48,40 @@ public class MenuPrincipalController {
     private VBox vboxMenuPrincipal;
     
     @FXML
-    private ImageView imageViewLogoRight;
+    private ImageView imageViewLogoRight1;
     @FXML
-    private ImageView imageViewLogoLeft;
+    private ImageView imageViewLogoRight2;
+    @FXML
+    private ImageView imageViewLogoRight3;
+    
+    
+    
+    @FXML
+    private ImageView imageViewLogoLeft1;
+    @FXML
+    private ImageView imageViewLogoLeft2;
+    @FXML
+    private ImageView imageViewLogoLeft3;
+    
+    
+    
+    
+    @FXML
+    private ImageView imageViewLogoBottom1;
+    @FXML
+    private ImageView imageViewLogoBottom2;
+    @FXML
+    private ImageView imageViewLogoBottom3;
+    
+    
+    @FXML
+    private ImageView imageViewLogoTop1;
+    
+    @FXML
+    private ImageView imageViewLogoTop2;
+
+    @FXML
+    private ImageView imageViewLogoTop3;
     
     
     @Inject
@@ -88,7 +119,18 @@ public class MenuPrincipalController {
     
     private void loadImage(){
         String f = this.getClass().getResource("/com/tpv/resources/logologin.jpg").toExternalForm();
-        imageViewLogoRight.setImage(new Image(f));
-        imageViewLogoLeft.setImage(new Image(f));
+        imageViewLogoRight1.setImage(new Image(f));
+        imageViewLogoRight2.setImage(new Image(f));
+        imageViewLogoRight3.setImage(new Image(f));
+        imageViewLogoLeft1.setImage(new Image(f));
+        imageViewLogoLeft2.setImage(new Image(f));
+        imageViewLogoLeft3.setImage(new Image(f));
+        imageViewLogoTop1.setImage(new Image(f));
+        imageViewLogoTop2.setImage(new Image(f));
+        imageViewLogoTop3.setImage(new Image(f));
+        imageViewLogoBottom1.setImage(new Image(f));
+        imageViewLogoBottom2.setImage(new Image(f));
+        imageViewLogoBottom3.setImage(new Image(f));
+                
     }    
 }
