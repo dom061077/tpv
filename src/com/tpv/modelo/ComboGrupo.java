@@ -8,6 +8,7 @@ package com.tpv.modelo;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -148,7 +149,9 @@ public class ComboGrupo {
      * @return the detallePreciosProductos
      */
     public List<ComboGrupoDetallePrecioProducto> getDetallePreciosProductos() {
+        Collections.sort(detallePreciosProductos,(o1,o2)->o1.getPaf().getPrecioUnitario().compareTo(o2.getPaf().getPrecioUnitario()));
         return detallePreciosProductos;
+        
     }
     
     public void addDetallePrecioProducto(BigDecimal precioProducto,ProductoAgrupadoEnFactura paf){
