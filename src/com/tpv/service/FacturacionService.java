@@ -290,16 +290,19 @@ public class FacturacionService  {
                         }
                     }
                 }
-                if(combo.cumpleCondicion()){
-                    FacturaDetalleCombo fd = new FacturaDetalleCombo();
-                    fd.setCombo(combo);
-                    fd.setCantidad(combo.getCantidadCombosArmados());
-                    if(combo.isCombinarProductos())
-                        fd.setBonificacion(combo.getBonificacion().setScale(2,BigDecimal.ROUND_HALF_EVEN));
-                    else    
-                        fd.setBonificacion(combo.getBonificacionSinCombinacion().setScale(2,BigDecimal.ROUND_HALF_EVEN));
-                    factura.getDetalleCombosAux().add(fd);
-                }
+                int cantidad = combo.getCantidadArmada();
+                System.out.println("Cantidad armada: "+cantidad);
+                
+//                if(combo.cumpleCondicion()){
+//                    FacturaDetalleCombo fd = new FacturaDetalleCombo();
+//                    fd.setCombo(combo);
+//                    fd.setCantidad(combo.getCantidadCombosArmados());
+//                    if(combo.isCombinarProductos())
+//                        fd.setBonificacion(combo.getBonificacion().setScale(2,BigDecimal.ROUND_HALF_EVEN));
+//                    else    
+//                        fd.setBonificacion(combo.getBonificacionSinCombinacion().setScale(2,BigDecimal.ROUND_HALF_EVEN));
+//                    factura.getDetalleCombosAux().add(fd);
+//                }
                 
             }
             

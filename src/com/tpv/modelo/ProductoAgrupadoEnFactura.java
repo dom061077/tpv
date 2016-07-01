@@ -15,6 +15,7 @@ public class ProductoAgrupadoEnFactura {
     private Producto producto;
     private BigDecimal precioUnitario;
     private int cantidad;
+    private int cantidadAux;
 
     /**
      * @return the producto
@@ -51,6 +52,7 @@ public class ProductoAgrupadoEnFactura {
     public void decCantidad(int dec){
         cantidad-=dec;
     }
+    
 
     /**
      * @return the cantidad
@@ -64,6 +66,21 @@ public class ProductoAgrupadoEnFactura {
      */
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
+    }
+
+    /**
+     * @return the cantidadAux
+     */
+    public int getCantidadAux() {
+        return cantidadAux;
+    }
+    
+    public void resetCantidadAux(){
+        cantidadAux = cantidad;
+    }
+    
+    public void decCantidadAux(int dec){
+        cantidadAux-=dec;
     }
     
 }

@@ -58,7 +58,9 @@ public class ComboGrupo {
     
     @Transient
     private List<ComboGrupoDetallePrecioProducto> detallePreciosProductos = new ArrayList<ComboGrupoDetallePrecioProducto>();
-    
+
+    @Transient
+    private int cantidadGruposEnCombo;
 
     /**
      * @return the id
@@ -228,6 +230,24 @@ public class ComboGrupo {
      */
     public boolean isTomarMenorPrecio() {
         return tomarMenorPrecio;
+    }
+    
+    public void incCantidadGruposEnCombo(){
+        this.cantidadGruposEnCombo+=1;
+        
+    }
+    
+    
+    
+    public void resetCantidadGruposEnCombo(){
+        this.cantidadGruposEnCombo = 0;
+    }
+
+    /**
+     * @return the cantidadGruposEnCombo
+     */
+    public int getCantidadGruposEnCombo() {
+        return cantidadGruposEnCombo;
     }
 
 }

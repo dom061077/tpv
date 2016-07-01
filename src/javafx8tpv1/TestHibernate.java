@@ -100,7 +100,7 @@ public class TestHibernate {
     static void recuperarCombos(){
        FacturacionService facturaService = new FacturacionService();
        try{
-            facturaService.calcularCombos(new Long(303));
+            facturaService.calcularCombos(new Long(541));
        }catch(Exception e){
            e.printStackTrace();
        }
@@ -189,7 +189,7 @@ public class TestHibernate {
         EntityManager em = Connection.getEm();
         FacturacionService facService = new FacturacionService();
         try{
-            facService.calcularCombos(new Long(303));
+            facService.calcularCombos(new Long(541));
         }catch(Exception e){
            e.printStackTrace();
         }
@@ -225,16 +225,16 @@ public class TestHibernate {
         
     public static void main(String[] args){
 //        DOMConfigurator.configure(TestHibernate.class.getResource("log4j.xml"));
-//        try{
-//            Connection.initConnections();
-//            //System.out.println("Direccion MAC: "+Connection.getMACAddress());
-//        }catch(Exception e){
-//            e.printStackTrace();
-//        }
+        try{
+            Connection.initConnections();
+            //System.out.println("Direccion MAC: "+Connection.getMACAddress());
+        }catch(Exception e){
+            e.printStackTrace();
+        }
         
-       formatCodigoBarra();    
+       //formatCodigoBarra();    
         //getProveedorFromCombo();
-        //calcularCombos();
+        calcularCombos();
         
         //probarRecursivadaGrupoProducto();
         //mostrarFacturaDetalle();
