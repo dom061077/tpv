@@ -222,7 +222,7 @@ public class FacturacionService  {
                 +" LEFT JOIN combosgrupo cg ON cgd.idCOMBOSGRUPO = cg.idCOMBOSGRUPO"
                 +" LEFT JOIN combos c ON cg.idCOMBOS = c.idCOMBOS"
                 +" WHERE c.idcombos IS NOT NULL AND fd.idFACTURAS = ?1 AND CONVERT(NOW(),DATE) BETWEEN c.FECHADESDE AND c.FECHAHASTA"
-                +" ORDER BY c.PRIORIDAD"
+                +" ORDER BY c.PRIORIDAD DESC"
                 , Combo.class).setParameter(1, id);
         try{
             listadoCombos = q.getResultList();
@@ -290,8 +290,9 @@ public class FacturacionService  {
                         }
                     }
                 }
-                int cantidad = combo.getCantidadArmada();
-                System.out.println("Cantidad armada: "+cantidad);
+//                int cantidad = combo.getCantidadArmada();
+//                System.out.println("Cantidad armada: "+cantidad);
+//                System.out.println("Bonificación: "+combo.getBonificacionFinal());
                 
 //                if(combo.cumpleCondicion()){
 //                    FacturaDetalleCombo fd = new FacturaDetalleCombo();
@@ -303,6 +304,15 @@ public class FacturacionService  {
 //                        fd.setBonificacion(combo.getBonificacionSinCombinacion().setScale(2,BigDecimal.ROUND_HALF_EVEN));
 //                    factura.getDetalleCombosAux().add(fd);
 //                }
+                int cantidadArmada = combo.getCantidadArmada();
+                if(cantidadArmada>0){
+                    FacturaDetalleCombo fd = new FacturaDetalleCombo();
+                    fd.setCombo(combo);
+                    fd.setCantidad(cantidadArmada);
+                    fd.setBonificacion(combo.getBonificacionFinal().setScale(2,BigDecimal.ROUND_HALF_EVEN));
+                    factura.getDetalleCombosAux().add(fd);
+                }
+                
                 
             }
             

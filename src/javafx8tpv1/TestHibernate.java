@@ -111,7 +111,7 @@ public class TestHibernate {
         EntityManager em = Connection.getEm();
         try{
             
-            Factura factura = em.find(Factura.class, new Long(303));
+            Factura factura = em.find(Factura.class, new Long(553));
             factura.getDetalle().forEach(item ->{
                 System.out.println("Producto: "+item.getProducto().getDescripcion());
                 System.out.println("Cantidad: "+item.getCantidad());
@@ -189,7 +189,7 @@ public class TestHibernate {
         EntityManager em = Connection.getEm();
         FacturacionService facService = new FacturacionService();
         try{
-            facService.calcularCombos(new Long(541));
+            facService.calcularCombos(new Long(554));
         }catch(Exception e){
            e.printStackTrace();
         }
