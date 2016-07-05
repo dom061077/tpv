@@ -419,53 +419,20 @@ public class Combo {
         while(hayCombo){
             for(Iterator<ComboGrupo> itcg = getCombosGrupo().iterator();itcg.hasNext();){
                  cgaux = itcg.next();
-                 if(this.isCombinarProductos()){
-                    cantRestante = 0;
-                    for(Iterator<ComboGrupoDetallePrecioProducto>it = cgaux.getDetallePreciosProductos().iterator()
-                            ;it.hasNext();) {
-                        ComboGrupoDetallePrecioProducto cgd = it.next();
-                        cantRestante+=cgd.getPaf().getCantidadAux();
-                    }
-                     
-                    hayCombo = false;
-                 }else
-                    hayCombo = true;
-                 int cantidadDescontada = 0;
+                 hayCombo = true;
                  for(Iterator<ComboGrupoDetallePrecioProducto> itcdpp = cgaux.getDetallePreciosProductos().iterator()
                      ;itcdpp.hasNext();){
                      ComboGrupoDetallePrecioProducto cdpp = itcdpp.next();
-                     if(this.isCombinarProductos()){
-                        if(cgaux.getCantidad()<=cantRestante){
-                            
-                            if(cgaux.getCantidad()>=cantidadDescontada + cdpp.getPaf().getCantidadAux()){
-                                cantidadDescontada+=cdpp.getPaf().getCantidadAux();
-                                cdpp.getPaf().decCantidadAux(cdpp.getPaf().getCantidadAux());
-                                
-                                hayCombo = true;   
-                            }else{
-                                cdpp.getPaf().decCantidadAux(
-                                        cantidadDescontada + cdpp.getPaf().getCantidadAux()-cgaux.getCantidad()
-                                    );
-                                //cantidadDescontada+=cgaux.getCantidad();
-                                break;
-                            }
-                        }else
-                            break;
-                     }else{
-                         if(cgaux.getCantidad()>cdpp.getPaf().getCantidadAux()){
-                             hayCombo=false;
-                             break;
-                         }else{
-                             cdpp.getPaf().decCantidadAux(cgaux.getCantidad());
-                         }
-                     }
+                    if(cgaux.getCantidad()>cdpp.getPaf().getCantidadAux()){
+                        hayCombo=false;
+
+                    }else{
+                        cdpp.getPaf().decCantidadAux(cgaux.getCantidad());
+                    }
+                    break;
                  }   
                  if(!hayCombo)
                      break;
-                 else{
-                     if(this.isCombinarProductos())
-                         cgaux.incCantidadGruposEnCombo();
-                 }
             }
             
             if(!this.isCombinarProductos() && hayCombo)
