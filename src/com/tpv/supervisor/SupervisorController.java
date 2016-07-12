@@ -5,17 +5,22 @@
  */
 package com.tpv.supervisor;
 
+import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.enums.TipoTituloSupervisorEnum;
 import com.tpv.exceptions.TpvException;
+import com.tpv.modelo.Usuario;
 import com.tpv.principal.DataModelTicket;
 import com.tpv.service.FacturacionService;
 import com.tpv.service.ImpresoraService;
+import com.tpv.service.UsuarioService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
@@ -35,6 +40,7 @@ public class SupervisorController {
 
     private ImpresoraService impresoraService = new ImpresoraService();
     private FacturacionService facturaService = new FacturacionService();
+    private UsuarioService usuarioService = new UsuarioService();    
     
     @FXML
     private Label labelTitulo;
@@ -44,6 +50,15 @@ public class SupervisorController {
     
     @FXML
     private TextField textFieldPassword;
+    
+    @FXML
+    private StackPane stackPaneError;
+    
+    @FXML
+    private Label labelError;
+    
+    @FXML
+    private BorderPane borderPaneIngreso;
     
     @FXML
     @ActionTrigger("volverFacturacion")
@@ -60,9 +75,21 @@ public class SupervisorController {
     
     @PostConstruct
     public void init(){
+        stackPaneError.setVisible(false);
         labelTitulo.setText(modelTicket.getTipoTituloSupervisor().getTitulo());
         textFieldPassword.setDisable(true);
         Platform.runLater(() -> {
+            
+            labelError.setOnKeyPressed(keyEvent -> {
+                if(keyEvent.getCode() == KeyCode.ESCAPE){
+                    stackPaneError.setVisible(false);
+                    borderPaneIngreso.setDisable(false);
+                    textFieldCodigoSupervisor.requestFocus();
+                    keyEvent.consume();
+                    
+                }
+            });
+            
             textFieldCodigoSupervisor.setOnKeyPressed(keyEvent->{
                 if(keyEvent.getCode() == KeyCode.ESCAPE){
                     volverButton.fire();
@@ -76,12 +103,31 @@ public class SupervisorController {
             });
             textFieldPassword.setOnKeyPressed(keyEvent->{
                 if(keyEvent.getCode() == KeyCode.ENTER){
-                    if(modelTicket.getTipoTituloSupervisor()==TipoTituloSupervisorEnum.HABILITAR_NEGATIVO)
-                        habilitarNegativos(true);
-                    if(modelTicket.getTipoTituloSupervisor()==TipoTituloSupervisorEnum.CANCELAR_TICKET)
-                        cancelarTicketCompleto();
-                    keyEvent.consume();
-                    volverButton.fire();                    
+                    Usuario usuario = null;
+                    try{        
+                            usuario = usuarioService.authenticarSupervisor(textFieldCodigoSupervisor.getText()
+                            ,textFieldPassword.getText() );
+                            if(usuario==null){
+                                labelError.setText("Credenciales de Supervisor incorrectas");
+                                borderPaneIngreso.setDisable(true);
+                                stackPaneError.setVisible(true);
+                                labelError.requestFocus();
+                            }else{
+                                if(modelTicket.getTipoTituloSupervisor()==TipoTituloSupervisorEnum.HABILITAR_NEGATIVO)
+                                    habilitarNegativos(true);
+                                if(modelTicket.getTipoTituloSupervisor()==TipoTituloSupervisorEnum.CANCELAR_TICKET)
+                                    cancelarTicketCompleto();
+                                keyEvent.consume();
+                                volverButton.fire();                    
+                            }
+                            
+                    }catch(TpvException e){
+                        log.error("Error: "+e.getMessage());
+                        modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_SUPERVISOR);
+                        modelTicket.setException(e);
+                        goToError.fire();
+                        
+                    }
                 }
                 if(keyEvent.getCode() == KeyCode.ESCAPE){
                     textFieldPassword.setDisable(true);

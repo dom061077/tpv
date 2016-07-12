@@ -8,25 +8,6 @@
    <top>
       <Label fx:id="labelTitulo" styleClass="label_titulo" text="Label" BorderPane.alignment="CENTER" />
    </top>
-   <center>
-      <GridPane BorderPane.alignment="CENTER">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints maxHeight="167.0" minHeight="10.0" prefHeight="129.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="180.0" minHeight="10.0" prefHeight="127.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <Label styleClass="label_textfield" text="Código de Supervisor:" />
-            <Label styleClass="label_textfield" text="Contraseña:" GridPane.rowIndex="1" />
-            <TextField fx:id="textFieldCodigoSupervisor" styleClass="textfield_sin_border" GridPane.columnIndex="1" />
-            <PasswordField fx:id="textFieldPassword" styleClass="textfield_sin_border" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-         </children>
-      </GridPane>
-   </center>
    <bottom>
       <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
@@ -35,4 +16,40 @@
          </children>
       </HBox>
    </bottom>
+   <center>
+      <Pane prefHeight="200.0" prefWidth="592.0" BorderPane.alignment="CENTER">
+         <children>
+            <StackPane fx:id="stackPaneError" prefHeight="200.0" prefWidth="700.0" styleClass="rounded_corner">
+               <children>
+                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                     <center>
+                        <Label fx:id="labelError" styleClass="label_error" BorderPane.alignment="CENTER" />
+                     </center>
+                  </BorderPane>
+               </children>
+            </StackPane>
+            <BorderPane fx:id="borderPaneIngreso" prefHeight="280.0" prefWidth="600.0">
+               <center>
+                  <GridPane BorderPane.alignment="CENTER">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <PasswordField fx:id="textFieldPassword" styleClass="textfield_sin_border" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="textFieldCodigoSupervisor" prefHeight="25.0" prefWidth="92.0" styleClass="textfield_sin_border" GridPane.columnIndex="1" />
+                        <Label styleClass="label_textfield" text="Contraseña:" GridPane.rowIndex="1" />
+                        <Label styleClass="label_textfield" text="Código de Supervisor:" />
+                     </children>
+                  </GridPane>
+               </center>
+            </BorderPane>
+         </children>
+      </Pane>
+   </center>
 </BorderPane>

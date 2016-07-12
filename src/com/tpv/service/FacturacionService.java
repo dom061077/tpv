@@ -222,7 +222,7 @@ public class FacturacionService  {
                 +" LEFT JOIN combosgrupo cg ON cgd.idCOMBOSGRUPO = cg.idCOMBOSGRUPO"
                 +" LEFT JOIN combos c ON cg.idCOMBOS = c.idCOMBOS"
                 +" WHERE c.idcombos IS NOT NULL AND fd.idFACTURAS = ?1 AND CONVERT(NOW(),DATE) BETWEEN c.FECHADESDE AND c.FECHAHASTA"
-                +" ORDER BY c.PRIORIDAD DESC"
+                +" ORDER BY c.PRIORIDAD"
                 , Combo.class).setParameter(1, id);
         try{
             listadoCombos = q.getResultList();

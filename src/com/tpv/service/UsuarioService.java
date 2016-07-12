@@ -29,16 +29,12 @@ public class UsuarioService {
         boolean flagReturn=false;
         Usuario usuario = null;
         EntityManager em = Connection.getEm();
-        EntityTransaction tx = null;
         try{
-//            tx = em.getTransaction();
-//            tx.begin();
             usuario = (Usuario)em.createQuery("FROM Usuario u WHERE u.nombre = :nombre").setParameter("nombre", nombre).getSingleResult();
             if(usuario.getPassword().compareTo(password)==0)
                     flagReturn=true;
             else
                 flagReturn=false;
-//            tx.commit();
         }catch(NoResultException e){
             log.info("No se encontró ningún usuario con nombre: "+nombre+" password: "+password);
         }catch(RuntimeException e){
@@ -47,12 +43,36 @@ public class UsuarioService {
         }finally{
             em.clear();
         }
-        
-        //emf.close();
         if(flagReturn)
             return usuario;
         else
             return null;
+    }
+    
+    public Usuario authenticarSupervisor(String nombre, String password)throws TpvException{
+        log.info("Autenticando usuario supervisor: "+nombre);
+        boolean flagReturn=false;
+        Usuario usuario = null;
+        EntityManager em = Connection.getEm();
+        try{
+            usuario = (Usuario)em.createQuery("FROM Usuario u WHERE u.nombre = :nombre").setParameter("nombre", nombre).getSingleResult();
+            if(usuario.getPassword().compareTo(password)==0)
+                    flagReturn=true;
+            else
+                flagReturn=false;
+        }catch(NoResultException e){
+            log.info("No se encontró ningún usuario con nombre: "+nombre+" password: "+password);
+        }catch(RuntimeException e){
+            log.error("Error en la capa de servicios al autenticar usuario.",e);
+            throw new TpvException("Error en la capa de servicios al autenticar usuario.");
+        }finally{
+            em.clear();
+        }
+        if(flagReturn)
+            return usuario;
+        else
+            return null;
+        
     }
     
     public Checkout checkMac() throws TpvException{

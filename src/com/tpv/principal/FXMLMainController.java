@@ -239,6 +239,7 @@ public class FXMLMainController implements Initializable {
                 
         initTableViewTickets();
         
+        
         Platform.runLater(() -> {
             chequearInterfazNegativo();            
             traerInfoImpresora();
@@ -254,7 +255,7 @@ public class FXMLMainController implements Initializable {
                 } 
                 
                 if(keyEvent.getCode()== KeyCode.ENTER){
-                    verificarDetalleTableView();
+                    
                     if(textFieldCodCliente.getText().trim().equals("")){
                         labelCliente.setVisible(false);
                         textFieldCodCliente.setVisible(false);
@@ -592,6 +593,7 @@ public class FXMLMainController implements Initializable {
     }
     
     public void iniciaIngresosVisibles(){
+        verificarDetalleTableView();
         textFieldProducto = new MaskTextField();
         textFieldProducto.setMask("N!");
         textFieldProducto.setVisible(false);
@@ -1060,7 +1062,9 @@ public class FXMLMainController implements Initializable {
 
                     LineaTicketData lineaTicketData = new LineaTicketData(fd.getProducto().getCodigoProducto()
                                     ,fd.getProducto().getDescripcion(),fd.getCantidad()
-                                    ,fd.getPrecioUnitario(),modelTicket.isImprimeComoNegativo());   
+                                    ,fd.getPrecioUnitario()
+                                    ,(fd.getSubTotal().compareTo(BigDecimal.ZERO)<0?true:false)
+                    );   
                     if(factura.getCliente()!=null){
                         modelTicket.setCliente(factura.getCliente());
                     }

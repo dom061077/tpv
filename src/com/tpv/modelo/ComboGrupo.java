@@ -151,7 +151,17 @@ public class ComboGrupo {
      * @return the detallePreciosProductos
      */
     public List<ComboGrupoDetallePrecioProducto> getDetallePreciosProductos() {
-        Collections.sort(detallePreciosProductos,(o1,o2)->o1.getPaf().getPrecioUnitario().compareTo(o2.getPaf().getPrecioUnitario()));
+        if(getPorcentaje().compareTo(BigDecimal.ZERO)>0 || getMonto().compareTo(BigDecimal.ZERO)>0)
+            Collections.sort(detallePreciosProductos,
+                    (o1,o2)->o1.getPaf().getPrecioUnitario()
+                            .compareTo(o2.getPaf().getPrecioUnitario())*-1
+            );
+        else
+            Collections.sort(detallePreciosProductos,
+                    (o1,o2)->o1.getPaf().getPrecioUnitario()
+                            .compareTo(o2.getPaf().getPrecioUnitario())
+            );
+            
         return detallePreciosProductos;
         
     }
