@@ -31,7 +31,7 @@ public class Producto {
     @Column(name = "CODBARRA")
     private String codBarra;
     @Column(name = "STOCK")
-    private int stock;
+    private BigDecimal stock;
     @Column(name = "DETALLESUCURSALES")
     private String descripcion;
     @Column(name = "CODIGOPRODUCTO")
@@ -87,17 +87,20 @@ public class Producto {
     /**
      * @return the stock
      */
-    public int getStock() {
+    public BigDecimal getStock() {
         return stock;
     }
 
     /**
      * @param stock the stock to set
      */
-    public void setStock(int stock) {
+    public void setStock(BigDecimal stock) {
         this.stock = stock;
     }
 
+    public void decStock(BigDecimal decremento){
+        this.stock = stock.subtract(decremento);
+    }
 
     /**
      * @return the codigoProducto

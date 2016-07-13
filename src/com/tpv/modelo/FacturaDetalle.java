@@ -62,7 +62,7 @@ public class FacturaDetalle {
     private Factura factura;
     
     
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "idPRODUCTOS", referencedColumnName = "idPRODUCTOS", nullable=false)
     private Producto producto;
     

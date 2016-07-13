@@ -403,8 +403,10 @@ public class FXMLMainController implements Initializable {
                 
                 
                 if(keyEvent.getCode() ==  KeyCode.F5){
-                    modelTicket.setTipoTituloSupervisor(TipoTituloSupervisorEnum.HABILITAR_NEGATIVO);
-                    habilitarSupervisorButton.fire();
+                    if(modelTicket.getDetalle().size()>0){
+                        modelTicket.setTipoTituloSupervisor(TipoTituloSupervisorEnum.HABILITAR_NEGATIVO);
+                        habilitarSupervisorButton.fire();
+                    }
                     keyEvent.consume();
                 }
                 
@@ -771,32 +773,32 @@ public class FXMLMainController implements Initializable {
                   totalCantidad = totalCantidad.add(lineaTicket.getCantidad());
                 
             }
-//            if(lineaTicket.getCodigoProducto()==codigo && 
-//                lineaTicket.getCantidad().compareTo(cantidad) >= 0 && 
-//                lineaTicket.getDevuelto()==false &&
-//                itemEncontrado == false
-//                    ){  
-//                lineaTicket.setDevuelto(true);
-//                itemEncontrado=true;
-//                break;
-//            }
+            if(lineaTicket.getCodigoProducto()==codigo && 
+                lineaTicket.getCantidad().compareTo(cantidad) >= 0 && 
+                lineaTicket.getDevuelto()==false &&
+                itemEncontrado == false
+                    ){  
+                lineaTicket.setDevuelto(true);
+                itemEncontrado=true;
+                break;
+            }
         }
-//        if(totalCantidad.compareTo(cantidad) >= 0 && itemEncontrado==false){
-//            Iterator segundoIterator = tableViewTickets.getItems().iterator();
-//            while(segundoIterator.hasNext()){
-//                LineaTicketData lineaTicket = (LineaTicketData)segundoIterator.next();
-//                if(lineaTicket.getCodigoProducto()==codigo && 
-//                    lineaTicket.getCantidad().compareTo(cantidad)>=0 && 
-//                    lineaTicket.getDevuelto()==false &&
-//                    itemEncontrado == false
-//                        ){
-//                    lineaTicket.setDevuelto(true);
-//                    itemEncontrado=true;
-//                    continue;
-//                }
-//            }
-//        }
-        if(totalCantidad.compareTo(cantidad)>=0 /*&& itemEncontrado == true*/){
+        if(totalCantidad.compareTo(cantidad) >= 0 && itemEncontrado==false){
+            Iterator segundoIterator = tableViewTickets.getItems().iterator();
+            while(segundoIterator.hasNext()){
+                LineaTicketData lineaTicket = (LineaTicketData)segundoIterator.next();
+                if(lineaTicket.getCodigoProducto()==codigo && 
+                    lineaTicket.getCantidad().compareTo(cantidad)>=0 && 
+                    lineaTicket.getDevuelto()==false &&
+                    itemEncontrado == false
+                        ){
+                    lineaTicket.setDevuelto(true);
+                    itemEncontrado=true;
+                    continue;
+                }
+            }
+        }
+        if(totalCantidad.compareTo(cantidad)>=0 && itemEncontrado == true){
             
             return true;
         }else{

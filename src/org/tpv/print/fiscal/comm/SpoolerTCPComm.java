@@ -15,7 +15,7 @@ import org.tpv.print.fiscal.util.ArrayUtils;
 /**
  * Interfaz de comunicación mediante un Spooler conectado por TCP.
  * <br>
- * NOTAS Modificaciones Ader Javier: <br>
+ * NOTAS : <br>
  * <ul>
  * <li>Version original 10.03: Se tenia 5 timeous de 200 mls para considerar que la respuesta
  * del spooler habia terminado. Esto da un overhead de 1 segundo por comando enviado independientemente

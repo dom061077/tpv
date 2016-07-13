@@ -140,6 +140,11 @@ public class FacturacionService  {
             tx.begin();
             
             factura.setEstado(FacturaEstadoEnum.CERRADA);
+            for(Iterator<FacturaDetalle>it = factura.getDetalle().iterator();it.hasNext();){
+                FacturaDetalle fd = it.next();
+                fd.getProducto().decStock(fd.getCantidad());
+                //em.merge(fd.getProducto());
+            }
             factura=em.merge(factura);
             tx.commit();
             log.info("Factura guardada, id: "+factura.getId());
