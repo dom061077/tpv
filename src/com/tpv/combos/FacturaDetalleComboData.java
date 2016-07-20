@@ -23,13 +23,15 @@ public class FacturaDetalleComboData {
     private StringProperty descripcion;
     private IntegerProperty cantidad;
     private ObjectProperty<BigDecimal> subTotal;
+    private StringProperty observacion;
     
     public FacturaDetalleComboData(int codigo,String descripcion,int cantidad
-        ,BigDecimal subTotal){
+        ,BigDecimal subTotal,String observacion){
         this.codigo = new SimpleIntegerProperty(codigo);
         this.descripcion = new SimpleStringProperty(descripcion);
         this.cantidad = new SimpleIntegerProperty(cantidad);
         this.subTotal = new SimpleObjectProperty<BigDecimal>(subTotal);
+        this.observacion = new SimpleStringProperty(observacion);
     }
 
     /**
@@ -58,6 +60,11 @@ public class FacturaDetalleComboData {
      */
     public ObjectProperty<BigDecimal> subTotalProperty() {
         return getSubTotal();
+    }
+    
+    
+    public StringProperty observacionProperty(){
+        return observacion;
     }
 
     /**
