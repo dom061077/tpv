@@ -1107,7 +1107,8 @@ public class FXMLMainController implements Initializable {
                             fdc.getCombo().getCodigoCombo(),
                             fdc.getCombo().getDescripcion(),
                             fdc.getCantidad(),
-                            fdc.getBonificacion()
+                            fdc.getBonificacion(),
+                            ""
                         );
                 listCombos.add(fdcd);
                 

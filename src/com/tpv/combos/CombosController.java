@@ -61,6 +61,10 @@ public class CombosController{
     private TableColumn subTotalColumn;
     
     @FXML
+    private TableColumn observacionColumn;
+    
+    
+    @FXML
     private Button goToErrorButton;
     
     @FXML
@@ -71,6 +75,7 @@ public class CombosController{
     
     @FXML
     private Label terminaPagando;
+    
     
     private BigDecimal totalBonificado;
     
@@ -107,6 +112,9 @@ public class CombosController{
         descripcionColumn.setCellValueFactory(new PropertyValueFactory("descripcion"));
         cantidadColumn.setCellValueFactory(new PropertyValueFactory("cantidad"));
         cantidadColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+        observacionColumn.setCellFactory(col->{
+            
+        });
         
         subTotalColumn.setCellValueFactory(new PropertyValueFactory("subTotal"));
         subTotalColumn.setCellFactory(col->{
@@ -157,11 +165,15 @@ public class CombosController{
             totalBonificado = BigDecimal.ZERO;
             for(Iterator<FacturaDetalleCombo> it = factura.getDetalleCombosAux().iterator();it.hasNext();){
                 FacturaDetalleCombo fdc = it.next();
+                String observacion="";
+                if(fdc.getCantidad()>fdc.getCombo().getCantidadMaxima())
+                    observacion="Excede máximo de "+fdc.getCombo().getCantidadMaxima();
                 FacturaDetalleComboData fdcd = new FacturaDetalleComboData(
                             fdc.getCombo().getCodigoCombo(),
                             fdc.getCombo().getDescripcion(),
                             fdc.getCantidad(),
-                            fdc.getBonificacion()
+                            fdc.getBonificacion(),
+                            observacion
                         );
                 totalBonificado = totalBonificado.add(fdc.getBonificacion());
                 listCombos.add(fdcd);

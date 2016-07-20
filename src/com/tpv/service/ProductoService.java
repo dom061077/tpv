@@ -70,6 +70,7 @@ public class ProductoService {
             }else{
                 log.info("Busqueda de productos por descripción o código de barra");
                 Query q = em.createQuery("FROM Producto p WHERE p.descripcion like  :detalleSuc");
+                filtro=filtro.replace("+", "%");
                 q.setParameter("detalleSuc", "%"+filtro+"%");
                 q.setFirstResult(0);
                 q.setMaxResults(100);
@@ -102,7 +103,7 @@ public class ProductoService {
             }
         }
         
-        
+        filtro = filtro.replace("+", "%");
         EntityManager em = Connection.getEm();
         List<ListaPrecioProducto> productosPrecios=null;
         try{
