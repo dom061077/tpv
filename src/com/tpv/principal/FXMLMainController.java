@@ -539,11 +539,11 @@ public class FXMLMainController implements Initializable {
                     precio= productoService.getPrecioProducto(producto.getCodigoProducto(),modelTicket.getCliente());
                     if(producto.isProductoVilleco()){
                         if(precioOPeso.compareTo(BigDecimal.ZERO)>0){
-                           cantidad = precioOPeso.divide(precio).setScale(2, RoundingMode.HALF_EVEN);
+                           cantidad = precioOPeso.divide(precio).setScale(3, RoundingMode.DOWN);
                         }
                     }else{
                         if(precioOPeso.compareTo(BigDecimal.ZERO)>0){
-                            cantidad = precioOPeso.setScale(2, RoundingMode.HALF_EVEN);
+                            cantidad = precioOPeso.setScale(3, RoundingMode.DOWN);
                         }
                     }
                     if(precio.compareTo(BigDecimal.valueOf(0))>0){

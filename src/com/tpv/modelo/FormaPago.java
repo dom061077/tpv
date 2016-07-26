@@ -5,9 +5,12 @@
  */
 package com.tpv.modelo;
 
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -27,6 +30,9 @@ public class FormaPago {
     @Column(name="MAXIMOCUOTAS")
     private int maxiCuotas;
 
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<InteresTarjeta> interesesTarjeta;
+    
     /**
      * @return the id
      */
@@ -68,5 +74,21 @@ public class FormaPago {
     public void setMaxiCuotas(int maxiCuotas) {
         this.maxiCuotas = maxiCuotas;
     }
+
+    /**
+     * @return the interesesTarjeta
+     */
+    public List<InteresTarjeta> getInteresesTarjeta() {
+        return interesesTarjeta;
+    }
+
+    /**
+     * @param interesesTarjeta the interesesTarjeta to set
+     */
+    public void setInteresesTarjeta(List<InteresTarjeta> interesesTarjeta) {
+        this.interesesTarjeta = interesesTarjeta;
+    }
+    
+    
     
 }

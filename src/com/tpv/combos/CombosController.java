@@ -112,8 +112,20 @@ public class CombosController{
         descripcionColumn.setCellValueFactory(new PropertyValueFactory("descripcion"));
         cantidadColumn.setCellValueFactory(new PropertyValueFactory("cantidad"));
         cantidadColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+        observacionColumn.setCellValueFactory(new PropertyValueFactory("observacion"));
         observacionColumn.setCellFactory(col->{
-            
+            TableCell<FacturaDetalleComboData,String> cell = new TableCell<FacturaDetalleComboData,String>(){
+                @Override
+                public void updateItem(String item, boolean empty){
+                    super.updateItem(item, empty);
+                    if(item!= null && item.trim().compareTo("")>0){
+                        setStyle("-fx-text-fill: red;");
+                        this.setText(item);
+                    }
+                }
+            };
+            return cell;
+        
         });
         
         subTotalColumn.setCellValueFactory(new PropertyValueFactory("subTotal"));

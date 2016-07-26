@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import org.hibernate.annotations.Formula;
 
 /**
  *
@@ -49,6 +51,10 @@ public class InteresTarjeta {
     @JoinColumn(name = "idFORMAPAGO"
             ,referencedColumnName="idFORMAPAGO",nullable=false)
     private FormaPago formaPago;
+
+    @Formula("(SELECT current_date())")
+    private java.sql.Date fechaHoy;
+    
     
 
     /**
@@ -175,6 +181,27 @@ public class InteresTarjeta {
      */
     public void setFormaPago(FormaPago formaPago) {
         this.formaPago = formaPago;
+    }
+    
+    
+    @Transient
+    public BigDecimal getInteres(){
+        BigDecimal interes=BigDecimal.ZERO;
+        if(desdeIntTarjeta.compareTo(fechaHoy)<=0 &&
+            hastaIntTarjeta.compareTo(fechaHoy)>=0){
+            interes = interesTarjeta;
+        }
+        return interes;
+    } 
+    
+    @Transient
+    public BigDecimal getBonificacion(){
+        BigDecimal bonificacion=BigDecimal.ZERO;
+        if(desdeBonTarjeta.compareTo(fechaHoy)<=0 &&
+            hastaBonTarjeta.compareTo(fechaHoy)>=0){
+            bonificacion = bonificaTarjeta;
+        }
+        return bonificacion;
     }
     
     

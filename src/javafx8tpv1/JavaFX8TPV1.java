@@ -17,6 +17,8 @@ import com.tpv.principal.MenuPrincipalController;
 import com.tpv.producto.BuscarPorDescProductoController;
 import com.tpv.supervisor.SupervisorController;
 import com.tpv.util.Connection;
+import java.io.IOException;
+import java.io.InputStream;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.application.Preloader.StateChangeNotification;
@@ -53,6 +55,8 @@ public class JavaFX8TPV1 extends Application {
             log.error("Excepción no controlada",throwable);
         });        
         
+        
+
        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent e) {
@@ -155,6 +159,18 @@ public class JavaFX8TPV1 extends Application {
         stage.show();
     }
 
+    private void ejecutarSpooler(){
+         try {
+            Process process = Runtime
+                    .getRuntime()
+                    .exec("E:\\JAVA TPV\\Hasar\\EMULADOR_HASAR_IF_NG\\HERRAMIENTAS\\WSPOOLER -k -p7");
+            InputStream inputstream = process.getInputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }       
+    }
+    
+    
     /**
      * @param args the command line arguments
      */

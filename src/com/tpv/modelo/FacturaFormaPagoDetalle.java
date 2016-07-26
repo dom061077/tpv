@@ -6,6 +6,7 @@
 package com.tpv.modelo;
 
 import java.math.BigDecimal;
+import java.util.Iterator;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -112,6 +113,10 @@ public class FacturaFormaPagoDetalle {
      */
     public void setFormaPago(FormaPago formaPago) {
         this.formaPago = formaPago;
+        for(Iterator<InteresTarjeta> it = formaPago.getInteresesTarjeta().iterator();it.hasNext();){
+            
+        }
+                
     }
 
     /**

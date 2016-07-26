@@ -499,4 +499,9 @@ public class Factura {
         this.productosAgrupados = productosAgrupados;
     }
     
+    public void addFormaPago(FacturaFormaPagoDetalle fpd){
+        getDetallePagos().add(fpd);
+        
+    }
+    
 }
