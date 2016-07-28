@@ -27,19 +27,24 @@ public class LineaPagoData {
     private IntegerProperty CantidadCuotas;
     private LongProperty CodigoCupon;
     private LongProperty NroTarjeta;
+    private ObjectProperty<BigDecimal> Interes;
+    private ObjectProperty<BigDecimal> Bonificacion;
     
     public LineaPagoData(){
         
     }
     
     public LineaPagoData(int codigoPago,String descripcion,BigDecimal monto
-            ,int cantidadCuotas,long nroTarjeta, long codigoCupon){
+            ,int cantidadCuotas,long nroTarjeta, long codigoCupon
+            ,BigDecimal interesTarjeta,BigDecimal bonificacionTarjeta){
         this.CodigoPago = new SimpleIntegerProperty(codigoPago);
         this.Descripcion = new SimpleStringProperty(descripcion);
         this.Monto = new SimpleObjectProperty(monto);
         this.CantidadCuotas = new SimpleIntegerProperty(cantidadCuotas);
         this.CodigoCupon = new SimpleLongProperty(codigoCupon);
         this.NroTarjeta = new SimpleLongProperty(nroTarjeta);
+        this.Interes =new SimpleObjectProperty(interesTarjeta);
+        this.Bonificacion = new SimpleObjectProperty(bonificacionTarjeta);
     }
 
     /**
@@ -63,6 +68,14 @@ public class LineaPagoData {
      */
     public ObjectProperty<BigDecimal> montoProperty() {
         return Monto;
+    }
+    
+    public ObjectProperty<BigDecimal> interesProperty(){
+        return Interes;
+    }
+    
+    public ObjectProperty<BigDecimal> bonificacionProperty(){
+        return Bonificacion;
     }
 
 
@@ -107,6 +120,15 @@ public class LineaPagoData {
      */
     public BigDecimal getMonto() {
         return montoProperty().get();
+    }
+    
+    
+    public BigDecimal getInteres(){
+        return interesProperty().get();
+    }
+    
+    public BigDecimal getBonificacion(){
+        return bonificacionProperty().get();
     }
 
     /**

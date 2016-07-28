@@ -185,20 +185,22 @@ public class InteresTarjeta {
     
     
     @Transient
-    public BigDecimal getInteres(){
+    public BigDecimal getInteres(int cantCuotas){
         BigDecimal interes=BigDecimal.ZERO;
         if(desdeIntTarjeta.compareTo(fechaHoy)<=0 &&
-            hastaIntTarjeta.compareTo(fechaHoy)>=0){
+            hastaIntTarjeta.compareTo(fechaHoy)>=0 &&
+            cuota == cantCuotas){
             interes = interesTarjeta;
         }
         return interes;
     } 
     
     @Transient
-    public BigDecimal getBonificacion(){
+    public BigDecimal getBonificacion(int cantCuotas){
         BigDecimal bonificacion=BigDecimal.ZERO;
         if(desdeBonTarjeta.compareTo(fechaHoy)<=0 &&
-            hastaBonTarjeta.compareTo(fechaHoy)>=0){
+            hastaBonTarjeta.compareTo(fechaHoy)>=0 &&
+            cuota == cantCuotas){
             bonificacion = bonificaTarjeta;
         }
         return bonificacion;

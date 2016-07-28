@@ -13,6 +13,7 @@ import com.tpv.modelo.Producto;
 import com.tpv.modelo.ProveedorProducto;
 import com.tpv.service.FacturacionService;
 import com.tpv.service.ImpresoraService;
+import com.tpv.service.PagoService;
 import com.tpv.service.ProductoService;
 import com.tpv.util.Connection;
 import java.math.BigDecimal;
@@ -211,7 +212,18 @@ public class TestHibernate {
                 
 		return num;
 	}
-            
+
+    public static void getFormasdePago()    {
+        EntityManager em = Connection.getEm();
+        PagoService pagService = new PagoService();
+        try{
+            pagService.getFormaPago(1);
+        }catch(Exception e){
+           e.printStackTrace();
+        }
+        
+    }
+        
     public static void formatCodigoBarra(){
         String codigoBarra = "2097289000003";
         System.out.println("Inicio de codigo: "+codigoBarra.substring(0,2));
@@ -224,7 +236,7 @@ public class TestHibernate {
     }
         
     public static void main(String[] args){
-//        DOMConfigurator.configure(TestHibernate.class.getResource("log4j.xml"));
+        DOMConfigurator.configure(TestHibernate.class.getResource("log4j.xml"));
         try{
             Connection.initConnections();
             //System.out.println("Direccion MAC: "+Connection.getMACAddress());
@@ -234,7 +246,8 @@ public class TestHibernate {
         
        //formatCodigoBarra();    
         //getProveedorFromCombo();
-        calcularCombos();
+        //calcularCombos();
+        getFormasdePago();
         
         //probarRecursivadaGrupoProducto();
         //mostrarFacturaDetalle();

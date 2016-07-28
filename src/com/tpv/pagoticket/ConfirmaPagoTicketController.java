@@ -102,6 +102,12 @@ public class ConfirmaPagoTicketController {
     private TableColumn nroTarjetaColumn;
     
     @FXML
+    private TableColumn interesTarjetaColumn;
+    
+    @FXML
+    private TableColumn bonificacionTarjetaColumn;
+    
+    @FXML
     private TextField totalTicketTextField;
     
     @FXML
@@ -155,6 +161,47 @@ public class ConfirmaPagoTicketController {
                 return cell;
             });
             montoPagoColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+            interesTarjetaColumn.setCellValueFactory(new PropertyValueFactory("interes"));
+            interesTarjetaColumn.setCellFactory(col -> {
+                TableCell<LineaPagoData,BigDecimal> cell = new TableCell<LineaPagoData,BigDecimal>(){
+                    @Override
+                    public void updateItem(BigDecimal item,boolean empty){
+                        super.updateItem(item, empty);
+                        this.setText(null);
+                        this.setGraphic(null);
+                        log.debug("Interes tarjeta en updateItem: "+item);
+                        if (!empty) {
+                                //String formattedDob = De
+                                DecimalFormat df = new DecimalFormat("##,###.00");
+
+                                this.setText(df.format(item));
+                        }
+                    }
+                };
+                return cell;
+            });
+            interesTarjetaColumn.setStyle("-fx-alignment: CENTER-RIGHT");
+            bonificacionTarjetaColumn.setCellValueFactory(new PropertyValueFactory("bonificacion"));
+            bonificacionTarjetaColumn.setCellFactory(col -> {
+                TableCell<LineaPagoData,BigDecimal> cell = new TableCell<LineaPagoData,BigDecimal>(){
+                    @Override
+                    public void updateItem(BigDecimal item,boolean empty){
+                        super.updateItem(item, empty);
+                        this.setText(null);
+                        this.setGraphic(null);
+                        log.debug("Bonifiacion en updateItem: "+item);
+                        if (!empty) {
+                                //String formattedDob = De
+                                DecimalFormat df = new DecimalFormat("##,###.00");
+
+                                this.setText(df.format(item));
+                        }
+                    }
+                };
+                return cell;
+            });
+            bonificacionTarjetaColumn.setStyle("-fx-alignment: CENTER-RIGHT");
+            
             DecimalFormat df = new DecimalFormat("##,##0.00");
             
             totalPagosLabel.setText(df.format(modelTicket.getTotalPagos()));
@@ -194,7 +241,7 @@ public class ConfirmaPagoTicketController {
             }
             
             impresoraService.cerrarTicket(factura);
-            confirmarButton.fire();
+            
 
         }catch(TpvException e){
             log.error("Error en controlador llamando al método cerrarTicket de ImpresoraService",e);
@@ -242,8 +289,13 @@ public class ConfirmaPagoTicketController {
                                 }
 
                                 formaPagoDetalle.setFactura(factura);
+                                
                                 formaPagoDetalle.setMontoPago(item.getMonto());
-                                factura.getDetallePagos().add(formaPagoDetalle);
+                                formaPagoDetalle.setCuota(item.getCantidadCuotas());
+                                formaPagoDetalle.setInteres(item.getInteres());
+                                formaPagoDetalle.setBonificacion(item.getBonificacion());
+//                                factura.getDetallePagos().add(formaPagoDetalle);
+                                factura.addFormaPago(formaPagoDetalle);
                                 log.info("                  Código forma: "+item.getCodigoPago());
                             }
                             
@@ -255,6 +307,7 @@ public class ConfirmaPagoTicketController {
                             modelTicket.getPagos().clear();
                             modelTicket.setImprimeComoNegativo(false);
                             log.info("Factura cerrada y confirmada");
+                            confirmarButton.fire();
                     }catch(TpvException e){
                         modelTicket.setException(e);
                         modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CONFIRMARTICKET);

@@ -10,11 +10,13 @@
       <TableView fx:id="tableViewPagos" focusTraversable="false" prefHeight="327.0" prefWidth="1024.0" styleClass="tpv-table-view" BorderPane.alignment="CENTER">
         <columns>
           <TableColumn fx:id="codigoPagoColumn" text="Cod. " />
-            <TableColumn fx:id="descripcionPagoColumn" prefWidth="254.0" text="Descripción Pago" />
+            <TableColumn fx:id="descripcionPagoColumn" prefWidth="200.0" text="Descripción Pago" />
             <TableColumn fx:id="montoPagoColumn" prefWidth="100.0" text="Monto" />
           <TableColumn fx:id="cantidadCuotaColumn" minWidth="100.0" prefWidth="100.0" text="Cuotas" />
-            <TableColumn fx:id="nroTarjetaColumn" prefWidth="257.0" text="Nº Tarjeta" />
-            <TableColumn fx:id="codigoCuponColumn" prefWidth="206.0" text="Cod.Cupón" />
+            <TableColumn fx:id="nroTarjetaColumn" prefWidth="170.0" text="Nº Tarjeta" />
+            <TableColumn fx:id="codigoCuponColumn" prefWidth="170.0" text="Cod.Cupón" />
+            <TableColumn fx:id="interesTarjetaColumn" prefWidth="100.0" text="Intereses" />
+            <TableColumn fx:id="bonificacionTarjetaColumn" prefWidth="100.0" text="Bonificaciones" />
         </columns>
          <BorderPane.margin>
             <Insets top="20.0" />

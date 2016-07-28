@@ -37,6 +37,9 @@ public class FacturaFormaPagoDetalle {
     @Column(name="BONIFICACION")
     private BigDecimal bonificacion;
     
+    @Column(name="CUOTA")
+    private int cuota;
+    
     @ManyToOne
     @JoinColumn(name = "idFORMAPAGO", referencedColumnName = "idFORMAPAGO", nullable=false)
     private FormaPago formaPago;
@@ -113,9 +116,6 @@ public class FacturaFormaPagoDetalle {
      */
     public void setFormaPago(FormaPago formaPago) {
         this.formaPago = formaPago;
-        for(Iterator<InteresTarjeta> it = formaPago.getInteresesTarjeta().iterator();it.hasNext();){
-            
-        }
                 
     }
 
@@ -131,6 +131,20 @@ public class FacturaFormaPagoDetalle {
      */
     public void setFactura(Factura factura) {
         this.factura = factura;
+    }
+
+    /**
+     * @return the cuota
+     */
+    public int getCuota() {
+        return cuota;
+    }
+
+    /**
+     * @param cuota the cuota to set
+     */
+    public void setCuota(int cuota) {
+        this.cuota = cuota;
     }
     
     

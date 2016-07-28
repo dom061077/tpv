@@ -5,6 +5,8 @@
  */
 package com.tpv.modelo;
 
+import java.math.BigDecimal;
+import java.util.Iterator;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,7 +32,7 @@ public class FormaPago {
     @Column(name="MAXIMOCUOTAS")
     private int maxiCuotas;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "formaPago")
     private List<InteresTarjeta> interesesTarjeta;
     
     /**
@@ -89,6 +91,23 @@ public class FormaPago {
         this.interesesTarjeta = interesesTarjeta;
     }
     
+    public BigDecimal getBonificacionEnFormaPago(int cantCuotas){
+        BigDecimal bonificaciones = BigDecimal.ZERO;
+        for(Iterator<InteresTarjeta> it = interesesTarjeta.iterator();it.hasNext();){
+            InteresTarjeta intTarj = it.next();
+            bonificaciones=bonificaciones.add(intTarj.getBonificacion(cantCuotas));
+        }
+        return bonificaciones;
+    }
+    
+    public BigDecimal getInteresEnFormaPago(int cantCuotas){
+        BigDecimal intereses = BigDecimal.ZERO;
+        for(Iterator<InteresTarjeta> it = interesesTarjeta.iterator();it.hasNext();){
+            InteresTarjeta intTarj = it.next();
+            intereses=intereses.add(intTarj.getInteres(cantCuotas));
+        }
+        return intereses;
+    }
     
     
 }

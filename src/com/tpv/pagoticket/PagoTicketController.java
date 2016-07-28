@@ -51,6 +51,7 @@ public class PagoTicketController {
     private boolean tieneCantidadCuotas;
     private boolean tieneCuponPago;
     private DataModelTicket modelTicket;
+    private FormaPago formaPago;
     
     PagoService pagoService = new PagoService();
     FacturacionService factService = new FacturacionService();
@@ -94,7 +95,12 @@ public class PagoTicketController {
     
     @FXML
     private TableColumn nroTarjetaColumn;
+
+    @FXML
+    private TableColumn interesTarjetaColumn;
     
+    @FXML
+    private TableColumn bonificacionTarjetaColumn;
     
     @FXMLViewFlowContext
     private ViewFlowContext context;    
@@ -131,6 +137,66 @@ public class PagoTicketController {
         codigoPagoColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
         descripcionPagoColumn.setCellValueFactory(new PropertyValueFactory("descripcion"));
         montoPagoColumn.setCellValueFactory(new PropertyValueFactory("monto"));
+        montoPagoColumn.setCellFactory(col -> {
+            TableCell<LineaPagoData,BigDecimal> cell = new TableCell<LineaPagoData,BigDecimal>(){
+                @Override
+                public void updateItem(BigDecimal item,boolean empty){
+                    super.updateItem(item, empty);
+                    this.setText(null);
+                    this.setGraphic(null);
+                    if (!empty) {
+                            //String formattedDob = De
+                            DecimalFormat df = new DecimalFormat("##,##0.00");
+                                    
+                            this.setText(df.format(item));
+                    }
+                }
+            };
+            return cell;
+        });
+        montoPagoColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+
+        interesTarjetaColumn.setCellValueFactory(new PropertyValueFactory("interes"));
+        interesTarjetaColumn.setCellFactory(col -> {
+            TableCell<LineaPagoData,BigDecimal> cell = new TableCell<LineaPagoData,BigDecimal>(){
+                @Override
+                public void updateItem(BigDecimal item,boolean empty){
+                    super.updateItem(item, empty);
+                    this.setText(null);
+                    this.setGraphic(null);
+                    if (!empty) {
+                            //String formattedDob = De
+                            DecimalFormat df = new DecimalFormat("##,##0.00");
+                                    
+                            this.setText(df.format(item));
+                    }
+                }
+            };
+            return cell;
+        });
+        interesTarjetaColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+
+        bonificacionTarjetaColumn.setCellValueFactory(new PropertyValueFactory("bonificacion"));
+        bonificacionTarjetaColumn.setCellFactory(col -> {
+            TableCell<LineaPagoData,BigDecimal> cell = new TableCell<LineaPagoData,BigDecimal>(){
+                @Override
+                public void updateItem(BigDecimal item,boolean empty){
+                    super.updateItem(item, empty);
+                    this.setText(null);
+                    this.setGraphic(null);
+                    if (!empty) {
+                            //String formattedDob = De
+                            DecimalFormat df = new DecimalFormat("##,##0.00");
+                                    
+                            this.setText(df.format(item));
+                    }
+                }
+            };
+            return cell;
+        });
+        bonificacionTarjetaColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+        
+        
         nroTarjetaColumn.setCellValueFactory(new PropertyValueFactory("nroTarjeta"));
         codigoCuponColumn.setCellValueFactory(new PropertyValueFactory("codigoCupon"));
                 
@@ -150,24 +216,6 @@ public class PagoTicketController {
         }
         bonificaciones.setText(df.format(modelTicket.getBonificaciones()));
         saldoPagar.setText(modelTicket.getFormatSaldo());        
-        montoPagoColumn.setCellFactory(col -> {
-            TableCell<LineaPagoData,BigDecimal> cell = new TableCell<LineaPagoData,BigDecimal>(){
-                @Override
-                public void updateItem(BigDecimal item,boolean empty){
-                    super.updateItem(item, empty);
-                    this.setText(null);
-                    this.setGraphic(null);
-                    if (!empty) {
-                            //String formattedDob = De
-                            DecimalFormat df = new DecimalFormat("##,###.00");
-                                    
-                            this.setText(df.format(item));
-                    }
-                }
-            };
-            return cell;
-        });
-        montoPagoColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
         
         cantidadCuotaColumn.setCellValueFactory(new PropertyValueFactory("cantidadCuotas"));
         cantidadCuotaColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
@@ -359,7 +407,6 @@ public class PagoTicketController {
     }
     
     private void buscarDescTipoPago(int codigoPago){
-        FormaPago formaPago = null;
         try{
             formaPago = pagoService.getFormaPago(codigoPago);
         }catch(TpvException e){
@@ -429,15 +476,14 @@ public class PagoTicketController {
         }
             
         
-        log.debug("Datos de Linea de pago :");
-        log.debug("         Codigo Pago: "+codigoPago);
-        log.debug("         Monto Pago: "+monto);
-        log.debug("         Cantidad cuotas: "+cantidadCuotas);
-        log.debug("         Nro tarjeta: "+nroTarjeta);
-        log.debug("         Codigo Cupon: "+codigoCupon);
         modelTicket.getPagos().add(new LineaPagoData(
             codigoPago,labelFormaPagoDescripcion.getText(),monto
-            ,cantidadCuotas,nroTarjeta,codigoCupon));
+            ,cantidadCuotas,nroTarjeta,codigoCupon
+            ,formaPago.getInteresEnFormaPago(cantidadCuotas)
+                    .multiply(monto).divide(BigDecimal.valueOf(100))
+            ,formaPago.getBonificacionEnFormaPago(cantidadCuotas)
+                    .multiply(monto).divide(BigDecimal.valueOf(100))
+        ));
         //BigDecimal saldoParcial = modelTicket.getTotalTicket().subtract(modelTicket.getTotalPagos());
         if (modelTicket.getSaldo().compareTo(BigDecimal.valueOf(0))>0)
             textFieldMonto.setText(modelTicket.getSaldo().toString());

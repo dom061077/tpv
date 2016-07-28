@@ -32,15 +32,7 @@ public class PagoService {
             formaPago = (FormaPago)q.getSingleResult();
             log.info("Forma de pago recuperada: "+formaPago.toString());
         }catch(RuntimeException e){
-            String fullTraceStr=e.getMessage()+"\n";
-            for(int i=0;i<=e.getStackTrace().length-1;i++){
-                fullTraceStr+="Clase: "+e.getStackTrace()[i].getClassName()+"; "
-                        +"Archivo: "+e.getStackTrace()[i].getFileName()+"; "
-                        +"Mètodo: "+e.getStackTrace()[i].getMethodName()+"; "
-                        +"Nro. Línea: "+e.getStackTrace()[i].getLineNumber()+"; "
-                        +"\n";
-            }
-            log.error(fullTraceStr);
+            log.error("Error en la capa de servicios al recuperar un pago.",e);
             throw new TpvException("Error en la capa de servicios al recuperar un pago.");
         }finally{
             em.clear();
