@@ -31,6 +31,10 @@ public class PagoService {
             Query q = em.createQuery("FROM FormaPago fp WHERE fp.id = :id").setParameter("id", codigoPago);
             formaPago = (FormaPago)q.getSingleResult();
             log.info("Forma de pago recuperada: "+formaPago.toString());
+        }catch(NoResultException e){
+            log.info("No se encontró el pago con el código: "+codigoPago
+                    +" no se toma la excepción como error");
+             
         }catch(RuntimeException e){
             log.error("Error en la capa de servicios al recuperar un pago.",e);
             throw new TpvException("Error en la capa de servicios al recuperar un pago.");

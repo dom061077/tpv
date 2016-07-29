@@ -20,6 +20,7 @@ public class MaskTextField extends TextField {
 
     private String mask;
     private ArrayList<String> patterns;
+    private int maxDigitos=0;
 
     public MaskTextField() {
         super();
@@ -36,10 +37,12 @@ public class MaskTextField extends TextField {
 
        
         String tempText = this.getText() + text;
-
+        if(this.getText().length()==maxDigitos && maxDigitos>0)
+            return;
         if(mask == null || mask.length() == 0){
             super.replaceText(start, end, text);
-        }else if (tempText.matches(this.mask) || tempText.length() == 0) {        //text.length == 0 representa o delete ou backspace
+        }else if (tempText.matches(this.mask) 
+                || tempText.length() == 0) {        //text.length == 0 representa o delete ou backspace
 
             super.replaceText(start, end, text);
 
@@ -165,4 +168,7 @@ public class MaskTextField extends TextField {
 
     }
 
+    public void setMaxDigitos(int cantMaxima){
+        this.maxDigitos=cantMaxima;
+    }
 }

@@ -129,8 +129,6 @@ public class PagoTicketController {
     @PostConstruct
     public void init(){
         iniciarIngresosVisibles();
-        if(tableViewPagos.getItems().size()>0)
-            tableViewPagos.getSelectionModel().select(0);
         modelTicket = context.getRegisteredObject(DataModelTicket.class);
         modelTicket.getPagos();
         codigoPagoColumn.setCellValueFactory(new PropertyValueFactory<LineaPagoData,Integer>("codigoPago"));
@@ -234,6 +232,12 @@ public class PagoTicketController {
         
         Platform.runLater(() -> {
             tableViewPagos.setItems(modelTicket.getPagos());
+            if(tableViewPagos.getItems().size()>0){
+                tableViewPagos.getSelectionModel().selectLast();
+                scrollDown();
+
+            }
+            
             textFieldTipoPago.setOnKeyPressed(keyEvent -> {
                 if(keyEvent.getCode() == KeyCode.SUBTRACT){
                     eliminarLineaPago();
@@ -248,7 +252,14 @@ public class PagoTicketController {
                         keyEvent.consume();
                         return;
                     }
-                    buscarDescTipoPago(Integer.parseInt(textFieldTipoPago.getText()));
+                    int codigoPago=0;
+                    try{
+                        codigoPago=Integer.parseInt(textFieldTipoPago.getText());
+                    }catch(NumberFormatException e){
+                       keyEvent.consume();
+                       return;
+                    }
+                    buscarDescTipoPago(codigoPago);
                     if(labelFormaPagoDescripcion.getText().length()!=0){
                         textFieldMonto.setDisable(false);
                         textFieldMonto.requestFocus();
@@ -386,11 +397,14 @@ public class PagoTicketController {
         textFieldCantidadCuotas = new MaskTextField();
         textFieldCantidadCuotas.getStyleClass().add("textfield_sin_border");
         textFieldCantidadCuotas.setMask("N!");
+        textFieldCantidadCuotas.setMaxDigitos(2);
         textFieldNroCupon = new MaskTextField();
         textFieldNroCupon.getStyleClass().add("textfield_sin_border");
         textFieldNroCupon.setMask("N!");
+        textFieldNroCupon.setMaxDigitos(15);
         textFieldNroTarjeta = new MaskTextField();
         textFieldNroTarjeta.setMask("N!");
+        textFieldNroTarjeta.setMaxDigitos(15);
         textFieldNroTarjeta.getStyleClass().add("textfield_sin_border");
         
         gridPanePagos.add(textFieldTipoPago,1,1);
