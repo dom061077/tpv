@@ -75,6 +75,12 @@ public class PagoTicketController {
     private Label bonificaciones;
     
     @FXML
+    private Label bonificacionPorPagoTotal;
+    
+    @FXML
+    private Label interesPorPagoTotal;
+            
+    @FXML
     private TableView tableViewPagos;
                       
     
@@ -102,6 +108,7 @@ public class PagoTicketController {
     @FXML
     private TableColumn bonificacionTarjetaColumn;
     
+
     @FXMLViewFlowContext
     private ViewFlowContext context;    
     
@@ -214,6 +221,8 @@ public class PagoTicketController {
         }
         bonificaciones.setText(df.format(modelTicket.getBonificaciones()));
         saldoPagar.setText(modelTicket.getFormatSaldo());        
+        bonificacionPorPagoTotal.setText(modelTicket.getFormatBonificacionPorPagoTotal());
+        interesPorPagoTotal.setText(modelTicket.getFormatInteresPorPagoTotal());
         
         cantidadCuotaColumn.setCellValueFactory(new PropertyValueFactory("cantidadCuotas"));
         cantidadCuotaColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
@@ -537,6 +546,8 @@ public class PagoTicketController {
     private void refrescarTextFieldSaldo(){
         textFieldMonto.setText(modelTicket.getSaldo().toString());
         saldoPagar.setText(modelTicket.getFormatSaldo());
+        bonificacionPorPagoTotal.setText(modelTicket.getFormatBonificacionPorPagoTotal());
+        interesPorPagoTotal.setText(modelTicket.getFormatInteresPorPagoTotal());
     }
     
 }

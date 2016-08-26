@@ -152,7 +152,7 @@ public class ConfirmaPagoTicketController {
                         this.setGraphic(null);
                         if (!empty) {
                                 //String formattedDob = De
-                                DecimalFormat df = new DecimalFormat("##,###.00");
+                                DecimalFormat df = new DecimalFormat("##,##0.00");
 
                                 this.setText(df.format(item));
                         }
@@ -172,7 +172,7 @@ public class ConfirmaPagoTicketController {
                         log.debug("Interes tarjeta en updateItem: "+item);
                         if (!empty) {
                                 //String formattedDob = De
-                                DecimalFormat df = new DecimalFormat("##,###.00");
+                                DecimalFormat df = new DecimalFormat("##,##0.00");
 
                                 this.setText(df.format(item));
                         }
@@ -192,7 +192,7 @@ public class ConfirmaPagoTicketController {
                         log.debug("Bonifiacion en updateItem: "+item);
                         if (!empty) {
                                 //String formattedDob = De
-                                DecimalFormat df = new DecimalFormat("##,###.00");
+                                DecimalFormat df = new DecimalFormat("##,##0.00");
 
                                 this.setText(df.format(item));
                         }

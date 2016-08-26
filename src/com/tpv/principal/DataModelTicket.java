@@ -102,7 +102,37 @@ public class DataModelTicket {
         return saldo;
     }
     
-
+    public BigDecimal getBonificacionPorPagoTotal(){
+        BigDecimal bonifTotal = BigDecimal.ZERO;
+        ListProperty<LineaPagoData> innerList = getPagos();
+        for(Iterator iter=innerList.iterator();iter.hasNext();){
+            LineaPagoData pago = (LineaPagoData)iter.next();
+            bonifTotal = bonifTotal.add(pago.getBonificacion());
+        }
+        return bonifTotal;
+    }
+    
+    public BigDecimal getInteresPorPagoTotal(){
+        BigDecimal interesTotal = BigDecimal.ZERO;
+        ListProperty<LineaPagoData> innerList = getPagos();
+        for(Iterator iter=innerList.iterator();iter.hasNext();){
+            LineaPagoData pago = (LineaPagoData)iter.next();
+            interesTotal = interesTotal.add(pago.getInteres());
+        }
+        
+        return interesTotal;
+    }
+    
+    public String getFormatBonificacionPorPagoTotal(){
+        DecimalFormat df = new DecimalFormat("###,###,###,##0.00");
+        return df.format(getBonificacionPorPagoTotal().doubleValue());
+    }
+    
+    public String getFormatInteresPorPagoTotal(){
+        DecimalFormat df = new DecimalFormat("###,###,###,##0.00");
+        return df.format(getInteresPorPagoTotal().doubleValue());
+    }
+    
     public String getFormatSaldo(){
         DecimalFormat df = new DecimalFormat("###,###,###,##0.00");
         return df.format(getSaldo());

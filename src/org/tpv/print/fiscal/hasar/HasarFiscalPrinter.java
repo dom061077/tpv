@@ -367,13 +367,13 @@ public abstract class HasarFiscalPrinter extends BasicFiscalPrinter implements H
 		int i = 1;
 		cmd.setText(i++, description, descMaxLength, false);
 		cmd.setNumber(i++, quantity,10,8, false,"");
-		cmd.setAmount(i++, price, false, true);
+		cmd.setNumber(i++,price,6,2,false,"");//cmd.setAmount(i++, price, false, true);
 		if(ivaPercent == null)
 			cmd.setText(i++, "**.**", false);
 		else
 			cmd.setNumber(i++, ivaPercent, 2, 2, false,"");		
 		cmd.setBoolean(i++, substract, "m", "M", false);
-		cmd.setNumber(i++, internalTaxes, 10, 8, false,"$");
+		cmd.setNumber(i++, internalTaxes, 10, 8, false,"");
 		cmd.setNumber(i++, display, true);
 		cmd.setBoolean(i++, basePrice, "x", "T", false);
 		return cmd;
