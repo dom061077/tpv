@@ -16,6 +16,7 @@ import com.tpv.principal.FXMLMainController;
 import com.tpv.principal.MenuPrincipalController;
 import com.tpv.producto.BuscarPorDescProductoController;
 import com.tpv.supervisor.SupervisorController;
+import com.tpv.print.fiscal.ConfiguracionImpresoraController;
 import com.tpv.util.Connection;
 import java.io.IOException;
 import java.io.InputStream;
@@ -100,6 +101,8 @@ public class JavaFX8TPV1 extends Application {
                    .withLink(LoginController.class,"iniciarSesion",MenuPrincipalController.class)
                    .withLink(LoginController.class,"mostrarError",ErrorController.class)
                    .withLink(MenuPrincipalController.class, "facturacion", FXMLMainController.class)
+                   .withLink(MenuPrincipalController.class,"configimpresora",ConfiguracionImpresoraController.class)
+                   .withLink(ConfiguracionImpresoraController.class,"volverMenuPrincipal",MenuPrincipalController.class)
                    .withLink(MenuPrincipalController.class, "mostrarError", ErrorController.class)
                    .withLink(ErrorController.class,"volverMenuPrincipal",MenuPrincipalController.class)
                    .withLink(FXMLMainController.class,"buscarCliente", BuscarPorNombreClienteController.class)

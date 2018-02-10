@@ -33,7 +33,7 @@ public class MenuPrincipalController {
     private Button buttonFacturacion;
          
     @FXML
-    @ActionTrigger("controlador")
+    @ActionTrigger("configimpresora")
     private Button buttonControlador;
     
     @FXML
@@ -113,6 +113,10 @@ public class MenuPrincipalController {
                 }
                 if(keyEvent.getCode()==KeyCode.NUMPAD4)
                     System.exit(0);
+                if(keyEvent.getCode()==KeyCode.NUMPAD2){
+                    log.debug("Antes de buttoncontrolador: ");
+                    buttonControlador.fire();
+                }
                 keyEvent.consume();
             });
         });
