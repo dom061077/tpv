@@ -20,6 +20,7 @@ import javax.inject.Inject;
 import org.apache.log4j.Logger;
 import org.datafx.controller.FXMLController;
 import org.datafx.controller.flow.action.ActionTrigger;
+import org.datafx.controller.flow.action.LinkAction;
 
 /**
  *
@@ -29,7 +30,7 @@ import org.datafx.controller.flow.action.ActionTrigger;
 public class MenuPrincipalController {
     Logger log = Logger.getLogger(MenuPrincipalController.class);
     @FXML
-    @ActionTrigger("facturacion")
+    @LinkAction(FXMLMainController.class)
     private Button buttonFacturacion;
          
     @FXML

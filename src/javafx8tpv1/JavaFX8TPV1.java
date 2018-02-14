@@ -109,13 +109,13 @@ public class JavaFX8TPV1 extends Application {
         
         Flow flow = new Flow(LoginController.class)
                     //--flow ventana buscar cliente
-                   .withLink(LoginController.class,"iniciarSesion",MenuPrincipalController.class)
+                   /*.withLink(LoginController.class,"iniciarSesion",MenuPrincipalController.class)
                    .withLink(LoginController.class,"mostrarError",ErrorController.class)
                    .withLink(MenuPrincipalController.class, "facturacion", FXMLMainController.class)
                    .withLink(MenuPrincipalController.class,"configimpresora",ConfiguracionImpresoraController.class)
                    .withLink(ConfiguracionImpresoraController.class,"volverMenuPrincipal",MenuPrincipalController.class)
                    .withLink(MenuPrincipalController.class, "mostrarError", ErrorController.class)
-                   /*.withLink(ErrorController.class,"volverMenuPrincipal",MenuPrincipalController.class)
+                   .withLink(ErrorController.class,"volverMenuPrincipal",MenuPrincipalController.class)
                    .withLink(FXMLMainController.class,"buscarCliente", BuscarPorNombreClienteController.class)
                    .withLink(FXMLMainController.class, "volverMenuPrincipal", MenuPrincipalController.class)
                    .withLink(BuscarPorNombreClienteController.class, "seleccionarCliente", FXMLMainController.class)

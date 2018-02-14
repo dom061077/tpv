@@ -8,15 +8,12 @@ package com.tpv.producto;
 import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.ListaPrecioProducto;
-import com.tpv.modelo.Producto;
 import com.tpv.principal.DataModelTicket;
+import com.tpv.principal.FXMLMainController;
 import com.tpv.principal.LineaTicketData;
 import com.tpv.service.ProductoService;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
@@ -39,7 +36,8 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
 import org.datafx.controller.FXMLController;
-import org.datafx.controller.flow.action.ActionTrigger;
+import org.datafx.controller.flow.action.BackAction;
+import org.datafx.controller.flow.action.LinkAction;
 
 
 
@@ -51,10 +49,11 @@ public class BuscarPorDescProductoController {
     private ProductoService productoService= new ProductoService();
     
     @FXML
-    @ActionTrigger("seleccionarProducto")
+    @LinkAction(FXMLMainController.class)
     private Button buttonAceptar;
     
     @FXML
+    @LinkAction(FXMLMainController.class)
     private Button buttonCancelar;
     
     @FXML

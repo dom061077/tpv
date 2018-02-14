@@ -16,10 +16,12 @@ import com.tpv.modelo.FacturaDetalleCombo;
 import com.tpv.modelo.Producto;
 import com.tpv.modelo.enums.FacturaEstadoEnum;
 import com.tpv.print.event.FiscalPrinterEvent;
+import com.tpv.producto.BuscarPorDescProductoController;
 import com.tpv.service.ClienteService;
 import com.tpv.service.FacturacionService;
 import com.tpv.service.ImpresoraService;
 import com.tpv.service.ProductoService;
+import com.tpv.supervisor.SupervisorController;
 import com.tpv.util.Connection;
 import com.tpv.util.ui.MaskTextField;
 import java.math.BigDecimal;
@@ -46,13 +48,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import javax.annotation.PostConstruct;
@@ -60,6 +60,8 @@ import javax.inject.Inject;
 import org.apache.log4j.Logger;
 import org.datafx.controller.FXMLController;
 import org.datafx.controller.flow.action.ActionTrigger;
+import org.datafx.controller.flow.action.BackAction;
+import org.datafx.controller.flow.action.LinkAction;
 import org.tpv.print.fiscal.FiscalPacket;
 import org.tpv.print.fiscal.FiscalPrinter;
 import org.tpv.print.fiscal.hasar.HasarCommands;
@@ -182,7 +184,7 @@ public class FXMLMainController implements Initializable {
     private Button clienteButton;
     
     @FXML
-    @ActionTrigger("buscarProducto")
+    @LinkAction(BuscarPorDescProductoController.class)
     private Button buscarProductoButton;
     
     @FXML
@@ -194,11 +196,11 @@ public class FXMLMainController implements Initializable {
     private Button combosButton;
     
     @FXML
-    @ActionTrigger("volverMenuPrincipal")
+    @BackAction
     private Button volverMenuPrincipalButton;
     
     @FXML
-    @ActionTrigger("habilitarSupervisor")
+    @LinkAction(SupervisorController.class)
     private Button habilitarSupervisorButton;
    
     @FXML

@@ -6,10 +6,12 @@
 package com.tpv.login;
 
 import com.tpv.enums.OrigenPantallaErrorEnum;
+import com.tpv.errorui.ErrorController;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Checkout;
 import com.tpv.modelo.Usuario;
 import com.tpv.principal.DataModelTicket;
+import com.tpv.principal.MenuPrincipalController;
 import com.tpv.service.UsuarioService;
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
@@ -27,7 +29,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
 import org.datafx.controller.FXMLController;
-import org.datafx.controller.flow.action.ActionTrigger;
+import org.datafx.controller.flow.action.LinkAction;
 
 /**
  *
@@ -39,11 +41,11 @@ public class LoginController {
     Logger log = Logger.getLogger(LoginController.class);
     UsuarioService usuarioService = new UsuarioService();    
     @FXML
-    @ActionTrigger("iniciarSesion")
+    @LinkAction(MenuPrincipalController.class)
     private Button buttonLogin;
     
     @FXML
-    @ActionTrigger("mostrarError")
+    @LinkAction(ErrorController.class)
     private Button goToErrorButton;
     
     @FXML
