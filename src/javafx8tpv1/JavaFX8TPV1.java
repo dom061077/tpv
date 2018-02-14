@@ -96,6 +96,17 @@ public class JavaFX8TPV1 extends Application {
                         ClienteSceneController.class, "seleccionarCliente", FXMLMainController.class);
         */
         log.debug("Inicializando Flow de infaces gráficas");
+        try{
+            log.debug("INICIANDO LAS CONEXIONES");
+            log.debug("PATH DEL DIRECTORIO DE RECURSOS: "+this.getClass().getResource("/com/tpv/resources/people.png"));
+            Connection.initConnections();
+            
+        }   catch(Exception e){
+            
+            log.error("Error general de conexiòn a la base de datos",e);
+            
+        }
+        
         Flow flow = new Flow(LoginController.class)
                     //--flow ventana buscar cliente
                    .withLink(LoginController.class,"iniciarSesion",MenuPrincipalController.class)
@@ -104,7 +115,7 @@ public class JavaFX8TPV1 extends Application {
                    .withLink(MenuPrincipalController.class,"configimpresora",ConfiguracionImpresoraController.class)
                    .withLink(ConfiguracionImpresoraController.class,"volverMenuPrincipal",MenuPrincipalController.class)
                    .withLink(MenuPrincipalController.class, "mostrarError", ErrorController.class)
-                   .withLink(ErrorController.class,"volverMenuPrincipal",MenuPrincipalController.class)
+                   /*.withLink(ErrorController.class,"volverMenuPrincipal",MenuPrincipalController.class)
                    .withLink(FXMLMainController.class,"buscarCliente", BuscarPorNombreClienteController.class)
                    .withLink(FXMLMainController.class, "volverMenuPrincipal", MenuPrincipalController.class)
                    .withLink(BuscarPorNombreClienteController.class, "seleccionarCliente", FXMLMainController.class)
@@ -131,35 +142,27 @@ public class JavaFX8TPV1 extends Application {
                    .withLink(ErrorController.class,"buscarproducto", BuscarPorDescProductoController.class)
                    .withLink(ErrorController.class,"buscarcliente",BuscarPorNombreClienteController.class)
                    .withLink(ErrorController.class,"login",LoginController.class)
-                   .withLink(ErrorController.class,"error_supervisor",SupervisorController.class);
-                   
-        StackPane root = flow.start();   
+                   .withLink(ErrorController.class,"error_supervisor",SupervisorController.class)*/;
         
-        Scene scene = new Scene(root);
+                   
+        //StackPane root = flow.start();   
+        
+        //Scene scene = new Scene(root);
         
         //scene.setCursor(Cursor.NONE);
-        String css = this.getClass().getResource("caspian.css").toExternalForm(); 
-        scene.getStylesheets().add(css);        
+        //String css = this.getClass().getResource("caspian.css").toExternalForm(); 
+        //scene.getStylesheets().add(css);        
         //stage.setFullScreen(true); //full screen without borders (no program menu bars)
         stage.setFullScreenExitHint(""); //Don't show "Press ESC to exit full screen"
         stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
-        stage.setScene(scene);
-        try{
-            log.debug("INICIANDO LAS CONEXIONES");
-            log.debug("PATH DEL DIRECTORIO DE RECURSOS: "+this.getClass().getResource("/com/tpv/resources/people.png"));
-            Connection.initConnections();
-            
-        }   catch(Exception e){
-            
-            log.error("Error general de conexiòn a la base de datos",e);
-            
-        }
+        //stage.setScene(scene);
         
         ready.setValue(Boolean.TRUE);
         notifyPreloader(new StateChangeNotification(
                  StateChangeNotification.Type.BEFORE_START));
         
-        stage.show();
+        flow.startInStage(stage);//stage.show();
+        
     }
 
     private void ejecutarSpooler(){

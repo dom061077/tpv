@@ -25,7 +25,7 @@
    <bottom>
       <HBox prefHeight="28.0" prefWidth="650.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="buttonVolver" mnemonicParsing="false" text="Button" visible="false" />
+            <Button fx:id="buttonVolver" mnemonicParsing="false" text="Button" />
          </children>
       </HBox>
    </bottom>

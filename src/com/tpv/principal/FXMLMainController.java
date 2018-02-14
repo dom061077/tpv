@@ -1039,8 +1039,8 @@ public class FXMLMainController implements Initializable {
 //        mp.setCycleCount(MediaPlayer.INDEFINITE);
 //        
 //        mp.setRate(0.5);
-        String f = this.getClass().getResource("/com/tpv/resources/sucursales.gif").toExternalForm();
-        imageViewDer.setImage(new Image(f));
+       // String f = this.getClass().getResource("/com/tpv/resources/sucursales.gif").toExternalForm();
+       // imageViewDer.setImage(new Image(f));
 //        imageViewIzq.setImage(new Image(f));
         //mp.play();
     }

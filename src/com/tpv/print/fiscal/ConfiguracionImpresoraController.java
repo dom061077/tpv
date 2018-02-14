@@ -15,6 +15,7 @@ import org.datafx.controller.flow.action.ActionTrigger;
 import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
+import javax.annotation.PreDestroy;
 
 /**
  *
@@ -49,6 +50,12 @@ public class ConfiguracionImpresoraController {
 
         });        
     }    
+    
+    @PreDestroy
+    public void destroy(){
+        buttonVolver = null;
+        vboxMenuImpresora = null;
+    }
     
 
 }
