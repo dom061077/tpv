@@ -6,7 +6,9 @@
 package com.tpv.principal;
 
 import com.tpv.enums.OrigenPantallaErrorEnum;
+import com.tpv.errorui.ErrorController;
 import com.tpv.exceptions.TpvException;
+import com.tpv.print.fiscal.ConfiguracionImpresoraController;
 import com.tpv.util.Connection;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -34,7 +36,7 @@ public class MenuPrincipalController {
     private Button buttonFacturacion;
          
     @FXML
-    @ActionTrigger("configimpresora")
+    @LinkAction(ConfiguracionImpresoraController.class)
     private Button buttonControlador;
     
     @FXML
@@ -42,7 +44,7 @@ public class MenuPrincipalController {
     private Button buttonRetirarDinero;
     
     @FXML
-    @ActionTrigger("mostrarError")
+    @LinkAction(ErrorController.class)
     private Button buttonError;
     
     @FXML

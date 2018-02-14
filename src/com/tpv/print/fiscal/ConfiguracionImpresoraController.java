@@ -11,11 +11,11 @@ import org.datafx.controller.FXMLController;
 
 import javafx.scene.control.Button;
 import javafx.fxml.FXML;
-import org.datafx.controller.flow.action.ActionTrigger;
 import javafx.application.Platform;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javax.annotation.PreDestroy;
+import org.datafx.controller.flow.action.BackAction;
 
 /**
  *
@@ -27,7 +27,7 @@ public class ConfiguracionImpresoraController {
     Logger log = Logger.getLogger(ConfiguracionImpresoraController.class);
     
     
-    @ActionTrigger("volverMenuPrincipal")
+    @BackAction
     @FXML
     private Button buttonVolver;
     

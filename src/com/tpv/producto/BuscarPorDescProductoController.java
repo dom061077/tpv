@@ -49,11 +49,11 @@ public class BuscarPorDescProductoController {
     private ProductoService productoService= new ProductoService();
     
     @FXML
-    @LinkAction(FXMLMainController.class)
+    @BackAction
     private Button buttonAceptar;
     
     @FXML
-    @LinkAction(FXMLMainController.class)
+    @BackAction
     private Button buttonCancelar;
     
     @FXML

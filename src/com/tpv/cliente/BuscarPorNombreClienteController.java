@@ -27,7 +27,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
 import org.datafx.controller.FXMLController;
-import org.datafx.controller.flow.action.ActionTrigger;
+import org.datafx.controller.flow.action.BackAction;
 
 /**
  * FXML Controller class
@@ -65,7 +65,7 @@ public class BuscarPorNombreClienteController  {
     
     
     @FXML
-    @ActionTrigger("seleccionarCliente")
+    @BackAction
     private Button volverButton;
     
     @Inject

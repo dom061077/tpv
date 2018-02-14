@@ -5,6 +5,7 @@
  */
 package com.tpv.principal;
 
+import com.tpv.cliente.BuscarPorNombreClienteController;
 import com.tpv.combos.FacturaDetalleComboData;
 import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.enums.TipoTituloSupervisorEnum;
@@ -180,7 +181,7 @@ public class FXMLMainController implements Initializable {
     private Button goToErrorButton;
     
     @FXML
-    @ActionTrigger("buscarCliente")
+    @LinkAction(BuscarPorNombreClienteController.class)
     private Button clienteButton;
     
     @FXML
