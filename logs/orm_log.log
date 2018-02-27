@@ -1,0 +1,18 @@
+2018-02-27 12:59:03,168 WARN  [HibernatePersistence          ]      HHH015016: Encountered a deprecated javax.persistence.spi.PersistenceProvider [org.hibernate.ejb.HibernatePersistence]; use [org.hibernate.jpa.HibernatePersistenceProvider] instead.
+2018-02-27 12:59:03,169 WARN  [HibernatePersistence          ]      HHH015016: Encountered a deprecated javax.persistence.spi.PersistenceProvider [org.hibernate.ejb.HibernatePersistence]; use [org.hibernate.jpa.HibernatePersistenceProvider] instead.
+2018-02-27 12:59:03,169 WARN  [HibernatePersistence          ]      HHH015016: Encountered a deprecated javax.persistence.spi.PersistenceProvider [org.hibernate.ejb.HibernatePersistence]; use [org.hibernate.jpa.HibernatePersistenceProvider] instead.
+2018-02-27 12:59:03,222 INFO  [LogHelper                     ]      HHH000204: Processing PersistenceUnitInfo [
+	name: tpvpersistence
+	...]
+2018-02-27 12:59:03,271 INFO  [Version                       ]      HHH000412: Hibernate Core {4.3.1.Final}
+2018-02-27 12:59:03,272 INFO  [Environment                   ]      HHH000206: hibernate.properties not found
+2018-02-27 12:59:03,273 INFO  [Environment                   ]      HHH000021: Bytecode provider name : javassist
+2018-02-27 12:59:03,451 INFO  [Version                       ]      HCANN000001: Hibernate Commons Annotations {4.0.4.Final}
+2018-02-27 12:59:03,477 WARN  [DriverManagerConnectionProviderImpl]      HHH000402: Using Hibernate built-in connection pool (not for production use!)
+2018-02-27 12:59:03,482 INFO  [DriverManagerConnectionProviderImpl]      HHH000401: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://127.0.0.1/luquefasesuper?autoReconnect=true]
+2018-02-27 12:59:03,482 INFO  [DriverManagerConnectionProviderImpl]      HHH000046: Connection properties: {user=root, password=****, release_mode=after_transaction}
+2018-02-27 12:59:03,483 INFO  [DriverManagerConnectionProviderImpl]      HHH000006: Autocommit mode: false
+2018-02-27 12:59:03,483 INFO  [DriverManagerConnectionProviderImpl]      HHH000115: Hibernate connection pool size: 20 (min=1)
+2018-02-27 12:59:03,697 INFO  [Dialect                       ]      HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2018-02-27 12:59:03,887 WARN  [RootClass                     ]      HHH000038: Composite-id class does not override equals(): com.tpv.modelo.ProveedorProducto$Id
+2018-02-27 12:59:03,894 INFO  [ASTQueryTranslatorFactory     ]      HHH000397: Using ASTQueryTranslatorFactory
