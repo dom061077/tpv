@@ -25,6 +25,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
+import javafx8tpv1.TabPanePrincipalController;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
@@ -38,6 +39,7 @@ import org.datafx.controller.flow.action.LinkAction;
 
 @FXMLController(value="Login.fxml", title = "Ingreso al Sistema")
 public class LoginController {
+    private TabPanePrincipalController tabController;
     Logger log = Logger.getLogger(LoginController.class);
     UsuarioService usuarioService = new UsuarioService();    
     @FXML
@@ -170,6 +172,10 @@ public class LoginController {
         String f = this.getClass().getResource("/com/tpv/resources/logologin.jpg").toExternalForm();
         imageViewLogoRight.setImage(new Image(f));
         imageViewLogoLeft.setImage(new Image(f));
+    }
+    
+    public void setTabController(TabPanePrincipalController tabPane){
+        this.tabController=tabPane;
     }
             
     

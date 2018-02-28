@@ -74,6 +74,7 @@ import org.tpv.print.fiscal.hasar.HasarCommands;
  */
 @FXMLController(value="FXMLMain.fxml", title = "Edit user")
 public class FXMLMainController implements Initializable {
+    private 
     private final static String LABEL_CANTIDAD="Cantidad:";
     private final static String LABEL_CANTIDAD_INGRESADA="(Cantidad->";
     private final static String TITULO_INGRESO_CLIENTE="Ingreso de Cliente";

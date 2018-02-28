@@ -97,11 +97,12 @@ public class Connection {
      */
     
     public static EntityManager getEm(){
-        if(emf==null)
-            return null;
-        if(em == null){
+        emf = Persistence.createEntityManagerFactory("tpvpersistence");
+        //if(emf==null)
+        //    return null;
+        //if(em == null){
             em = emf.createEntityManager();
-        }
+        //}
         return em;
     }
     

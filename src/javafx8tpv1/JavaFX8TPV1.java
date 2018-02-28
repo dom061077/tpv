@@ -5,18 +5,6 @@
  */
 package javafx8tpv1;
 
-import com.tpv.cliente.BuscarPorNombreClienteController;
-import com.tpv.combos.CombosController;
-import com.tpv.errorui.ErrorController;
-import com.tpv.exceptions.TpvException;
-import com.tpv.login.LoginController;
-import com.tpv.pagoticket.ConfirmaPagoTicketController;
-import com.tpv.pagoticket.PagoTicketController;
-import com.tpv.principal.FXMLMainController;
-import com.tpv.principal.MenuPrincipalController;
-import com.tpv.producto.BuscarPorDescProductoController;
-import com.tpv.supervisor.SupervisorController;
-import com.tpv.print.fiscal.ConfiguracionImpresoraController;
 import com.tpv.util.Connection;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,15 +14,14 @@ import javafx.application.Preloader.StateChangeNotification;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.EventHandler;
-import javafx.scene.Cursor;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCombination;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import org.datafx.controller.flow.Flow;
 //import org.datafx.samples.app.MasterViewController;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
@@ -89,7 +76,7 @@ public class JavaFX8TPV1 extends Application {
         thread.start();
         */
         
-        //Parent root = FXMLLoader.load(getClass().getResource("FXMLMain.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("TabPanePrincipalController.fxml"));
       
         /*Flow flow = new Flow(FXMLMainController.class).withLink(FXMLMainController.class
                 , "buscarCliente", ClienteSceneController.class).withLink(
@@ -107,9 +94,9 @@ public class JavaFX8TPV1 extends Application {
             
         }
         
-        Flow flow = new Flow(LoginController.class)
+        /*Flow flow = new Flow(LoginController.class)
                     //--flow ventana buscar cliente
-                   /*.withLink(LoginController.class,"iniciarSesion",MenuPrincipalController.class)
+                   .withLink(LoginController.class,"iniciarSesion",MenuPrincipalController.class)
                    .withLink(LoginController.class,"mostrarError",ErrorController.class)
                    .withLink(MenuPrincipalController.class, "facturacion", FXMLMainController.class)
                    .withLink(MenuPrincipalController.class,"configimpresora",ConfiguracionImpresoraController.class)
@@ -142,12 +129,12 @@ public class JavaFX8TPV1 extends Application {
                    .withLink(ErrorController.class,"buscarproducto", BuscarPorDescProductoController.class)
                    .withLink(ErrorController.class,"buscarcliente",BuscarPorNombreClienteController.class)
                    .withLink(ErrorController.class,"login",LoginController.class)
-                   .withLink(ErrorController.class,"error_supervisor",SupervisorController.class)*/;
+                   .withLink(ErrorController.class,"error_supervisor",SupervisorController.class);*/
         
                    
         //StackPane root = flow.start();   
         
-        //Scene scene = new Scene(root);
+        Scene scene = new Scene(root);
         
         //scene.setCursor(Cursor.NONE);
         //String css = this.getClass().getResource("caspian.css").toExternalForm(); 
@@ -161,7 +148,9 @@ public class JavaFX8TPV1 extends Application {
         notifyPreloader(new StateChangeNotification(
                  StateChangeNotification.Type.BEFORE_START));
         
-        flow.startInStage(stage);//stage.show();
+        //flow.startInStage(stage);//
+        
+        stage.show();
         
     }
 

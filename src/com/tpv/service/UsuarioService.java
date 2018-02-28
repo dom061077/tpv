@@ -10,13 +10,11 @@ import com.tpv.modelo.Checkout;
 import com.tpv.modelo.Usuario;
 import com.tpv.util.Connection;
 import java.net.SocketException;
-import javax.persistence.CacheRetrieveMode;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import org.apache.log4j.Logger;
-import org.hibernate.jpa.QueryHints;
 
 
 /**
@@ -30,12 +28,12 @@ public class UsuarioService {
         boolean flagReturn=false;
         Usuario usuario = null;
         EntityManager em = Connection.getEm();
-
+        Query query;
+        
         try{
-            usuario = (Usuario)em.createQuery("FROM Usuario u WHERE u.nombre = :nombre").setParameter("nombre", nombre)
-                            .setHint("javax.persistence.cache.storeMode", CacheRetrieveMode.BYPASS)
-                            .getSingleResult();
-            
+            query = em.createQuery("FROM Usuario u WHERE u.nombre = :nombre").setParameter("nombre", nombre);
+            query.setHint("org.hibernate.cacheMode",org.hibernate.CacheMode.IGNORE);
+            usuario = (Usuario) query.getSingleResult();
             if(usuario.getPassword().compareTo(password)==0)
                     flagReturn=true;
             else
@@ -47,6 +45,7 @@ public class UsuarioService {
             throw new TpvException("Error en la capa de servicios al autenticar usuario.");
         }finally{
             em.clear();
+            em.close();
         }
         if(flagReturn)
             return usuario;

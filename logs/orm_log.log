@@ -1,18 +1,108 @@
-2018-02-27 12:59:03,168 WARN  [HibernatePersistence          ]      HHH015016: Encountered a deprecated javax.persistence.spi.PersistenceProvider [org.hibernate.ejb.HibernatePersistence]; use [org.hibernate.jpa.HibernatePersistenceProvider] instead.
-2018-02-27 12:59:03,169 WARN  [HibernatePersistence          ]      HHH015016: Encountered a deprecated javax.persistence.spi.PersistenceProvider [org.hibernate.ejb.HibernatePersistence]; use [org.hibernate.jpa.HibernatePersistenceProvider] instead.
-2018-02-27 12:59:03,169 WARN  [HibernatePersistence          ]      HHH015016: Encountered a deprecated javax.persistence.spi.PersistenceProvider [org.hibernate.ejb.HibernatePersistence]; use [org.hibernate.jpa.HibernatePersistenceProvider] instead.
-2018-02-27 12:59:03,222 INFO  [LogHelper                     ]      HHH000204: Processing PersistenceUnitInfo [
+2018-02-28 11:22:36,000 WARN  [HibernatePersistence          ]      HHH015016: Encountered a deprecated javax.persistence.spi.PersistenceProvider [org.hibernate.ejb.HibernatePersistence]; use [org.hibernate.jpa.HibernatePersistenceProvider] instead.
+2018-02-28 11:22:36,001 WARN  [HibernatePersistence          ]      HHH015016: Encountered a deprecated javax.persistence.spi.PersistenceProvider [org.hibernate.ejb.HibernatePersistence]; use [org.hibernate.jpa.HibernatePersistenceProvider] instead.
+2018-02-28 11:22:36,001 WARN  [HibernatePersistence          ]      HHH015016: Encountered a deprecated javax.persistence.spi.PersistenceProvider [org.hibernate.ejb.HibernatePersistence]; use [org.hibernate.jpa.HibernatePersistenceProvider] instead.
+2018-02-28 11:22:36,052 INFO  [LogHelper                     ]      HHH000204: Processing PersistenceUnitInfo [
 	name: tpvpersistence
 	...]
-2018-02-27 12:59:03,271 INFO  [Version                       ]      HHH000412: Hibernate Core {4.3.1.Final}
-2018-02-27 12:59:03,272 INFO  [Environment                   ]      HHH000206: hibernate.properties not found
-2018-02-27 12:59:03,273 INFO  [Environment                   ]      HHH000021: Bytecode provider name : javassist
-2018-02-27 12:59:03,451 INFO  [Version                       ]      HCANN000001: Hibernate Commons Annotations {4.0.4.Final}
-2018-02-27 12:59:03,477 WARN  [DriverManagerConnectionProviderImpl]      HHH000402: Using Hibernate built-in connection pool (not for production use!)
-2018-02-27 12:59:03,482 INFO  [DriverManagerConnectionProviderImpl]      HHH000401: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://127.0.0.1/luquefasesuper?autoReconnect=true]
-2018-02-27 12:59:03,482 INFO  [DriverManagerConnectionProviderImpl]      HHH000046: Connection properties: {user=root, password=****, release_mode=after_transaction}
-2018-02-27 12:59:03,483 INFO  [DriverManagerConnectionProviderImpl]      HHH000006: Autocommit mode: false
-2018-02-27 12:59:03,483 INFO  [DriverManagerConnectionProviderImpl]      HHH000115: Hibernate connection pool size: 20 (min=1)
-2018-02-27 12:59:03,697 INFO  [Dialect                       ]      HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
-2018-02-27 12:59:03,887 WARN  [RootClass                     ]      HHH000038: Composite-id class does not override equals(): com.tpv.modelo.ProveedorProducto$Id
-2018-02-27 12:59:03,894 INFO  [ASTQueryTranslatorFactory     ]      HHH000397: Using ASTQueryTranslatorFactory
+2018-02-28 11:22:36,098 INFO  [Version                       ]      HHH000412: Hibernate Core {4.3.1.Final}
+2018-02-28 11:22:36,099 INFO  [Environment                   ]      HHH000206: hibernate.properties not found
+2018-02-28 11:22:36,100 INFO  [Environment                   ]      HHH000021: Bytecode provider name : javassist
+2018-02-28 11:22:36,260 INFO  [Version                       ]      HCANN000001: Hibernate Commons Annotations {4.0.4.Final}
+2018-02-28 11:22:36,281 WARN  [DriverManagerConnectionProviderImpl]      HHH000402: Using Hibernate built-in connection pool (not for production use!)
+2018-02-28 11:22:36,285 INFO  [DriverManagerConnectionProviderImpl]      HHH000401: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://127.0.0.1/luquefasesuper?autoReconnect=true]
+2018-02-28 11:22:36,286 INFO  [DriverManagerConnectionProviderImpl]      HHH000046: Connection properties: {user=root, password=****, release_mode=after_transaction}
+2018-02-28 11:22:36,286 INFO  [DriverManagerConnectionProviderImpl]      HHH000006: Autocommit mode: false
+2018-02-28 11:22:36,286 INFO  [DriverManagerConnectionProviderImpl]      HHH000115: Hibernate connection pool size: 20 (min=1)
+2018-02-28 11:22:36,495 INFO  [Dialect                       ]      HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2018-02-28 11:22:36,652 WARN  [RootClass                     ]      HHH000038: Composite-id class does not override equals(): com.tpv.modelo.ProveedorProducto$Id
+2018-02-28 11:22:36,660 INFO  [ASTQueryTranslatorFactory     ]      HHH000397: Using ASTQueryTranslatorFactory
+2018-02-28 11:22:37,455 WARN  [HibernatePersistence          ]      HHH015016: Encountered a deprecated javax.persistence.spi.PersistenceProvider [org.hibernate.ejb.HibernatePersistence]; use [org.hibernate.jpa.HibernatePersistenceProvider] instead.
+2018-02-28 11:22:37,455 WARN  [HibernatePersistence          ]      HHH015016: Encountered a deprecated javax.persistence.spi.PersistenceProvider [org.hibernate.ejb.HibernatePersistence]; use [org.hibernate.jpa.HibernatePersistenceProvider] instead.
+2018-02-28 11:22:37,455 WARN  [HibernatePersistence          ]      HHH015016: Encountered a deprecated javax.persistence.spi.PersistenceProvider [org.hibernate.ejb.HibernatePersistence]; use [org.hibernate.jpa.HibernatePersistenceProvider] instead.
+2018-02-28 11:22:37,464 INFO  [LogHelper                     ]      HHH000204: Processing PersistenceUnitInfo [
+	name: tpvpersistence
+	...]
+2018-02-28 11:22:37,493 WARN  [DriverManagerConnectionProviderImpl]      HHH000402: Using Hibernate built-in connection pool (not for production use!)
+2018-02-28 11:22:37,493 INFO  [DriverManagerConnectionProviderImpl]      HHH000401: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://127.0.0.1/luquefasesuper?autoReconnect=true]
+2018-02-28 11:22:37,494 INFO  [DriverManagerConnectionProviderImpl]      HHH000046: Connection properties: {user=root, password=****, release_mode=after_transaction}
+2018-02-28 11:22:37,494 INFO  [DriverManagerConnectionProviderImpl]      HHH000006: Autocommit mode: false
+2018-02-28 11:22:37,494 INFO  [DriverManagerConnectionProviderImpl]      HHH000115: Hibernate connection pool size: 20 (min=1)
+2018-02-28 11:22:37,503 INFO  [Dialect                       ]      HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2018-02-28 11:22:37,530 WARN  [RootClass                     ]      HHH000038: Composite-id class does not override equals(): com.tpv.modelo.ProveedorProducto$Id
+2018-02-28 11:22:37,532 INFO  [ASTQueryTranslatorFactory     ]      HHH000397: Using ASTQueryTranslatorFactory
+2018-02-28 11:22:37,592 WARN  [EntityManagerFactoryRegistry  ]      HHH000436: Entity manager factory name (tpvpersistence) is already registered.  If entity manager will be clustered or passivated, specify a unique value for property 'hibernate.ejb.entitymanager_factory_name'
+2018-02-28 11:22:47,697 WARN  [HibernatePersistence          ]      HHH015016: Encountered a deprecated javax.persistence.spi.PersistenceProvider [org.hibernate.ejb.HibernatePersistence]; use [org.hibernate.jpa.HibernatePersistenceProvider] instead.
+2018-02-28 11:22:47,697 WARN  [HibernatePersistence          ]      HHH015016: Encountered a deprecated javax.persistence.spi.PersistenceProvider [org.hibernate.ejb.HibernatePersistence]; use [org.hibernate.jpa.HibernatePersistenceProvider] instead.
+2018-02-28 11:22:47,698 WARN  [HibernatePersistence          ]      HHH015016: Encountered a deprecated javax.persistence.spi.PersistenceProvider [org.hibernate.ejb.HibernatePersistence]; use [org.hibernate.jpa.HibernatePersistenceProvider] instead.
+2018-02-28 11:22:47,720 INFO  [LogHelper                     ]      HHH000204: Processing PersistenceUnitInfo [
+	name: tpvpersistence
+	...]
+2018-02-28 11:22:47,756 WARN  [DriverManagerConnectionProviderImpl]      HHH000402: Using Hibernate built-in connection pool (not for production use!)
+2018-02-28 11:22:47,756 INFO  [DriverManagerConnectionProviderImpl]      HHH000401: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://127.0.0.1/luquefasesuper?autoReconnect=true]
+2018-02-28 11:22:47,756 INFO  [DriverManagerConnectionProviderImpl]      HHH000046: Connection properties: {user=root, password=****, release_mode=after_transaction}
+2018-02-28 11:22:47,756 INFO  [DriverManagerConnectionProviderImpl]      HHH000006: Autocommit mode: false
+2018-02-28 11:22:47,756 INFO  [DriverManagerConnectionProviderImpl]      HHH000115: Hibernate connection pool size: 20 (min=1)
+2018-02-28 11:22:47,765 INFO  [Dialect                       ]      HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2018-02-28 11:22:47,785 WARN  [RootClass                     ]      HHH000038: Composite-id class does not override equals(): com.tpv.modelo.ProveedorProducto$Id
+2018-02-28 11:22:47,786 INFO  [ASTQueryTranslatorFactory     ]      HHH000397: Using ASTQueryTranslatorFactory
+2018-02-28 11:22:47,831 WARN  [EntityManagerFactoryRegistry  ]      HHH000436: Entity manager factory name (tpvpersistence) is already registered.  If entity manager will be clustered or passivated, specify a unique value for property 'hibernate.ejb.entitymanager_factory_name'
+2018-02-28 11:22:50,648 WARN  [HibernatePersistence          ]      HHH015016: Encountered a deprecated javax.persistence.spi.PersistenceProvider [org.hibernate.ejb.HibernatePersistence]; use [org.hibernate.jpa.HibernatePersistenceProvider] instead.
+2018-02-28 11:22:50,648 WARN  [HibernatePersistence          ]      HHH015016: Encountered a deprecated javax.persistence.spi.PersistenceProvider [org.hibernate.ejb.HibernatePersistence]; use [org.hibernate.jpa.HibernatePersistenceProvider] instead.
+2018-02-28 11:22:50,648 WARN  [HibernatePersistence          ]      HHH015016: Encountered a deprecated javax.persistence.spi.PersistenceProvider [org.hibernate.ejb.HibernatePersistence]; use [org.hibernate.jpa.HibernatePersistenceProvider] instead.
+2018-02-28 11:22:50,655 INFO  [LogHelper                     ]      HHH000204: Processing PersistenceUnitInfo [
+	name: tpvpersistence
+	...]
+2018-02-28 11:22:50,673 WARN  [DriverManagerConnectionProviderImpl]      HHH000402: Using Hibernate built-in connection pool (not for production use!)
+2018-02-28 11:22:50,673 INFO  [DriverManagerConnectionProviderImpl]      HHH000401: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://127.0.0.1/luquefasesuper?autoReconnect=true]
+2018-02-28 11:22:50,673 INFO  [DriverManagerConnectionProviderImpl]      HHH000046: Connection properties: {user=root, password=****, release_mode=after_transaction}
+2018-02-28 11:22:50,673 INFO  [DriverManagerConnectionProviderImpl]      HHH000006: Autocommit mode: false
+2018-02-28 11:22:50,673 INFO  [DriverManagerConnectionProviderImpl]      HHH000115: Hibernate connection pool size: 20 (min=1)
+2018-02-28 11:22:50,680 INFO  [Dialect                       ]      HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2018-02-28 11:22:50,698 WARN  [RootClass                     ]      HHH000038: Composite-id class does not override equals(): com.tpv.modelo.ProveedorProducto$Id
+2018-02-28 11:22:50,700 INFO  [ASTQueryTranslatorFactory     ]      HHH000397: Using ASTQueryTranslatorFactory
+2018-02-28 11:22:50,741 WARN  [EntityManagerFactoryRegistry  ]      HHH000436: Entity manager factory name (tpvpersistence) is already registered.  If entity manager will be clustered or passivated, specify a unique value for property 'hibernate.ejb.entitymanager_factory_name'
+2018-02-28 11:22:51,969 WARN  [HibernatePersistence          ]      HHH015016: Encountered a deprecated javax.persistence.spi.PersistenceProvider [org.hibernate.ejb.HibernatePersistence]; use [org.hibernate.jpa.HibernatePersistenceProvider] instead.
+2018-02-28 11:22:51,969 WARN  [HibernatePersistence          ]      HHH015016: Encountered a deprecated javax.persistence.spi.PersistenceProvider [org.hibernate.ejb.HibernatePersistence]; use [org.hibernate.jpa.HibernatePersistenceProvider] instead.
+2018-02-28 11:22:51,969 WARN  [HibernatePersistence          ]      HHH015016: Encountered a deprecated javax.persistence.spi.PersistenceProvider [org.hibernate.ejb.HibernatePersistence]; use [org.hibernate.jpa.HibernatePersistenceProvider] instead.
+2018-02-28 11:22:51,976 INFO  [LogHelper                     ]      HHH000204: Processing PersistenceUnitInfo [
+	name: tpvpersistence
+	...]
+2018-02-28 11:22:51,994 WARN  [DriverManagerConnectionProviderImpl]      HHH000402: Using Hibernate built-in connection pool (not for production use!)
+2018-02-28 11:22:51,994 INFO  [DriverManagerConnectionProviderImpl]      HHH000401: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://127.0.0.1/luquefasesuper?autoReconnect=true]
+2018-02-28 11:22:51,994 INFO  [DriverManagerConnectionProviderImpl]      HHH000046: Connection properties: {user=root, password=****, release_mode=after_transaction}
+2018-02-28 11:22:51,994 INFO  [DriverManagerConnectionProviderImpl]      HHH000006: Autocommit mode: false
+2018-02-28 11:22:51,994 INFO  [DriverManagerConnectionProviderImpl]      HHH000115: Hibernate connection pool size: 20 (min=1)
+2018-02-28 11:22:52,002 INFO  [Dialect                       ]      HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2018-02-28 11:22:52,019 WARN  [RootClass                     ]      HHH000038: Composite-id class does not override equals(): com.tpv.modelo.ProveedorProducto$Id
+2018-02-28 11:22:52,021 INFO  [ASTQueryTranslatorFactory     ]      HHH000397: Using ASTQueryTranslatorFactory
+2018-02-28 11:22:52,055 WARN  [EntityManagerFactoryRegistry  ]      HHH000436: Entity manager factory name (tpvpersistence) is already registered.  If entity manager will be clustered or passivated, specify a unique value for property 'hibernate.ejb.entitymanager_factory_name'
+2018-02-28 11:22:58,586 WARN  [HibernatePersistence          ]      HHH015016: Encountered a deprecated javax.persistence.spi.PersistenceProvider [org.hibernate.ejb.HibernatePersistence]; use [org.hibernate.jpa.HibernatePersistenceProvider] instead.
+2018-02-28 11:22:58,587 WARN  [HibernatePersistence          ]      HHH015016: Encountered a deprecated javax.persistence.spi.PersistenceProvider [org.hibernate.ejb.HibernatePersistence]; use [org.hibernate.jpa.HibernatePersistenceProvider] instead.
+2018-02-28 11:22:58,587 WARN  [HibernatePersistence          ]      HHH015016: Encountered a deprecated javax.persistence.spi.PersistenceProvider [org.hibernate.ejb.HibernatePersistence]; use [org.hibernate.jpa.HibernatePersistenceProvider] instead.
+2018-02-28 11:22:58,606 INFO  [LogHelper                     ]      HHH000204: Processing PersistenceUnitInfo [
+	name: tpvpersistence
+	...]
+2018-02-28 11:22:58,640 WARN  [DriverManagerConnectionProviderImpl]      HHH000402: Using Hibernate built-in connection pool (not for production use!)
+2018-02-28 11:22:58,640 INFO  [DriverManagerConnectionProviderImpl]      HHH000401: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://127.0.0.1/luquefasesuper?autoReconnect=true]
+2018-02-28 11:22:58,640 INFO  [DriverManagerConnectionProviderImpl]      HHH000046: Connection properties: {user=root, password=****, release_mode=after_transaction}
+2018-02-28 11:22:58,640 INFO  [DriverManagerConnectionProviderImpl]      HHH000006: Autocommit mode: false
+2018-02-28 11:22:58,640 INFO  [DriverManagerConnectionProviderImpl]      HHH000115: Hibernate connection pool size: 20 (min=1)
+2018-02-28 11:22:58,647 INFO  [Dialect                       ]      HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2018-02-28 11:22:58,661 WARN  [RootClass                     ]      HHH000038: Composite-id class does not override equals(): com.tpv.modelo.ProveedorProducto$Id
+2018-02-28 11:22:58,662 INFO  [ASTQueryTranslatorFactory     ]      HHH000397: Using ASTQueryTranslatorFactory
+2018-02-28 11:22:58,693 WARN  [EntityManagerFactoryRegistry  ]      HHH000436: Entity manager factory name (tpvpersistence) is already registered.  If entity manager will be clustered or passivated, specify a unique value for property 'hibernate.ejb.entitymanager_factory_name'
+2018-02-28 11:22:58,749 WARN  [HibernatePersistence          ]      HHH015016: Encountered a deprecated javax.persistence.spi.PersistenceProvider [org.hibernate.ejb.HibernatePersistence]; use [org.hibernate.jpa.HibernatePersistenceProvider] instead.
+2018-02-28 11:22:58,749 WARN  [HibernatePersistence          ]      HHH015016: Encountered a deprecated javax.persistence.spi.PersistenceProvider [org.hibernate.ejb.HibernatePersistence]; use [org.hibernate.jpa.HibernatePersistenceProvider] instead.
+2018-02-28 11:22:58,749 WARN  [HibernatePersistence          ]      HHH015016: Encountered a deprecated javax.persistence.spi.PersistenceProvider [org.hibernate.ejb.HibernatePersistence]; use [org.hibernate.jpa.HibernatePersistenceProvider] instead.
+2018-02-28 11:22:58,755 INFO  [LogHelper                     ]      HHH000204: Processing PersistenceUnitInfo [
+	name: tpvpersistence
+	...]
+2018-02-28 11:22:58,771 WARN  [DriverManagerConnectionProviderImpl]      HHH000402: Using Hibernate built-in connection pool (not for production use!)
+2018-02-28 11:22:58,771 INFO  [DriverManagerConnectionProviderImpl]      HHH000401: using driver [com.mysql.jdbc.Driver] at URL [jdbc:mysql://127.0.0.1/luquefasesuper?autoReconnect=true]
+2018-02-28 11:22:58,771 INFO  [DriverManagerConnectionProviderImpl]      HHH000046: Connection properties: {user=root, password=****, release_mode=after_transaction}
+2018-02-28 11:22:58,771 INFO  [DriverManagerConnectionProviderImpl]      HHH000006: Autocommit mode: false
+2018-02-28 11:22:58,771 INFO  [DriverManagerConnectionProviderImpl]      HHH000115: Hibernate connection pool size: 20 (min=1)
+2018-02-28 11:22:58,777 INFO  [Dialect                       ]      HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2018-02-28 11:22:58,788 WARN  [RootClass                     ]      HHH000038: Composite-id class does not override equals(): com.tpv.modelo.ProveedorProducto$Id
+2018-02-28 11:22:58,789 INFO  [ASTQueryTranslatorFactory     ]      HHH000397: Using ASTQueryTranslatorFactory
+2018-02-28 11:22:58,834 WARN  [EntityManagerFactoryRegistry  ]      HHH000436: Entity manager factory name (tpvpersistence) is already registered.  If entity manager will be clustered or passivated, specify a unique value for property 'hibernate.ejb.entitymanager_factory_name'

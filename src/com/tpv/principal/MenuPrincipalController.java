@@ -17,6 +17,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
+import javafx8tpv1.TabPanePrincipalController;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
@@ -30,6 +31,7 @@ import org.datafx.controller.flow.action.LinkAction;
  */
 @FXMLController(value="MenuPrincipal.fxml", title = "Menu Principal")
 public class MenuPrincipalController {
+    private TabPanePrincipalController tabController;
     Logger log = Logger.getLogger(MenuPrincipalController.class);
     @FXML
     @LinkAction(FXMLMainController.class)
@@ -141,4 +143,8 @@ public class MenuPrincipalController {
         imageViewLogoBottom3.setImage(new Image(f));
                 
     }    
+    
+    public void setTabController(TabPanePrincipalController tabController){
+        this.tabController=tabController;
+    }
 }
