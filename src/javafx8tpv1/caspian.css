@@ -2667,12 +2667,6 @@
  *                                                                             *
  ******************************************************************************/
 
-.tab-pane {
-    /* -fx-tab-min-width: 4.583em;  55 */
-    /* -fx-tab-max-width: 4.583em; 55 */
-    -fx-tab-min-height: 1.75em; /* 21 */
-    -fx-tab-max-height: 1.75em; /* 21 */
-}
 
 .tab-pane > .tab-header-area > .headers-region > .tab > .tab-container > .tab-label {
     -fx-background-color: transparent;    
@@ -4454,4 +4448,20 @@ to the top and bottom -fx-padding values of the parent toolbar. */
     -fx-hgap: 10;
     -fx-vgap: 10;
 }
+
+.tab-pane {
+    -fx-tab-max-height: 0;
+
+} 
+
+.tab-pane .tab-header-area .tab-header-background {
+    //-fx-background-color: #843487;//your background colour code
+
+}
+.tab-pane .tab
+{
+   // -fx-background-color: #843487;//your background colour code
+
+}
+
 

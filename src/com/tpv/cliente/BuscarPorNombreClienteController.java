@@ -12,11 +12,14 @@ import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Cliente;
 import com.tpv.principal.DataModelTicket;
 import com.tpv.service.ClienteService;
+import java.net.URL;
 import java.util.List;
+import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -34,8 +37,8 @@ import org.datafx.controller.flow.action.BackAction;
  *
  * @author daniel
  */
-@FXMLController(value="BuscarPorNombreCliente.fxml", title = "Cliente a buscar")
-public class BuscarPorNombreClienteController  {
+//@FXMLController(value="BuscarPorNombreCliente.fxml", title = "Cliente a buscar")
+public class BuscarPorNombreClienteController implements Initializable  {
     Logger log = Logger.getLogger(BuscarPorNombreClienteController.class);
     
     private ObservableList<ClienteData> data;
@@ -72,8 +75,8 @@ public class BuscarPorNombreClienteController  {
     private DataModelTicket modelTicket;
     
     
-    @PostConstruct
-    public void init() {
+    @FXML
+    public  void initialize(URL url, ResourceBundle rb) {
         log.info("Ingresando al mètodo init");
         codigoColumn.setCellValueFactory(new PropertyValueFactory("CodigoCliente"));
         nombreColumn.setCellValueFactory(new PropertyValueFactory("NombreCliente"));

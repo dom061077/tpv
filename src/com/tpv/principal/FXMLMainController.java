@@ -56,6 +56,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.util.Callback;
 import javafx.util.Duration;
+import javafx8tpv1.TabPanePrincipalController;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
@@ -72,9 +73,9 @@ import org.tpv.print.fiscal.hasar.HasarCommands;
  * 
  * @author daniel
  */
-@FXMLController(value="FXMLMain.fxml", title = "Edit user")
+//@FXMLController(value="FXMLMain.fxml", title = "Edit user")
 public class FXMLMainController implements Initializable {
-    private 
+    TabPanePrincipalController tabController;
     private final static String LABEL_CANTIDAD="Cantidad:";
     private final static String LABEL_CANTIDAD_INGRESADA="(Cantidad->";
     private final static String TITULO_INGRESO_CLIENTE="Ingreso de Cliente";
@@ -211,8 +212,6 @@ public class FXMLMainController implements Initializable {
     @FXML
     private Label labelTotalGral;
     
-    @Inject
-    private DataModelTicket modelTicket;
 
     
     @Override
@@ -231,13 +230,13 @@ public class FXMLMainController implements Initializable {
         labelCantidad.setText(LABEL_CANTIDAD);
         iniciaIngresosVisibles();
         
-        if(modelTicket.getCodigoProdSelecEnBuscarPorDesc()>0){
-            textFieldProducto.setText(modelTicket.getCodigoProdSelecEnBuscarPorDesc()+"");
-            modelTicket.setCodigoProdSelecEnBuscarPorDesc(0);
+        if(Context.getInstance().currentDMTicket().getCodigoProdSelecEnBuscarPorDesc()>0){
+            textFieldProducto.setText(Context.getInstance().currentDMTicket().getCodigoProdSelecEnBuscarPorDesc()+"");
+            Context.getInstance().currentDMTicket().setCodigoProdSelecEnBuscarPorDesc(0);
         }
-        if(modelTicket.getCodigoClienteSelecEnBuscarPorDesc()>0){
-            textFieldCodCliente.setText(""+modelTicket.getCodigoClienteSelecEnBuscarPorDesc());
-            modelTicket.setCodigoClienteSelecEnBuscarPorDesc(0);
+        if(Context.getInstance().currentDMTicket().getCodigoClienteSelecEnBuscarPorDesc()>0){
+            textFieldCodCliente.setText(""+Context.getInstance().currentDMTicket().getCodigoClienteSelecEnBuscarPorDesc());
+            Context.getInstance().currentDMTicket().setCodigoClienteSelecEnBuscarPorDesc(0);
         }
         
                 
@@ -247,7 +246,7 @@ public class FXMLMainController implements Initializable {
         Platform.runLater(() -> {
             chequearInterfazNegativo();            
             traerInfoImpresora();
-            tableViewTickets.setItems(modelTicket.getDetalle());
+            tableViewTickets.setItems(Context.getInstance().currentDMTicket().getDetalle());
             calcularTotalGeneral();
             scrollDown();
             
@@ -267,17 +266,17 @@ public class FXMLMainController implements Initializable {
                         stackPaneIngresos.setVisible(false);                        
                         labelProducto.setVisible(true);
                         textFieldProducto.setVisible(true);
-                        modelTicket.setCliente(null);
+                        Context.getInstance().currentDMTicket().setCliente(null);
                         nombreCliente.setVisible(false);
 
-                        modelTicket.setClienteSeleccionado(true);
+                        Context.getInstance().currentDMTicket().setClienteSeleccionado(true);
                     }else{
                         traerCliente();
                     } 
                     
                 }
                 if(keyEvent.getCode()==KeyCode.F11 ){
-                    if(modelTicket.getDetalle().size()==0)
+                    if(Context.getInstance().currentDMTicket().getDetalle().size()==0)
                         volverMenuPrincipalButton.fire();
                     else{
                         Alert alert = new Alert(AlertType.WARNING,
@@ -312,8 +311,8 @@ public class FXMLMainController implements Initializable {
             textFieldProducto.requestFocus();
             textFieldProducto.setOnKeyPressed(keyEvent -> {
                 if(keyEvent.getCode() == KeyCode.ESCAPE){
-                    if(modelTicket.getDetalle().size()==0){
-                        modelTicket.setClienteSeleccionado(false);
+                    if(Context.getInstance().currentDMTicket().getDetalle().size()==0){
+                        Context.getInstance().currentDMTicket().setClienteSeleccionado(false);
                         labelProducto.setVisible(false);
                         textFieldProducto.setVisible(false);
                         stackPaneIngresos.setVisible(true);
@@ -341,7 +340,7 @@ public class FXMLMainController implements Initializable {
                         enviarComandoLineaTicket();
                         scrollDown();
                     }else{
-                        if(modelTicket.getDetalle().size()>0)
+                        if(Context.getInstance().currentDMTicket().getDetalle().size()>0)
                             pagoTicketButton.fire();
                         else{
                             Alert alert = new Alert(AlertType.WARNING
@@ -381,7 +380,7 @@ public class FXMLMainController implements Initializable {
                 }
                 
                 if(keyEvent.getCode() == KeyCode.F11){
-                    if(modelTicket.getDetalle().size()==0)
+                    if(Context.getInstance().currentDMTicket().getDetalle().size()==0)
                         volverMenuPrincipalButton.fire();
                     else{
                         
@@ -407,33 +406,33 @@ public class FXMLMainController implements Initializable {
                 
                 
                 if(keyEvent.getCode() ==  KeyCode.F5){
-                    if(modelTicket.getDetalle().size()>0){
-                        modelTicket.setTipoTituloSupervisor(TipoTituloSupervisorEnum.HABILITAR_NEGATIVO);
+                    if(Context.getInstance().currentDMTicket().getDetalle().size()>0){
+                        Context.getInstance().currentDMTicket().setTipoTituloSupervisor(TipoTituloSupervisorEnum.HABILITAR_NEGATIVO);
                         habilitarSupervisorButton.fire();
                     }
                     keyEvent.consume();
                 }
                 
                 if(keyEvent.getCode() == KeyCode.F6){
-                    modelTicket.setImprimeComoNegativo(false);
+                    Context.getInstance().currentDMTicket().setImprimeComoNegativo(false);
                     chequearInterfazNegativo();        
                     keyEvent.consume();
                 }
                 
                 if(keyEvent.getCode() == KeyCode.F7){
-                    if(modelTicket.getIdFactura()!=null){
-                        modelTicket.setTipoTituloSupervisor(TipoTituloSupervisorEnum.CANCELAR_TICKET);
+                    if(Context.getInstance().currentDMTicket().getIdFactura()!=null){
+                        Context.getInstance().currentDMTicket().setTipoTituloSupervisor(TipoTituloSupervisorEnum.CANCELAR_TICKET);
                         habilitarSupervisorButton.fire();
                     }else{
                         log.error("No se puede cancelar un ticket que no está abierto");
-                        modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
-                        modelTicket.setException(new TpvException("No se puede cancelar un ticket que no está abierto"));
+                        Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+                        Context.getInstance().currentDMTicket().setException(new TpvException("No se puede cancelar un ticket que no está abierto"));
                         goToErrorButton.fire();
                     }
                 }
                 
                 if(keyEvent.getCode() == KeyCode.F8){
-                    if(modelTicket.getDetalle().getSize()>0)
+                    if(Context.getInstance().currentDMTicket().getDetalle().getSize()>0)
                         combosButton.fire();
                 }
                     
@@ -489,7 +488,7 @@ public class FXMLMainController implements Initializable {
     }
     private void calcularTotalGeneral(){
         DecimalFormat df = new DecimalFormat("##,##0.00");
-        totalGeneral.setText(df.format(modelTicket.getTotalTicket()));
+        totalGeneral.setText(df.format(Context.getInstance().currentDMTicket().getTotalTicket()));
     }
     
     private void scrollDown(){
@@ -540,7 +539,7 @@ public class FXMLMainController implements Initializable {
                         
                 if(producto!=null){
                     log.debug("Producto encontrado: "+producto.getDescripcion());
-                    precio= productoService.getPrecioProducto(producto.getCodigoProducto(),modelTicket.getCliente());
+                    precio= productoService.getPrecioProducto(producto.getCodigoProducto(),Context.getInstance().currentDMTicket().getCliente());
                     if(producto.isProductoVilleco()){
                         if(precioOPeso.compareTo(BigDecimal.ZERO)>0){
                            cantidad = precioOPeso.divide(precio).setScale(3, RoundingMode.DOWN);
@@ -551,7 +550,7 @@ public class FXMLMainController implements Initializable {
                         }
                     }
                     if(precio.compareTo(BigDecimal.valueOf(0))>0){
-                        if(modelTicket.getDetalle().size()==0){
+                        if(Context.getInstance().currentDMTicket().getDetalle().size()==0){
                                 impresoraService.abrirTicket();
                                 //guardarFacturaPrimeraVez();
                         }
@@ -560,34 +559,34 @@ public class FXMLMainController implements Initializable {
                             descripcion="#"+descripcion;
                         }
 
-                        if(modelTicket.isImprimeComoNegativo())
+                        if(Context.getInstance().currentDMTicket().isImprimeComoNegativo())
                             if(!anulaItemIngresado(producto.getCodigoProducto(), cantidad)){
                                 textFieldCantidad.setText("");
                                 return;
                             }
                         lineaTicketData = new LineaTicketData(producto.getCodigoProducto()
-                                ,producto.getDescripcion(),cantidad,precio,modelTicket.isImprimeComoNegativo());
+                                ,producto.getDescripcion(),cantidad,precio,Context.getInstance().currentDMTicket().isImprimeComoNegativo());
 
-                        if(modelTicket.isImprimeComoNegativo()){
+                        if(Context.getInstance().currentDMTicket().isImprimeComoNegativo()){
                             precio = precio.multiply(BigDecimal.valueOf(-1));
                             cantidad = cantidad.multiply(new BigDecimal(-1));
                         }                          
                         impresoraService.imprimirLineaTicket(descripcion, cantidad
-                                    ,precio ,producto.getValorImpositivo().getValor() ,modelTicket.isImprimeComoNegativo(), producto.getImpuestoInterno());
+                                    ,precio ,producto.getValorImpositivo().getValor() ,Context.getInstance().currentDMTicket().isImprimeComoNegativo(), producto.getImpuestoInterno());
                         
                   
 
 
-        //                    modelTicket.getDetalle().add(lineaTicketData);                    
-        //                    if(modelTicket.getDetalle().size()>1){
+        //                    Context.getInstance().currentDMTicket().getDetalle().add(lineaTicketData);                    
+        //                    if(Context.getInstance().currentDMTicket().getDetalle().size()>1){
         //                            agregarDetalleFactura(lineaTicketData);
         //
         //                    }
                     }
                 }
         }catch(TpvException e){
-                modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
-                modelTicket.setException(e);
+                Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+                Context.getInstance().currentDMTicket().setException(e);
                 goToErrorButton.fire();
         }
         
@@ -626,14 +625,14 @@ public class FXMLMainController implements Initializable {
         gridPaneIngresos.add(textFieldCodCliente,1,1);
         gridPaneIngresos.add(textFieldCantidad,1,1);
         
-        if(modelTicket.isClienteSeleccionado()){
+        if(Context.getInstance().currentDMTicket().isClienteSeleccionado()){
             labelProducto.setVisible(true);
             textFieldProducto.setVisible(true);
             labelCliente.setVisible(false);
             textFieldCodCliente.setVisible(false);
             stackPaneIngresos.setVisible(false);
-            if(modelTicket.getCliente()!=null){
-                nombreCliente.setText(modelTicket.getCliente().getRazonSocial());
+            if(Context.getInstance().currentDMTicket().getCliente()!=null){
+                nombreCliente.setText(Context.getInstance().currentDMTicket().getCliente().getRazonSocial());
             }
         }else{
             nombreCliente.setVisible(false);
@@ -658,13 +657,13 @@ public class FXMLMainController implements Initializable {
                 stackPaneIngresos.setVisible(false);                                    
                 labelProducto.setVisible(true);
                 textFieldProducto.setVisible(true);
-                modelTicket.setClienteSeleccionado(true);
-                modelTicket.setCliente(cliente);
+                Context.getInstance().currentDMTicket().setClienteSeleccionado(true);
+                Context.getInstance().currentDMTicket().setCliente(cliente);
             }else
                 textFieldCodCliente.setText("");
         }catch(TpvException e){
-                modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
-                modelTicket.setException(e);
+                Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+                Context.getInstance().currentDMTicket().setException(e);
                 goToErrorButton.fire();
         }
             
@@ -672,26 +671,26 @@ public class FXMLMainController implements Initializable {
     }
     
     public void traerInfoImpresora(){
-        if(modelTicket.getNroTicket()==0){
+        if(Context.getInstance().currentDMTicket().getNroTicket()==0){
             try{
 
                 String retorno[] = impresoraService.getPtoVtaNrosTicket();
-                modelTicket.setNroTicket(Integer.parseInt(retorno[1])+1);
-                modelTicket.setPuntoVenta(Long.parseLong(retorno[0]));
+                Context.getInstance().currentDMTicket().setNroTicket(Integer.parseInt(retorno[1])+1);
+                Context.getInstance().currentDMTicket().setPuntoVenta(Long.parseLong(retorno[0]));
 
             }catch(TpvException e){
                 log.error(e.getMessage());
-                modelTicket.setException(e);
-                modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+                Context.getInstance().currentDMTicket().setException(e);
+                Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
                 goToErrorButton.fire();
                 
             }
         }
-        nroticket.setText("Pto.Venta: "+modelTicket.getPuntoVenta()+" Nro. Ticket (B/C): "
-                            +modelTicket.getNroTicket()
+        nroticket.setText("Pto.Venta: "+Context.getInstance().currentDMTicket().getPuntoVenta()+" Nro. Ticket (B/C): "
+                            +Context.getInstance().currentDMTicket().getNroTicket()
                 //+" Nro. Ticket (A): "+retorno[2]
         );
-        checkout.setText("Checkout: "+modelTicket.getCheckout().getId());
+        checkout.setText("Checkout: "+Context.getInstance().currentDMTicket().getCheckout().getId());
         
 //            Worker<String> worker = new Task<String>(){
 //                @Override
@@ -707,15 +706,15 @@ public class FXMLMainController implements Initializable {
 //                    }
 //                    
 //                    if(!Connection.getStcp().isConnected()){
-//                        modelTicket.setException(new TpvException("La impresora no está conectada"));
-//                        throw modelTicket.getTpvException();
+//                        Context.getInstance().currentDMTicket().setException(new TpvException("La impresora no está conectada"));
+//                        throw Context.getInstance().currentDMTicket().getTpvException();
 //                    }else{
 //                            retorno = impresoraService.getPtoVtaNrosTicket();
 //                    }
 //                    
 //                    updateMessage("Pto.Venta: "+retorno[0]+" Nro. Ticket (B/C): "
 //                            +retorno[1]+" Nro. Ticket (A): "+retorno[2]);
-//                    modelTicket.setNroTicket(Integer.parseInt(retorno[1]));
+//                    Context.getInstance().currentDMTicket().setNroTicket(Integer.parseInt(retorno[1]));
 //                    return "Tarea finalizada";
 //                }
 //            };
@@ -729,9 +728,9 @@ public class FXMLMainController implements Initializable {
 
     
     private void chequearInterfazNegativo(){
-        //ingresoNegativoHabilitado.setVisible(modelTicket.isImprimeComoNegativo());
-        ingresoNegativoPane.setVisible(modelTicket.isImprimeComoNegativo());
-//        if(modelTicket.isImprimeComoNegativo()){
+        //ingresoNegativoHabilitado.setVisible(Context.getInstance().currentDMTicket().isImprimeComoNegativo());
+        ingresoNegativoPane.setVisible(Context.getInstance().currentDMTicket().isImprimeComoNegativo());
+//        if(Context.getInstance().currentDMTicket().isImprimeComoNegativo()){
 //            labelProducto.getStyleClass().clear();
 //            labelProducto.getStyleClass().add("label_textfield_negativo");
 //            labelCliente.getStyleClass().clear();
@@ -813,14 +812,14 @@ public class FXMLMainController implements Initializable {
     private void guardarFacturaPrimeraVez(){
         log.debug("Guardar Factura Primera Vez:");
         Factura factura = new Factura();
-        factura.setTotal(modelTicket.getTotalTicket());
+        factura.setTotal(Context.getInstance().currentDMTicket().getTotalTicket());
         factura.setEstado(FacturaEstadoEnum.ABIERTA);
-        factura.setCliente(modelTicket.getCliente());
-        if(modelTicket.getCliente()!=null)
-            factura.setCondicionIva(modelTicket.getCliente().getCondicionIva());
-        factura.setCheckout(modelTicket.getCheckout());
-        factura.setPrefijoFiscal(modelTicket.getPuntoVenta());
-        ListProperty<LineaTicketData> detalle =  modelTicket.getDetalle();
+        factura.setCliente(Context.getInstance().currentDMTicket().getCliente());
+        if(Context.getInstance().currentDMTicket().getCliente()!=null)
+            factura.setCondicionIva(Context.getInstance().currentDMTicket().getCliente().getCondicionIva());
+        factura.setCheckout(Context.getInstance().currentDMTicket().getCheckout());
+        factura.setPrefijoFiscal(Context.getInstance().currentDMTicket().getPuntoVenta());
+        ListProperty<LineaTicketData> detalle =  Context.getInstance().currentDMTicket().getDetalle();
         
         detalle.forEach(item->{
             FacturaDetalle facturaDetalle = new FacturaDetalle();
@@ -829,8 +828,8 @@ public class FXMLMainController implements Initializable {
                 productoService.getProductoPorCodigo(item.getCodigoProducto());
             }catch(TpvException e){
                 log.error("Error: "+e.getMessage());
-                modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
-                modelTicket.setException(e);
+                Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+                Context.getInstance().currentDMTicket().setException(e);
                 goToErrorButton.fire();
             }
 
@@ -845,22 +844,22 @@ public class FXMLMainController implements Initializable {
         Factura facturaGuardada=null;
         try{
             factura.setNumeroComprobante(impresoraService.getNroUltimoTicketBC());
-            factura.setUsuario(modelTicket.getUsuario());
-            factura.setCheckout(modelTicket.getCheckout());
+            factura.setUsuario(Context.getInstance().currentDMTicket().getUsuario());
+            factura.setCheckout(Context.getInstance().currentDMTicket().getCheckout());
             facturaGuardada=factService.registrarFactura(factura);
         }catch(TpvException e){
             log.error("Error: "+e.getMessage());
-            modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
-            modelTicket.setException(e);
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+            Context.getInstance().currentDMTicket().setException(e);
             goToErrorButton.fire();
         }
-        modelTicket.setIdFactura(facturaGuardada.getId());
+        Context.getInstance().currentDMTicket().setIdFactura(facturaGuardada.getId());
         log.debug("ID de factura: "+facturaGuardada.getId());
     }  
     
     private void agregarDetalleFactura(){
-        modelTicket.getDetalle().add(lineaTicketData);                    
-//        if(modelTicket.getDetalle()d.size()>1){
+        Context.getInstance().currentDMTicket().getDetalle().add(lineaTicketData);                    
+//        if(Context.getInstance().currentDMTicket().getDetalle()d.size()>1){
 //            agregarDetalleFactura(lineaTicketData);
 //
 //        }
@@ -876,11 +875,11 @@ public class FXMLMainController implements Initializable {
 
         try{
             facturaDetalle.setProducto(productoService.getProductoPorCodigo(lineaTicketData.getCodigoProducto()));
-            factService.agregarDetalleFactura(modelTicket.getIdFactura(), facturaDetalle);
+            factService.agregarDetalleFactura(Context.getInstance().currentDMTicket().getIdFactura(), facturaDetalle);
         }catch(TpvException e){
             log.error("Error: "+e.getMessage());
-            modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
-            modelTicket.setException(e);
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+            Context.getInstance().currentDMTicket().setException(e);
             goToErrorButton.fire();
         }
     }
@@ -1052,16 +1051,16 @@ public class FXMLMainController implements Initializable {
     
     private void verificarDetalleTableView(){
         log.info("Verificando detalle de TableView");
-        if(modelTicket.isReinicioVerificado()){
+        if(Context.getInstance().currentDMTicket().isReinicioVerificado()){
             return;
         }
-        if(modelTicket.getDetalle().size()==0 && 
+        if(Context.getInstance().currentDMTicket().getDetalle().size()==0 && 
                 tableViewTickets.getItems().size()>0)
             tableViewTickets.getItems().clear();
         Factura factura = null;
         try{
-            factura = factService.getFacturaAbiertaPorCheckout(modelTicket.getCheckout().getId()
-                    ,modelTicket.getUsuario().getIdUsuario());
+            factura = factService.getFacturaAbiertaPorCheckout(Context.getInstance().currentDMTicket().getCheckout().getId()
+                    ,Context.getInstance().currentDMTicket().getUsuario().getIdUsuario());
             if(factura!=null){
                 for(Iterator iterator = factura.getDetalle().iterator();iterator.hasNext();){
                     FacturaDetalle fd = (FacturaDetalle)iterator.next();
@@ -1072,14 +1071,14 @@ public class FXMLMainController implements Initializable {
                                     ,(fd.getSubTotal().compareTo(BigDecimal.ZERO)<0?true:false)
                     );   
                     if(factura.getCliente()!=null){
-                        modelTicket.setCliente(factura.getCliente());
+                        Context.getInstance().currentDMTicket().setCliente(factura.getCliente());
                     }
-                    modelTicket.setClienteSeleccionado(true);
-                    modelTicket.getDetalle().add(lineaTicketData);
+                    Context.getInstance().currentDMTicket().setClienteSeleccionado(true);
+                    Context.getInstance().currentDMTicket().getDetalle().add(lineaTicketData);
                 }
-                modelTicket.setIdFactura(factura.getId());
+                Context.getInstance().currentDMTicket().setIdFactura(factura.getId());
             }
-            modelTicket.setReinicioVerificado(true);                    
+            Context.getInstance().currentDMTicket().setReinicioVerificado(true);                    
         }catch(TpvException e){
             log.error("Error en capa controller: "+e.getMessage());
             Alert alert = new Alert(AlertType.ERROR
@@ -1091,10 +1090,10 @@ public class FXMLMainController implements Initializable {
                             }
                         });
               
-//            modelTicket.setCliente(null);
-//            modelTicket.setClienteSeleccionado(false);
-//            modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
-//            modelTicket.setException(e);
+//            Context.getInstance().currentDMTicket().setCliente(null);
+//            Context.getInstance().currentDMTicket().setClienteSeleccionado(false);
+//            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+//            Context.getInstance().currentDMTicket().setException(e);
 //            goToErrorButton.fire();
         }
     }
@@ -1104,7 +1103,7 @@ public class FXMLMainController implements Initializable {
         ListProperty<FacturaDetalleComboData> listCombos = new SimpleListProperty<>(combosItems);
         
         try{
-            Factura factura = factService.calcularCombos(modelTicket.getIdFactura());
+            Factura factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdFactura());
             for(Iterator<FacturaDetalleCombo> it = factura.getDetalleCombosAux().iterator();it.hasNext();){
                 FacturaDetalleCombo fdc = it.next();
                 FacturaDetalleComboData fdcd = new FacturaDetalleComboData(
@@ -1119,12 +1118,15 @@ public class FXMLMainController implements Initializable {
             }
         }catch(TpvException e){
             log.error("Error en capa controller: "+e.getMessage());
-            modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
-            modelTicket.setException(e);
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+            Context.getInstance().currentDMTicket().setException(e);
             goToErrorButton.fire();
         }
     }
     
+    public void setTabController(TabPanePrincipalController tabPane){
+        this.tabController=tabPane;
+    }
     
     
 }

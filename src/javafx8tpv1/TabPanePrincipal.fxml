@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="528.0" prefWidth="806.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="528.0" prefWidth="806.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafx8tpv1.TabPanePrincipalController">
    <children>
       <BorderPane focusTraversable="true" prefHeight="519.0" prefWidth="806.0">
          <center>
@@ -79,9 +79,9 @@
          <bottom>
             <HBox prefHeight="17.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="buttonMenuPrincipal" mnemonicParsing="false" text="Ir a Menu Principal" />
-                  <Button mnemonicParsing="false" text="Ir a Facturacion" />
-                  <Button mnemonicParsing="false" text="Login" />
+                  <Button fx:id="buttonMenuPrincipal" mnemonicParsing="false" text="Ir a Menu Principal" visible="false" />
+                  <Button mnemonicParsing="false" text="Ir a Facturacion" visible="false" />
+                  <Button mnemonicParsing="false" text="Login" visible="false" />
                </children>
             </HBox>
          </bottom>

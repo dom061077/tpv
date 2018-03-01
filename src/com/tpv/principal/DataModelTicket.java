@@ -17,12 +17,9 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Iterator;
 import javafx.beans.property.ListProperty;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleListProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.datafx.controller.flow.injection.FlowScoped;
 //import org.datafx.samples.app.Person;
 
 /**
@@ -30,7 +27,7 @@ import org.datafx.controller.flow.injection.FlowScoped;
  * @author daniel
  */
 
-@FlowScoped
+
 public class DataModelTicket {
     private ListProperty<LineaTicketData> detalle;
     private ListProperty<LineaPagoData> pagos;

@@ -9,18 +9,20 @@ import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Factura;
 import com.tpv.modelo.FacturaDetalleCombo;
-import com.tpv.principal.DataModelTicket;
-import com.tpv.principal.LineaTicketData;
+import com.tpv.principal.Context;
 import com.tpv.service.FacturacionService;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.Iterator;
+import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
@@ -28,8 +30,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import org.apache.log4j.Logger;
 import org.datafx.controller.flow.action.ActionTrigger;
 
@@ -37,7 +37,7 @@ import org.datafx.controller.flow.action.ActionTrigger;
  *
  * @author daniel
  */
-public class CombosController{
+public class CombosController implements Initializable{
 
     Logger log = Logger.getLogger(CombosController.class);
     
@@ -82,16 +82,14 @@ public class CombosController{
     
            
     
-    @Inject
-    private DataModelTicket modelTicket;
     private FacturacionService factService = new FacturacionService();
     
     ObservableList<FacturaDetalleComboData> combosItems = FXCollections.observableArrayList();
     ListProperty<FacturaDetalleComboData> listCombos = new SimpleListProperty<>(combosItems);
     
     
-    @PostConstruct
-    public void init() {
+    @FXML
+    public  void initialize(URL url, ResourceBundle rb) {
         Platform.runLater(() -> {
             initTableViewCombos();
             tableViewCombos.setOnKeyPressed(keyEvent->{
@@ -173,7 +171,7 @@ public class CombosController{
         DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
         
         try{
-            Factura factura = factService.calcularCombos(modelTicket.getIdFactura());
+            Factura factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdFactura());
             totalBonificado = BigDecimal.ZERO;
             for(Iterator<FacturaDetalleCombo> it = factura.getDetalleCombosAux().iterator();it.hasNext();){
                 FacturaDetalleCombo fdc = it.next();
@@ -192,13 +190,13 @@ public class CombosController{
                 totalBonificaciones.setText(df.format(totalBonificado));
                 
             }
-                totalTicket.setText(df.format(modelTicket.getTotalTicket()));
-                terminaPagando.setText(df.format(modelTicket.getTotalTicket().subtract(totalBonificado)));
+                totalTicket.setText(df.format(Context.getInstance().currentDMTicket().getTotalTicket()));
+                terminaPagando.setText(df.format(Context.getInstance().currentDMTicket().getTotalTicket().subtract(totalBonificado)));
             
         }catch(TpvException e){
             log.error("Error en capa controller: "+e.getMessage());
-            modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
-            modelTicket.setException(e);
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+            Context.getInstance().currentDMTicket().setException(e);
             goToErrorButton.fire();
         }
     }

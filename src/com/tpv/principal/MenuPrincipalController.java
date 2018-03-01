@@ -10,8 +10,11 @@ import com.tpv.errorui.ErrorController;
 import com.tpv.exceptions.TpvException;
 import com.tpv.print.fiscal.ConfiguracionImpresoraController;
 import com.tpv.util.Connection;
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -29,8 +32,8 @@ import org.datafx.controller.flow.action.LinkAction;
  *
  * @author daniel
  */
-@FXMLController(value="MenuPrincipal.fxml", title = "Menu Principal")
-public class MenuPrincipalController {
+//@FXMLController(value="MenuPrincipal.fxml", title = "Menu Principal")
+public class MenuPrincipalController implements Initializable {
     private TabPanePrincipalController tabController;
     Logger log = Logger.getLogger(MenuPrincipalController.class);
     @FXML
@@ -93,8 +96,9 @@ public class MenuPrincipalController {
     private DataModelTicket modelTicket;
     
         
-    @PostConstruct
-    public void init(){
+    
+    @FXML
+    public  void initialize(URL url, ResourceBundle rb) {
         log.info("Ingresando al menú principal");
         loadImage();
         Platform.runLater(()->{

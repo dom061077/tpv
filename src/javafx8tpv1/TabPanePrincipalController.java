@@ -15,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TabPane;
+import org.apache.log4j.Logger;
 import org.datafx.controller.FXMLController;
 
 /**
@@ -24,7 +25,7 @@ import org.datafx.controller.FXMLController;
 
 //@FXMLController(value="TabPanePrincipal.fxml", title = "Ingreso al Sistema")
 public class TabPanePrincipalController implements Initializable {
-    
+    Logger log = Logger.getLogger(TabPanePrincipalController.class);
     @FXML private LoginController loginController;
     @FXML private MenuPrincipalController menuController;
     @FXML private FXMLMainController facturacionController;
@@ -43,11 +44,12 @@ public class TabPanePrincipalController implements Initializable {
     public  void initialize(URL url, ResourceBundle rb) {
         // TODO
         this.loginController.setTabController(this);
-        this.loginController.password.requestFocus();
+        this.loginController.getPassword().requestFocus();
+        this.loginController.setTabController(this);
         this.menuController.setTabController(this);
         this.facturacionController.setTabController(this);
-        this.tabPane.setOnKeyPressed(keyEvent->{
-            System.out.println("Tecla pulsada en tabpane");
+        buttonMenuPrincipal.setOnAction((ActionEvent event)->{
+            log.debug("Botón de ingreso de menu pulsado");
         });
     }      
     

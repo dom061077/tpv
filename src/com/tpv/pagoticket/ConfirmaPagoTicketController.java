@@ -10,20 +10,23 @@ import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Factura;
 import com.tpv.modelo.FacturaDetalleCombo;
 import com.tpv.modelo.FacturaFormaPagoDetalle;
-import com.tpv.principal.DataModelTicket;
+import com.tpv.principal.Context;
 import com.tpv.print.event.FiscalPrinterEvent;
 import com.tpv.service.FacturacionService;
 import com.tpv.service.ImpresoraService;
 import com.tpv.service.PagoService;
 import com.tpv.service.ProductoService;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
@@ -33,8 +36,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import org.apache.log4j.Logger;
 import org.datafx.controller.flow.action.ActionTrigger;
 import org.datafx.controller.flow.context.FXMLViewFlowContext;
@@ -50,7 +51,7 @@ import org.tpv.print.fiscal.msg.FiscalMessages;
  */
 
 //@FXMLController(value="ConfirmarPagoTicket.fxml", title = "Confirmar Ticket")
-public class ConfirmaPagoTicketController {
+public class ConfirmaPagoTicketController implements Initializable{
     Logger log = Logger.getLogger(ConfirmaPagoTicketController.class);
     
     private FacturacionService factService = new FacturacionService();
@@ -125,16 +126,15 @@ public class ConfirmaPagoTicketController {
     @FXML
     private Label totalBonificacionesLabel;
 
-    @Inject
-    private DataModelTicket modelTicket;
     
     
-    @PostConstruct
-    public void init(){
+    @FXML
+    public  void initialize(URL url, ResourceBundle rb) {
             log.info("Ingresando a la confirmación de pago");
             asignarEvento();
             //labelError.setText(model.getTpvException().getMessage());
-            modelTicket = context.getRegisteredObject(DataModelTicket.class);
+            //modelTicket = context.getRegisteredObject(DataModelTicket.class);
+            
             codigoPagoColumn.setCellValueFactory(new PropertyValueFactory<LineaPagoData,Integer>("codigoPago"));
             cantidadCuotaColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
             cantidadCuotaColumn.setCellValueFactory(new PropertyValueFactory<LineaPagoData,Integer>("cantidadCuotas"));
@@ -204,13 +204,13 @@ public class ConfirmaPagoTicketController {
             
             DecimalFormat df = new DecimalFormat("##,##0.00");
             
-            totalPagosLabel.setText(df.format(modelTicket.getTotalPagos()));
-            totalBonificacionesLabel.setText(df.format(modelTicket.getBonificaciones()));
-            totalTicketLabel.setText(df.format(modelTicket.getTotalTicket()));
-            cambioLabel.setText(df.format(modelTicket.getSaldo().abs()));
+            totalPagosLabel.setText(df.format(Context.getInstance().currentDMTicket().getTotalPagos()));
+            totalBonificacionesLabel.setText(df.format(Context.getInstance().currentDMTicket().getBonificaciones()));
+            totalTicketLabel.setText(df.format(Context.getInstance().currentDMTicket().getTotalTicket()));
+            cambioLabel.setText(df.format(Context.getInstance().currentDMTicket().getSaldo().abs()));
             
             Platform.runLater(()->{
-                tableViewPagos.setItems(modelTicket.getPagos());
+                tableViewPagos.setItems(Context.getInstance().currentDMTicket().getPagos());
                 borderPane.setOnKeyPressed(keyEvent->{
                     if(keyEvent.getCode()==KeyCode.ESCAPE){
                         volverButton.fire();
@@ -231,12 +231,12 @@ public class ConfirmaPagoTicketController {
     public void confirmarFactura(){
         try{
             log.info("Cerrando y confirmando factura ");
-            Factura factura = factService.calcularCombos(modelTicket.getIdFactura());
+            Factura factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdFactura());
             for(Iterator<FacturaDetalleCombo> it = factura.getDetalleCombosAux().iterator();it.hasNext();){
                 FacturaDetalleCombo fdc = it.next();
                 //TODO en las bonificaciones de los combos
                 //impresoraService.imprimirLineaTicket(fdc.getCombo().getDescripcion(), fdc.getCantidad()
-                //            ,fdc.getBonificacion() ,producto.getValorImpositivo().getValor() ,modelTicket.isImprimeComoNegativo(), producto.getImpuestoInterno());
+                //            ,fdc.getBonificacion() ,producto.getValorImpositivo().getValor() ,Context.getInstance().currentDMTicket().isImprimeComoNegativo(), producto.getImpuestoInterno());
                 
             }
             
@@ -245,8 +245,8 @@ public class ConfirmaPagoTicketController {
 
         }catch(TpvException e){
             log.error("Error en controlador llamando al método cerrarTicket de ImpresoraService",e);
-            modelTicket.setException(e);
-            modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CONFIRMARTICKET);
+            Context.getInstance().currentDMTicket().setException(e);
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CONFIRMARTICKET);
             goToErrorButton.fire();
         }catch(NullPointerException e){
             e.printStackTrace();
@@ -262,11 +262,11 @@ public class ConfirmaPagoTicketController {
                 log.debug("Se ejecutó correctamente el siguiente comando:");
                 if(command.getCommandCode()==HasarCommands.CMD_CLOSE_FISCAL_RECEIPT){
                     try{
-                            log.info("El cierre del ticket para el id de Factura : "+modelTicket.getIdFactura()
+                            log.info("El cierre del ticket para el id de Factura : "+Context.getInstance().currentDMTicket().getIdFactura()
                                 +" en la impresora fiscal fue correcto. A continuación se cierra el ticket en la base de datos");
                             List<FacturaFormaPagoDetalle> pagos = new ArrayList<FacturaFormaPagoDetalle>();
-                            ListProperty<LineaPagoData> detallePagosData = modelTicket.getPagos();
-                            Factura factura = factService.calcularCombos(modelTicket.getIdFactura());
+                            ListProperty<LineaPagoData> detallePagosData = Context.getInstance().currentDMTicket().getPagos();
+                            Factura factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdFactura());
                             log.info("Cantidad de combos a guardar en la base de datos: "+factura.getDetalleCombosAux().size());
                             for(Iterator<FacturaDetalleCombo> it = factura.getDetalleCombosAux().iterator();it.hasNext();){
                                 FacturaDetalleCombo fdc = it.next();
@@ -275,7 +275,7 @@ public class ConfirmaPagoTicketController {
                                 log.info("          Combo: "+fdc.getCombo().getDescripcion());
                             }
                             
-                            //Factura factura = factService.getFactura(modelTicket.getIdFactura());
+                            //Factura factura = factService.getFactura(Context.getInstance().currentDMTicket().getIdFactura());
                             log.info("Cantidad de formas de pago: "+detallePagosData.size());
                             for(Iterator<LineaPagoData> it = detallePagosData.iterator();it.hasNext();){
                                 LineaPagoData item = it.next();
@@ -283,8 +283,8 @@ public class ConfirmaPagoTicketController {
                                 try{
                                     formaPagoDetalle.setFormaPago(pagoService.getFormaPago(item.getCodigoPago()));
                                 }catch(TpvException e){
-                                        modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CONFIRMARTICKET);
-                                        modelTicket.setException(e);
+                                        Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CONFIRMARTICKET);
+                                        Context.getInstance().currentDMTicket().setException(e);
                                         goToErrorButton.fire();
                                 }
 
@@ -300,17 +300,17 @@ public class ConfirmaPagoTicketController {
                             }
                             
                             factService.confirmarFactura(factura);
-                            modelTicket.setCliente(null);
-                            modelTicket.setClienteSeleccionado(false);
-                            modelTicket.setNroTicket(modelTicket.getNroTicket()+1);
-                            modelTicket.getDetalle().clear();
-                            modelTicket.getPagos().clear();
-                            modelTicket.setImprimeComoNegativo(false);
+                            Context.getInstance().currentDMTicket().setCliente(null);
+                            Context.getInstance().currentDMTicket().setClienteSeleccionado(false);
+                            Context.getInstance().currentDMTicket().setNroTicket(Context.getInstance().currentDMTicket().getNroTicket()+1);
+                            Context.getInstance().currentDMTicket().getDetalle().clear();
+                            Context.getInstance().currentDMTicket().getPagos().clear();
+                            Context.getInstance().currentDMTicket().setImprimeComoNegativo(false);
                             log.info("Factura cerrada y confirmada");
                             confirmarButton.fire();
                     }catch(TpvException e){
-                        modelTicket.setException(e);
-                        modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CONFIRMARTICKET);
+                        Context.getInstance().currentDMTicket().setException(e);
+                        Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CONFIRMARTICKET);
                         goToErrorButton.fire();
                     }catch(NullPointerException e){
                         e.printStackTrace();
@@ -361,10 +361,10 @@ public class ConfirmaPagoTicketController {
     public void guardarTicket(){
         DataModelTicket modelTicket = context.getRegisteredObject(DataModelTicket.class);
         Factura factura = new Factura();
-        factura.setTotal(modelTicket.getTotalTicket());
-        factura.setCliente(modelTicket.getCliente());
+        factura.setTotal(Context.getInstance().currentDMTicket().getTotalTicket());
+        factura.setCliente(Context.getInstance().currentDMTicket().getCliente());
         //factura.setNumeroComprobante(LABEL_CANTIDAD);
-        ListProperty<LineaTicketData> detalle =  modelTicket.getDetalle();
+        ListProperty<LineaTicketData> detalle =  Context.getInstance().currentDMTicket().getDetalle();
         
         detalle.forEach(item->{
             FacturaDetalle facturaDetalle = new FacturaDetalle();
@@ -378,19 +378,19 @@ public class ConfirmaPagoTicketController {
         try{
             impresoraService.cerrarTicket();
             factura.setNumeroComprobante(impresoraService.getNroUltimoTicketBC());
-            factura.setUsuario(modelTicket.getUsuario());
+            factura.setUsuario(Context.getInstance().currentDMTicket().getUsuario());
             //factService.registrarFactura(factura);
-            modelTicket.setCliente(null);
-            modelTicket.setClienteSeleccionado(false);
-            modelTicket.setNroTicket(modelTicket.getNroTicket()+1);
-            modelTicket.getDetalle().clear();
-            modelTicket.getPagos().clear();
-            modelTicket.setImprimeComoNegativo(false);
+            Context.getInstance().currentDMTicket().setCliente(null);
+            Context.getInstance().currentDMTicket().setClienteSeleccionado(false);
+            Context.getInstance().currentDMTicket().setNroTicket(Context.getInstance().currentDMTicket().getNroTicket()+1);
+            Context.getInstance().currentDMTicket().getDetalle().clear();
+            Context.getInstance().currentDMTicket().getPagos().clear();
+            Context.getInstance().currentDMTicket().setImprimeComoNegativo(false);
            
 
         }catch(TpvException e){
             log.error("Error: "+e.getMessage());
-            modelTicket.setException(e);
+            Context.getInstance().currentDMTicket().setException(e);
             mostrarErrorButton.fire();
             
         }

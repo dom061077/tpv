@@ -8,13 +8,14 @@ package com.tpv.producto;
 import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.ListaPrecioProducto;
-import com.tpv.principal.DataModelTicket;
-import com.tpv.principal.FXMLMainController;
+import com.tpv.principal.Context;
 import com.tpv.principal.LineaTicketData;
 import com.tpv.service.ProductoService;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -25,6 +26,7 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -32,17 +34,13 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import org.apache.log4j.Logger;
-import org.datafx.controller.FXMLController;
 import org.datafx.controller.flow.action.BackAction;
-import org.datafx.controller.flow.action.LinkAction;
 
 
 
-@FXMLController(value="BuscarPorDescProducto.fxml", title = "busqueda")
-public class BuscarPorDescProductoController {
+//@FXMLController(value="BuscarPorDescProducto.fxml", title = "busqueda")
+public class BuscarPorDescProductoController implements Initializable{
     Logger log = Logger.getLogger(BuscarPorDescProductoController.class);
     
     private ObservableList<ProductoData> data;
@@ -72,12 +70,10 @@ public class BuscarPorDescProductoController {
     @FXML
     private TableColumn descripcionColumn;
 
-    @Inject
-    private DataModelTicket modelTicket;
     
     
-    @PostConstruct
-    public void init(){
+    @FXML
+    public void initialize(URL url, ResourceBundle rb) {
         log.info("Ingesando al método init");
         
         codigoColumn.setCellValueFactory(new  PropertyValueFactory("CodigoProducto"));
@@ -106,7 +102,7 @@ public class BuscarPorDescProductoController {
                     if(keyEvent.getCode()==KeyCode.ENTER){
                         if(textFieldFiltroProducto.getText().trim().equals("")){
                             ProductoData productoData = (ProductoData)tableView.getSelectionModel().getSelectedItem();
-                            modelTicket.setCodigoProdSelecEnBuscarPorDesc(productoData.CodigoProductoProperty().get());
+                            Context.getInstance().currentDMTicket().setCodigoProdSelecEnBuscarPorDesc(productoData.CodigoProductoProperty().get());
                             buttonAceptar.fire();
                             keyEvent.consume();
                         }
@@ -117,7 +113,7 @@ public class BuscarPorDescProductoController {
                         
                     }
                     if(keyEvent.getCode()==KeyCode.ESCAPE){
-                        modelTicket.setCodigoProdSelecEnBuscarPorDesc(0);
+                        Context.getInstance().currentDMTicket().setCodigoProdSelecEnBuscarPorDesc(0);
                         buttonAceptar.fire();
                     }
                     int index=0;
@@ -163,8 +159,8 @@ public class BuscarPorDescProductoController {
               productosPrecios = productoService.getProductosPrecio(textFieldFiltroProducto.getText());
         }catch(TpvException e){
             log.error("Error: "+e.getMessage());
-             modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_BUSCARPORDESCPRODUCTO);
-             modelTicket.setException(e);
+             Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_BUSCARPORDESCPRODUCTO);
+             Context.getInstance().currentDMTicket().setException(e);
         }
             
         productosPrecios.forEach(lstPrecioProducto->{

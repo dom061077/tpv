@@ -10,12 +10,15 @@ import com.tpv.errorui.ErrorController;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Checkout;
 import com.tpv.modelo.Usuario;
-import com.tpv.principal.DataModelTicket;
+import com.tpv.principal.Context;
 import com.tpv.principal.MenuPrincipalController;
 import com.tpv.service.UsuarioService;
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -26,10 +29,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import javafx8tpv1.TabPanePrincipalController;
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import org.apache.log4j.Logger;
-import org.datafx.controller.FXMLController;
 import org.datafx.controller.flow.action.LinkAction;
 
 /**
@@ -37,8 +37,9 @@ import org.datafx.controller.flow.action.LinkAction;
  * @author daniel
  */
 
-@FXMLController(value="Login.fxml", title = "Ingreso al Sistema")
-public class LoginController {
+//@FXMLController(value="Login.fxml", title = "Ingreso al Sistema")
+
+public class LoginController implements Initializable{
     private TabPanePrincipalController tabController;
     Logger log = Logger.getLogger(LoginController.class);
     UsuarioService usuarioService = new UsuarioService();    
@@ -72,14 +73,13 @@ public class LoginController {
     private Label labelError;
                       
     
-    @Inject
-    private DataModelTicket modelTicket;
     
     
     
     
-    @PostConstruct
-    public void init(){
+    
+    @FXML
+    public  void initialize(URL url, ResourceBundle rb) {
         loadImage();
         Platform.runLater(() -> {
             Checkout checkout = null;
@@ -87,8 +87,8 @@ public class LoginController {
                 checkout = usuarioService.checkMac();
             }catch(TpvException e){
                 log.error("Error: "+e.getMessage(),e);
-                modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_LOGIN);
-                modelTicket.setException(e);
+                Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_LOGIN);
+                Context.getInstance().currentDMTicket().setException(e);
                 goToErrorButton.fire();
             }
             if(checkout == null){
@@ -111,7 +111,7 @@ public class LoginController {
                 });
                 
             }else
-                modelTicket.setCheckout(checkout);
+                Context.getInstance().currentDMTicket().setCheckout(checkout);
             userName.requestFocus();            
             userName.setOnKeyPressed(keyEvent->{
                 if(keyEvent.getCode() == KeyCode.ENTER){
@@ -138,13 +138,14 @@ public class LoginController {
                         usuario = usuarioService.authenticar(userName.getText(), password.getText());
                     }catch(TpvException e){
                         log.error("Error: "+e.getMessage());
-                        modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_LOGIN);
-                        modelTicket.setException(e);
+                        Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_LOGIN);
+                        Context.getInstance().currentDMTicket().setException(e);
                         goToErrorButton.fire();
                     }                        
                     if(usuario!=null){
-                        modelTicket.setUsuario(usuario);
-                        buttonLogin.fire();
+                        Context.getInstance().currentDMTicket().setUsuario(usuario);
+                        //buttonLogin.fire();
+                        tabController.getButtonMenuPrincipal().fire();
                     }else{
                         labelError.setText("Usuario o contraseña incorrectos");
                         
@@ -177,6 +178,9 @@ public class LoginController {
     public void setTabController(TabPanePrincipalController tabPane){
         this.tabController=tabPane;
     }
-            
+
+    public TextField getPassword(){
+        return password;
+    }
     
 }
