@@ -1,79 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<AnchorPane focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="528.0" prefWidth="806.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafx8tpv1.TabPanePrincipalController">
+<AnchorPane focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafx8tpv1.TabPanePrincipalController">
    <children>
-      <BorderPane focusTraversable="true" prefHeight="519.0" prefWidth="806.0">
+      <BorderPane focusTraversable="true" prefHeight="700.0" prefWidth="900.0">
          <center>
-            <TabPane prefHeight="331.0" prefWidth="600.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+            <TabPane fx:id="tabPanePrincipal" prefHeight="700.0" prefWidth="900.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
               <tabs>
-                <Tab closable="false" text="Login">
+                  <Tab fx:id="tabMenuPrincipal" closable="false" text="Menu Prinipal">
+                      <content>
+                           <fx:include fx:id="menuPrincipal" source="../com/tpv/principal/MenuPrincipal.fxml" />
+                      </content>    
+                  </Tab>    
+                <Tab fx:id="tabLogin" closable="false" text="Login">
                      <content>
-                        <fx:include source="../com/tpv/login/Login.fxml" />
+                        <fx:include fx:id="login" source="../com/tpv/login/Login.fxml" />
                      </content>
                      <graphic>
                         <StackPane focusTraversable="true" prefHeight="150.0" prefWidth="200.0" />
                      </graphic>
                   </Tab>
-                  <Tab text="Facturación">
+                  <Tab fx:id="tabFacturacion" text="Facturación">
                      <content>
-                        <fx:include source="../com/tpv/principal/FXMLMain.fxml" />
-                     </content>
-                  </Tab>
-                <Tab text="Menu Principal">
-                     <content>
-                        <BorderPane>
-                           <center>
-                              <VBox fx:id="vboxMenuPrincipal" focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="433.0" prefWidth="719.0" styleClass="label_menu, rounded_corner">
-                                 <children>
-                                    <Label styleClass="label_menu" text="1- FACTURACION" textFill="#3062e1">
-                                       <font>
-                                          <Font name="Arial" size="64.0" />
-                                       </font>
-                                    </Label>
-                                    <Label styleClass="label_menu" text="2- CONTROLADOR" textFill="#3062e1">
-                                       <font>
-                                          <Font name="Arial" size="64.0" />
-                                       </font>
-                                    </Label>
-                                    <Label styleClass="label_menu" text="3- RETIRO DE DINERO" textFill="#3062e1">
-                                       <font>
-                                          <Font name="Arial" size="64.0" />
-                                       </font>
-                                    </Label>
-                                    <Label styleClass="label_menu" text="4- FIN" textFill="#3062e1">
-                                       <font>
-                                          <Font size="64.0" />
-                                       </font>
-                                    </Label>
-                                    <Button fx:id="buttonFacturacion" mnemonicParsing="false" text="Facturación" />
-                                    <Button fx:id="buttonControlador" mnemonicParsing="false" text="Button" visible="false" />
-                                    <Button fx:id="buttonRetirarDinero" mnemonicParsing="false" text="Button" visible="false" />
-                                    <Button fx:id="buttonError" focusTraversable="false" mnemonicParsing="false" visible="false" />
-                                 </children>
-                              </VBox>
-                           </center>
-                           <left>
-                              <ImageView fx:id="imageViewLogoRight" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER_RIGHT" />
-                           </left>
-                           <right>
-                              <ImageView fx:id="imageViewLogoLeft" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER_LEFT" />
-                           </right>
-                        </BorderPane>
+                        <fx:include fx:id="facturacion" source="../com/tpv/principal/FXMLMain.fxml" />
                      </content>
                   </Tab>
               </tabs>
+               <BorderPane.margin>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </BorderPane.margin>
             </TabPane>
          </center>
          <bottom>

@@ -145,7 +145,7 @@ public class LoginController implements Initializable{
                     if(usuario!=null){
                         Context.getInstance().currentDMTicket().setUsuario(usuario);
                         //buttonLogin.fire();
-                        tabController.getButtonMenuPrincipal().fire();
+                       tabController.gotoMenuPrincipal();
                     }else{
                         labelError.setText("Usuario o contraseña incorrectos");
                         
@@ -161,7 +161,7 @@ public class LoginController implements Initializable{
                 if(keyEvent.getCode() == KeyCode.F11){
                     System.exit(0);
                 }
-                
+                keyEvent.consume();
             });
             
                     

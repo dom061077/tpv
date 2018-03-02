@@ -19,14 +19,13 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx8tpv1.TabPanePrincipalController;
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import org.apache.log4j.Logger;
-import org.datafx.controller.FXMLController;
 import org.datafx.controller.flow.action.ActionTrigger;
 import org.datafx.controller.flow.action.LinkAction;
+
 
 /**
  *
@@ -54,6 +53,9 @@ public class MenuPrincipalController implements Initializable {
     
     @FXML
     private VBox vboxMenuPrincipal;
+    
+    @FXML
+    private BorderPane borderPane;
     
     @FXML
     private ImageView imageViewLogoRight1;
@@ -92,33 +94,31 @@ public class MenuPrincipalController implements Initializable {
     private ImageView imageViewLogoTop3;
     
     
-    @Inject
-    private DataModelTicket modelTicket;
     
         
     
     @FXML
     public  void initialize(URL url, ResourceBundle rb) {
         log.info("Ingresando al menú principal");
-        loadImage();
+        //loadImage();
         Platform.runLater(()->{
             try{
                 Connection.initFiscalPrinter();
             }catch(TpvException e){
                 log.error(e.getMessage());
-                modelTicket.setException(e);
-                modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_MENUPRINCIPAL);
+                Context.getInstance().currentDMTicket().setException(e);
+                Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_MENUPRINCIPAL);
                 buttonError.fire();
             }
             
-            vboxMenuPrincipal.setOnKeyPressed(keyEvent->{
+            borderPane.setOnKeyPressed(keyEvent->{
                 log.debug("Tecla pulsada: "+keyEvent.getCode());
                 if(keyEvent.getCode()==KeyCode.NUMPAD1){
-                    modelTicket.setCliente(null);
-                    modelTicket.setClienteSeleccionado(false);
-                    modelTicket.setReinicioVerificado(false);
-                    modelTicket.getDetalle().clear();
-                    buttonFacturacion.fire();
+                    Context.getInstance().currentDMTicket().setCliente(null);
+                    Context.getInstance().currentDMTicket().setClienteSeleccionado(false);
+                    Context.getInstance().currentDMTicket().setReinicioVerificado(false);
+                    Context.getInstance().currentDMTicket().getDetalle().clear();
+                    tabController.gotoFacturacion();
                 }
                 if(keyEvent.getCode()==KeyCode.NUMPAD4)
                     System.exit(0);
@@ -150,5 +150,9 @@ public class MenuPrincipalController implements Initializable {
     
     public void setTabController(TabPanePrincipalController tabController){
         this.tabController=tabController;
+    }
+    
+    public void setMenuFocus(){
+        vboxMenuPrincipal.requestFocus();
     }
 }

@@ -14,9 +14,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import org.apache.log4j.Logger;
-import org.datafx.controller.FXMLController;
 
 /**
  *
@@ -27,12 +27,17 @@ import org.datafx.controller.FXMLController;
 public class TabPanePrincipalController implements Initializable {
     Logger log = Logger.getLogger(TabPanePrincipalController.class);
     @FXML private LoginController loginController;
-    @FXML private MenuPrincipalController menuController;
+    @FXML private MenuPrincipalController menuPrincipalController;
     @FXML private FXMLMainController facturacionController;
     
     @FXML private Button buttonMenuPrincipal;
     
-    @FXML private TabPane tabPane;
+    @FXML private Tab tabMenuPrincipal;
+    @FXML private Tab tabLogin;
+    @FXML private Tab tabFacturacion;  
+    @FXML private TabPane tabPanePrincipal;
+    
+    
     
     public Button getButtonMenuPrincipal(){
         return buttonMenuPrincipal;
@@ -46,15 +51,38 @@ public class TabPanePrincipalController implements Initializable {
         this.loginController.setTabController(this);
         this.loginController.getPassword().requestFocus();
         this.loginController.setTabController(this);
-        this.menuController.setTabController(this);
+        this.menuPrincipalController.setTabController(this);
         this.facturacionController.setTabController(this);
         buttonMenuPrincipal.setOnAction((ActionEvent event)->{
             log.debug("Botón de ingreso de menu pulsado");
         });
+        
+        tabPanePrincipal.getSelectionModel().selectedItemProperty()
+                .addListener((observable,oldTab,newTab)->{
+                   if(newTab.getId().compareTo("tabMenuPrincipal")==0){
+                       menuPrincipalController.setMenuFocus();
+                   }
+                });
+        
+        gotoLogin();
     }      
     
     @FXML
     private void handleButtonMenuPrincipal(ActionEvent event){
         System.out.println("IR AL MENU PRINCIPAL");
     }   
+    
+    public void gotoLogin(){
+        this.tabPanePrincipal.getSelectionModel().select(tabLogin);
+    }
+    
+    public void gotoMenuPrincipal(){
+        this.tabPanePrincipal.getSelectionModel().select(tabMenuPrincipal);
+    }
+    
+    public void gotoFacturacion(){
+        this.tabPanePrincipal.getSelectionModel().select(tabFacturacion);
+    }
+    
+    
 }
