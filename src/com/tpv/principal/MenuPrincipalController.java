@@ -15,6 +15,7 @@ import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -94,22 +95,15 @@ public class MenuPrincipalController implements Initializable {
     private ImageView imageViewLogoTop3;
     
     
-    
+    public void configurarInicio(){
+        repeatFocus(borderPane);
+    }    
         
     
     @FXML
     public  void initialize(URL url, ResourceBundle rb) {
-        log.info("Ingresando al menú principal");
-        //loadImage();
+        loadImage();
         Platform.runLater(()->{
-            try{
-                Connection.initFiscalPrinter();
-            }catch(TpvException e){
-                log.error(e.getMessage());
-                Context.getInstance().currentDMTicket().setException(e);
-                Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_MENUPRINCIPAL);
-                buttonError.fire();
-            }
             
             borderPane.setOnKeyPressed(keyEvent->{
                 log.debug("Tecla pulsada: "+keyEvent.getCode());
@@ -151,8 +145,15 @@ public class MenuPrincipalController implements Initializable {
     public void setTabController(TabPanePrincipalController tabController){
         this.tabController=tabController;
     }
-    
-    public void setMenuFocus(){
-        vboxMenuPrincipal.requestFocus();
+    private void repeatFocus(Node node){
+        Platform.runLater(() -> {
+            if (!node.isFocused()) {
+                node.requestFocus();
+                repeatFocus(node);
+            }
+        });        
     }
+    
+    
+    
 }

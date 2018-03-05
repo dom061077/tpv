@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.principal.FXMLMainController">
+<BorderPane focusTraversable="true" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.principal.FXMLMainController">
    <bottom>
       <GridPane BorderPane.alignment="CENTER">
         <columnConstraints>
@@ -60,7 +60,7 @@
       </GridPane>
    </bottom>
    <top>
-      <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <BorderPane focusTraversable="true" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <right>
             <StackPane fx:id="stackPaneMediaViewDer" alignment="TOP_CENTER" prefHeight="172.0" prefWidth="400.0" styleClass="rounded_corner" BorderPane.alignment="CENTER">
                <children>
@@ -120,9 +120,9 @@
       </BorderPane>
    </top>
    <center>
-      <BorderPane prefHeight="450.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
+      <BorderPane focusTraversable="true" prefHeight="450.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
          <center>
-            <Pane prefHeight="400.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
+            <Pane focusTraversable="true" prefHeight="400.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
                <children>
                   <TableView fx:id="tableViewTickets" editable="true" focusTraversable="false" prefHeight="400.0" prefWidth="1024.0" styleClass="tpv-table-view">
                     <columns>
@@ -136,7 +136,7 @@
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                   </TableView>
-                  <StackPane layoutX="200.0" layoutY="420.0" prefHeight="100.0" prefWidth="600.0" styleClass="rounded_corner">
+                  <StackPane focusTraversable="true" layoutX="200.0" layoutY="420.0" prefHeight="100.0" prefWidth="600.0" styleClass="rounded_corner">
                      <children>
                         <GridPane prefHeight="77.0" prefWidth="491.0" styleClass="rounded_corner">
                           <columnConstraints>
@@ -153,9 +153,9 @@
                         </GridPane>
                      </children>
                   </StackPane>
-                  <StackPane fx:id="stackPaneIngresos" layoutX="250.0" layoutY="50.0" prefHeight="246.0" prefWidth="510.0" styleClass="rounded_corner">
+                  <StackPane fx:id="stackPaneIngresos" focusTraversable="true" layoutX="250.0" layoutY="50.0" prefHeight="246.0" prefWidth="510.0" styleClass="rounded_corner">
                      <children>
-                        <GridPane fx:id="gridPaneIngresos">
+                        <GridPane fx:id="gridPaneIngresos" focusTraversable="true">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" maxWidth="299.0" minWidth="10.0" prefWidth="266.0" />
                             <ColumnConstraints hgrow="SOMETIMES" maxWidth="245.0" minWidth="10.0" prefWidth="244.0" />

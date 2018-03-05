@@ -39,6 +39,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -57,10 +58,7 @@ import javafx.scene.layout.StackPane;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import javafx8tpv1.TabPanePrincipalController;
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import org.apache.log4j.Logger;
-import org.datafx.controller.FXMLController;
 import org.datafx.controller.flow.action.ActionTrigger;
 import org.datafx.controller.flow.action.BackAction;
 import org.datafx.controller.flow.action.LinkAction;
@@ -212,23 +210,47 @@ public class FXMLMainController implements Initializable {
     @FXML
     private Label labelTotalGral;
     
-
-    
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
-    
-    @PostConstruct
-    public void init(){
+    public void configurarInicio(){
+        log.info("Ingresando a pantalla de facturación");
+        stackPaneIngresos.requestFocus();
+        textFieldCodCliente.requestFocus();
+        repeatFocus(textFieldCodCliente);
+        configurarAnimacionIngresoNegativo();
+        initTableViewTickets();
+        verificarDetalleTableView();
+        chequearInterfazNegativo();            
+        traerInfoImpresora();
+        tableViewTickets.setItems(Context.getInstance().currentDMTicket().getDetalle());
+        calcularTotalGeneral();
+        scrollDown();
+        if(Context.getInstance().currentDMTicket().isClienteSeleccionado()){
+            labelProducto.setVisible(true);
+            textFieldProducto.setVisible(true);
+            labelCliente.setVisible(false);
+            textFieldCodCliente.setVisible(false);
+            stackPaneIngresos.setVisible(false);
+            if(Context.getInstance().currentDMTicket().getCliente()!=null){
+                nombreCliente.setText(Context.getInstance().currentDMTicket().getCliente().getRazonSocial());
+            }
+        }else{
+            nombreCliente.setVisible(false);
+            labelSubTituloIngresos.setText(TITULO_INGRESO_CLIENTE);
+            stackPaneIngresos.setVisible(true);
+            textFieldCodCliente.requestFocus();
+            textFieldProducto.setVisible(false);
+            labelProducto.setVisible(false);
+        }
         
+        
+        
+    }
+    
+    @FXML
+    public void initialize(URL url, ResourceBundle rb) {
         setBanner();
         asignarEvento();
-        configurarAnimacionIngresoNegativo();
         
-        //verificarDetalleTableView();
         labelCantidad.setText(LABEL_CANTIDAD);
-        iniciaIngresosVisibles();
         
         if(Context.getInstance().currentDMTicket().getCodigoProdSelecEnBuscarPorDesc()>0){
             textFieldProducto.setText(Context.getInstance().currentDMTicket().getCodigoProdSelecEnBuscarPorDesc()+"");
@@ -240,17 +262,12 @@ public class FXMLMainController implements Initializable {
         }
         
                 
-        initTableViewTickets();
         
         
         Platform.runLater(() -> {
-            chequearInterfazNegativo();            
-            traerInfoImpresora();
-            tableViewTickets.setItems(Context.getInstance().currentDMTicket().getDetalle());
-            calcularTotalGeneral();
-            scrollDown();
             
-            
+            iniciaIngresosVisibles();
+
             textFieldCodCliente.setOnKeyPressed(keyEvent ->{
                 if(keyEvent.getCode() == KeyCode.F2){
                     clienteButton.fire();
@@ -273,11 +290,11 @@ public class FXMLMainController implements Initializable {
                     }else{
                         traerCliente();
                     } 
-                    
+                    repeatFocus(textFieldProducto);
                 }
                 if(keyEvent.getCode()==KeyCode.F11 ){
                     if(Context.getInstance().currentDMTicket().getDetalle().size()==0)
-                        volverMenuPrincipalButton.fire();
+                        this.tabController.gotoMenuPrincipal();
                     else{
                         Alert alert = new Alert(AlertType.WARNING,
                             "No se puede volver al menú principal cuando hay un ticket abierto"
@@ -308,7 +325,6 @@ public class FXMLMainController implements Initializable {
             });
             
             
-            textFieldProducto.requestFocus();
             textFieldProducto.setOnKeyPressed(keyEvent -> {
                 if(keyEvent.getCode() == KeyCode.ESCAPE){
                     if(Context.getInstance().currentDMTicket().getDetalle().size()==0){
@@ -381,7 +397,7 @@ public class FXMLMainController implements Initializable {
                 
                 if(keyEvent.getCode() == KeyCode.F11){
                     if(Context.getInstance().currentDMTicket().getDetalle().size()==0)
-                        volverMenuPrincipalButton.fire();
+                        this.tabController.gotoMenuPrincipal();
                     else{
                         
                         Alert alert = new Alert(AlertType.WARNING,
@@ -484,8 +500,10 @@ public class FXMLMainController implements Initializable {
                 );*/
             }
         });
-        
-    }
+
+    }    
+    
+
     private void calcularTotalGeneral(){
         DecimalFormat df = new DecimalFormat("##,##0.00");
         totalGeneral.setText(df.format(Context.getInstance().currentDMTicket().getTotalTicket()));
@@ -598,7 +616,7 @@ public class FXMLMainController implements Initializable {
     }
     
     public void iniciaIngresosVisibles(){
-        verificarDetalleTableView();
+        
         textFieldProducto = new MaskTextField();
         textFieldProducto.setMask("N!");
         textFieldProducto.setVisible(false);
@@ -616,33 +634,15 @@ public class FXMLMainController implements Initializable {
         textFieldCodCliente.setPrefWidth(150);
         textFieldCodCliente.setMaxWidth(150);
         textFieldCodCliente.getStyleClass().add("textfield_sin_border");
+        textFieldCodCliente.setFocusTraversable(true);
         
         labelCantidadIngresada.setVisible(false);
         
-//        gridPaneCodigoProducto.add(textFieldCodCliente,1,1);
+        gridPaneCodigoProducto.add(textFieldCodCliente,1,1);
         gridPaneCodigoProducto.add(textFieldProducto,1,1);
-//        gridPaneCodigoProducto.add(textFieldCantidad,1,3);
+        gridPaneCodigoProducto.add(textFieldCantidad,1,3);
         gridPaneIngresos.add(textFieldCodCliente,1,1);
         gridPaneIngresos.add(textFieldCantidad,1,1);
-        
-        if(Context.getInstance().currentDMTicket().isClienteSeleccionado()){
-            labelProducto.setVisible(true);
-            textFieldProducto.setVisible(true);
-            labelCliente.setVisible(false);
-            textFieldCodCliente.setVisible(false);
-            stackPaneIngresos.setVisible(false);
-            if(Context.getInstance().currentDMTicket().getCliente()!=null){
-                nombreCliente.setText(Context.getInstance().currentDMTicket().getCliente().getRazonSocial());
-            }
-        }else{
-            nombreCliente.setVisible(false);
-            labelSubTituloIngresos.setText(TITULO_INGRESO_CLIENTE);
-            stackPaneIngresos.setVisible(true);
-            textFieldCodCliente.requestFocus();
-            textFieldProducto.setVisible(false);
-            labelProducto.setVisible(false);
-        }
-                
     }
 
     public void traerCliente(){
@@ -1126,6 +1126,15 @@ public class FXMLMainController implements Initializable {
     
     public void setTabController(TabPanePrincipalController tabPane){
         this.tabController=tabPane;
+    }
+    
+    private void repeatFocus(Node node){
+        Platform.runLater(() -> {
+            if (!node.isFocused()) {
+                node.requestFocus();
+                repeatFocus(node);
+            }
+        });        
     }
     
     

@@ -40,6 +40,7 @@ public class PagoService {
             throw new TpvException("Error en la capa de servicios al recuperar un pago.");
         }finally{
             em.clear();
+
         }
         return formaPago;
     }

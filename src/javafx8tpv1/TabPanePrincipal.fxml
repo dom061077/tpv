@@ -28,6 +28,12 @@
                         <StackPane focusTraversable="true" prefHeight="150.0" prefWidth="200.0" />
                      </graphic>
                   </Tab>
+                  <Tab fx:id="tabError" text="Error">
+                     <content>
+                        <fx:include fx:id="error" source="../com/tpv/errorui/Error.fxml" />
+                     </content>
+                  </Tab>
+
                   <Tab fx:id="tabFacturacion" text="Facturación">
                      <content>
                         <fx:include fx:id="facturacion" source="../com/tpv/principal/FXMLMain.fxml" />
@@ -42,8 +48,10 @@
          <bottom>
             <HBox prefHeight="17.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="buttonMenuPrincipal" mnemonicParsing="false" text="Ir a Menu Principal" visible="false" />
+                  <Button fx:id="buttonMenuPrincipal" mnemonicParsing="false" text="Menu Principal" visible="false" />
                   <Button mnemonicParsing="false" text="Ir a Facturacion" visible="false" />
+                  <Button fx:id="buttonGoToError" mnemonicParsing="false" text="Go to Error" visible="false" />
+                  <Button mnemonicParsing="false" text="Button" />
                   <Button mnemonicParsing="false" text="Login" visible="false" />
                </children>
             </HBox>

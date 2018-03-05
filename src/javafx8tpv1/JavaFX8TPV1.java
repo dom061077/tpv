@@ -5,6 +5,9 @@
  */
 package javafx8tpv1;
 
+import com.tpv.enums.OrigenPantallaErrorEnum;
+import com.tpv.exceptions.TpvException;
+import com.tpv.principal.Context;
 import com.tpv.util.Connection;
 import java.io.IOException;
 import java.io.InputStream;
@@ -52,6 +55,26 @@ public class JavaFX8TPV1 extends Application {
                System.exit(0);
             }
        });
+        try{
+            Connection.initFiscalPrinter();
+        }catch(TpvException e){
+            log.error(e.getMessage());
+            Context.getInstance().currentDMTicket().setException(e);
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_MENUPRINCIPAL);
+        }        
+        
+        try{
+            log.debug("INICIANDO LAS CONEXIONES");
+            log.debug("PATH DEL DIRECTORIO DE RECURSOS: "+this.getClass().getResource("/com/tpv/resources/people.png"));
+            Connection.initConnections();
+            
+        }   catch(Exception e){
+            
+            log.error("Error general de conexiòn a la base de datos",e);
+            
+        }
+        
+       
         
         DOMConfigurator.configure(getClass().getResource("log4j.xml"));
         
@@ -82,17 +105,7 @@ public class JavaFX8TPV1 extends Application {
                 , "buscarCliente", ClienteSceneController.class).withLink(
                         ClienteSceneController.class, "seleccionarCliente", FXMLMainController.class);
         */
-        log.debug("Inicializando Flow de infaces gráficas");
-        try{
-            log.debug("INICIANDO LAS CONEXIONES");
-            log.debug("PATH DEL DIRECTORIO DE RECURSOS: "+this.getClass().getResource("/com/tpv/resources/people.png"));
-            Connection.initConnections();
-            
-        }   catch(Exception e){
-            
-            log.error("Error general de conexiòn a la base de datos",e);
-            
-        }
+        
         
         /*Flow flow = new Flow(LoginController.class)
                     //--flow ventana buscar cliente

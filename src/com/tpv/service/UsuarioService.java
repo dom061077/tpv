@@ -30,9 +30,12 @@ public class UsuarioService {
         EntityManager em = Connection.getEm();
         Query query;
         
+        //https://stackoverflow.com/questions/27905148/force-hibernate-to-read-database-and-not-return-cached-entity
+            /*para probar que el objeto se refresque directo desde la base de datos*/
+        
         try{
             query = em.createQuery("FROM Usuario u WHERE u.nombre = :nombre").setParameter("nombre", nombre);
-            query.setHint("org.hibernate.cacheMode",org.hibernate.CacheMode.IGNORE);
+            //query.setHint("org.hibernate.cacheMode",org.hibernate.CacheMode.IGNORE);
             usuario = (Usuario) query.getSingleResult();
             if(usuario.getPassword().compareTo(password)==0)
                     flagReturn=true;
@@ -45,7 +48,6 @@ public class UsuarioService {
             throw new TpvException("Error en la capa de servicios al autenticar usuario.");
         }finally{
             em.clear();
-            em.close();
         }
         if(flagReturn)
             return usuario;

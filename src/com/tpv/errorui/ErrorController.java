@@ -9,7 +9,6 @@ import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.principal.DataModelTicket;
 import com.tpv.util.Connection;
-import java.io.IOException;
 import java.net.ConnectException;
 import java.net.URL;
 import java.net.UnknownHostException;
@@ -21,13 +20,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
-import javax.annotation.PostConstruct;
+import javafx8tpv1.TabPanePrincipalController;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
 import org.datafx.controller.FXMLController;
 import org.datafx.controller.flow.action.ActionTrigger;
 import org.datafx.controller.flow.context.FXMLViewFlowContext;
 import org.datafx.controller.flow.context.ViewFlowContext;
+import com.tpv.principal.Context;
+        
 
 /**
  *
@@ -36,6 +37,7 @@ import org.datafx.controller.flow.context.ViewFlowContext;
 
 @FXMLController(value="Error.fxml", title = "Error de Sistema")
 public class ErrorController implements Initializable {
+    private TabPanePrincipalController tabController;
     Logger log = Logger.getLogger(ErrorController.class);
 //    @FXML
 //    @ActionTrigger("salir")
@@ -51,35 +53,27 @@ public class ErrorController implements Initializable {
     
     
     @FXML
-    @ActionTrigger("facturacion")
     private Button facturacionButton;
     
     @FXML
-    @ActionTrigger("menuprincipal")
     private Button menuButton;
     
     @FXML
-    @ActionTrigger("confirmarticket")
     private Button confirmarTicketButton;
     
     @FXML
-    @ActionTrigger("buscarcliente")
     private Button buscarClienteButton; 
     
     @FXML
-    @ActionTrigger("buscarproducto")
     private Button buscarProdButton; 
 
     @FXML
-    @ActionTrigger("pagoticket")
     private Button pagoTicketButton; 
     
     @FXML
-    @ActionTrigger("login")
     private Button loginButton;
     
     @FXML
-    @ActionTrigger("error_supervisor")
     private Button supervisorButton;
     
     
@@ -93,27 +87,19 @@ public class ErrorController implements Initializable {
     private DataModelTicket modelTicket;
     
     
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
     
     
-    @PostConstruct
-    public void init(){
-            log.info("Ingresando a pantalla de error: "+modelTicket.getTpvException().getMessage());
-            //labelError.setText(model.getTpvException().getMessage());
-            textAreaError.setText(modelTicket.getTpvException().getMessage()+'\n'
-                +modelTicket.getTpvException().getFiscalErrorMsg());
+    @FXML
+    public  void initialize(URL url, ResourceBundle rb) {
             Platform.runLater(()->{
                 textAreaError.setOnKeyPressed(keyEvent->{
                     if(keyEvent.getCode()==KeyCode.ESCAPE){
                         log.debug("Tecla Escape pulsada");
                         recuperarFallo();
                         if(modelTicket.getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_FACTURACION)
-                            facturacionButton.fire();
+                            tabController.gotoFacturacion();
                         if(modelTicket.getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_MENUPRINCIPAL)
-                            menuButton.fire();
+                            tabController.gotoMenuPrincipal();
                         if(modelTicket.getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_CONFIRMARTICKET)
                             confirmarTicketButton.fire();
                         if(modelTicket.getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_BUSCARPORNOMBRECLIENTE)
@@ -123,7 +109,7 @@ public class ErrorController implements Initializable {
                         if(modelTicket.getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_PAGOTICKET)
                             pagoTicketButton.fire();
                         if(modelTicket.getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_LOGIN)
-                            loginButton.fire();
+                            tabController.gotoLogin();
                         
                         if(modelTicket.getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_SUPERVISOR)
                             supervisorButton.fire();
@@ -151,5 +137,18 @@ public class ErrorController implements Initializable {
         }catch(TpvException e){
             log.error("Error al reconectar la impresora fiscal");
         }
+    }
+    
+    public void setTabController(TabPanePrincipalController tabController){
+        this.tabController=tabController;
+    }
+    
+    public void configurarInicio(){
+            //if(Context.getInstance().currentDMTicket().getTpvException()!=null){
+                log.info("Ingresando a pantalla de error: "+Context.getInstance().currentDMTicket().getTpvException().getMessage());
+                textAreaError.setText(modelTicket.getTpvException().getMessage()+'\n'
+                    +Context.getInstance().currentDMTicket().getTpvException().getFiscalErrorMsg());
+            //}        
+        
     }
 }

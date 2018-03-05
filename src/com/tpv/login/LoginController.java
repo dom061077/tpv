@@ -19,6 +19,7 @@ import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -74,7 +75,10 @@ public class LoginController implements Initializable{
                       
     
     
-    
+    public void configurarInicio(){
+        userName.requestFocus();            
+        repeatFocus(userName);
+    }
     
     
     
@@ -82,37 +86,6 @@ public class LoginController implements Initializable{
     public  void initialize(URL url, ResourceBundle rb) {
         loadImage();
         Platform.runLater(() -> {
-            Checkout checkout = null;
-            try{
-                checkout = usuarioService.checkMac();
-            }catch(TpvException e){
-                log.error("Error: "+e.getMessage(),e);
-                Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_LOGIN);
-                Context.getInstance().currentDMTicket().setException(e);
-                goToErrorButton.fire();
-            }
-            if(checkout == null){
-                log.fatal("La MAC de la PC no coincide con el registro del Checkout");
-                labelError.setText("La PC no está habilitada para este Checkout");
-                FadeTransition fadeInOut;
-                fadeInOut = new FadeTransition(Duration.seconds(1),labelError);
-		fadeInOut.setFromValue(1.0);
-		fadeInOut.setToValue(.20);
-		fadeInOut.setCycleCount(FadeTransition.INDEFINITE);
-		fadeInOut.setAutoReverse(true);
-		fadeInOut.play();
-                
-                
-                stackPaneError.setVisible(true);
-                labelError.setOnKeyPressed(keyEvent -> {
-                    if(keyEvent.getCode() == KeyCode.F11){
-                        System.exit(0);
-                    }
-                });
-                
-            }else
-                Context.getInstance().currentDMTicket().setCheckout(checkout);
-            userName.requestFocus();            
             userName.setOnKeyPressed(keyEvent->{
                 if(keyEvent.getCode() == KeyCode.ENTER){
                     password.requestFocus();
@@ -182,5 +155,15 @@ public class LoginController implements Initializable{
     public TextField getPassword(){
         return password;
     }
+    
+    private void repeatFocus(Node node){
+        Platform.runLater(() -> {
+            if (!node.isFocused()) {
+                node.requestFocus();
+                repeatFocus(node);
+            }
+        });        
+    }
+    
     
 }

@@ -83,6 +83,7 @@ public class ProductoService {
             throw new TpvException("Error en la capa de servicios al recuperar listado de productos.");
         }finally{
             em.clear();
+
         }
         return productos;
     }
@@ -132,8 +133,11 @@ public class ProductoService {
     public Producto getProductoPorCodigo(int filtroCodigo) throws TpvException{
         log.info("Capa de servicios búsqueda por código, filtro "+filtroCodigo);
         EntityManager em = Connection.getEm();
+        //EntityTransaction tx = null;
         Producto producto = null;
         try{
+            //tx = em.getTransaction();
+            //tx.begin();
             Query q = em.createQuery("FROM Producto p WHERE p.discontinuado = 0 "
                     +" and p.codigoProducto = :codigoProducto")
                     .setParameter("codigoProducto", filtroCodigo);
@@ -142,6 +146,7 @@ public class ProductoService {
             producto.getProveedores().forEach(item->{
                 item.getProveedor().getId();
             });
+            //tx.commit();
         }catch(NoResultException e){
             log.warn("No se pudo encontrar el producto con el código: "+filtroCodigo);
         }catch(RuntimeException e){
