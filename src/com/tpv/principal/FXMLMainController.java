@@ -214,13 +214,13 @@ public class FXMLMainController implements Initializable {
         log.info("Ingresando a pantalla de facturación");
         stackPaneIngresos.requestFocus();
         textFieldCodCliente.requestFocus();
-        repeatFocus(textFieldCodCliente);
         configurarAnimacionIngresoNegativo();
         initTableViewTickets();
         verificarDetalleTableView();
+        
         chequearInterfazNegativo();            
         traerInfoImpresora();
-        tableViewTickets.setItems(Context.getInstance().currentDMTicket().getDetalle());
+        /*tableViewTickets.setItems(Context.getInstance().currentDMTicket().getDetalle());
         calcularTotalGeneral();
         scrollDown();
         if(Context.getInstance().currentDMTicket().isClienteSeleccionado()){
@@ -239,9 +239,9 @@ public class FXMLMainController implements Initializable {
             textFieldCodCliente.requestFocus();
             textFieldProducto.setVisible(false);
             labelProducto.setVisible(false);
-        }
+        }*/
         
-        
+
         
     }
     
@@ -342,10 +342,6 @@ public class FXMLMainController implements Initializable {
                     buscarProductoButton.fire();
                     keyEvent.consume();
                 }
-                /*if(keyEvent.getCode() == KeyCode.F4){
-                    pagoTicketButton.fire();
-                    keyEvent.consume();
-                }*/
                 if(keyEvent.getCode() == KeyCode.ENTER){
                     labelCantidadIngresada.setVisible(false);
                     if(textFieldCantidad.isVisible()){
@@ -417,7 +413,9 @@ public class FXMLMainController implements Initializable {
                         labelProducto.setVisible(false);
                         stackPaneIngresos.setVisible(true);
                         labelSubTituloIngresos.setText(TITULO_INGRESO_CANTIDAD);
+                        repeatFocus(textFieldCantidad);
                         stackPaneIngresos.toFront();
+                        
                 }
                 
                 
@@ -438,12 +436,13 @@ public class FXMLMainController implements Initializable {
                 if(keyEvent.getCode() == KeyCode.F7){
                     if(Context.getInstance().currentDMTicket().getIdFactura()!=null){
                         Context.getInstance().currentDMTicket().setTipoTituloSupervisor(TipoTituloSupervisorEnum.CANCELAR_TICKET);
-                        habilitarSupervisorButton.fire();
+                        //habilitarSupervisorButton.fire();
+                        tabController.gotoSupervisor();
                     }else{
                         log.error("No se puede cancelar un ticket que no está abierto");
                         Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
                         Context.getInstance().currentDMTicket().setException(new TpvException("No se puede cancelar un ticket que no está abierto"));
-                        goToErrorButton.fire();
+                        tabController.gotoError();
                     }
                 }
                 
@@ -463,14 +462,6 @@ public class FXMLMainController implements Initializable {
                         }
                     }
                 });
-                /*buscarProductoButton.getScene().getAccelerators().put(
-                        new KeyCodeCombination(KeyCode.NUMPAD2, KeyCombination.ALT_DOWN), 
-                        new Runnable() {
-                          @Override public void run() {
-                            buscarProductoButton.fire();
-                          }
-                        }
-                      );*/
                 buscarProductoButton.getScene().setOnKeyPressed(keyEvent ->{
                     if(keyEvent.getCode() == KeyCode.F3){
                         if(buscarProductoButton.getScene()!=null){
@@ -479,25 +470,6 @@ public class FXMLMainController implements Initializable {
                         }
                     }
                 });
-                //buttonLogin.getScene().addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, 
-               /* clienteButton.getScene().addEventFilter(KeyEvent.KEY_PRESSED, 
-                        new EventHandler<javafx.scene.input.KeyEvent>(){
-                               public void handle(javafx.scene.input.KeyEvent event) {
-                                   if(event.getCode() == KeyCode.NUMPAD1 && event.isControlDown()){
-                                            if (clienteButton.getScene()!=null){
-                                                clienteButton.fire();
-                                                event.consume();
-                                            }
-                                   }
-                                   if(event.getCode() == KeyCode.NUMPAD2 && event.isControlDown()){
-                                            if (buscarProductoButton.getScene()!=null){
-                                                buscarProductoButton.fire();
-                                                event.consume();
-                                            }
-                                   }
-                               }
-                        }
-                );*/
             }
         });
 
@@ -728,31 +700,31 @@ public class FXMLMainController implements Initializable {
 
     
     private void chequearInterfazNegativo(){
-        //ingresoNegativoHabilitado.setVisible(Context.getInstance().currentDMTicket().isImprimeComoNegativo());
+        ingresoNegativoHabilitado.setVisible(Context.getInstance().currentDMTicket().isImprimeComoNegativo());
         ingresoNegativoPane.setVisible(Context.getInstance().currentDMTicket().isImprimeComoNegativo());
-//        if(Context.getInstance().currentDMTicket().isImprimeComoNegativo()){
-//            labelProducto.getStyleClass().clear();
-//            labelProducto.getStyleClass().add("label_textfield_negativo");
-//            labelCliente.getStyleClass().clear();
-//            labelCliente.getStyleClass().add("label_textfield_negativo");
-//            labelCantidad.getStyleClass().clear();
-//            labelCantidad.getStyleClass().add("label_textfield_negativo");
-//            totalGeneral.getStyleClass().clear();
-//            totalGeneral.getStyleClass().add("label_textfield_negativo");
-//            labelTotalGral.getStyleClass().clear();
-//            labelTotalGral.getStyleClass().add("label_textfield_negativo");
-//        }else{
-//            labelProducto.getStyleClass().clear();
-//            labelProducto.getStyleClass().add("label_textfield");
-//            labelCliente.getStyleClass().clear();
-//            labelCliente.getStyleClass().add("label_textfield");
-//            labelCantidad.getStyleClass().clear();
-//            labelCantidad.getStyleClass().add("label_textfield");
-//            totalGeneral.getStyleClass().clear();
-//            totalGeneral.getStyleClass().add("label_textfield");
-//            labelTotalGral.getStyleClass().clear();
-//            labelTotalGral.getStyleClass().add("label_textfield");
-//        }
+        if(Context.getInstance().currentDMTicket().isImprimeComoNegativo()){
+            labelProducto.getStyleClass().clear();
+            labelProducto.getStyleClass().add("label_textfield_negativo");
+            labelCliente.getStyleClass().clear();
+            labelCliente.getStyleClass().add("label_textfield_negativo");
+            labelCantidad.getStyleClass().clear();
+            labelCantidad.getStyleClass().add("label_textfield_negativo");
+            totalGeneral.getStyleClass().clear();
+            totalGeneral.getStyleClass().add("label_textfield_negativo");
+            labelTotalGral.getStyleClass().clear();
+            labelTotalGral.getStyleClass().add("label_textfield_negativo");
+        }else{
+            labelProducto.getStyleClass().clear();
+            labelProducto.getStyleClass().add("label_textfield");
+            labelCliente.getStyleClass().clear();
+            labelCliente.getStyleClass().add("label_textfield");
+            labelCantidad.getStyleClass().clear();
+            labelCantidad.getStyleClass().add("label_textfield");
+            totalGeneral.getStyleClass().clear();
+            totalGeneral.getStyleClass().add("label_textfield");
+            labelTotalGral.getStyleClass().clear();
+            labelTotalGral.getStyleClass().add("label_textfield");
+        }
     }
     
     private void configurarAnimacionIngresoNegativo(){
@@ -1081,20 +1053,20 @@ public class FXMLMainController implements Initializable {
             Context.getInstance().currentDMTicket().setReinicioVerificado(true);                    
         }catch(TpvException e){
             log.error("Error en capa controller: "+e.getMessage());
-            Alert alert = new Alert(AlertType.ERROR
-                    , "Hay un o más tickets abiertos para el checkout y el usuario en curso"
+            /*Alert alert = new Alert(AlertType.ERROR
+                    , "Hay uno o más tickets abiertos para el checkout y el usuario en curso"
                     , ButtonType.OK);
                         alert.showAndWait().ifPresent(response ->{
                             if(response == ButtonType.OK){
                                 volverMenuPrincipalButton.fire();
                             }
-                        });
+                        });*/
               
-//            Context.getInstance().currentDMTicket().setCliente(null);
-//            Context.getInstance().currentDMTicket().setClienteSeleccionado(false);
-//            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
-//            Context.getInstance().currentDMTicket().setException(e);
-//            goToErrorButton.fire();
+            Context.getInstance().currentDMTicket().setCliente(null);
+            Context.getInstance().currentDMTicket().setClienteSeleccionado(false);
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+            Context.getInstance().currentDMTicket().setException(e);
+            tabController.gotoError();
         }
     }
     

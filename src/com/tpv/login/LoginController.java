@@ -8,14 +8,12 @@ package com.tpv.login;
 import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.errorui.ErrorController;
 import com.tpv.exceptions.TpvException;
-import com.tpv.modelo.Checkout;
 import com.tpv.modelo.Usuario;
 import com.tpv.principal.Context;
 import com.tpv.principal.MenuPrincipalController;
 import com.tpv.service.UsuarioService;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -28,7 +26,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import javafx.util.Duration;
 import javafx8tpv1.TabPanePrincipalController;
 import org.apache.log4j.Logger;
 import org.datafx.controller.flow.action.LinkAction;
@@ -44,6 +41,7 @@ public class LoginController implements Initializable{
     private TabPanePrincipalController tabController;
     Logger log = Logger.getLogger(LoginController.class);
     UsuarioService usuarioService = new UsuarioService();    
+    
     @FXML
     @LinkAction(MenuPrincipalController.class)
     private Button buttonLogin;
@@ -84,7 +82,7 @@ public class LoginController implements Initializable{
     
     @FXML
     public  void initialize(URL url, ResourceBundle rb) {
-        loadImage();
+        //loadImage();
         Platform.runLater(() -> {
             userName.setOnKeyPressed(keyEvent->{
                 if(keyEvent.getCode() == KeyCode.ENTER){

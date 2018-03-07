@@ -9,11 +9,11 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 
-<AnchorPane focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafx8tpv1.TabPanePrincipalController">
+<AnchorPane focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="729.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafx8tpv1.TabPanePrincipalController">
    <children>
-      <BorderPane focusTraversable="true" prefHeight="700.0" prefWidth="900.0">
+      <BorderPane focusTraversable="true" prefHeight="722.0" prefWidth="900.0">
          <center>
-            <TabPane fx:id="tabPanePrincipal" prefHeight="700.0" prefWidth="900.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+            <TabPane fx:id="tabPanePrincipal" prefHeight="675.0" prefWidth="860.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
               <tabs>
                   <Tab fx:id="tabMenuPrincipal" closable="false" text="Menu Prinipal">
                       <content>
@@ -33,6 +33,11 @@
                         <fx:include fx:id="error" source="../com/tpv/errorui/Error.fxml" />
                      </content>
                   </Tab>
+                  <Tab fx:id="tabSupervisor" text="Supervisor">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    </content>
+                  </Tab>
 
                   <Tab fx:id="tabFacturacion" text="Facturación">
                      <content>
@@ -51,7 +56,7 @@
                   <Button fx:id="buttonMenuPrincipal" mnemonicParsing="false" text="Menu Principal" visible="false" />
                   <Button mnemonicParsing="false" text="Ir a Facturacion" visible="false" />
                   <Button fx:id="buttonGoToError" mnemonicParsing="false" text="Go to Error" visible="false" />
-                  <Button mnemonicParsing="false" text="Button" />
+                  <Button mnemonicParsing="false" text="Button" visible="false" />
                   <Button mnemonicParsing="false" text="Login" visible="false" />
                </children>
             </HBox>

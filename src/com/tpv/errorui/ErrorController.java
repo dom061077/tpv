@@ -24,7 +24,6 @@ import javafx8tpv1.TabPanePrincipalController;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
 import org.datafx.controller.FXMLController;
-import org.datafx.controller.flow.action.ActionTrigger;
 import org.datafx.controller.flow.context.FXMLViewFlowContext;
 import org.datafx.controller.flow.context.ViewFlowContext;
 import com.tpv.principal.Context;
@@ -83,8 +82,6 @@ public class ErrorController implements Initializable {
     @FXML
     private TextArea textAreaError;
     
-    @Inject
-    private DataModelTicket modelTicket;
     
     
     
@@ -96,22 +93,22 @@ public class ErrorController implements Initializable {
                     if(keyEvent.getCode()==KeyCode.ESCAPE){
                         log.debug("Tecla Escape pulsada");
                         recuperarFallo();
-                        if(modelTicket.getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_FACTURACION)
+                        if(Context.getInstance().currentDMTicket().getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_FACTURACION)
                             tabController.gotoFacturacion();
-                        if(modelTicket.getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_MENUPRINCIPAL)
+                        if(Context.getInstance().currentDMTicket().getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_MENUPRINCIPAL)
                             tabController.gotoMenuPrincipal();
-                        if(modelTicket.getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_CONFIRMARTICKET)
+                        if(Context.getInstance().currentDMTicket().getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_CONFIRMARTICKET)
                             confirmarTicketButton.fire();
-                        if(modelTicket.getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_BUSCARPORNOMBRECLIENTE)
+                        if(Context.getInstance().currentDMTicket().getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_BUSCARPORNOMBRECLIENTE)
                             buscarClienteButton.fire();
-                        if(modelTicket.getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_BUSCARPORDESCPRODUCTO)
+                        if(Context.getInstance().currentDMTicket().getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_BUSCARPORDESCPRODUCTO)
                             buscarProdButton.fire();
-                        if(modelTicket.getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_PAGOTICKET)
+                        if(Context.getInstance().currentDMTicket().getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_PAGOTICKET)
                             pagoTicketButton.fire();
-                        if(modelTicket.getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_LOGIN)
+                        if(Context.getInstance().currentDMTicket().getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_LOGIN)
                             tabController.gotoLogin();
                         
-                        if(modelTicket.getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_SUPERVISOR)
+                        if(Context.getInstance().currentDMTicket().getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_SUPERVISOR)
                             supervisorButton.fire();
                         
                         
@@ -125,8 +122,8 @@ public class ErrorController implements Initializable {
     }
     
     private void recuperarFallo(){
-        if(modelTicket.getTpvException().getExceptionOrigen() instanceof ConnectException
-           || modelTicket.getTpvException().getExceptionOrigen() instanceof UnknownHostException){
+        if(Context.getInstance().currentDMTicket().getTpvException().getExceptionOrigen() instanceof ConnectException
+           || Context.getInstance().currentDMTicket().getTpvException().getExceptionOrigen() instanceof UnknownHostException){
             reconectarImpresora();
         }
     }
@@ -146,7 +143,7 @@ public class ErrorController implements Initializable {
     public void configurarInicio(){
             //if(Context.getInstance().currentDMTicket().getTpvException()!=null){
                 log.info("Ingresando a pantalla de error: "+Context.getInstance().currentDMTicket().getTpvException().getMessage());
-                textAreaError.setText(modelTicket.getTpvException().getMessage()+'\n'
+                textAreaError.setText(Context.getInstance().currentDMTicket().getTpvException().getMessage()+'\n'
                     +Context.getInstance().currentDMTicket().getTpvException().getFiscalErrorMsg());
             //}        
         

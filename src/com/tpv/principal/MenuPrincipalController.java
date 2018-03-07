@@ -102,7 +102,7 @@ public class MenuPrincipalController implements Initializable {
     
     @FXML
     public  void initialize(URL url, ResourceBundle rb) {
-        loadImage();
+        //loadImage();
         Platform.runLater(()->{
             
             borderPane.setOnKeyPressed(keyEvent->{

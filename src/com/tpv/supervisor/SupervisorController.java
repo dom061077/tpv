@@ -9,18 +9,23 @@ import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.enums.TipoTituloSupervisorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Usuario;
+import com.tpv.principal.Context;
 import com.tpv.principal.DataModelTicket;
 import com.tpv.service.FacturacionService;
 import com.tpv.service.ImpresoraService;
 import com.tpv.service.UsuarioService;
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx8tpv1.TabPanePrincipalController;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
@@ -35,12 +40,14 @@ import org.datafx.controller.flow.action.ActionTrigger;
         
 
 @FXMLController(value="Supervisor.fxml", title = "Habilitacion de Supervisor")
-public class SupervisorController {
+public class SupervisorController implements Initializable{
     Logger log = Logger.getLogger(SupervisorController.class);
 
     private ImpresoraService impresoraService = new ImpresoraService();
     private FacturacionService facturaService = new FacturacionService();
     private UsuarioService usuarioService = new UsuarioService();    
+    private TabPanePrincipalController tabController;
+
     
     @FXML
     private Label labelTitulo;
@@ -60,23 +67,16 @@ public class SupervisorController {
     @FXML
     private BorderPane borderPaneIngreso;
     
-    @FXML
-    @ActionTrigger("volverFacturacion")
-    private Button volverButton;
 
-    @FXML
-    @ActionTrigger("mostrarError")
-    private Button goToError;
-    
-    
-    @Inject
-    private DataModelTicket modelTicket;
 
     
-    @PostConstruct
-    public void init(){
+    
+
+    
+    @FXML
+    public  void initialize(URL url, ResourceBundle rb) {
         stackPaneError.setVisible(false);
-        labelTitulo.setText(modelTicket.getTipoTituloSupervisor().getTitulo());
+        labelTitulo.setText(Context.getInstance().currentDMTicket().getTipoTituloSupervisor().getTitulo());
         textFieldPassword.setDisable(true);
         Platform.runLater(() -> {
             
@@ -92,7 +92,7 @@ public class SupervisorController {
             
             textFieldCodigoSupervisor.setOnKeyPressed(keyEvent->{
                 if(keyEvent.getCode() == KeyCode.ESCAPE){
-                    volverButton.fire();
+                    tabController.gotoFacturacion();
                     keyEvent.consume();
                 }
                 if(keyEvent.getCode() == KeyCode.ENTER){
@@ -113,19 +113,19 @@ public class SupervisorController {
                                 stackPaneError.setVisible(true);
                                 labelError.requestFocus();
                             }else{
-                                if(modelTicket.getTipoTituloSupervisor()==TipoTituloSupervisorEnum.HABILITAR_NEGATIVO)
+                                if(Context.getInstance().currentDMTicket().getTipoTituloSupervisor()==TipoTituloSupervisorEnum.HABILITAR_NEGATIVO)
                                     habilitarNegativos(true);
-                                if(modelTicket.getTipoTituloSupervisor()==TipoTituloSupervisorEnum.CANCELAR_TICKET)
+                                if(Context.getInstance().currentDMTicket().getTipoTituloSupervisor()==TipoTituloSupervisorEnum.CANCELAR_TICKET)
                                     cancelarTicketCompleto();
                                 keyEvent.consume();
-                                volverButton.fire();                    
+                                tabController.gotoFacturacion();
                             }
                             
                     }catch(TpvException e){
                         log.error("Error: "+e.getMessage());
-                        modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_SUPERVISOR);
-                        modelTicket.setException(e);
-                        goToError.fire();
+                        Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_SUPERVISOR);
+                        Context.getInstance().currentDMTicket().setException(e);
+                        tabController.gotoError();
                         
                     }
                 }
@@ -133,7 +133,7 @@ public class SupervisorController {
                     textFieldPassword.setDisable(true);
                     textFieldCodigoSupervisor.requestFocus();
                     keyEvent.consume();
-                    volverButton.fire();                    
+                    tabController.gotoFacturacion();
                 }
             });
             
@@ -142,7 +142,7 @@ public class SupervisorController {
     }
     
     private void habilitarNegativos(boolean habilita){
-        modelTicket.setImprimeComoNegativo(habilita);
+        Context.getInstance().currentDMTicket().setImprimeComoNegativo(habilita);
     }
     
     
@@ -150,16 +150,20 @@ public class SupervisorController {
         try{
             
             impresoraService.cancelarTicket();
-            facturaService.cancelarFactura(modelTicket.getIdFactura());
-            modelTicket.setCliente(null);
-            modelTicket.setClienteSeleccionado(false);
-            modelTicket.getDetalle().clear();
-            modelTicket.getPagos().clear();;
+            facturaService.cancelarFactura(Context.getInstance().currentDMTicket().getIdFactura());
+            Context.getInstance().currentDMTicket().setCliente(null);
+            Context.getInstance().currentDMTicket().setClienteSeleccionado(false);
+            Context.getInstance().currentDMTicket().getDetalle().clear();
+            Context.getInstance().currentDMTicket().getPagos().clear();
         }catch(TpvException e){
             log.info("Error en cancelacion de ticket");
-            modelTicket.setException(e);
-            goToError.fire();
+            Context.getInstance().currentDMTicket().setException(e);
+            tabController.gotoError();
         } 
+    }
+    
+    public void setTabController(TabPanePrincipalController tabController){
+        this.tabController=this.tabController;
     }
     
 }

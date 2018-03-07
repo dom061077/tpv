@@ -14,18 +14,16 @@ import com.tpv.principal.FXMLMainController;
 import com.tpv.principal.MenuPrincipalController;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.input.KeyCode;
-import javafx.util.Duration;
 import org.apache.log4j.Logger;
 import com.tpv.exceptions.TpvException;
 import com.tpv.service.UsuarioService;
+import com.tpv.supervisor.SupervisorController;
 import com.tpv.util.Connection;
 
 /**
@@ -42,6 +40,7 @@ public class TabPanePrincipalController implements Initializable {
     @FXML private MenuPrincipalController menuPrincipalController;
     @FXML private FXMLMainController facturacionController;
     @FXML private ErrorController errorController;
+    @FXML private SupervisorController supervisorController;
     
     @FXML private Button buttonMenuPrincipal;
     
@@ -49,7 +48,9 @@ public class TabPanePrincipalController implements Initializable {
     @FXML private Tab tabLogin;
     @FXML private Tab tabFacturacion;  
     @FXML private Tab tabError;
+    @FXML private Tab tabSupervisor;
     @FXML private TabPane tabPanePrincipal;
+    
     @FXML private Button buttonGoToError;
     
     
@@ -157,5 +158,7 @@ public class TabPanePrincipalController implements Initializable {
         this.tabPanePrincipal.getSelectionModel().select(tabError);
     }
     
-    
+    public void gotoSupervisor(){
+        this.tabPanePrincipal.getSelectionModel().select(tabSupervisor);
+    }
 }
