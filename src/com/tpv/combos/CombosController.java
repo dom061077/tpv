@@ -30,6 +30,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
+import javafx8tpv1.TabPanePrincipalController;
 import org.apache.log4j.Logger;
 import org.datafx.controller.flow.action.ActionTrigger;
 
@@ -40,6 +41,7 @@ import org.datafx.controller.flow.action.ActionTrigger;
 public class CombosController implements Initializable{
 
     Logger log = Logger.getLogger(CombosController.class);
+    TabPanePrincipalController tabPaneController;
     
     @FXML
     @ActionTrigger("volverFacturacion")
@@ -88,8 +90,13 @@ public class CombosController implements Initializable{
     ListProperty<FacturaDetalleComboData> listCombos = new SimpleListProperty<>(combosItems);
     
     
+    public void configurarInicio(){
+        
+    }
+    
     @FXML
     public  void initialize(URL url, ResourceBundle rb) {
+        log.info("Ingresando al mètodo init");
         Platform.runLater(() -> {
             initTableViewCombos();
             tableViewCombos.setOnKeyPressed(keyEvent->{
@@ -199,6 +206,10 @@ public class CombosController implements Initializable{
             Context.getInstance().currentDMTicket().setException(e);
             goToErrorButton.fire();
         }
+    }
+    
+    public void setTabController(TabPanePrincipalController tabPaneController){
+        this.tabPaneController=tabPaneController;
     }
     
     

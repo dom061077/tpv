@@ -8,18 +8,18 @@ package com.tpv.pagoticket;
 import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Factura;
-import com.tpv.modelo.FacturaDetalle;
 import com.tpv.modelo.FormaPago;
 import com.tpv.principal.DataModelTicket;
-import com.tpv.principal.LineaTicketData;
 import com.tpv.service.FacturacionService;
 import com.tpv.service.PagoService;
 import com.tpv.util.ui.MaskTextField;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.text.DecimalFormat;
+import java.util.ResourceBundle;
 import javafx.application.Platform;
-import javafx.beans.property.ListProperty;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
@@ -28,19 +28,18 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
-import javax.annotation.PostConstruct;
+import javafx8tpv1.TabPanePrincipalController;
 import org.apache.log4j.Logger;
 import org.datafx.controller.FXMLController;
 import org.datafx.controller.flow.action.ActionTrigger;
-import org.datafx.controller.flow.context.FXMLViewFlowContext;
-import org.datafx.controller.flow.context.ViewFlowContext;
+import com.tpv.principal.Context;
 
 /**
  *|
  * @author daniel
  */
 @FXMLController(value="PagoTicket.fxml", title = "pago ticket")
-public class PagoTicketController {
+public class PagoTicketController implements Initializable {
     Logger log = Logger.getLogger(PagoTicketController.class);
     
     private MaskTextField textFieldTipoPago;
@@ -50,8 +49,8 @@ public class PagoTicketController {
     private MaskTextField textFieldNroTarjeta;
     private boolean tieneCantidadCuotas;
     private boolean tieneCuponPago;
-    private DataModelTicket modelTicket;
     private FormaPago formaPago;
+    private TabPanePrincipalController tabPaneController;
     
     PagoService pagoService = new PagoService();
     FacturacionService factService = new FacturacionService();
@@ -108,11 +107,6 @@ public class PagoTicketController {
     @FXML
     private TableColumn bonificacionTarjetaColumn;
     
-
-    @FXMLViewFlowContext
-    private ViewFlowContext context;    
-    
-    
     @FXML
     private GridPane gridPanePagos;
     
@@ -120,24 +114,35 @@ public class PagoTicketController {
     private Label labelCantidadCuotas;
     
     
-    @FXML
-    @ActionTrigger("volverFacturacion")
-    private Button volverButton;
-    
-    @FXML
-    @ActionTrigger("confirmarTicket")
-    private Button confirmarButton;
-
-    @FXML
-    @ActionTrigger("mostrarError")
-    private Button goToError;
-    
-    
-    @PostConstruct
-    public void init(){
+    public void configurarInicio(){
         iniciarIngresosVisibles();
-        modelTicket = context.getRegisteredObject(DataModelTicket.class);
-        modelTicket.getPagos();
+        Context.getInstance().currentDMTicket().getPagos();
+        //textFieldCantidadCuotas.setDisable(true);
+        DecimalFormat df = new DecimalFormat("##,###,##0.00");
+        totalGral.setText(df.format(Context.getInstance().currentDMTicket().getTotalTicket()));
+        //saldoPagar.setText(df.format(Context.getInstance().currentDMTicket().getTotalTicket().subtract(Context.getInstance().currentDMTicket().getTotalPagos())));
+
+        try{
+            Factura factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdFactura());
+            Context.getInstance().currentDMTicket().setBonificaciones(factura.getBonificacionCombosAux());
+        }catch(TpvException e)    {
+            log.error("Error en capa controller "+e.getMessage());
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_PAGOTICKET);
+            Context.getInstance().currentDMTicket().setException(e);
+            tabPaneController.gotoError();
+        }
+        bonificaciones.setText(df.format(Context.getInstance().currentDMTicket().getBonificaciones()));
+        saldoPagar.setText(Context.getInstance().currentDMTicket().getFormatSaldo());        
+        bonificacionPorPagoTotal.setText(Context.getInstance().currentDMTicket().getFormatBonificacionPorPagoTotal());
+        interesPorPagoTotal.setText(Context.getInstance().currentDMTicket().getFormatInteresPorPagoTotal());
+        
+    }
+
+    
+    
+    @FXML
+    public  void initialize(URL url, ResourceBundle rb) {
+        log.info("Ingresando al mètodo init");
         codigoPagoColumn.setCellValueFactory(new PropertyValueFactory<LineaPagoData,Integer>("codigoPago"));
         codigoPagoColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
         descripcionPagoColumn.setCellValueFactory(new PropertyValueFactory("descripcion"));
@@ -205,24 +210,35 @@ public class PagoTicketController {
         nroTarjetaColumn.setCellValueFactory(new PropertyValueFactory("nroTarjeta"));
         codigoCuponColumn.setCellValueFactory(new PropertyValueFactory("codigoCupon"));
                 
-        //textFieldCantidadCuotas.setDisable(true);
-        DecimalFormat df = new DecimalFormat("##,###,##0.00");
-        totalGral.setText(df.format(modelTicket.getTotalTicket()));
-        //saldoPagar.setText(df.format(modelTicket.getTotalTicket().subtract(modelTicket.getTotalPagos())));
-
-        try{
-            Factura factura = factService.calcularCombos(modelTicket.getIdFactura());
-            modelTicket.setBonificaciones(factura.getBonificacionCombosAux());
-        }catch(TpvException e)    {
-            log.error("Error en capa controller "+e.getMessage());
-            modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_PAGOTICKET);
-            modelTicket.setException(e);
-            goToError.fire();
-        }
-        bonificaciones.setText(df.format(modelTicket.getBonificaciones()));
-        saldoPagar.setText(modelTicket.getFormatSaldo());        
-        bonificacionPorPagoTotal.setText(modelTicket.getFormatBonificacionPorPagoTotal());
-        interesPorPagoTotal.setText(modelTicket.getFormatInteresPorPagoTotal());
+        
+        
+        
+        
+        textFieldTipoPago = new MaskTextField();
+        textFieldTipoPago.getStyleClass().add("textfield_sin_border");
+        textFieldTipoPago.setMask("N!");
+        textFieldMonto = new MaskTextField();
+        textFieldMonto.getStyleClass().add("textfield_sin_border");
+        textFieldMonto.setMask("N!.N!");
+        textFieldMonto.setDisable(true);
+        textFieldCantidadCuotas = new MaskTextField();
+        textFieldCantidadCuotas.getStyleClass().add("textfield_sin_border");
+        textFieldCantidadCuotas.setMask("N!");
+        textFieldCantidadCuotas.setMaxDigitos(2);
+        textFieldNroCupon = new MaskTextField();
+        textFieldNroCupon.getStyleClass().add("textfield_sin_border");
+        textFieldNroCupon.setMask("N!");
+        textFieldNroCupon.setMaxDigitos(15);
+        textFieldNroTarjeta = new MaskTextField();
+        textFieldNroTarjeta.setMask("N!");
+        textFieldNroTarjeta.setMaxDigitos(15);
+        textFieldNroTarjeta.getStyleClass().add("textfield_sin_border");
+        
+        gridPanePagos.add(textFieldTipoPago,1,1);
+        gridPanePagos.add(textFieldMonto,1,2);
+        gridPanePagos.add(textFieldCantidadCuotas,1,3);
+        gridPanePagos.add(textFieldNroTarjeta,1,4);
+        gridPanePagos.add(textFieldNroCupon,1,5);
         
         cantidadCuotaColumn.setCellValueFactory(new PropertyValueFactory("cantidadCuotas"));
         cantidadCuotaColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
@@ -234,13 +250,13 @@ public class PagoTicketController {
         textFieldNroCupon.setStyle("-fx-alignment: CENTER-RIGHT;");
         textFieldCantidadCuotas.setStyle("-fx-alignment: CENTER-RIGHT;");
         
-        if (modelTicket.getSaldo().compareTo(BigDecimal.valueOf(0))>0)
-            textFieldMonto.setText(modelTicket.getSaldo().toString());
+        if (Context.getInstance().currentDMTicket().getSaldo().compareTo(BigDecimal.valueOf(0))>0)
+            textFieldMonto.setText(Context.getInstance().currentDMTicket().getSaldo().toString());
         else
             textFieldMonto.setText("0");
         
         Platform.runLater(() -> {
-            tableViewPagos.setItems(modelTicket.getPagos());
+            tableViewPagos.setItems(Context.getInstance().currentDMTicket().getPagos());
             if(tableViewPagos.getItems().size()>0){
                 tableViewPagos.getSelectionModel().selectLast();
                 scrollDown();
@@ -256,8 +272,8 @@ public class PagoTicketController {
                 }
                     
                 if(keyEvent.getCode() == KeyCode.ENTER){
-                    if(modelTicket.getSaldo().compareTo(BigDecimal.valueOf(Double.parseDouble("0")))<=0){
-                        confirmarButton.fire();
+                    if(Context.getInstance().currentDMTicket().getSaldo().compareTo(BigDecimal.valueOf(Double.parseDouble("0")))<=0){
+                        tabPaneController.gotoConfirmarPago();//confirmarButton.fire();
                         keyEvent.consume();
                         return;
                     }
@@ -278,7 +294,7 @@ public class PagoTicketController {
                     return;
                 }
                 if(keyEvent.getCode() == KeyCode.ESCAPE){
-                    volverButton.fire();
+                    tabPaneController.gotoFacturacion();//volverButton.fire();
                     keyEvent.consume();
                     return;
                 }
@@ -396,31 +412,6 @@ public class PagoTicketController {
     }
     
     private void iniciarIngresosVisibles(){
-        textFieldTipoPago = new MaskTextField();
-        textFieldTipoPago.getStyleClass().add("textfield_sin_border");
-        textFieldTipoPago.setMask("N!");
-        textFieldMonto = new MaskTextField();
-        textFieldMonto.getStyleClass().add("textfield_sin_border");
-        textFieldMonto.setMask("N!.N!");
-        textFieldMonto.setDisable(true);
-        textFieldCantidadCuotas = new MaskTextField();
-        textFieldCantidadCuotas.getStyleClass().add("textfield_sin_border");
-        textFieldCantidadCuotas.setMask("N!");
-        textFieldCantidadCuotas.setMaxDigitos(2);
-        textFieldNroCupon = new MaskTextField();
-        textFieldNroCupon.getStyleClass().add("textfield_sin_border");
-        textFieldNroCupon.setMask("N!");
-        textFieldNroCupon.setMaxDigitos(15);
-        textFieldNroTarjeta = new MaskTextField();
-        textFieldNroTarjeta.setMask("N!");
-        textFieldNroTarjeta.setMaxDigitos(15);
-        textFieldNroTarjeta.getStyleClass().add("textfield_sin_border");
-        
-        gridPanePagos.add(textFieldTipoPago,1,1);
-        gridPanePagos.add(textFieldMonto,1,2);
-        gridPanePagos.add(textFieldCantidadCuotas,1,3);
-        gridPanePagos.add(textFieldNroTarjeta,1,4);
-        gridPanePagos.add(textFieldNroCupon,1,5);
         labelCantidadCuotas.setVisible(false);
         textFieldCantidadCuotas.setVisible(false);
         textFieldNroCupon.setVisible(false);
@@ -434,9 +425,9 @@ public class PagoTicketController {
             formaPago = pagoService.getFormaPago(codigoPago);
         }catch(TpvException e){
             log.error("Error: "+e.getMessage());
-            modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_PAGOTICKET);
-            modelTicket.setException(e);
-            goToError.fire();
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_PAGOTICKET);
+            Context.getInstance().currentDMTicket().setException(e);
+            tabPaneController.gotoError();//goToError.fire();
         }            
         if(formaPago!= null){
             labelFormaPagoDescripcion.setText(formaPago.getDetalle());
@@ -471,8 +462,8 @@ public class PagoTicketController {
     
     private void agregarLineaPago(){
         BigDecimal pagoParcial = new BigDecimal(textFieldMonto.getText());
-        pagoParcial = pagoParcial.add(modelTicket.getTotalPagos());
-        //if(pagoParcial.compareTo(modelTicket.getTotalTicket())==1)
+        pagoParcial = pagoParcial.add(Context.getInstance().currentDMTicket().getTotalPagos());
+        //if(pagoParcial.compareTo(Context.getInstance().currentDMTicket().getTotalTicket())==1)
         //    return;
             
         int codigoPago = 0;int cantidadCuotas=0;long codigoCupon=0;
@@ -499,7 +490,7 @@ public class PagoTicketController {
         }
             
         
-        modelTicket.getPagos().add(new LineaPagoData(
+        Context.getInstance().currentDMTicket().getPagos().add(new LineaPagoData(
             codigoPago,labelFormaPagoDescripcion.getText(),monto
             ,cantidadCuotas,nroTarjeta,codigoCupon
             ,formaPago.getInteresEnFormaPago(cantidadCuotas)
@@ -507,9 +498,9 @@ public class PagoTicketController {
             ,formaPago.getBonificacionEnFormaPago(cantidadCuotas)
                     .multiply(monto).divide(BigDecimal.valueOf(100))
         ));
-        //BigDecimal saldoParcial = modelTicket.getTotalTicket().subtract(modelTicket.getTotalPagos());
-        if (modelTicket.getSaldo().compareTo(BigDecimal.valueOf(0))>0)
-            textFieldMonto.setText(modelTicket.getSaldo().toString());
+        //BigDecimal saldoParcial = Context.getInstance().currentDMTicket().getTotalTicket().subtract(Context.getInstance().currentDMTicket().getTotalPagos());
+        if (Context.getInstance().currentDMTicket().getSaldo().compareTo(BigDecimal.valueOf(0))>0)
+            textFieldMonto.setText(Context.getInstance().currentDMTicket().getSaldo().toString());
         else
             textFieldMonto.setText("0");        
         
@@ -532,7 +523,7 @@ public class PagoTicketController {
        int index = tableViewPagos.getSelectionModel().getSelectedIndex();
        if(index>=0){
             LineaPagoData lineaPagoData = (LineaPagoData)tableViewPagos.getItems().get(index);
-            modelTicket.getPagos().remove(lineaPagoData);
+            Context.getInstance().currentDMTicket().getPagos().remove(lineaPagoData);
        }
     }
 
@@ -544,10 +535,14 @@ public class PagoTicketController {
     }    
     
     private void refrescarTextFieldSaldo(){
-        textFieldMonto.setText(modelTicket.getSaldo().toString());
-        saldoPagar.setText(modelTicket.getFormatSaldo());
-        bonificacionPorPagoTotal.setText(modelTicket.getFormatBonificacionPorPagoTotal());
-        interesPorPagoTotal.setText(modelTicket.getFormatInteresPorPagoTotal());
+        textFieldMonto.setText(Context.getInstance().currentDMTicket().getSaldo().toString());
+        saldoPagar.setText(Context.getInstance().currentDMTicket().getFormatSaldo());
+        bonificacionPorPagoTotal.setText(Context.getInstance().currentDMTicket().getFormatBonificacionPorPagoTotal());
+        interesPorPagoTotal.setText(Context.getInstance().currentDMTicket().getFormatInteresPorPagoTotal());
+    }
+    
+    public void setTabController(TabPanePrincipalController tabPaneController){
+        this.tabPaneController=tabPaneController;
     }
     
 }

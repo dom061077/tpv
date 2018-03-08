@@ -10,7 +10,6 @@ package com.tpv.cliente;
 import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Cliente;
-import com.tpv.principal.DataModelTicket;
 import com.tpv.service.ClienteService;
 import java.net.URL;
 import java.util.List;
@@ -20,17 +19,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
+import javafx8tpv1.TabPanePrincipalController;
+import com.tpv.principal.Context;
 import org.apache.log4j.Logger;
-import org.datafx.controller.FXMLController;
-import org.datafx.controller.flow.action.BackAction;
 
 /**
  * FXML Controller class
@@ -43,6 +39,7 @@ public class BuscarPorNombreClienteController implements Initializable  {
     
     private ObservableList<ClienteData> data;
     private ClienteService clienteService = new ClienteService();
+    private TabPanePrincipalController tabPaneController;
 
     /**
      * Initializes the controller class.
@@ -66,14 +63,9 @@ public class BuscarPorNombreClienteController implements Initializable  {
     @FXML
     private TableColumn cuitColumn;
     
-    
-    @FXML
-    @BackAction
-    private Button volverButton;
-    
-    @Inject
-    private DataModelTicket modelTicket;
-    
+    public void configurarInicio(){
+        
+    }
     
     @FXML
     public  void initialize(URL url, ResourceBundle rb) {
@@ -88,8 +80,8 @@ public class BuscarPorNombreClienteController implements Initializable  {
                 if(keyEvent.getCode() == KeyCode.ENTER){
                     if(textFieldFiltroNombreCliente.getText().trim().equals("")){
                             ClienteData clienteData = (ClienteData)tableView.getSelectionModel().getSelectedItem();
-                            modelTicket.setCodigoClienteSelecEnBuscarPorDesc(clienteData.getCodigoCliente());
-                            volverButton.fire();
+                            Context.getInstance().currentDMTicket().setCodigoClienteSelecEnBuscarPorDesc(clienteData.getCodigoCliente());
+                            tabPaneController.gotoFacturacion();
                             keyEvent.consume();
                         
                     }else{
@@ -98,7 +90,7 @@ public class BuscarPorNombreClienteController implements Initializable  {
                     }
                 }
                 if(keyEvent.getCode() == KeyCode.ESCAPE){
-                    volverButton.fire();
+                    tabPaneController.gotoFacturacion();
                 }
                 
                 int index=0;
@@ -141,8 +133,8 @@ public class BuscarPorNombreClienteController implements Initializable  {
                 clienteService.getClientes(filtro);
         }catch(TpvException e){
                 log.error("Error: "+e.getMessage());
-                modelTicket.setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_BUSCARPORNOMBRECLIENTE);
-                modelTicket.setException(e);
+                Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_BUSCARPORNOMBRECLIENTE);
+                Context.getInstance().currentDMTicket().setException(e);
         }
                 
         clientes.forEach(cliente->{
@@ -163,6 +155,10 @@ public class BuscarPorNombreClienteController implements Initializable  {
             
         }
         
+    }
+    
+    public void setTabController(TabPanePrincipalController tabPaneController){
+        this.tabPaneController = tabPaneController;
     }
 
    

@@ -5,7 +5,6 @@
  */
 package com.tpv.principal;
 
-import com.tpv.cliente.BuscarPorNombreClienteController;
 import com.tpv.combos.FacturaDetalleComboData;
 import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.enums.TipoTituloSupervisorEnum;
@@ -17,12 +16,10 @@ import com.tpv.modelo.FacturaDetalleCombo;
 import com.tpv.modelo.Producto;
 import com.tpv.modelo.enums.FacturaEstadoEnum;
 import com.tpv.print.event.FiscalPrinterEvent;
-import com.tpv.producto.BuscarPorDescProductoController;
 import com.tpv.service.ClienteService;
 import com.tpv.service.FacturacionService;
 import com.tpv.service.ImpresoraService;
 import com.tpv.service.ProductoService;
-import com.tpv.supervisor.SupervisorController;
 import com.tpv.util.Connection;
 import com.tpv.util.ui.MaskTextField;
 import java.math.BigDecimal;
@@ -59,9 +56,6 @@ import javafx.util.Callback;
 import javafx.util.Duration;
 import javafx8tpv1.TabPanePrincipalController;
 import org.apache.log4j.Logger;
-import org.datafx.controller.flow.action.ActionTrigger;
-import org.datafx.controller.flow.action.BackAction;
-import org.datafx.controller.flow.action.LinkAction;
 import org.tpv.print.fiscal.FiscalPacket;
 import org.tpv.print.fiscal.FiscalPrinter;
 import org.tpv.print.fiscal.hasar.HasarCommands;
@@ -73,7 +67,7 @@ import org.tpv.print.fiscal.hasar.HasarCommands;
  */
 //@FXMLController(value="FXMLMain.fxml", title = "Edit user")
 public class FXMLMainController implements Initializable {
-    TabPanePrincipalController tabController;
+    TabPanePrincipalController tabPaneController;
     private final static String LABEL_CANTIDAD="Cantidad:";
     private final static String LABEL_CANTIDAD_INGRESADA="(Cantidad->";
     private final static String TITULO_INGRESO_CLIENTE="Ingreso de Cliente";
@@ -176,33 +170,11 @@ public class FXMLMainController implements Initializable {
 //    private ImageView imageViewIzq;
 //    
     
-    @FXML
-    @ActionTrigger("mostrarError")
-    private Button goToErrorButton;
     
-    @FXML
-    @LinkAction(BuscarPorNombreClienteController.class)
-    private Button clienteButton;
     
-    @FXML
-    @LinkAction(BuscarPorDescProductoController.class)
-    private Button buscarProductoButton;
     
-    @FXML
-    @ActionTrigger("pagoTicket")
-    private Button pagoTicketButton;
     
-    @FXML
-    @ActionTrigger("combos")
-    private Button combosButton;
     
-    @FXML
-    @BackAction
-    private Button volverMenuPrincipalButton;
-    
-    @FXML
-    @LinkAction(SupervisorController.class)
-    private Button habilitarSupervisorButton;
    
     @FXML
     private Label totalGeneral;
@@ -270,7 +242,7 @@ public class FXMLMainController implements Initializable {
 
             textFieldCodCliente.setOnKeyPressed(keyEvent ->{
                 if(keyEvent.getCode() == KeyCode.F2){
-                    clienteButton.fire();
+                    tabPaneController.gotoCliente();
                     keyEvent.consume();
                 } 
                 
@@ -294,7 +266,7 @@ public class FXMLMainController implements Initializable {
                 }
                 if(keyEvent.getCode()==KeyCode.F11 ){
                     if(Context.getInstance().currentDMTicket().getDetalle().size()==0)
-                        this.tabController.gotoMenuPrincipal();
+                        this.tabPaneController.gotoMenuPrincipal();
                     else{
                         Alert alert = new Alert(AlertType.WARNING,
                             "No se puede volver al menú principal cuando hay un ticket abierto"
@@ -339,7 +311,7 @@ public class FXMLMainController implements Initializable {
                     }
                 }
                 if(keyEvent.getCode() == KeyCode.F3){
-                    buscarProductoButton.fire();
+                    tabPaneController.gotoProducto();
                     keyEvent.consume();
                 }
                 if(keyEvent.getCode() == KeyCode.ENTER){
@@ -353,7 +325,7 @@ public class FXMLMainController implements Initializable {
                         scrollDown();
                     }else{
                         if(Context.getInstance().currentDMTicket().getDetalle().size()>0)
-                            pagoTicketButton.fire();
+                            tabPaneController.gotoPago();
                         else{
                             Alert alert = new Alert(AlertType.WARNING
                                     ,"No es posible ir al pago con un ticket sin Productos"
@@ -393,7 +365,8 @@ public class FXMLMainController implements Initializable {
                 
                 if(keyEvent.getCode() == KeyCode.F11){
                     if(Context.getInstance().currentDMTicket().getDetalle().size()==0)
-                        this.tabController.gotoMenuPrincipal();
+                        
+                        this.tabPaneController.gotoMenuPrincipal();
                     else{
                         
                         Alert alert = new Alert(AlertType.WARNING,
@@ -422,7 +395,7 @@ public class FXMLMainController implements Initializable {
                 if(keyEvent.getCode() ==  KeyCode.F5){
                     if(Context.getInstance().currentDMTicket().getDetalle().size()>0){
                         Context.getInstance().currentDMTicket().setTipoTituloSupervisor(TipoTituloSupervisorEnum.HABILITAR_NEGATIVO);
-                        habilitarSupervisorButton.fire();
+                        tabPaneController.gotoSupervisor();
                     }
                     keyEvent.consume();
                 }
@@ -437,40 +410,29 @@ public class FXMLMainController implements Initializable {
                     if(Context.getInstance().currentDMTicket().getIdFactura()!=null){
                         Context.getInstance().currentDMTicket().setTipoTituloSupervisor(TipoTituloSupervisorEnum.CANCELAR_TICKET);
                         //habilitarSupervisorButton.fire();
-                        tabController.gotoSupervisor();
+                        tabPaneController.gotoSupervisor();
                     }else{
                         log.error("No se puede cancelar un ticket que no está abierto");
                         Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
                         Context.getInstance().currentDMTicket().setException(new TpvException("No se puede cancelar un ticket que no está abierto"));
-                        tabController.gotoError();
+                        tabPaneController.gotoError();
                     }
                 }
                 
                 if(keyEvent.getCode() == KeyCode.F8){
                     if(Context.getInstance().currentDMTicket().getDetalle().getSize()>0)
-                        combosButton.fire();
+                        tabPaneController.gotoCombos();
                 }
+                
+                if(keyEvent.getCode() == KeyCode.F2)
+                    tabPaneController.gotoCliente();
+                
+                if(keyEvent.getCode() == KeyCode.F3)
+                    tabPaneController.gotoProducto();
                     
                 
             });
-            if(clienteButton.getScene()!=null){
-                clienteButton.getScene().setOnKeyPressed(keyEvent -> {
-                    if(keyEvent.getCode() == KeyCode.F2){
-                        if(clienteButton.getScene()!=null){
-                            clienteButton.fire();
-                            keyEvent.consume();
-                        }
-                    }
-                });
-                buscarProductoButton.getScene().setOnKeyPressed(keyEvent ->{
-                    if(keyEvent.getCode() == KeyCode.F3){
-                        if(buscarProductoButton.getScene()!=null){
-                            buscarProductoButton.fire();
-                            keyEvent.consume();
-                        }
-                    }
-                });
-            }
+
         });
 
     }    
@@ -577,7 +539,7 @@ public class FXMLMainController implements Initializable {
         }catch(TpvException e){
                 Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
                 Context.getInstance().currentDMTicket().setException(e);
-                goToErrorButton.fire();
+                tabPaneController.gotoError();
         }
         
         textFieldProducto.setText("");
@@ -636,7 +598,7 @@ public class FXMLMainController implements Initializable {
         }catch(TpvException e){
                 Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
                 Context.getInstance().currentDMTicket().setException(e);
-                goToErrorButton.fire();
+                tabPaneController.gotoError();
         }
             
 
@@ -654,7 +616,7 @@ public class FXMLMainController implements Initializable {
                 log.error(e.getMessage());
                 Context.getInstance().currentDMTicket().setException(e);
                 Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
-                goToErrorButton.fire();
+                tabPaneController.gotoError();
                 
             }
         }
@@ -802,7 +764,7 @@ public class FXMLMainController implements Initializable {
                 log.error("Error: "+e.getMessage());
                 Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
                 Context.getInstance().currentDMTicket().setException(e);
-                goToErrorButton.fire();
+                tabPaneController.gotoError();
             }
 
             facturaDetalle.setFactura(factura);
@@ -823,7 +785,7 @@ public class FXMLMainController implements Initializable {
             log.error("Error: "+e.getMessage());
             Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
             Context.getInstance().currentDMTicket().setException(e);
-            goToErrorButton.fire();
+            tabPaneController.gotoError();
         }
         Context.getInstance().currentDMTicket().setIdFactura(facturaGuardada.getId());
         log.debug("ID de factura: "+facturaGuardada.getId());
@@ -852,7 +814,7 @@ public class FXMLMainController implements Initializable {
             log.error("Error: "+e.getMessage());
             Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
             Context.getInstance().currentDMTicket().setException(e);
-            goToErrorButton.fire();
+            tabPaneController.gotoError();
         }
     }
     
@@ -1066,7 +1028,7 @@ public class FXMLMainController implements Initializable {
             Context.getInstance().currentDMTicket().setClienteSeleccionado(false);
             Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
             Context.getInstance().currentDMTicket().setException(e);
-            tabController.gotoError();
+            tabPaneController.gotoError();
         }
     }
     
@@ -1092,12 +1054,12 @@ public class FXMLMainController implements Initializable {
             log.error("Error en capa controller: "+e.getMessage());
             Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
             Context.getInstance().currentDMTicket().setException(e);
-            goToErrorButton.fire();
+            tabPaneController.gotoError();
         }
     }
     
     public void setTabController(TabPanePrincipalController tabPane){
-        this.tabController=tabPane;
+        this.tabPaneController=tabPane;
     }
     
     private void repeatFocus(Node node){

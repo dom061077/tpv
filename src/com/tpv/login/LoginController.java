@@ -6,11 +6,9 @@
 package com.tpv.login;
 
 import com.tpv.enums.OrigenPantallaErrorEnum;
-import com.tpv.errorui.ErrorController;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Usuario;
 import com.tpv.principal.Context;
-import com.tpv.principal.MenuPrincipalController;
 import com.tpv.service.UsuarioService;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -18,7 +16,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -28,7 +25,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx8tpv1.TabPanePrincipalController;
 import org.apache.log4j.Logger;
-import org.datafx.controller.flow.action.LinkAction;
 
 /**
  *
@@ -42,13 +38,7 @@ public class LoginController implements Initializable{
     Logger log = Logger.getLogger(LoginController.class);
     UsuarioService usuarioService = new UsuarioService();    
     
-    @FXML
-    @LinkAction(MenuPrincipalController.class)
-    private Button buttonLogin;
     
-    @FXML
-    @LinkAction(ErrorController.class)
-    private Button goToErrorButton;
     
     @FXML
     private StackPane stackPaneError;
@@ -82,7 +72,9 @@ public class LoginController implements Initializable{
     
     @FXML
     public  void initialize(URL url, ResourceBundle rb) {
+        log.info("Ingresando al mètodo init");
         //loadImage();
+        
         Platform.runLater(() -> {
             userName.setOnKeyPressed(keyEvent->{
                 if(keyEvent.getCode() == KeyCode.ENTER){
@@ -111,7 +103,7 @@ public class LoginController implements Initializable{
                         log.error("Error: "+e.getMessage());
                         Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_LOGIN);
                         Context.getInstance().currentDMTicket().setException(e);
-                        goToErrorButton.fire();
+                        tabController.gotoError();
                     }                        
                     if(usuario!=null){
                         Context.getInstance().currentDMTicket().setUsuario(usuario);

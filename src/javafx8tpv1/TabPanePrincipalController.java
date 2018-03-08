@@ -5,6 +5,8 @@
  */
 package javafx8tpv1;
 
+import com.tpv.cliente.BuscarPorNombreClienteController;
+import com.tpv.combos.CombosController;
 import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.errorui.ErrorController;
 import com.tpv.login.LoginController;
@@ -22,6 +24,9 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import org.apache.log4j.Logger;
 import com.tpv.exceptions.TpvException;
+import com.tpv.pagoticket.ConfirmaPagoTicketController;
+import com.tpv.pagoticket.PagoTicketController;
+import com.tpv.producto.BuscarPorDescProductoController;
 import com.tpv.service.UsuarioService;
 import com.tpv.supervisor.SupervisorController;
 import com.tpv.util.Connection;
@@ -31,7 +36,6 @@ import com.tpv.util.Connection;
  * @author daniel
  */
 
-//@FXMLController(value="TabPanePrincipal.fxml", title = "Ingreso al Sistema")
 public class TabPanePrincipalController implements Initializable {
     Logger log = Logger.getLogger(TabPanePrincipalController.class);
     UsuarioService usuarioService = new UsuarioService();        
@@ -40,7 +44,15 @@ public class TabPanePrincipalController implements Initializable {
     @FXML private MenuPrincipalController menuPrincipalController;
     @FXML private FXMLMainController facturacionController;
     @FXML private ErrorController errorController;
+    
     @FXML private SupervisorController supervisorController;
+    @FXML private BuscarPorNombreClienteController buscarPorNombreClienteController;
+    @FXML private BuscarPorDescProductoController productoController;
+    @FXML private ConfirmaPagoTicketController confirmaPagoController;
+    @FXML private PagoTicketController pagoTicketController;
+    @FXML private CombosController comboController;
+    
+    @FXML private CombosController combosController;
     
     @FXML private Button buttonMenuPrincipal;
     
@@ -49,8 +61,13 @@ public class TabPanePrincipalController implements Initializable {
     @FXML private Tab tabFacturacion;  
     @FXML private Tab tabError;
     @FXML private Tab tabSupervisor;
-    @FXML private TabPane tabPanePrincipal;
+    @FXML private Tab tabCliente;
+    @FXML private Tab tabProducto;
+    @FXML private Tab tabConfirmarPago;
+    @FXML private Tab tabPago;
+    @FXML private Tab tabCombos;
     
+    @FXML private TabPane tabPanePrincipal;
     @FXML private Button buttonGoToError;
     
     
@@ -64,12 +81,21 @@ public class TabPanePrincipalController implements Initializable {
     @FXML
     public  void initialize(URL url, ResourceBundle rb) {
         // TODO
-        this.loginController.setTabController(this);
         this.loginController.getPassword().requestFocus();
+        
+        
         this.loginController.setTabController(this);
         this.menuPrincipalController.setTabController(this);
         this.facturacionController.setTabController(this);
         this.errorController.setTabController(this);
+        this.supervisorController.setTabController(this);
+        
+        this.pagoTicketController.setTabController(this);
+        this.confirmaPagoController.setTabController(this);
+        this.productoController.setTabController(this);
+        this.buscarPorNombreClienteController.setTabController(this);
+        
+        
         buttonMenuPrincipal.setOnAction((ActionEvent event)->{
             log.debug("Botón de ingreso de menu pulsado");
         });
@@ -159,6 +185,36 @@ public class TabPanePrincipalController implements Initializable {
     }
     
     public void gotoSupervisor(){
+        this.supervisorController.configurarInicio();
         this.tabPanePrincipal.getSelectionModel().select(tabSupervisor);
+        
     }
+    
+    public void gotoCliente(){
+        this.buscarPorNombreClienteController.configurarInicio();
+        this.tabPanePrincipal.getSelectionModel().select(tabCliente);
+    }
+    
+    public void gotoProducto(){
+        this.productoController.configurarInicio();
+        this.tabPanePrincipal.getSelectionModel().select(tabProducto);
+    }
+    
+    public void gotoConfirmarPago(){
+        this.confirmaPagoController.configurarInicio();
+        this.tabPanePrincipal.getSelectionModel().select(tabConfirmarPago);
+    }
+    
+    public void gotoPago(){
+        this.pagoTicketController.configurarInicio();
+        this.tabPanePrincipal.getSelectionModel().select(tabPago);
+    }
+    
+    public void gotoCombos(){
+        this.comboController.configurarInicio();
+        this.tabPanePrincipal.getSelectionModel().select(tabConfirmarPago);
+    }
+    
+    
+    
 }

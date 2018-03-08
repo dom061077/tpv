@@ -10,27 +10,20 @@ import com.tpv.enums.TipoTituloSupervisorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Usuario;
 import com.tpv.principal.Context;
-import com.tpv.principal.DataModelTicket;
 import com.tpv.service.FacturacionService;
 import com.tpv.service.ImpresoraService;
 import com.tpv.service.UsuarioService;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx8tpv1.TabPanePrincipalController;
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import org.apache.log4j.Logger;
-import org.datafx.controller.FXMLController;
-import org.datafx.controller.flow.action.ActionTrigger;
 
 /**
  *
@@ -39,7 +32,6 @@ import org.datafx.controller.flow.action.ActionTrigger;
 
         
 
-@FXMLController(value="Supervisor.fxml", title = "Habilitacion de Supervisor")
 public class SupervisorController implements Initializable{
     Logger log = Logger.getLogger(SupervisorController.class);
 
@@ -69,17 +61,19 @@ public class SupervisorController implements Initializable{
     
 
 
+    public void configurarInicio(){
+        stackPaneError.setVisible(false);
+        labelTitulo.setText(Context.getInstance().currentDMTicket().getTipoTituloSupervisor().getTitulo());
+        textFieldPassword.setDisable(true);
+        
+    }
     
     
 
     
     @FXML
     public  void initialize(URL url, ResourceBundle rb) {
-        stackPaneError.setVisible(false);
-        labelTitulo.setText(Context.getInstance().currentDMTicket().getTipoTituloSupervisor().getTitulo());
-        textFieldPassword.setDisable(true);
-        Platform.runLater(() -> {
-            
+            log.info("Ingresando al método init");
             labelError.setOnKeyPressed(keyEvent -> {
                 if(keyEvent.getCode() == KeyCode.ESCAPE){
                     stackPaneError.setVisible(false);
@@ -138,7 +132,6 @@ public class SupervisorController implements Initializable{
             });
             
             
-        });
     }
     
     private void habilitarNegativos(boolean habilita){

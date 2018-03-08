@@ -34,6 +34,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
+import javafx8tpv1.TabPanePrincipalController;
 import org.apache.log4j.Logger;
 import org.datafx.controller.flow.action.BackAction;
 
@@ -45,6 +46,7 @@ public class BuscarPorDescProductoController implements Initializable{
     
     private ObservableList<ProductoData> data;
     private ProductoService productoService= new ProductoService();
+    private TabPanePrincipalController tabPaneController;
     
     @FXML
     @BackAction
@@ -70,7 +72,9 @@ public class BuscarPorDescProductoController implements Initializable{
     @FXML
     private TableColumn descripcionColumn;
 
-    
+    public void configurarInicio(){
+        
+    }
     
     @FXML
     public void initialize(URL url, ResourceBundle rb) {
@@ -180,7 +184,12 @@ public class BuscarPorDescProductoController implements Initializable{
             
         }
         
+        
     }
+    public void setTabController(TabPanePrincipalController tabController){
+        this.tabPaneController=tabController;
+    }
+    
     
     public static class ProductoData{
         private IntegerProperty CodigoProducto;

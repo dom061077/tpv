@@ -35,9 +35,37 @@
                   </Tab>
                   <Tab fx:id="tabSupervisor" text="Supervisor">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                      <fx:include fx:id="supervisor" source="../com/tpv/supervisor/Supervisor.fxml" />
                     </content>
                   </Tab>
+                  <Tab fx:id="tabProducto" text="Búsqueda de Producto">
+                    <content>
+                      <fx:include fx:id="producto" source="../com/tpv/producto/BuscarPorDescProducto.fxml" />
+                    </content>
+                  </Tab>
+                  <Tab fx:id="tabBuscarCliente" text="Búsqueda de Cliente">
+                    <content>
+                      <fx:include fx:id="buscarPorNombreCliente" source="../com/tpv/cliente/BuscarPorNombreCliente.fxml" />
+                    </content>
+                  </Tab>
+                  <Tab fx:id="tabPago" text="Pago Ticket">
+                    <content>
+                      <fx:include fx:id="pagoTicket" source="../com/tpv/pagoticket/PagoTicket.fxml" />
+                    </content>
+                  </Tab>
+                  
+                  <Tab fx:id="tabConfirmarPago" text="Confirmar Pago Ticket">
+                    <content>
+                      <fx:include fx:id="confirmaPago" source="../com/tpv/pagoticket/ConfirmaPagoTicket.fxml" />
+                    </content>
+                  </Tab>
+                  
+                  <Tab fx:id="tabCombos" text="Combos">
+                    <content>
+                      <fx:include fx:id="combos" source="../com/tpv/combos/Combos.fxml" />
+                    </content>
+                  </Tab>
+                  
 
                   <Tab fx:id="tabFacturacion" text="Facturación">
                      <content>

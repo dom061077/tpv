@@ -27,7 +27,6 @@ import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -36,10 +35,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
+import javafx8tpv1.TabPanePrincipalController;
 import org.apache.log4j.Logger;
-import org.datafx.controller.flow.action.ActionTrigger;
-import org.datafx.controller.flow.context.FXMLViewFlowContext;
-import org.datafx.controller.flow.context.ViewFlowContext;
 import org.tpv.print.fiscal.FiscalPacket;
 import org.tpv.print.fiscal.FiscalPrinter;
 import org.tpv.print.fiscal.hasar.HasarCommands;
@@ -62,21 +59,8 @@ public class ConfirmaPagoTicketController implements Initializable{
 
     
     
-    @FXMLViewFlowContext
-    private ViewFlowContext context;    
     
     
-    @FXML
-    @ActionTrigger("volverPagoTicket")
-    private Button volverButton;
-    
-    @FXML
-    @ActionTrigger("facturacion")
-    private Button confirmarButton;
-   
-    @FXML
-    @ActionTrigger("mostrarError")
-    private Button goToErrorButton;
     
     @FXML
     BorderPane borderPane;
@@ -126,11 +110,17 @@ public class ConfirmaPagoTicketController implements Initializable{
     @FXML
     private Label totalBonificacionesLabel;
 
+    @FXML
+    private TabPanePrincipalController tabPaneController;
     
+    public void configurarInicio(){
+            log.info("Ingresando a la confirmación de pago");
+        
+    }
     
     @FXML
     public  void initialize(URL url, ResourceBundle rb) {
-            log.info("Ingresando a la confirmación de pago");
+            log.info("Ingresando al mètodo init");
             asignarEvento();
             //labelError.setText(model.getTpvException().getMessage());
             //modelTicket = context.getRegisteredObject(DataModelTicket.class);
@@ -213,7 +203,8 @@ public class ConfirmaPagoTicketController implements Initializable{
                 tableViewPagos.setItems(Context.getInstance().currentDMTicket().getPagos());
                 borderPane.setOnKeyPressed(keyEvent->{
                     if(keyEvent.getCode()==KeyCode.ESCAPE){
-                        volverButton.fire();
+                        
+                        tabPaneController.gotoPago();
                         
                     }
                     if(keyEvent.getCode() == KeyCode.ENTER){
@@ -247,7 +238,7 @@ public class ConfirmaPagoTicketController implements Initializable{
             log.error("Error en controlador llamando al método cerrarTicket de ImpresoraService",e);
             Context.getInstance().currentDMTicket().setException(e);
             Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CONFIRMARTICKET);
-            goToErrorButton.fire();
+            tabPaneController.gotoError();
         }catch(NullPointerException e){
             e.printStackTrace();
                     
@@ -285,7 +276,7 @@ public class ConfirmaPagoTicketController implements Initializable{
                                 }catch(TpvException e){
                                         Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CONFIRMARTICKET);
                                         Context.getInstance().currentDMTicket().setException(e);
-                                        goToErrorButton.fire();
+                                        tabPaneController.gotoError();
                                 }
 
                                 formaPagoDetalle.setFactura(factura);
@@ -307,11 +298,12 @@ public class ConfirmaPagoTicketController implements Initializable{
                             Context.getInstance().currentDMTicket().getPagos().clear();
                             Context.getInstance().currentDMTicket().setImprimeComoNegativo(false);
                             log.info("Factura cerrada y confirmada");
-                            confirmarButton.fire();
+                            tabPaneController.gotoFacturacion();
+                            //confirmarButton.fire();
                     }catch(TpvException e){
                         Context.getInstance().currentDMTicket().setException(e);
                         Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CONFIRMARTICKET);
-                        goToErrorButton.fire();
+                        tabPaneController.gotoError();
                     }catch(NullPointerException e){
                         e.printStackTrace();
                     }  
@@ -356,6 +348,11 @@ public class ConfirmaPagoTicketController implements Initializable{
         impresoraService.getHfp().setEventListener(this.fiscalPrinterEvent);
                 
     }
+    
+    public void setTabController(TabPanePrincipalController tabPaneController){
+        this.tabPaneController=tabPaneController;
+    }
+    
     
     /*
     public void guardarTicket(){

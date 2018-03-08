@@ -34,7 +34,6 @@ import com.tpv.principal.Context;
  * @author daniel
  */
 
-@FXMLController(value="Error.fxml", title = "Error de Sistema")
 public class ErrorController implements Initializable {
     private TabPanePrincipalController tabController;
     Logger log = Logger.getLogger(ErrorController.class);
@@ -88,6 +87,7 @@ public class ErrorController implements Initializable {
     
     @FXML
     public  void initialize(URL url, ResourceBundle rb) {
+            log.info("Ingresando al mètodo init");
             Platform.runLater(()->{
                 textAreaError.setOnKeyPressed(keyEvent->{
                     if(keyEvent.getCode()==KeyCode.ESCAPE){
