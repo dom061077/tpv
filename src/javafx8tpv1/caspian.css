@@ -4451,8 +4451,12 @@ to the top and bottom -fx-padding values of the parent toolbar. */
 
 .tab-pane {
     -fx-tab-max-height: 0;
-
 } 
+
+.tab-pane .tab-header-area {
+    visibility: hidden ;
+    
+}
 
 .tab-pane .tab-header-area .tab-header-background {
     //-fx-background-color: #843487;//your background colour code

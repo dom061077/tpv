@@ -104,6 +104,7 @@ public class MenuPrincipalController implements Initializable {
     public  void initialize(URL url, ResourceBundle rb) {
         //loadImage();
         log.info("Ingresando al mètodo init");
+        repeatFocus(borderPane);
         Platform.runLater(()->{
             
             borderPane.setOnKeyPressed(keyEvent->{

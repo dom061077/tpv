@@ -96,9 +96,6 @@ public class TabPanePrincipalController implements Initializable {
         this.buscarPorNombreClienteController.setTabController(this);
         
         
-        buttonMenuPrincipal.setOnAction((ActionEvent event)->{
-            log.debug("Botón de ingreso de menu pulsado");
-        });
         checkMac();
         tabPanePrincipal.getSelectionModel().selectedItemProperty()
                 .addListener((observable,oldTab,newTab)->{
