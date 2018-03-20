@@ -130,7 +130,7 @@ public class BuscarPorNombreClienteController implements Initializable  {
         data = FXCollections.observableArrayList();
         List<Cliente> clientes = null;
         try{
-                clienteService.getClientes(filtro);
+                clientes=clienteService.getClientes(filtro);
         }catch(TpvException e){
                 log.error("Error: "+e.getMessage());
                 Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_BUSCARPORNOMBRECLIENTE);

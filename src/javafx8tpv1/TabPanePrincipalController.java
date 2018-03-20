@@ -103,8 +103,15 @@ public class TabPanePrincipalController implements Initializable {
                        //menuPrincipalController.setMenuFocus();
                    }
                 });
-        //initImpresora();
-        gotoLogin();
+        try{
+            initImpresora();
+            gotoLogin();            
+        }catch(TpvException e){
+            log.error(e.getMessage());
+            Context.getInstance().currentDMTicket().setException(e);
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_LOGIN);
+            this.gotoError();
+        }
     }      
     
     @FXML
@@ -112,16 +119,8 @@ public class TabPanePrincipalController implements Initializable {
         System.out.println("IR AL MENU PRINCIPAL");
     }   
     
-    private void initImpresora(){
-        log.info("Ingresando al menú principal");
-        try{
+    private void initImpresora() throws TpvException{
             Connection.initFiscalPrinter();
-        }catch(TpvException e){
-            log.error(e.getMessage());
-            Context.getInstance().currentDMTicket().setException(e);
-            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_MENUPRINCIPAL);
-            this.gotoError();
-        }
         
     }
     

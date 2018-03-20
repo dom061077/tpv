@@ -156,7 +156,7 @@ public class SupervisorController implements Initializable{
     }
     
     public void setTabController(TabPanePrincipalController tabController){
-        this.tabController=this.tabController;
+        this.tabController=tabController;
     }
     
 }

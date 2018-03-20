@@ -27,6 +27,7 @@ import org.datafx.controller.FXMLController;
 import org.datafx.controller.flow.context.FXMLViewFlowContext;
 import org.datafx.controller.flow.context.ViewFlowContext;
 import com.tpv.principal.Context;
+import javafx.scene.Node;
         
 
 /**
@@ -122,9 +123,10 @@ public class ErrorController implements Initializable {
     }
     
     private void recuperarFallo(){
-        if(Context.getInstance().currentDMTicket().getTpvException().getExceptionOrigen() instanceof ConnectException
-           || Context.getInstance().currentDMTicket().getTpvException().getExceptionOrigen() instanceof UnknownHostException){
-            reconectarImpresora();
+        //if(Context.getInstance().currentDMTicket().getTpvException().getExceptionOrigen() instanceof ConnectException
+        //   || Context.getInstance().currentDMTicket().getTpvException().getExceptionOrigen() instanceof UnknownHostException){
+        if(!Connection.isDBConnected()){
+            //reconectarImpresora();
         }
     }
     
@@ -145,7 +147,19 @@ public class ErrorController implements Initializable {
                 log.info("Ingresando a pantalla de error: "+Context.getInstance().currentDMTicket().getTpvException().getMessage());
                 textAreaError.setText(Context.getInstance().currentDMTicket().getTpvException().getMessage()+'\n'
                     +Context.getInstance().currentDMTicket().getTpvException().getFiscalErrorMsg());
+                repeatFocus(textAreaError);
             //}        
-        
     }
+    
+    
+    private void repeatFocus(Node node){
+        Platform.runLater(() -> {
+            if (!node.isFocused()) {
+                node.requestFocus();
+                repeatFocus(node);
+            }
+        });        
+    }
+    
+    
 }

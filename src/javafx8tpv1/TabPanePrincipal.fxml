@@ -47,7 +47,7 @@
                       <fx:include fx:id="producto" source="../com/tpv/producto/BuscarPorDescProducto.fxml" />
                     </content>
                   </Tab>
-                  <Tab fx:id="tabBuscarCliente" text="Búsqueda de Cliente">
+                  <Tab fx:id="tabCliente" text="Búsqueda de Cliente">
                     <content>
                       <fx:include fx:id="buscarPorNombreCliente" source="../com/tpv/cliente/BuscarPorNombreCliente.fxml" />
                     </content>

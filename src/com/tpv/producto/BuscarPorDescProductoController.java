@@ -48,13 +48,7 @@ public class BuscarPorDescProductoController implements Initializable{
     private ProductoService productoService= new ProductoService();
     private TabPanePrincipalController tabPaneController;
     
-    @FXML
-    @BackAction
-    private Button buttonAceptar;
     
-    @FXML
-    @BackAction
-    private Button buttonCancelar;
     
     @FXML
     private TextField textFieldFiltroProducto;
@@ -107,7 +101,7 @@ public class BuscarPorDescProductoController implements Initializable{
                         if(textFieldFiltroProducto.getText().trim().equals("")){
                             ProductoData productoData = (ProductoData)tableView.getSelectionModel().getSelectedItem();
                             Context.getInstance().currentDMTicket().setCodigoProdSelecEnBuscarPorDesc(productoData.CodigoProductoProperty().get());
-                            buttonAceptar.fire();
+                            tabPaneController.gotoFacturacion();
                             keyEvent.consume();
                         }
                         else{
@@ -118,7 +112,7 @@ public class BuscarPorDescProductoController implements Initializable{
                     }
                     if(keyEvent.getCode()==KeyCode.ESCAPE){
                         Context.getInstance().currentDMTicket().setCodigoProdSelecEnBuscarPorDesc(0);
-                        buttonAceptar.fire();
+                        tabPaneController.gotoFacturacion();
                     }
                     int index=0;
                     if(keyEvent.getCode() == KeyCode.PAGE_DOWN){

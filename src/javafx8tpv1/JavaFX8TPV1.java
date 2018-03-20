@@ -60,7 +60,7 @@ public class JavaFX8TPV1 extends Application {
         }catch(TpvException e){
             log.error(e.getMessage());
             Context.getInstance().currentDMTicket().setException(e);
-            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_MENUPRINCIPAL);
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_LOGIN);
         }        
         
         try{
@@ -152,7 +152,7 @@ public class JavaFX8TPV1 extends Application {
         //scene.setCursor(Cursor.NONE);
         String css = this.getClass().getResource("caspian.css").toExternalForm(); 
         scene.getStylesheets().add(css);        
-        stage.setFullScreen(true); //full screen without borders (no program menu bars)
+        //stage.setFullScreen(true); //full screen without borders (no program menu bars)
         stage.setFullScreenExitHint(""); //Don't show "Press ESC to exit full screen"
         stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         

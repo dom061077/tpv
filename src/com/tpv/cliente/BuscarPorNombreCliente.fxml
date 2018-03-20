@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
@@ -12,7 +16,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1296.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.cliente.BuscarPorNombreClienteController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.cliente.BuscarPorNombreClienteController">
    <top>
       <BorderPane prefHeight="120.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <top>
@@ -25,8 +29,8 @@
          <center>
             <GridPane BorderPane.alignment="CENTER">
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="507.0" minWidth="10.0" prefWidth="413.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="613.0" minWidth="10.0" prefWidth="611.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -35,7 +39,7 @@
               </rowConstraints>
                <children>
                   <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="650.0" styleClass="label_textfield" text="Filtro:   " GridPane.rowIndex="1" />
-                  <TextField fx:id="textFieldFiltroNombreCliente" maxWidth="350.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="textFieldFiltroNombreCliente" maxWidth="437.0" prefHeight="31.0" prefWidth="437.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                </children>
             </GridPane>
          </center>
@@ -51,10 +55,10 @@
    <center>
       <TableView fx:id="tableView" focusTraversable="false" prefHeight="334.0" prefWidth="1296.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn fx:id="codigoColumn" prefWidth="103.0" text="Código" />
-            <TableColumn fx:id="dniColumn" prefWidth="128.0" text="D.N.I" />
-            <TableColumn fx:id="cuitColumn" prefWidth="114.99996948242188" text="C.U.I.T" />
-          <TableColumn fx:id="nombreColumn" prefWidth="607.0" text="Nombre" />
+          <TableColumn fx:id="codigoColumn" prefWidth="178.0" text="Código" />
+            <TableColumn fx:id="dniColumn" prefWidth="163.0" text="D.N.I" />
+            <TableColumn fx:id="cuitColumn" prefWidth="158.0" text="C.U.I.T" />
+          <TableColumn fx:id="nombreColumn" prefWidth="474.0" text="Nombre" />
         </columns>
       </TableView>
    </center>
