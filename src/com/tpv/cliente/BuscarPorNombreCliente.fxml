@@ -39,7 +39,7 @@
               </rowConstraints>
                <children>
                   <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="650.0" styleClass="label_textfield" text="Filtro:   " GridPane.rowIndex="1" />
-                  <TextField fx:id="textFieldFiltroNombreCliente" maxWidth="437.0" prefHeight="31.0" prefWidth="437.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="textFieldFiltroNombreCliente" maxWidth="437.0" prefHeight="31.0" prefWidth="437.0" styleClass="textfield_sin_border" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                </children>
             </GridPane>
          </center>

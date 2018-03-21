@@ -116,12 +116,19 @@ public class PagoTicketController implements Initializable {
     
     public void configurarInicio(){
         iniciarIngresosVisibles();
+        tableViewPagos.getItems().clear();
+        tableViewPagos.setItems(Context.getInstance().currentDMTicket().getPagos());
+        if(tableViewPagos.getItems().size()>0){
+            tableViewPagos.getSelectionModel().selectLast();
+            scrollDown();
+
+        }        
         Context.getInstance().currentDMTicket().getPagos();
         //textFieldCantidadCuotas.setDisable(true);
         DecimalFormat df = new DecimalFormat("##,###,##0.00");
         totalGral.setText(df.format(Context.getInstance().currentDMTicket().getTotalTicket()));
         //saldoPagar.setText(df.format(Context.getInstance().currentDMTicket().getTotalTicket().subtract(Context.getInstance().currentDMTicket().getTotalPagos())));
-
+        textFieldMonto.setText(Context.getInstance().currentDMTicket().getSaldo().toString());
         try{
             Factura factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdFactura());
             Context.getInstance().currentDMTicket().setBonificaciones(factura.getBonificacionCombosAux());
@@ -256,12 +263,7 @@ public class PagoTicketController implements Initializable {
             textFieldMonto.setText("0");
         
         Platform.runLater(() -> {
-            tableViewPagos.setItems(Context.getInstance().currentDMTicket().getPagos());
-            if(tableViewPagos.getItems().size()>0){
-                tableViewPagos.getSelectionModel().selectLast();
-                scrollDown();
 
-            }
             
             textFieldTipoPago.setOnKeyPressed(keyEvent -> {
                 if(keyEvent.getCode() == KeyCode.SUBTRACT){

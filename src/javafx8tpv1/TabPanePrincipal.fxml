@@ -69,6 +69,11 @@
                       <fx:include fx:id="combos" source="../com/tpv/combos/Combos.fxml" />
                     </content>
                   </Tab>
+                  <Tab fx:id="tabControlador" text="Controlador">
+                    <content>
+                      <fx:include fx:id="configImpresora" source="../com/tpv/print/fiscal/ConfiguracionImpresora.fxml" />
+                    </content>
+                  </Tab>
                   
 
                   <Tab fx:id="tabFacturacion" text="Facturación">

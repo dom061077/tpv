@@ -27,6 +27,7 @@ import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -115,7 +116,14 @@ public class ConfirmaPagoTicketController implements Initializable{
     
     public void configurarInicio(){
             log.info("Ingresando a la confirmación de pago");
-        
+            DecimalFormat df = new DecimalFormat("##,##0.00");
+            
+            totalPagosLabel.setText(df.format(Context.getInstance().currentDMTicket().getTotalPagos()));
+            totalBonificacionesLabel.setText(df.format(Context.getInstance().currentDMTicket().getBonificaciones()));
+            totalTicketLabel.setText(df.format(Context.getInstance().currentDMTicket().getTotalTicket()));
+            cambioLabel.setText(df.format(Context.getInstance().currentDMTicket().getSaldo().abs()));
+            repeatFocus(borderPane);
+                    
     }
     
     @FXML
@@ -192,12 +200,7 @@ public class ConfirmaPagoTicketController implements Initializable{
             });
             bonificacionTarjetaColumn.setStyle("-fx-alignment: CENTER-RIGHT");
             
-            DecimalFormat df = new DecimalFormat("##,##0.00");
             
-            totalPagosLabel.setText(df.format(Context.getInstance().currentDMTicket().getTotalPagos()));
-            totalBonificacionesLabel.setText(df.format(Context.getInstance().currentDMTicket().getBonificaciones()));
-            totalTicketLabel.setText(df.format(Context.getInstance().currentDMTicket().getTotalTicket()));
-            cambioLabel.setText(df.format(Context.getInstance().currentDMTicket().getSaldo().abs()));
             
             Platform.runLater(()->{
                 tableViewPagos.setItems(Context.getInstance().currentDMTicket().getPagos());
@@ -394,6 +397,13 @@ public class ConfirmaPagoTicketController implements Initializable{
         
     }    */
     
-    
+    private void repeatFocus(Node node){
+        Platform.runLater(() -> {
+            if (!node.isFocused()) {
+                node.requestFocus();
+                repeatFocus(node);
+            }
+        });        
+    }    
     
 }

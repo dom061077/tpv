@@ -99,19 +99,21 @@ public class ErrorController implements Initializable {
                         if(Context.getInstance().currentDMTicket().getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_MENUPRINCIPAL)
                             tabController.gotoMenuPrincipal();
                         if(Context.getInstance().currentDMTicket().getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_CONFIRMARTICKET)
-                            confirmarTicketButton.fire();
+                            tabController.gotoConfirmarPago();
                         if(Context.getInstance().currentDMTicket().getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_BUSCARPORNOMBRECLIENTE)
-                            buscarClienteButton.fire();
+                            tabController.gotoCliente();
                         if(Context.getInstance().currentDMTicket().getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_BUSCARPORDESCPRODUCTO)
-                            buscarProdButton.fire();
+                            tabController.gotoProducto();
                         if(Context.getInstance().currentDMTicket().getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_PAGOTICKET)
-                            pagoTicketButton.fire();
+                            tabController.gotoPago();
                         if(Context.getInstance().currentDMTicket().getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_LOGIN)
                             tabController.gotoLogin();
                         
                         if(Context.getInstance().currentDMTicket().getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_SUPERVISOR)
-                            supervisorButton.fire();
+                            tabController.gotoSupervisor();
                         
+                        if(Context.getInstance().currentDMTicket().getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_CONTROLADOR)
+                            tabController.gotoControlador();
                         
                     }
                     if(keyEvent.getCode()==KeyCode.F12)

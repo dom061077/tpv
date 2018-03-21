@@ -66,6 +66,9 @@ public class SupervisorController implements Initializable{
         labelTitulo.setText(Context.getInstance().currentDMTicket().getTipoTituloSupervisor().getTitulo());
         textFieldPassword.setDisable(true);
         
+        textFieldCodigoSupervisor.setText("");
+        textFieldPassword.setText("");
+        
     }
     
     
@@ -151,6 +154,7 @@ public class SupervisorController implements Initializable{
         }catch(TpvException e){
             log.info("Error en cancelacion de ticket");
             Context.getInstance().currentDMTicket().setException(e);
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_SUPERVISOR);
             tabController.gotoError();
         } 
     }

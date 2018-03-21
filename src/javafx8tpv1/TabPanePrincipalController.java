@@ -26,10 +26,13 @@ import org.apache.log4j.Logger;
 import com.tpv.exceptions.TpvException;
 import com.tpv.pagoticket.ConfirmaPagoTicketController;
 import com.tpv.pagoticket.PagoTicketController;
+import com.tpv.print.fiscal.ConfiguracionImpresoraController;
 import com.tpv.producto.BuscarPorDescProductoController;
 import com.tpv.service.UsuarioService;
 import com.tpv.supervisor.SupervisorController;
 import com.tpv.util.Connection;
+import javafx.application.Platform;
+import javafx.scene.Node;
 
 /**
  *
@@ -51,6 +54,7 @@ public class TabPanePrincipalController implements Initializable {
     @FXML private ConfirmaPagoTicketController confirmaPagoController;
     @FXML private PagoTicketController pagoTicketController;
     @FXML private CombosController comboController;
+    @FXML private ConfiguracionImpresoraController configImpresoraController;
     
     @FXML private CombosController combosController;
     
@@ -66,6 +70,7 @@ public class TabPanePrincipalController implements Initializable {
     @FXML private Tab tabConfirmarPago;
     @FXML private Tab tabPago;
     @FXML private Tab tabCombos;
+    @FXML private Tab tabControlador;
     
     @FXML private TabPane tabPanePrincipal;
     @FXML private Button buttonGoToError;
@@ -94,7 +99,7 @@ public class TabPanePrincipalController implements Initializable {
         this.confirmaPagoController.setTabController(this);
         this.productoController.setTabController(this);
         this.buscarPorNombreClienteController.setTabController(this);
-        
+        this.configImpresoraController.setTabController(this);
         
         checkMac();
         tabPanePrincipal.getSelectionModel().selectedItemProperty()
@@ -211,6 +216,20 @@ public class TabPanePrincipalController implements Initializable {
         this.tabPanePrincipal.getSelectionModel().select(tabConfirmarPago);
     }
     
+    public void gotoControlador(){
+        this.configImpresoraController.configurarInicio();
+        this.tabPanePrincipal.getSelectionModel().select(tabControlador);
+    }
+            
+
+    public void repeatFocus(Node node){
+        Platform.runLater(() -> {
+            if (!node.isFocused()) {
+                node.requestFocus();
+                repeatFocus(node);
+            }
+        });        
+    }    
     
     
 }

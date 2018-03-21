@@ -204,7 +204,7 @@ public class FXMLMainController implements Initializable {
             if(Context.getInstance().currentDMTicket().getCliente()!=null){
                 nombreCliente.setText(Context.getInstance().currentDMTicket().getCliente().getRazonSocial());
             }
-            repeatFocus(textFieldProducto);
+            tabPaneController.repeatFocus(textFieldProducto);
         }else{
             nombreCliente.setVisible(false);
             labelSubTituloIngresos.setText(TITULO_INGRESO_CLIENTE);
@@ -213,7 +213,7 @@ public class FXMLMainController implements Initializable {
             textFieldProducto.setVisible(false);
             labelProducto.setVisible(false);
             textFieldCodCliente.setVisible(true);
-            repeatFocus(textFieldCodCliente);
+            tabPaneController.repeatFocus(textFieldCodCliente);
             labelCliente.setVisible(true);
         }
         
@@ -268,7 +268,7 @@ public class FXMLMainController implements Initializable {
                     }else{
                         traerCliente();
                     } 
-                    repeatFocus(textFieldProducto);
+                    tabPaneController.repeatFocus(textFieldProducto);
                 }
                 if(keyEvent.getCode()==KeyCode.F11 ){
                     if(Context.getInstance().currentDMTicket().getDetalle().size()==0)
@@ -297,7 +297,7 @@ public class FXMLMainController implements Initializable {
                         labelProducto.setVisible(true);
                         textFieldCantidad.setVisible(false);
                         stackPaneIngresos.setVisible(false);
-                        repeatFocus(textFieldProducto);
+                        tabPaneController.repeatFocus(textFieldProducto);
                     }
                     
                 }
@@ -315,7 +315,7 @@ public class FXMLMainController implements Initializable {
                         labelCantidad.setVisible(false);
                         textFieldCodCliente.setVisible(true);
                         labelCliente.setVisible(true);
-                        repeatFocus(textFieldCodCliente);
+                        tabPaneController.repeatFocus(textFieldCodCliente);
                     }
                 }
                 if(keyEvent.getCode() == KeyCode.F3){
@@ -395,7 +395,7 @@ public class FXMLMainController implements Initializable {
                         labelProducto.setVisible(false);
                         stackPaneIngresos.setVisible(true);
                         labelSubTituloIngresos.setText(TITULO_INGRESO_CANTIDAD);
-                        repeatFocus(textFieldCantidad);
+                        tabPaneController.repeatFocus(textFieldCantidad);
                         stackPaneIngresos.toFront();
                         
                 }
@@ -613,21 +613,21 @@ public class FXMLMainController implements Initializable {
 
     }
     
-    public void traerInfoImpresora(){
+    public void traerInfoImpresora() throws TpvException{
         if(Context.getInstance().currentDMTicket().getNroTicket()==0){
-            try{
+//            try{
 
                 String retorno[] = impresoraService.getPtoVtaNrosTicket();
                 Context.getInstance().currentDMTicket().setNroTicket(Integer.parseInt(retorno[1])+1);
                 Context.getInstance().currentDMTicket().setPuntoVenta(Long.parseLong(retorno[0]));
 
-            }catch(TpvException e){
-                log.error(e.getMessage());
-                Context.getInstance().currentDMTicket().setException(e);
-                Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
-                tabPaneController.gotoError();
+//            }catch(TpvException e){
+//                log.error(e.getMessage());
+//                Context.getInstance().currentDMTicket().setException(e);
+//                Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+//                tabPaneController.gotoError();
                 
-            }
+//            }
         }
         nroticket.setText("Pto.Venta: "+Context.getInstance().currentDMTicket().getPuntoVenta()+" Nro. Ticket (B/C): "
                             +Context.getInstance().currentDMTicket().getNroTicket()
@@ -1071,14 +1071,7 @@ public class FXMLMainController implements Initializable {
         this.tabPaneController=tabPane;
     }
     
-    private void repeatFocus(Node node){
-        Platform.runLater(() -> {
-            if (!node.isFocused()) {
-                node.requestFocus();
-                repeatFocus(node);
-            }
-        });        
-    }
+
     
     
 }

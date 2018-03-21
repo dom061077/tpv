@@ -4,11 +4,11 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="439.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.print.fiscal.ConfiguracionImpresoraController">
    <top>
       <Pane prefHeight="116.0" prefWidth="650.0" BorderPane.alignment="CENTER">
          <children>
-            <GridPane prefHeight="88.0" prefWidth="650.0">
+            <GridPane prefHeight="88.0" prefWidth="1024.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
@@ -16,7 +16,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label alignment="TOP_CENTER" contentDisplay="CENTER" prefHeight="68.0" prefWidth="638.0" styleClass="label_titulo" text="Configuración Impresora" textAlignment="CENTER" />
+                  <Label alignment="TOP_CENTER" contentDisplay="CENTER" prefHeight="68.0" prefWidth="944.0" styleClass="label_titulo" text="Configuración Impresora" textAlignment="CENTER" />
                </children>
             </GridPane>
          </children>
@@ -25,17 +25,23 @@
    <bottom>
       <HBox prefHeight="28.0" prefWidth="650.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="buttonVolver" mnemonicParsing="false" text="Button" />
+            <Label text="F11 - Retornar a Menu Principal" />
          </children>
       </HBox>
    </bottom>
    <center>
-      <VBox fx:id="vboxMenuImpresora" focusTraversable="true" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+      <VBox fx:id="vboxMenuImpresora" focusTraversable="true" prefHeight="700.0" prefWidth="1024.0" styleClass="rounded_corner" BorderPane.alignment="CENTER">
          <children>
-            <Label styleClass="label_titulo" text="Cancelar Ticket" />
-            <Label styleClass="label_titulo" text="Libro X" />
+            <Label styleClass="label_titulo" text="1 - Cancelar Ticket" />
+            <Label styleClass="label_titulo" text="2 - Cierre Z" />
             <Label styleClass="label_titulo" text="Libro Y" />
          </children>
       </VBox>
    </center>
+   <left>
+      <Button mnemonicParsing="false" text="Button" visible="false" BorderPane.alignment="CENTER" />
+   </left>
+   <right>
+      <Button mnemonicParsing="false" text="Button" visible="false" BorderPane.alignment="CENTER" />
+   </right>
 </BorderPane>
