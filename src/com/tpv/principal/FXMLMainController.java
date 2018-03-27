@@ -182,7 +182,7 @@ public class FXMLMainController implements Initializable {
     @FXML
     private Label labelTotalGral;
     
-    public void configurarInicio(){
+    public void configurarInicio() throws TpvException{
         log.info("Ingresando a pantalla de facturación");
         stackPaneIngresos.requestFocus();
         textFieldCodCliente.requestFocus();
@@ -191,7 +191,9 @@ public class FXMLMainController implements Initializable {
         verificarDetalleTableView();
         
         chequearInterfazNegativo();            
+
         traerInfoImpresora();
+        
         tableViewTickets.setItems(Context.getInstance().currentDMTicket().getDetalle());
         calcularTotalGeneral();
         scrollDown();
@@ -263,6 +265,7 @@ public class FXMLMainController implements Initializable {
                         textFieldProducto.setVisible(true);
                         Context.getInstance().currentDMTicket().setCliente(null);
                         nombreCliente.setVisible(false);
+                        
 
                         Context.getInstance().currentDMTicket().setClienteSeleccionado(true);
                     }else{
@@ -992,7 +995,7 @@ public class FXMLMainController implements Initializable {
     }
             
     
-    private void verificarDetalleTableView(){
+    private void verificarDetalleTableView() throws TpvException{
         log.info("Verificando detalle de TableView");
         if(Context.getInstance().currentDMTicket().isReinicioVerificado()){
             return;
@@ -1001,7 +1004,7 @@ public class FXMLMainController implements Initializable {
                 tableViewTickets.getItems().size()>0)
             tableViewTickets.getItems().clear();
         Factura factura = null;
-        try{
+        //try{
             factura = factService.getFacturaAbiertaPorCheckout(Context.getInstance().currentDMTicket().getCheckout().getId()
                     ,Context.getInstance().currentDMTicket().getUsuario().getIdUsuario());
             if(factura!=null){
@@ -1022,23 +1025,15 @@ public class FXMLMainController implements Initializable {
                 Context.getInstance().currentDMTicket().setIdFactura(factura.getId());
             }
             Context.getInstance().currentDMTicket().setReinicioVerificado(true);                    
-        }catch(TpvException e){
+        /*}catch(TpvException e){
             log.error("Error en capa controller: "+e.getMessage());
-            /*Alert alert = new Alert(AlertType.ERROR
-                    , "Hay uno o más tickets abiertos para el checkout y el usuario en curso"
-                    , ButtonType.OK);
-                        alert.showAndWait().ifPresent(response ->{
-                            if(response == ButtonType.OK){
-                                volverMenuPrincipalButton.fire();
-                            }
-                        });*/
               
             Context.getInstance().currentDMTicket().setCliente(null);
             Context.getInstance().currentDMTicket().setClienteSeleccionado(false);
             Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
             Context.getInstance().currentDMTicket().setException(e);
             tabPaneController.gotoError();
-        }
+        }*/
     }
     
     private void verCombos(){

@@ -289,8 +289,6 @@ public class FacturacionService  {
                                     grupo.addDetallePrecioProducto(
                                              paf.getPrecioUnitario(),paf);
                                 }
-                                    
-                                
                             }
                         }
                     }

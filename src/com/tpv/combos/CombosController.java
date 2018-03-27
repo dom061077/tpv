@@ -43,9 +43,6 @@ public class CombosController implements Initializable{
     Logger log = Logger.getLogger(CombosController.class);
     TabPanePrincipalController tabPaneController;
     
-    @FXML
-    @ActionTrigger("volverFacturacion")
-    private Button volverButton;
     
     @FXML
     private TableView tableViewCombos;
@@ -66,8 +63,6 @@ public class CombosController implements Initializable{
     private TableColumn observacionColumn;
     
     
-    @FXML
-    private Button goToErrorButton;
     
     @FXML
     private Label totalTicket;
@@ -91,7 +86,9 @@ public class CombosController implements Initializable{
     
     
     public void configurarInicio(){
-        
+            traerCombos();
+            tableViewCombos.setItems(listCombos);
+            tabPaneController.repeatFocus(tableViewCombos);
     }
     
     @FXML
@@ -101,11 +98,9 @@ public class CombosController implements Initializable{
             initTableViewCombos();
             tableViewCombos.setOnKeyPressed(keyEvent->{
                 if(keyEvent.getCode()==KeyCode.ESCAPE){
-                    volverButton.fire();
+                    tabPaneController.gotoFacturacion();
                 }
             });
-            traerCombos();
-            tableViewCombos.setItems(listCombos);
             
         });      
     }
@@ -176,7 +171,7 @@ public class CombosController implements Initializable{
     
     private void traerCombos(){
         DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
-        
+        listCombos.removeAll(combosItems);
         try{
             Factura factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdFactura());
             totalBonificado = BigDecimal.ZERO;
@@ -204,7 +199,7 @@ public class CombosController implements Initializable{
             log.error("Error en capa controller: "+e.getMessage());
             Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
             Context.getInstance().currentDMTicket().setException(e);
-            goToErrorButton.fire();
+            tabPaneController.gotoError();
         }
     }
     

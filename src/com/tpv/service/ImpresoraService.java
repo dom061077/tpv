@@ -189,7 +189,7 @@ public class ImpresoraService {
         
         
         //HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
-        FiscalPacket request2daLineaDetalle,request1eraLineaDetalle;
+        FiscalPacket request2daLineaDetalle,request1eraLineaDetalle,requestEstado;
         FiscalPacket response;
         FiscalMessages fMsg;
         //cmdPrintLineItem(String description, BigDecimal quantity, BigDecimal price, BigDecimal ivaPercent
@@ -197,8 +197,10 @@ public class ImpresoraService {
         //request = hfp.cmdPrintLineItem("CACAO", new BigDecimal("1"), new BigDecimal("1"), new BigDecimal("21"), false, new BigDecimal("0"), false,0);
         request1eraLineaDetalle = getHfp().cmdPrintFiscalText(_1erLineaDetalle,0);
         request2daLineaDetalle = getHfp().cmdPrintLineItem(_2daLineaDetalle,  cantidad, precio, iva, imprimeNegativo, impuestoInterno, false,0);
+        requestEstado = getHfp().cmdStatusRequest();
 //        hfp.cmdPrintFiscalText(descripcion, Integer.SIZE)
         try{
+            response = getHfp().execute(requestEstado);
             response = getHfp().execute(request1eraLineaDetalle);
             response = getHfp().execute(request2daLineaDetalle);
         }catch(FiscalPrinterStatusError e){

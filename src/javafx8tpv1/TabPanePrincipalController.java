@@ -53,10 +53,9 @@ public class TabPanePrincipalController implements Initializable {
     @FXML private BuscarPorDescProductoController productoController;
     @FXML private ConfirmaPagoTicketController confirmaPagoController;
     @FXML private PagoTicketController pagoTicketController;
-    @FXML private CombosController comboController;
     @FXML private ConfiguracionImpresoraController configImpresoraController;
     
-    @FXML private CombosController combosController;
+    @FXML private CombosController combosController; 
     
     @FXML private Button buttonMenuPrincipal;
     
@@ -100,6 +99,7 @@ public class TabPanePrincipalController implements Initializable {
         this.productoController.setTabController(this);
         this.buscarPorNombreClienteController.setTabController(this);
         this.configImpresoraController.setTabController(this);
+        this.combosController.setTabController(this);
         
         checkMac();
         tabPanePrincipal.getSelectionModel().selectedItemProperty()
@@ -176,8 +176,15 @@ public class TabPanePrincipalController implements Initializable {
     }
     
     public void gotoFacturacion(){
-        this.facturacionController.configurarInicio();
-        this.tabPanePrincipal.getSelectionModel().select(tabFacturacion);
+        try{
+            this.facturacionController.configurarInicio();
+            this.tabPanePrincipal.getSelectionModel().select(tabFacturacion);
+        }catch(TpvException e){
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+            Context.getInstance().currentDMTicket().setException(e);
+            gotoError();
+        }    
+        
     }
     
     public void gotoError(){
@@ -212,8 +219,8 @@ public class TabPanePrincipalController implements Initializable {
     }
     
     public void gotoCombos(){
-        this.comboController.configurarInicio();
-        this.tabPanePrincipal.getSelectionModel().select(tabConfirmarPago);
+        this.combosController.configurarInicio();
+        this.tabPanePrincipal.getSelectionModel().select(tabCombos);
     }
     
     public void gotoControlador(){
