@@ -151,7 +151,7 @@ public class ComboGrupo {
      * @return the detallePreciosProductos
      */
     public List<ComboGrupoDetallePrecioProducto> getDetallePreciosProductos() {
-        if(getPorcentaje().compareTo(BigDecimal.ZERO)>0 || getMonto().compareTo(BigDecimal.ZERO)>0)
+        /*if(getPorcentaje().compareTo(BigDecimal.ZERO)>0 || getMonto().compareTo(BigDecimal.ZERO)>0)
             Collections.sort(detallePreciosProductos,
                     (o1,o2)->o1.getPaf().getPrecioUnitario()
                             .compareTo(o2.getPaf().getPrecioUnitario())*-1
@@ -159,8 +159,20 @@ public class ComboGrupo {
         else
             Collections.sort(detallePreciosProductos,
                     (o1,o2)->o1.getPaf().getPrecioUnitario()
-                            .compareTo(o2.getPaf().getPrecioUnitario())
+                            .compareTo(o2.getPaf().getPrecioUnitario    ())
+            );*/
+        
+        if(tomarMenorPrecio)
+            Collections.sort(detallePreciosProductos,
+                    (o1,o2)->o1.getPaf().getPrecioUnitario()
+                            .compareTo(o2.getPaf().getPrecioUnitario    ())
             );
+        else
+            Collections.sort(detallePreciosProductos,
+                    (o1,o2)->o1.getPaf().getPrecioUnitario()
+                            .compareTo(o2.getPaf().getPrecioUnitario())*-1
+            );
+            
             
         return detallePreciosProductos;
         

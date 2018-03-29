@@ -414,7 +414,7 @@ public class Combo {
         }
         boolean hayCombo=true;
         ComboGrupo cgaux=null;
-        if(!isCombinarProductos()){
+        //if(!isCombinarProductos()){
             while(hayCombo){
                 for(Iterator<ComboGrupo> itcg = getCombosGrupo().iterator();itcg.hasNext();){
                      cgaux = itcg.next();
@@ -432,7 +432,7 @@ public class Combo {
                         cgaux.incCantidadGruposEnCombo();;
                 }
             }
-        }else{
+        /*}else{
             while(hayCombo){
                 for(Iterator<ComboGrupo>itcg = getCombosGrupo().iterator();itcg.hasNext();){
                     cgaux = itcg.next();
@@ -469,20 +469,27 @@ public class Combo {
                     
                 }
             }
-        }
+        }*/
         
         if(getCombosGrupo().size()>0)
             cantidadCombos = getCombosGrupo().get(0).getCantidadGruposEnCombo();
+        
+        
         for(Iterator<ComboGrupo> itcg = getCombosGrupo().iterator();itcg.hasNext();){
             ComboGrupo cg = itcg.next();
+            if(cg.getCantidadGruposEnCombo()==0){
+                //al menos un grupocombo no cumple con la condición
+                cantidadCombos=0;
+                break;
+            }
             if(cantidadCombos>cg.getCantidadGruposEnCombo())
                 cantidadCombos=cg.getCantidadGruposEnCombo();
         }            
 
         if(cantidadCombos==0)
             return cantidadCombos;
-
-        if(this.isCombinarProductos()){
+        int cantidadCombosAux=cantidadCombos;
+        /*if(this.isCombinarProductos()){
             for(Iterator<ComboGrupo> itcg = getCombosGrupo().iterator();itcg.hasNext();){
                     ComboGrupo cg = itcg.next();
                     int cantidadADecrementar = cantidadCombos * cg.getCantidad();                    
@@ -534,18 +541,18 @@ public class Combo {
                    );
                     
             }
-        }else{
+        }else{*/
             for(Iterator<ComboGrupo> itcg = getCombosGrupo().iterator();itcg.hasNext();){
                 ComboGrupo cg = itcg.next();
-                for(Iterator<ComboGrupoDetallePrecioProducto> itcdpp = cg.getDetallePreciosProductos().iterator()
+                /*or(Iterator<ComboGrupoDetallePrecioProducto> itcdpp = cg.getDetallePreciosProductos().iterator()
                         ;itcdpp.hasNext();){
                     ComboGrupoDetallePrecioProducto cdpp = itcdpp.next();
                     int cantidadDecrementada = cdpp.getPaf().getCantidad()/cg.getCantidad();
                     cdpp.getPaf().decCantidad(cantidadDecrementada*cg.getCantidad());
                     if(cg.getMonto().compareTo(BigDecimal.ZERO)>0){
-//                        bonificacionFinal = bonificacionFinal.add(cdpp.getPaf()
-//                                .getPrecioUnitario().multiply(BigDecimal.valueOf(cantidadDecrementada*cg.getCantidad()))
-//                            );
+                        //bonificacionFinal = bonificacionFinal.add(cdpp.getPaf()
+                        //        .getPrecioUnitario().multiply(BigDecimal.valueOf(cantidadDecrementada*cg.getCantidad()))
+                        //    );
                     }else{
                         bonificacionFinal = bonificacionFinal.add(
                                 cdpp.getPaf().getPrecioUnitario().multiply(cg.getPorcentaje())
@@ -558,8 +565,29 @@ public class Combo {
                    bonificacionFinal = bonificacionFinal.add(
                            cg.getMonto().multiply(BigDecimal.valueOf(cantidadCombos))
                    );
+               */
+                
+                for(Iterator<ComboGrupoDetallePrecioProducto> itcdpp = cg.getDetallePreciosProductos().iterator();
+                            itcdpp.hasNext();){
+                    if(cantidadCombosAux<=0)
+                        break;
+                    ComboGrupoDetallePrecioProducto cdpp = itcdpp.next();
+                    int cantidadDecrementada = cantidadCombos * cg.getCantidad();        
+                    cdpp.getPaf().decCantidad(cantidadDecrementada);
+                    bonificacionFinal = bonificacionFinal.add(
+                            cdpp.getPaf().getPrecioUnitario().multiply(cg.getPorcentaje())
+                                .divide(BigDecimal.valueOf(100))
+                                .multiply(BigDecimal.valueOf(cantidadDecrementada))
+                    );
+                    cantidadCombosAux-=1;
+                }
+                if(cg.getMonto().compareTo(BigDecimal.ZERO)>0)
+                   bonificacionFinal = bonificacionFinal.add(
+                           cg.getMonto().multiply(BigDecimal.valueOf(cantidadCombos))
+                   );                
+                
             }
-        }
+        //}
         
         //bonificacion
         
