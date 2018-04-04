@@ -115,6 +115,17 @@ public class PagoTicketController implements Initializable {
     
     
     public void configurarInicio(){
+        
+        try{
+            Factura factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdFactura());
+            Context.getInstance().currentDMTicket().setBonificaciones(factura.getBonificacionCombosAux());
+        }catch(TpvException e)    {
+            log.error("Error en capa controller "+e.getMessage());
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_PAGOTICKET);
+            Context.getInstance().currentDMTicket().setException(e);
+            tabPaneController.gotoError();
+        }
+        
         iniciarIngresosVisibles();
         tableViewPagos.getItems().clear();
         tableViewPagos.setItems(Context.getInstance().currentDMTicket().getPagos());
@@ -129,15 +140,6 @@ public class PagoTicketController implements Initializable {
         totalGral.setText(df.format(Context.getInstance().currentDMTicket().getTotalTicket()));
         //saldoPagar.setText(df.format(Context.getInstance().currentDMTicket().getTotalTicket().subtract(Context.getInstance().currentDMTicket().getTotalPagos())));
         textFieldMonto.setText(Context.getInstance().currentDMTicket().getSaldo().toString());
-        try{
-            Factura factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdFactura());
-            Context.getInstance().currentDMTicket().setBonificaciones(factura.getBonificacionCombosAux());
-        }catch(TpvException e)    {
-            log.error("Error en capa controller "+e.getMessage());
-            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_PAGOTICKET);
-            Context.getInstance().currentDMTicket().setException(e);
-            tabPaneController.gotoError();
-        }
         bonificaciones.setText(df.format(Context.getInstance().currentDMTicket().getBonificaciones()));
         saldoPagar.setText(Context.getInstance().currentDMTicket().getFormatSaldo());        
         bonificacionPorPagoTotal.setText(Context.getInstance().currentDMTicket().getFormatBonificacionPorPagoTotal());
@@ -351,7 +353,7 @@ public class PagoTicketController implements Initializable {
             });
             textFieldCantidadCuotas.setOnKeyPressed(keyEvent->{
                 if(keyEvent.getCode() == KeyCode.ESCAPE){
-                    
+                    textFieldCantidadCuotas.setText("0");
                     textFieldCantidadCuotas.setDisable(true);
                     textFieldMonto.requestFocus();
                 }

@@ -68,7 +68,7 @@ public class SupervisorController implements Initializable{
         
         textFieldCodigoSupervisor.setText("");
         textFieldPassword.setText("");
-        
+        tabController.repeatFocus(textFieldCodigoSupervisor);
     }
     
     
@@ -142,21 +142,13 @@ public class SupervisorController implements Initializable{
     }
     
     
-    private void cancelarTicketCompleto(){
-        try{
-            
+    private void cancelarTicketCompleto() throws TpvException{
             impresoraService.cancelarTicket();
             facturaService.cancelarFactura(Context.getInstance().currentDMTicket().getIdFactura());
             Context.getInstance().currentDMTicket().setCliente(null);
             Context.getInstance().currentDMTicket().setClienteSeleccionado(false);
             Context.getInstance().currentDMTicket().getDetalle().clear();
             Context.getInstance().currentDMTicket().getPagos().clear();
-        }catch(TpvException e){
-            log.info("Error en cancelacion de ticket");
-            Context.getInstance().currentDMTicket().setException(e);
-            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_SUPERVISOR);
-            tabController.gotoError();
-        } 
     }
     
     public void setTabController(TabPanePrincipalController tabController){

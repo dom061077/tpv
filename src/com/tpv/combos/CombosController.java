@@ -178,7 +178,7 @@ public class CombosController implements Initializable{
             for(Iterator<FacturaDetalleCombo> it = factura.getDetalleCombosAux().iterator();it.hasNext();){
                 FacturaDetalleCombo fdc = it.next();
                 String observacion="";
-                if(fdc.getCantidad()>fdc.getCombo().getCantidadMaxima())
+                if(fdc.getCombo().getCantidadMaxima()>0 && fdc.getCantidad()>fdc.getCombo().getCantidadMaxima())
                     observacion="Excede máximo de "+fdc.getCombo().getCantidadMaxima();
                 FacturaDetalleComboData fdcd = new FacturaDetalleComboData(
                             fdc.getCombo().getCodigoCombo(),

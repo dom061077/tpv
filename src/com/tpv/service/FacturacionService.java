@@ -13,23 +13,19 @@ import com.tpv.modelo.CondicionIva;
 import com.tpv.modelo.Factura;
 import com.tpv.modelo.FacturaDetalle;
 import com.tpv.modelo.FacturaDetalleCombo;
-import com.tpv.modelo.Producto;
 import com.tpv.modelo.ProductoAgrupadoEnFactura;
-import com.tpv.modelo.Proveedor;
-import com.tpv.modelo.ProveedorProducto;
 import com.tpv.modelo.enums.FacturaEstadoEnum;
-import com.tpv.principal.LineaTicketData;
 import com.tpv.util.Connection;
 import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.List;
-import javafx.beans.property.ListProperty;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 import org.apache.log4j.Logger;
+import java.math.BigDecimal;
 
 /**
  *
@@ -140,11 +136,13 @@ public class FacturacionService  {
             tx.begin();
             
             factura.setEstado(FacturaEstadoEnum.CERRADA);
+            BigDecimal total=new BigDecimal(0);
             for(Iterator<FacturaDetalle>it = factura.getDetalle().iterator();it.hasNext();){
                 FacturaDetalle fd = it.next();
                 fd.getProducto().decStock(fd.getCantidad());
-                //em.merge(fd.getProducto());
+                total=total.add(fd.getSubTotal());
             }
+            factura.setTotal(total);
             factura=em.merge(factura);
             tx.commit();
             log.info("Factura guardada, id: "+factura.getId());

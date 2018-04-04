@@ -206,10 +206,13 @@ public class ImpresoraService {
         }catch(FiscalPrinterStatusError e){
             fMsg = getHfp().getMessages();
             log.warn("Error fiscal al imprimir linea de ticket",e);
+            log.info("Codigos error en PrinterStatusError: "+e.getResponsePacket().getPrinterStatus());
+            log.info("Codigos error del estado fiscal: "+e.getResponsePacket().getFiscalStatus());
             throw new TpvException(e.getMessage());
             
         }catch(FiscalPrinterIOException e){
-            log.warn("Error de Impresora al imprimir linea de ticket",e);
+            log.warn("Codigo de Error en PrinterIOException de Impresora al imprimir linea de ticket",e);
+            
             throw new TpvException(e.getMessage());
         }
         
