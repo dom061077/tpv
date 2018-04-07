@@ -55,6 +55,9 @@ public class FacturaDetalle {
     private BigDecimal subTotal;
     
     @Transient
+    private BigDecimal ivaReducido;
+    
+    @Transient
     private int cantidadAuxCombo;
     
     @ManyToOne(cascade = CascadeType.ALL)

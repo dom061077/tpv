@@ -13,6 +13,7 @@ import com.tpv.modelo.Cliente;
 import com.tpv.modelo.Factura;
 import com.tpv.modelo.FacturaDetalle;
 import com.tpv.modelo.FacturaDetalleCombo;
+import com.tpv.modelo.ListaPrecioProducto;
 import com.tpv.modelo.Producto;
 import com.tpv.modelo.enums.FacturaEstadoEnum;
 import com.tpv.print.event.FiscalPrinterEvent;
@@ -470,6 +471,8 @@ public class FXMLMainController implements Initializable {
         Producto producto = null;
         BigDecimal precioOPeso = BigDecimal.ZERO;
         BigDecimal precio = BigDecimal.valueOf(0);
+        BigDecimal descuentoCliente = BigDecimal.valueOf(0);
+        ListaPrecioProducto lpp;
         try{
             cantidad = new BigDecimal(textFieldCantidad.getText());
         }catch(Exception e){
@@ -503,7 +506,13 @@ public class FXMLMainController implements Initializable {
                         
                 if(producto!=null){
                     log.debug("Producto encontrado: "+producto.getDescripcion());
-                    precio= productoService.getPrecioProducto(producto.getCodigoProducto(),Context.getInstance().currentDMTicket().getCliente());
+                    lpp = productoService.getListaPrecioProducto(producto.getCodigoProducto(),Context.getInstance().currentDMTicket().getCliente());
+                    precio = lpp.getPrecioFinal(); //precio sin tomar el posible descuento por cliente de luque
+                    BigDecimal descCliente = precio.multiply(lpp.getDescuentoCliente()).divide(BigDecimal.valueOf(100));
+                    precio = precio.subtract(descCliente);
+                    quede aqui
+                    //descuentoCliente = productoService.getPorcentajeDescCliente(producto.getCodigoProducto()
+                    //            , Context.getInstance().currentDMTicket().getCliente() );
                     if(producto.isProductoVilleco()){
                         if(precioOPeso.compareTo(BigDecimal.ZERO)>0){
                            cantidad = precioOPeso.divide(precio).setScale(3, RoundingMode.DOWN);
@@ -528,8 +537,16 @@ public class FXMLMainController implements Initializable {
                                 textFieldCantidad.setText("");
                                 return;
                             }
+                        
+    //public LineaTicketData(int codigoProducto,String descripcion,BigDecimal cantidad,BigDecimal precioUnitario
+    //        ,BigDecimal neto,BigDecimal impuestoInterno,BigDecimal descuento
+    //        ,BigDecimal retencion ,boolean devuelto)                        
+                        
                         lineaTicketData = new LineaTicketData(producto.getCodigoProducto()
-                                ,producto.getDescripcion(),cantidad,precio,Context.getInstance().currentDMTicket().isImprimeComoNegativo());
+                                ,producto.getDescripcion(),cantidad,precio
+                                , new BigDecimal(0),new BigDecimal(0)
+                                ,new BigDecimal(0),new BigDecimal(0)
+                                ,Context.getInstance().currentDMTicket().isImprimeComoNegativo());
 
                         if(Context.getInstance().currentDMTicket().isImprimeComoNegativo()){
                             precio = precio.multiply(BigDecimal.valueOf(-1));
@@ -818,9 +835,17 @@ public class FXMLMainController implements Initializable {
         facturaDetalle.setNeto(BigDecimal.ZERO);
         facturaDetalle.setPrecioUnitario(lineaTicketData.getPrecioUnitario());
         facturaDetalle.setSubTotal(lineaTicketData.getSubTotal());
+        Producto producto ;
+        
 
         try{
-            facturaDetalle.setProducto(productoService.getProductoPorCodigo(lineaTicketData.getCodigoProducto()));
+            producto = productoService.getProductoPorCodigo(lineaTicketData.getCodigoProducto());
+            facturaDetalle.setImpuestoInterno(
+                        producto.getImpuestoInterno().multiply(facturaDetalle.getSubTotal())
+                                .divide(new BigDecimal(100))
+            );
+            
+            facturaDetalle.setProducto(producto);
             factService.agregarDetalleFactura(Context.getInstance().currentDMTicket().getIdFactura(), facturaDetalle);
         }catch(TpvException e){
             log.error("Error: "+e.getMessage());
@@ -1011,9 +1036,15 @@ public class FXMLMainController implements Initializable {
                 for(Iterator iterator = factura.getDetalle().iterator();iterator.hasNext();){
                     FacturaDetalle fd = (FacturaDetalle)iterator.next();
 
+//(int codigoProducto,String descripcion,BigDecimal cantidad,BigDecimal precioUnitario
+//            ,BigDecimal neto,BigDecimal impuestoInterno,BigDecimal descuento
+//            ,BigDecimal retencion ,boolean devuelto)
+        
                     LineaTicketData lineaTicketData = new LineaTicketData(fd.getProducto().getCodigoProducto()
                                     ,fd.getProducto().getDescripcion(),fd.getCantidad()
                                     ,fd.getPrecioUnitario()
+                                    ,new BigDecimal(0),new BigDecimal(0),new BigDecimal(0)
+                                    ,new BigDecimal(0)
                                     ,(fd.getSubTotal().compareTo(BigDecimal.ZERO)<0?true:false)
                     );   
                     if(factura.getCliente()!=null){

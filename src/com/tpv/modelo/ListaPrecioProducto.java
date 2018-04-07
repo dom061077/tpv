@@ -235,6 +235,9 @@ public class ListaPrecioProducto {
         @Formula("(SELECT current_date())")
         private java.sql.Date fechaHoy;
         
+        @Transient
+        private BigDecimal descuentoCliente;
+        
       
         
         @ManyToOne
@@ -324,6 +327,23 @@ public class ListaPrecioProducto {
             return valorImpositivo;
         }
 
-                
+        @Transient
+        public BigDecimal getMontoImpuestoInterno(){
+            BigDecimal montoii=null;
+            montoii = getPrecioUnitario().multiply(producto.getImpuestoInterno());
+            return montoii;
+        }
+        
+        public BigDecimal getDescuentoCliente(){
+            return descuentoCliente;
+        }
+        
+        public void setDescuentoCliente(BigDecimal descuentoCliente){
+            this.descuentoCliente=descuentoCliente;
+        }
+        
+        public BigDecimal getDescuentoCliente(){
+            return descuentoCliente;
+        }
     
 }

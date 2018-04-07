@@ -27,17 +27,29 @@ public class LineaTicketData {
     private ObjectProperty<BigDecimal> Cantidad;
     private ObjectProperty<BigDecimal> PrecioUnitario;
     private ObjectProperty<BigDecimal> SubTotal;
+    private ObjectProperty<BigDecimal> neto;//sin IVA 
+    private ObjectProperty<BigDecimal> iva;
+    private ObjectProperty<BigDecimal> impuestoInterno;
+    private ObjectProperty<BigDecimal> descuento;
+    private ObjectProperty<BigDecimal> retencion; //ingresos brutos
+    
     private BooleanProperty Devuelto;
     
     public LineaTicketData(){
         
     }
     
-    public LineaTicketData(int codigoProducto,String descripcion,BigDecimal cantidad,BigDecimal precioUnitario,boolean devuelto){
+    public LineaTicketData(int codigoProducto,String descripcion,BigDecimal cantidad,BigDecimal precioUnitario
+            ,BigDecimal neto,BigDecimal impuestoInterno,BigDecimal descuento
+            ,BigDecimal retencion ,boolean devuelto){
         this.CodigoProducto = new SimpleIntegerProperty(codigoProducto);
         this.Descripcion = new SimpleStringProperty(descripcion);
         this.Cantidad = new SimpleObjectProperty(cantidad);
         this.PrecioUnitario = new SimpleObjectProperty(precioUnitario);
+        this.neto = new SimpleObjectProperty(neto);
+        this.impuestoInterno = new SimpleObjectProperty(impuestoInterno);
+        this.descuento = new SimpleObjectProperty(descuento);
+        this.retencion = new SimpleObjectProperty(retencion);
         this.Devuelto = new SimpleBooleanProperty(devuelto);
         if(devuelto)
             cantidad = cantidad.multiply(new BigDecimal(-1));

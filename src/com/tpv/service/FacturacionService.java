@@ -110,6 +110,7 @@ public class FacturacionService  {
         EntityManager em = Connection.getEm();
         EntityTransaction tx = null;
         try{
+            
             tx = em.getTransaction();
             tx.begin();
             factura = em.find(Factura.class,id);

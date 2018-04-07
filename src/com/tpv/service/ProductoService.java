@@ -9,17 +9,15 @@ import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.BonificacionCliente;
 import com.tpv.modelo.Cliente;
 import com.tpv.modelo.Combo;
-import com.tpv.modelo.GrupoProducto;
+import com.tpv.modelo.FacturaDetalle;
 import com.tpv.modelo.ListaPrecioProducto;
 import com.tpv.modelo.Producto;
 import com.tpv.modelo.Proveedor;
 import com.tpv.util.Connection;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.math.RoundingMode;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
@@ -216,7 +214,8 @@ public class ProductoService {
         return true;            
     }
     
-    public BigDecimal getPrecioProducto(int filtroCodigo,Cliente cliente) throws TpvException{
+    
+    public ListaPrecioProducto getListaPrecioProducto(int filtroCodigo,Cliente cliente) throws TpvException{
         log.info("Capa de servicios, parámetro de filtro producto: "+filtroCodigo
                 +", cliente: "+(cliente!=null?cliente.getId():0));
         ListaPrecioProducto lstPrecioProducto=null;
@@ -257,6 +256,7 @@ public class ProductoService {
                                 .compareTo(totalAcumulado)>0){
                                 log.info("El precio del producto tiene descuento de personal");
                                 precio = precioConDescuento;
+                                lstPrecioProducto.setDescuentoCliente(descuento);
                             }
                         }
                     }
@@ -280,8 +280,8 @@ public class ProductoService {
         }
 
         
-        precio = precio.setScale(2,BigDecimal.ROUND_HALF_EVEN);
-        return precio;
+        //precio = precio.setScale(2,BigDecimal.ROUND_HALF_EVEN);
+        return lstPrecioProducto;
     }
     
     
