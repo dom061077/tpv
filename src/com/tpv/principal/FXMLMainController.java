@@ -510,7 +510,7 @@ public class FXMLMainController implements Initializable {
                     precio = lpp.getPrecioFinal(); //precio sin tomar el posible descuento por cliente de luque
                     BigDecimal descCliente = precio.multiply(lpp.getDescuentoCliente()).divide(BigDecimal.valueOf(100));
                     precio = precio.subtract(descCliente);
-                    quede aqui
+                   
                     //descuentoCliente = productoService.getPorcentajeDescCliente(producto.getCodigoProducto()
                     //            , Context.getInstance().currentDMTicket().getCliente() );
                     if(producto.isProductoVilleco()){
@@ -551,7 +551,8 @@ public class FXMLMainController implements Initializable {
                         if(Context.getInstance().currentDMTicket().isImprimeComoNegativo()){
                             precio = precio.multiply(BigDecimal.valueOf(-1));
                             cantidad = cantidad.multiply(new BigDecimal(-1));
-                        }                          
+                        }    
+                        precio = precio.setScale(2,BigDecimal.ROUND_HALF_EVEN);
                         impresoraService.imprimirLineaTicket(descripcion, cantidad
                                     ,precio ,producto.getValorImpositivo().getValor() ,Context.getInstance().currentDMTicket().isImprimeComoNegativo(), producto.getImpuestoInterno());
                         

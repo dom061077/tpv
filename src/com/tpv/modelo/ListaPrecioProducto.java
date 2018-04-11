@@ -335,6 +335,8 @@ public class ListaPrecioProducto {
         }
         
         public BigDecimal getDescuentoCliente(){
+            if (descuentoCliente==null)
+                descuentoCliente = BigDecimal.valueOf(0);
             return descuentoCliente;
         }
         
@@ -342,8 +344,6 @@ public class ListaPrecioProducto {
             this.descuentoCliente=descuentoCliente;
         }
         
-        public BigDecimal getDescuentoCliente(){
-            return descuentoCliente;
-        }
+
     
 }

@@ -123,7 +123,7 @@ public class Combo {
      */
     public List<ComboGrupo> getCombosGrupo() {
         Collections.sort(combosGrupo,(g1,g2)->g1.getPorcentaje()
-                .compareTo(g2.getPorcentaje())*-1
+                .compareTo(g2.getPorcentaje())
         );
         return combosGrupo;
     }
@@ -419,7 +419,7 @@ public class Combo {
         boolean hayCombo=true;
         ComboGrupo cgaux=null;
         //if(!isCombinarProductos()){
-            while(hayCombo){
+           /* while(hayCombo){
                 for(Iterator<ComboGrupo> itcg = getCombosGrupo().iterator();itcg.hasNext();){
                      cgaux = itcg.next();
                      hayCombo = false;
@@ -435,8 +435,8 @@ public class Combo {
                      if(hayCombo)
                         cgaux.incCantidadGruposEnCombo();;
                 }
-            }
-        /*}else{
+            }*/
+        //}else{
             while(hayCombo){
                 for(Iterator<ComboGrupo>itcg = getCombosGrupo().iterator();itcg.hasNext();){
                     cgaux = itcg.next();
@@ -473,7 +473,7 @@ public class Combo {
                     
                 }
             }
-        }*/
+        //}
         
         if(getCombosGrupo().size()>0)
             cantidadCombos = getCombosGrupo().get(0).getCantidadGruposEnCombo();

@@ -162,12 +162,12 @@ public class ComboGrupo {
                             .compareTo(o2.getPaf().getPrecioUnitario    ())
             );*/
         
-        if(tomarMenorPrecio)
-            Collections.sort(detallePreciosProductos,
-                    (o1,o2)->o1.getPaf().getPrecioUnitario()
-                            .compareTo(o2.getPaf().getPrecioUnitario    ())
-            );
-        else
+        //if(tomarMenorPrecio)
+        //    Collections.sort(detallePreciosProductos,
+        //            (o1,o2)->o1.getPaf().getPrecioUnitario()
+        //                    .compareTo(o2.getPaf().getPrecioUnitario    ())
+        //    );
+        //else
             Collections.sort(detallePreciosProductos,
                     (o1,o2)->o1.getPaf().getPrecioUnitario()
                             .compareTo(o2.getPaf().getPrecioUnitario())*-1
