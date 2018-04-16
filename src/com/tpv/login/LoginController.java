@@ -7,6 +7,7 @@ package com.tpv.login;
 
 import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.exceptions.TpvException;
+import com.tpv.modelo.Checkout;
 import com.tpv.modelo.Usuario;
 import com.tpv.principal.Context;
 import com.tpv.service.UsuarioService;
@@ -63,12 +64,26 @@ public class LoginController implements Initializable{
                       
     
     
-    public void configurarInicio(){
-        userName.requestFocus();            
-        repeatFocus(userName);
+    public void configurarInicio() throws TpvException{
+        
+            checkMac();
+            userName.requestFocus();            
+            repeatFocus(userName);
+            
+        
     }
     
-    
+    private void checkMac() throws TpvException{
+            Checkout checkout = null;
+            checkout = usuarioService.checkMac();
+            //if(checkout == null){
+            //    log.fatal("La MAC de la PC no coincide con el registro del Checkout");
+            //    throw new TpvException("Error en la capa de servicios al recuperar checkout a través de la MAC.");                
+            //}else
+                Context.getInstance().currentDMTicket().setCheckout(checkout);
+                
+        
+    }    
     
     @FXML
     public  void initialize(URL url, ResourceBundle rb) {

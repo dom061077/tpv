@@ -128,7 +128,7 @@ public class ErrorController implements Initializable {
         //if(Context.getInstance().currentDMTicket().getTpvException().getExceptionOrigen() instanceof ConnectException
         //   || Context.getInstance().currentDMTicket().getTpvException().getExceptionOrigen() instanceof UnknownHostException){
         if(!Connection.isDBConnected()){
-            //reconectarImpresora();
+            reconectarImpresora();
         }
     }
     

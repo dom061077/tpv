@@ -86,30 +86,31 @@ public class UsuarioService {
         String mac = "";
         try{
                 mac=Connection.getMACAddress();
+                log.info("MAC recuperada: "+mac);
+                if(mac!=null){
+                    EntityManager em = Connection.getEm();
+                    EntityTransaction tx = null;
+                    try{
+                        tx = em.getTransaction();
+                        tx.begin();
+                        Query q = em.createQuery("FROM Checkout c WHERE c.placa = :placa").setParameter("placa",mac);    
+                        Checkout checkout = null;
+                        checkout = (Checkout)q.getSingleResult();
+                        tx.commit();
+                        log.info("Checkout recuperado: "+checkout.getId());
+                        if(checkout != null)
+                            return checkout;
+                    }catch(RuntimeException e){
+                        log.error("Error recuperando MAC: "+mac,e);
+                        throw new TpvException("Error en la capa de servicios al recuperar checkout a través de la MAC.");
+                    }finally{
+                        em.clear();
+                    }
+                }
+                
         }catch(SocketException e){
             log.error("Error en la capa de servicios al recuperar la MAC",e);
             throw new TpvException("Error en la capa de servicios al recuperar la MAC");
-        }
-        log.info("MAC recuperada: "+mac);
-        if(mac!=null){
-            EntityManager em = Connection.getEm();
-            EntityTransaction tx = null;
-            try{
-                tx = em.getTransaction();
-                tx.begin();
-                Query q = em.createQuery("FROM Checkout c WHERE c.placa = :placa").setParameter("placa",mac);    
-                Checkout checkout = null;
-                checkout = (Checkout)q.getSingleResult();
-                tx.commit();
-                log.info("Checkout recuperado: "+checkout.getId());
-                if(checkout != null)
-                    return checkout;
-            }catch(RuntimeException e){
-                log.error("Error recuperando MAC: "+mac,e);
-                throw new TpvException("Error en la capa de servicios al recuperar checkout a través de la MAC.");
-            }finally{
-                em.clear();
-            }
         }
         return null;
     }
