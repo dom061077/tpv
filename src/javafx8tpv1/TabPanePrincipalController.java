@@ -72,7 +72,7 @@ public class TabPanePrincipalController implements Initializable {
     @FXML private Tab tabControlador;
     
     @FXML private TabPane tabPanePrincipal;
-    @FXML private Button buttonGoToError;
+    
     
     
     
@@ -100,14 +100,6 @@ public class TabPanePrincipalController implements Initializable {
         this.buscarPorNombreClienteController.setTabController(this);
         this.configImpresoraController.setTabController(this);
         this.combosController.setTabController(this);
-        
-        checkMac();
-        tabPanePrincipal.getSelectionModel().selectedItemProperty()
-                .addListener((observable,oldTab,newTab)->{
-                   if(newTab.getId().compareTo("tabMenuPrincipal")==0){
-                       //menuPrincipalController.setMenuFocus();
-                   }
-                });
         try{
             initImpresora();
             gotoLogin();            
@@ -117,6 +109,14 @@ public class TabPanePrincipalController implements Initializable {
             Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_LOGIN);
             this.gotoError();
         }
+
+        tabPanePrincipal.getSelectionModel().selectedItemProperty()
+                .addListener((observable,oldTab,newTab)->{
+                   if(newTab.getId().compareTo("tabMenuPrincipal")==0){
+                       //menuPrincipalController.setMenuFocus();
+                   }
+                });
+        
     }      
     
     @FXML
@@ -129,43 +129,19 @@ public class TabPanePrincipalController implements Initializable {
         
     }
     
-    private void checkMac(){
-            Checkout checkout = null;
-            try{
-                checkout = usuarioService.checkMac();
-            }catch(TpvException e){
-                log.error("Error: "+e.getMessage(),e);
-                Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_LOGIN);
-                Context.getInstance().currentDMTicket().setException(e);
-                buttonGoToError.fire();
-            }
-            if(checkout == null){
-                log.fatal("La MAC de la PC no coincide con el registro del Checkout");
-                /*labelError.setText("La PC no está habilitada para este Checkout");
-                FadeTransition fadeInOut;
-                fadeInOut = new FadeTransition(Duration.seconds(1),labelError);
-		fadeInOut.setFromValue(1.0);
-		fadeInOut.setToValue(.20);
-		fadeInOut.setCycleCount(FadeTransition.INDEFINITE);
-		fadeInOut.setAutoReverse(true);
-		fadeInOut.play();
-                
-                
-                stackPaneError.setVisible(true);
-                labelError.setOnKeyPressed(keyEvent -> {
-                    if(keyEvent.getCode() == KeyCode.F11){
-                        System.exit(0);
-                    }
-                });*/
-                
-            }else
-                Context.getInstance().currentDMTicket().setCheckout(checkout);
-        
-    }
+
     
     public void gotoLogin(){
-        this.loginController.configurarInicio();
-        this.tabPanePrincipal.getSelectionModel().select(tabLogin);
+        try{
+            this.loginController.configurarInicio();
+            this.tabPanePrincipal.getSelectionModel().select(tabLogin);
+        }catch(TpvException e){
+            log.error(e.getMessage());
+            Context.getInstance().currentDMTicket().setException(e);
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_LOGIN);
+            gotoError();
+        }
+            
        
     }
     
