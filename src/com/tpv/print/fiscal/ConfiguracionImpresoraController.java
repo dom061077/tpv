@@ -52,7 +52,20 @@ public class ConfiguracionImpresoraController implements Initializable {
                         alert.getDialogPane().getStylesheets().add(Connection.getCss());                        
                         alert.showAndWait();
                     }catch(TpvException e){
-                        log.error("Error al trabar de cancelar el ticket",e);
+                        log.error("Error al tratar de cancelar el ticket",e);
+                        Context.getInstance().currentDMTicket().setException(e);
+                        Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CONTROLADOR);
+                        tabController.gotoError();
+                                
+                    }
+                }
+                if(keyEvent.getCode()==KeyCode.NUMPAD2){
+                    try{
+                        impresoraService.cierreZ();
+                        Alert alert=new Alert(Alert.AlertType.INFORMATION,"El cierre diario fue correcto");
+                        alert.showAndWait();
+                    }catch(TpvException e){
+                        log.error("Error al tratar de hacer el cierre diario",e);
                         Context.getInstance().currentDMTicket().setException(e);
                         Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CONTROLADOR);
                         tabController.gotoError();
