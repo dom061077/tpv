@@ -5,6 +5,7 @@
  */
 package com.tpv.modelo;
 
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Column;
@@ -304,6 +305,16 @@ public class ListaPrecioProducto {
         }
         
         @Transient
+        public BigDecimal getPrecioFinalConDescCliente(){
+            BigDecimal precioRef = getPrecioFinal();
+            BigDecimal descCliente = precioRef.multiply(getDescuentoCliente())
+                    .divide(BigDecimal.valueOf(100));
+            BigDecimal precioAux=getPrecioFinal().subtract(descCliente);
+            
+            return precioAux;
+        }
+        
+        @Transient
         public BigDecimal getPrecioUnitario(){
                BigDecimal precioAux = new BigDecimal(0);
                if(fechaInicioEspecial.compareTo(fechaHoy)<=0 &&
@@ -320,17 +331,67 @@ public class ListaPrecioProducto {
         }
         
         @Transient
+        public BigDecimal getPrecioUnitarioConDescCliente(){
+            BigDecimal precioRef = getPrecioUnitario();
+            BigDecimal descCliente = precioRef.multiply(getDescuentoCliente())
+                    .divide(BigDecimal.valueOf(100));
+            BigDecimal precioAux = getPrecioUnitario().subtract(descCliente);
+            return precioAux;
+        }
+                
+        
+        @Transient
         public BigDecimal getIva(){
             BigDecimal valorImpositivo = null;
-            valorImpositivo = getPrecioUnitario().multiply(producto.getValorImpositivo().getValor());
+            valorImpositivo = getPrecioFinalConDescCliente().multiply(producto.getValorImpositivo().getValor());
             valorImpositivo = valorImpositivo.divide(BigDecimal.valueOf(100));
             return valorImpositivo;
+        }
+        
+        @Transient
+        public BigDecimal getIvaReducido(){
+            if (producto.getValorImpositivo().getId()==2)
+                return getIva();
+            else
+                return BigDecimal.ZERO;
+        }
+        
+        @Transient
+        public BigDecimal getIvaCompleto(){
+            if (producto.getValorImpositivo().getId()==0)
+                return getIva();
+            else
+                return BigDecimal.ZERO;
+        }
+        
+        @Transient
+        public BigDecimal  getNeto(){
+            if (producto.getValorImpositivo().getId()==0)
+                return getPrecioUnitario();
+            else
+                return BigDecimal.ZERO;   
+        }
+        
+        @Transient
+        public BigDecimal getNetoReducido(){
+            if (producto.getValorImpositivo().getId()==2)
+                return getPrecioUnitario();
+            else    
+                return BigDecimal.ZERO;
+        }
+        
+        @Transient
+        public BigDecimal getExento(){
+            if (producto.getValorImpositivo().getId()==0)
+                return getPrecioUnitario();
+            else
+                return BigDecimal.ZERO;
         }
 
         @Transient
         public BigDecimal getMontoImpuestoInterno(){
             BigDecimal montoii=null;
-            montoii = getPrecioUnitario().multiply(producto.getImpuestoInterno());
+            montoii = getPrecioFinalConDescCliente().multiply(producto.getImpuestoInterno());
             return montoii;
         }
         
@@ -340,6 +401,9 @@ public class ListaPrecioProducto {
             return descuentoCliente;
         }
         
+        /*
+            Descuento en dinero por unidad
+        */
         public void setDescuentoCliente(BigDecimal descuentoCliente){
             this.descuentoCliente=descuentoCliente;
         }

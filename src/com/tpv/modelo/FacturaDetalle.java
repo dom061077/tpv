@@ -42,6 +42,9 @@ public class FacturaDetalle {
     @Column(name = "IVA")
     private BigDecimal iva;
     
+    @Column(name = "IVAREDUCIDO")
+    private BigDecimal ivaReducido;
+    
     @Column(name = "DESCUENTO")
     private BigDecimal descuento;
     
@@ -51,11 +54,15 @@ public class FacturaDetalle {
     @Column(name = "NETO")
     private BigDecimal neto;
     
+    @Column(name = "NETOREDUCIDO")
+    private BigDecimal netoReducido;
+    
+    @Column(name = "EXENTO")
+    private BigDecimal exento;
+    
     @Column(name = "TOTAL")
     private BigDecimal subTotal;
     
-    @Transient
-    private BigDecimal ivaReducido;
     
     @Transient
     private int cantidadAuxCombo;
@@ -242,6 +249,48 @@ public class FacturaDetalle {
      */
     public void setCantidadAuxCombo(int cantidadAuxCombo) {
         this.cantidadAuxCombo = cantidadAuxCombo;
+    }
+
+    /**
+     * @return the exento
+     */
+    public BigDecimal getExento() {
+        return exento;
+    }
+
+    /**
+     * @param exento the exento to set
+     */
+    public void setExento(BigDecimal exento) {
+        this.exento = exento;
+    }
+
+    /**
+     * @return the ivaReducido
+     */
+    public BigDecimal getIvaReducido() {
+        return ivaReducido;
+    }
+
+    /**
+     * @param ivaReducido the ivaReducido to set
+     */
+    public void setIvaReducido(BigDecimal ivaReducido) {
+        this.ivaReducido = ivaReducido;
+    }
+
+    /**
+     * @return the netoReducido
+     */
+    public BigDecimal getNetoReducido() {
+        return netoReducido;
+    }
+
+    /**
+     * @param netoReducido the netoReducido to set
+     */
+    public void setNetoReducido(BigDecimal netoReducido) {
+        this.netoReducido = netoReducido;
     }
     
     

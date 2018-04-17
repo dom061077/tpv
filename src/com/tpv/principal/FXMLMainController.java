@@ -507,12 +507,8 @@ public class FXMLMainController implements Initializable {
                 if(producto!=null){
                     log.debug("Producto encontrado: "+producto.getDescripcion());
                     lpp = productoService.getListaPrecioProducto(producto.getCodigoProducto(),Context.getInstance().currentDMTicket().getCliente());
-                    precio = lpp.getPrecioFinal(); //precio sin tomar el posible descuento por cliente de luque
-                    BigDecimal descCliente = precio.multiply(lpp.getDescuentoCliente()).divide(BigDecimal.valueOf(100));
-                    precio = precio.subtract(descCliente);
+                    precio = lpp.getPrecioFinalConDescCliente();
                    
-                    //descuentoCliente = productoService.getPorcentajeDescCliente(producto.getCodigoProducto()
-                    //            , Context.getInstance().currentDMTicket().getCliente() );
                     if(producto.isProductoVilleco()){
                         if(precioOPeso.compareTo(BigDecimal.ZERO)>0){
                            cantidad = precioOPeso.divide(precio).setScale(3, RoundingMode.DOWN);
@@ -538,15 +534,25 @@ public class FXMLMainController implements Initializable {
                                 return;
                             }
                         
-    //public LineaTicketData(int codigoProducto,String descripcion,BigDecimal cantidad,BigDecimal precioUnitario
-    //        ,BigDecimal neto,BigDecimal impuestoInterno,BigDecimal descuento
-    //        ,BigDecimal retencion ,boolean devuelto)                        
+            //LineaTicketData(int codigoProducto,String descripcion,BigDecimal cantidad,BigDecimal precioUnitario
+            //    ,BigDecimal neto,BigDecimal netoReducido,BigDecimal exento
+            //    ,BigDecimal descuentoCliente,BigDecimal iva
+            //    ,BigDecimal ivaReducido
+            //    ,BigDecimal impuestoInterno
+            //    ,BigDecimal retencion ,boolean devuelto)                   
                         
-                        lineaTicketData = new LineaTicketData(producto.getCodigoProducto()
-                                ,producto.getDescripcion(),cantidad,precio
-                                , new BigDecimal(0),new BigDecimal(0)
-                                ,new BigDecimal(0),new BigDecimal(0)
-                                ,Context.getInstance().currentDMTicket().isImprimeComoNegativo());
+                        lineaTicketData = new LineaTicketData(
+                                  producto.getCodigoProducto()
+                                , producto.getDescripcion(),cantidad,precio
+                                , lpp.getNeto().multiply(cantidad)
+                                , lpp.getNetoReducido().multiply(cantidad)
+                                , lpp.getExento().multiply(cantidad)
+                                , lpp.getDescuentoCliente().multiply(cantidad)
+                                , lpp.getIvaCompleto().multiply(cantidad)
+                                , lpp.getIvaReducido().multiply(cantidad)
+                                , lpp.getMontoImpuestoInterno().multiply(cantidad)
+                                , new BigDecimal(0)
+                                , Context.getInstance().currentDMTicket().isImprimeComoNegativo());
 
                         if(Context.getInstance().currentDMTicket().isImprimeComoNegativo()){
                             precio = precio.multiply(BigDecimal.valueOf(-1));
@@ -1037,14 +1043,23 @@ public class FXMLMainController implements Initializable {
                 for(Iterator iterator = factura.getDetalle().iterator();iterator.hasNext();){
                     FacturaDetalle fd = (FacturaDetalle)iterator.next();
 
-//(int codigoProducto,String descripcion,BigDecimal cantidad,BigDecimal precioUnitario
-//            ,BigDecimal neto,BigDecimal impuestoInterno,BigDecimal descuento
-//            ,BigDecimal retencion ,boolean devuelto)
+                /*LineaTicketData(int codigoProducto,String descripcion,BigDecimal cantidad,BigDecimal precioUnitario
+                            ,BigDecimal neto,BigDecimal netoReducido,BigDecimal exento
+                            ,BigDecimal descuentoCliente,BigDecimal iva
+                            ,BigDecimal ivaReducido
+                            ,BigDecimal impuestoInterno
+                            ,BigDecimal retencion ,boolean devuelto)                    
+                    */
         
-                    LineaTicketData lineaTicketData = new LineaTicketData(fd.getProducto().getCodigoProducto()
+                    LineaTicketData lineaTicketData = new LineaTicketData(
+                                     fd.getProducto().getCodigoProducto()
                                     ,fd.getProducto().getDescripcion(),fd.getCantidad()
                                     ,fd.getPrecioUnitario()
-                                    ,new BigDecimal(0),new BigDecimal(0),new BigDecimal(0)
+                                    ,fd.getNeto(),fd.getNetoReducido(),fd.getExento()
+                                    ,fd.getDescuento()
+                                    ,fd.getIva()
+                                    ,fd.getIvaReducido()
+                                    ,fd.getImpuestoInterno()
                                     ,new BigDecimal(0)
                                     ,(fd.getSubTotal().compareTo(BigDecimal.ZERO)<0?true:false)
                     );   

@@ -27,10 +27,31 @@ public class LineaTicketData {
     private ObjectProperty<BigDecimal> Cantidad;
     private ObjectProperty<BigDecimal> PrecioUnitario;
     private ObjectProperty<BigDecimal> SubTotal;
-    private ObjectProperty<BigDecimal> neto;//sin IVA 
+    /**
+     * 
+     *  neto de la línea de detalle sin el iva del 21 %
+    */
+    private ObjectProperty<BigDecimal> neto;
+    /**
+     * neto de la linea de detalle sin el iva del 10.5 %
+     */
+    private ObjectProperty<BigDecimal> netoReducido;
+    /**
+     *  iva del 21% de la línea de detalle
+     */
     private ObjectProperty<BigDecimal> iva;
+    /**
+     * iva reducido del 10.5 % de la línea de detalle
+     */
+    private ObjectProperty<BigDecimal> ivaReducido;
+    
+    /**
+     *  exento de la línea de datalle
+     */
+    private ObjectProperty<BigDecimal> exento;
+    
     private ObjectProperty<BigDecimal> impuestoInterno;
-    private ObjectProperty<BigDecimal> descuento;
+    private ObjectProperty<BigDecimal> descuentoCliente;
     private ObjectProperty<BigDecimal> retencion; //ingresos brutos
     
     private BooleanProperty Devuelto;
@@ -40,15 +61,22 @@ public class LineaTicketData {
     }
     
     public LineaTicketData(int codigoProducto,String descripcion,BigDecimal cantidad,BigDecimal precioUnitario
-            ,BigDecimal neto,BigDecimal impuestoInterno,BigDecimal descuento
+            ,BigDecimal neto,BigDecimal netoReducido,BigDecimal exento
+            ,BigDecimal descuentoCliente,BigDecimal iva
+            ,BigDecimal ivaReducido
+            ,BigDecimal impuestoInterno
             ,BigDecimal retencion ,boolean devuelto){
         this.CodigoProducto = new SimpleIntegerProperty(codigoProducto);
         this.Descripcion = new SimpleStringProperty(descripcion);
         this.Cantidad = new SimpleObjectProperty(cantidad);
         this.PrecioUnitario = new SimpleObjectProperty(precioUnitario);
         this.neto = new SimpleObjectProperty(neto);
+        this.netoReducido = new SimpleObjectProperty(netoReducido);
+        this.exento = new SimpleObjectProperty(exento);
+        this.iva = new SimpleObjectProperty(iva);
+        this.ivaReducido = new SimpleObjectProperty(ivaReducido);
         this.impuestoInterno = new SimpleObjectProperty(impuestoInterno);
-        this.descuento = new SimpleObjectProperty(descuento);
+        this.descuentoCliente = new SimpleObjectProperty(descuentoCliente);
         this.retencion = new SimpleObjectProperty(retencion);
         this.Devuelto = new SimpleBooleanProperty(devuelto);
         if(devuelto)
