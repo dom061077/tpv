@@ -39,6 +39,9 @@ public class FacturaDetalle {
     @Column(name = "VALORUNITARIO")
     private BigDecimal precioUnitario;
     
+    @Column(name = "COSTO")
+    private BigDecimal precioUnitarioBase;
+    
     @Column(name = "IVA")
     private BigDecimal iva;
     
@@ -291,6 +294,20 @@ public class FacturaDetalle {
      */
     public void setNetoReducido(BigDecimal netoReducido) {
         this.netoReducido = netoReducido;
+    }
+
+    /**
+     * @return the precioUnitarioBase
+     */
+    public BigDecimal getPrecioUnitarioBase() {
+        return precioUnitarioBase;
+    }
+
+    /**
+     * @param precioUnitarioBase the precioUnitarioBase to set
+     */
+    public void setPrecioUnitarioBase(BigDecimal precioUnitarioBase) {
+        this.precioUnitarioBase = precioUnitarioBase;
     }
     
     

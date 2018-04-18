@@ -507,7 +507,7 @@ public class FXMLMainController implements Initializable {
                 if(producto!=null){
                     log.debug("Producto encontrado: "+producto.getDescripcion());
                     lpp = productoService.getListaPrecioProducto(producto.getCodigoProducto(),Context.getInstance().currentDMTicket().getCliente());
-                    precio = lpp.getPrecioFinalConDescCliente();
+                    precio = lpp.getPrecioFinal();
                    
                     if(producto.isProductoVilleco()){
                         if(precioOPeso.compareTo(BigDecimal.ZERO)>0){
@@ -534,16 +534,16 @@ public class FXMLMainController implements Initializable {
                                 return;
                             }
                         
-            //LineaTicketData(int codigoProducto,String descripcion,BigDecimal cantidad,BigDecimal precioUnitario
-            //    ,BigDecimal neto,BigDecimal netoReducido,BigDecimal exento
-            //    ,BigDecimal descuentoCliente,BigDecimal iva
-            //    ,BigDecimal ivaReducido
-            //    ,BigDecimal impuestoInterno
-            //    ,BigDecimal retencion ,boolean devuelto)                   
+                    //LineaTicketData(int codigoProducto,String descripcion,BigDecimal cantidad,BigDecimal precioUnitario
+                    //,BigDecimal precioUnitarioBase,BigDecimal neto,BigDecimal netoReducido,BigDecimal exento
+                    //,BigDecimal descuentoCliente,BigDecimal iva ,BigDecimal ivaReducido
+                    //,BigDecimal impuestoInterno,BigDecimal retencion ,boolean devuelto)
+                        
                         
                         lineaTicketData = new LineaTicketData(
                                   producto.getCodigoProducto()
                                 , producto.getDescripcion(),cantidad,precio
+                                , lpp.getPrecioUnitario()
                                 , lpp.getNeto().multiply(cantidad)
                                 , lpp.getNetoReducido().multiply(cantidad)
                                 , lpp.getExento().multiply(cantidad)
@@ -836,21 +836,25 @@ public class FXMLMainController implements Initializable {
         
         FacturaDetalle facturaDetalle = new FacturaDetalle();
         facturaDetalle.setCantidad(lineaTicketData.getCantidad());
-        facturaDetalle.setDescuento(BigDecimal.ZERO);
-        facturaDetalle.setImpuestoInterno(BigDecimal.ZERO);
-        facturaDetalle.setIva(BigDecimal.ZERO);
-        facturaDetalle.setNeto(BigDecimal.ZERO);
+        facturaDetalle.setDescuento(lineaTicketData.getDescuentoCliente());
+        facturaDetalle.setExento(lineaTicketData.getExento());
+        facturaDetalle.setImpuestoInterno(lineaTicketData.getImpuestoInterno());
+        facturaDetalle.setIva(lineaTicketData.getIva());
+        facturaDetalle.setIvaReducido(lineaTicketData.getIvaReducido());
+        facturaDetalle.setNeto(lineaTicketData.getNeto());
+        facturaDetalle.setNetoReducido(lineaTicketData.getNetoReducido());
         facturaDetalle.setPrecioUnitario(lineaTicketData.getPrecioUnitario());
+        facturaDetalle.setPrecioUnitarioBase(lineaTicketData.getPrecioUnitarioBase());
         facturaDetalle.setSubTotal(lineaTicketData.getSubTotal());
         Producto producto ;
         
 
         try{
             producto = productoService.getProductoPorCodigo(lineaTicketData.getCodigoProducto());
-            facturaDetalle.setImpuestoInterno(
+            /*facturaDetalle.setImpuestoInterno(
                         producto.getImpuestoInterno().multiply(facturaDetalle.getSubTotal())
                                 .divide(new BigDecimal(100))
-            );
+            );*/
             
             facturaDetalle.setProducto(producto);
             factService.agregarDetalleFactura(Context.getInstance().currentDMTicket().getIdFactura(), facturaDetalle);
@@ -1043,18 +1047,16 @@ public class FXMLMainController implements Initializable {
                 for(Iterator iterator = factura.getDetalle().iterator();iterator.hasNext();){
                     FacturaDetalle fd = (FacturaDetalle)iterator.next();
 
-                /*LineaTicketData(int codigoProducto,String descripcion,BigDecimal cantidad,BigDecimal precioUnitario
-                            ,BigDecimal neto,BigDecimal netoReducido,BigDecimal exento
-                            ,BigDecimal descuentoCliente,BigDecimal iva
-                            ,BigDecimal ivaReducido
-                            ,BigDecimal impuestoInterno
-                            ,BigDecimal retencion ,boolean devuelto)                    
-                    */
+                    /*LineaTicketData(int codigoProducto,String descripcion,BigDecimal cantidad,BigDecimal precioUnitario
+                        ,BigDecimal precioUnitarioBase,BigDecimal neto,BigDecimal netoReducido,BigDecimal exento
+                        ,BigDecimal descuentoCliente,BigDecimal iva ,BigDecimal ivaReducido
+                        ,BigDecimal impuestoInterno,BigDecimal retencion ,boolean devuelto)*/
         
                     LineaTicketData lineaTicketData = new LineaTicketData(
                                      fd.getProducto().getCodigoProducto()
                                     ,fd.getProducto().getDescripcion(),fd.getCantidad()
                                     ,fd.getPrecioUnitario()
+                                    ,fd.getPrecioUnitarioBase()
                                     ,fd.getNeto(),fd.getNetoReducido(),fd.getExento()
                                     ,fd.getDescuento()
                                     ,fd.getIva()

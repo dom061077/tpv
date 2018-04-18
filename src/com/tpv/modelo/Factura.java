@@ -56,11 +56,24 @@ public class Factura {
     @Column(name = "TOTAL")
     private BigDecimal total;
     
+    @Column(name = "COSTO")
+    private BigDecimal costo;
+    
     @Column(name = "NETO")
     private BigDecimal neto;
     
+    @Column(name = "NETOREDUCIDO")
+    private BigDecimal netoReducido;
+    
+    @Column(name = "DESCUENTO")
+    private BigDecimal descuento;
+    
     @Column(name = "IVA")
     private BigDecimal iva;
+    
+    @Column(name = "IVAREDUCIDO")
+    private BigDecimal ivaReducido; 
+            
     
     @Column(name = "IMPUESTOINTERNO")
     private BigDecimal impuestoInterno;

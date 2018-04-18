@@ -26,6 +26,7 @@ public class LineaTicketData {
     private StringProperty Descripcion;
     private ObjectProperty<BigDecimal> Cantidad;
     private ObjectProperty<BigDecimal> PrecioUnitario;
+    private ObjectProperty<BigDecimal> PrecioUnitarioBase;//sin sin iva, impuestointerno pero si con posible descuento de cliente
     private ObjectProperty<BigDecimal> SubTotal;
     /**
      * 
@@ -61,15 +62,14 @@ public class LineaTicketData {
     }
     
     public LineaTicketData(int codigoProducto,String descripcion,BigDecimal cantidad,BigDecimal precioUnitario
-            ,BigDecimal neto,BigDecimal netoReducido,BigDecimal exento
-            ,BigDecimal descuentoCliente,BigDecimal iva
-            ,BigDecimal ivaReducido
-            ,BigDecimal impuestoInterno
-            ,BigDecimal retencion ,boolean devuelto){
+            ,BigDecimal precioUnitarioBase,BigDecimal neto,BigDecimal netoReducido,BigDecimal exento
+            ,BigDecimal descuentoCliente,BigDecimal iva ,BigDecimal ivaReducido
+            ,BigDecimal impuestoInterno,BigDecimal retencion ,boolean devuelto){
         this.CodigoProducto = new SimpleIntegerProperty(codigoProducto);
         this.Descripcion = new SimpleStringProperty(descripcion);
         this.Cantidad = new SimpleObjectProperty(cantidad);
         this.PrecioUnitario = new SimpleObjectProperty(precioUnitario);
+        this.PrecioUnitarioBase = new SimpleObjectProperty(precioUnitarioBase);
         this.neto = new SimpleObjectProperty(neto);
         this.netoReducido = new SimpleObjectProperty(netoReducido);
         this.exento = new SimpleObjectProperty(exento);
@@ -123,6 +123,10 @@ public class LineaTicketData {
         return precioUnitarioProperty().get();
     }
     
+    public BigDecimal getPrecioUnitarioBase(){
+        return PrecioUnitarioBase.get();
+    }
+    
     public ObjectProperty<BigDecimal> precioUnitarioProperty(){
         if(PrecioUnitario == null){
             PrecioUnitario = new SimpleObjectProperty();
@@ -145,15 +149,128 @@ public class LineaTicketData {
         return devueltoProperty().get();
     }
     
-    public void setDevuelto(boolean dev){
-        this.devueltoProperty().set(dev);
-    }
     
     public BooleanProperty devueltoProperty(){
         if(Devuelto == null){
             Devuelto = new SimpleBooleanProperty();
         }
         return Devuelto;
+    }
+    
+    public void setDevuelto(boolean devuelto){
+        this.devueltoProperty().set(devuelto);
+    }
+
+    /**
+     * @return the netoReducido
+     */
+    public BigDecimal getNetoReducido() {
+        return netoReducido.get();
+    }
+
+    /**
+     * @param netoReducido the netoReducido to set
+     */
+    public void setNetoReducido(ObjectProperty<BigDecimal> netoReducido) {
+        this.netoReducido = netoReducido;
+    }
+
+    /**
+     * @return the iva
+     */
+    public BigDecimal getIva() {
+        return iva.get();
+    }
+
+    /**
+     * @param iva the iva to set
+     */
+    public void setIva(ObjectProperty<BigDecimal> iva) {
+        this.iva = iva;
+    }
+
+    /**
+     * @return the ivaReducido
+     */
+    public BigDecimal getIvaReducido() {
+        return ivaReducido.get();
+    }
+
+    /**
+     * @param ivaReducido the ivaReducido to set
+     */
+    public void setIvaReducido(ObjectProperty<BigDecimal> ivaReducido) {
+        this.ivaReducido = ivaReducido;
+    }
+
+    /**
+     * @return the exento
+     */
+    public BigDecimal getExento() {
+        return exento.get();
+    }
+
+    /**
+     * @param exento the exento to set
+     */
+    public void setExento(ObjectProperty<BigDecimal> exento) {
+        this.exento = exento;
+    }
+
+    /**
+     * @return the impuestoInterno
+     */
+    public BigDecimal getImpuestoInterno() {
+        return impuestoInterno.get();
+    }
+
+    /**
+     * @param impuestoInterno the impuestoInterno to set
+     */
+    public void setImpuestoInterno(ObjectProperty<BigDecimal> impuestoInterno) {
+        this.impuestoInterno = impuestoInterno;
+    }
+
+    /**
+     * @return the descuentoCliente
+     */
+    public BigDecimal getDescuentoCliente() {
+        return descuentoCliente.get();
+    }
+
+    /**
+     * @param descuentoCliente the descuentoCliente to set
+     */
+    public void setDescuentoCliente(ObjectProperty<BigDecimal> descuentoCliente) {
+        this.descuentoCliente = descuentoCliente;
+    }
+
+    /**
+     * @return the retencion
+     */
+    public BigDecimal getRetencion() {
+        return retencion.get();
+    }
+
+    /**
+     * @param retencion the retencion to set
+     */
+    public void setRetencion(ObjectProperty<BigDecimal> retencion) {
+        this.retencion = retencion;
+    }
+
+    /**
+     * @return the neto
+     */
+    public BigDecimal getNeto() {
+        return neto.get();
+    }
+
+    /**
+     * @param neto the neto to set
+     */
+    public void setNeto(ObjectProperty<BigDecimal> neto) {
+        this.neto = neto;
     }
     
     

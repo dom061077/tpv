@@ -137,11 +137,25 @@ public class FacturacionService  {
             tx.begin();
             
             factura.setEstado(FacturaEstadoEnum.CERRADA);
-            BigDecimal total=new BigDecimal(0);
+            BigDecimal total= BigDecimal.ZERO;
+            BigDecimal costo = BigDecimal.ZERO;
+            BigDecimal neto = BigDecimal.ZERO;
+            BigDecimal netoReducido = BigDecimal.ZERO;
+            BigDecimal impuestoInterno= BigDecimal.ZERO;
+            BigDecimal descuento = BigDecimal.ZERO;
+            BigDecimal exento = BigDecimal.ZERO;
+            
             for(Iterator<FacturaDetalle>it = factura.getDetalle().iterator();it.hasNext();){
                 FacturaDetalle fd = it.next();
                 fd.getProducto().decStock(fd.getCantidad());
                 total=total.add(fd.getSubTotal());
+                costo = costo.add(fd.getPrecioUnitario());
+                neto = neto.add(fd.getNeto());
+                netoReducido = netoReducido.add(fd.getNetoReducido());
+                impuestoInterno = impuestoInterno.add(fd.getImpuestoInterno());
+                descuento = descuento.add(fd.getDescuento());
+                exento = exento.add(fd.getExento());
+                
             }
             factura.setTotal(total);
             factura=em.merge(factura);

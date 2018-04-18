@@ -284,33 +284,17 @@ public class ListaPrecioProducto {
         
         @Transient
         public BigDecimal getPrecioFinal(){
-               BigDecimal precioAux = new BigDecimal(0);
-               if(fechaInicioEspecial.compareTo(fechaHoy)<=0 &&
-                       fechaFinEspecial.compareTo(fechaHoy)>=0){
-                   precioAux =  precioEspecial;
-               }else{
-                   if(fechaInicioOferta.compareTo(fechaHoy)<=0 &&
-                       fechaFinOferta.compareTo(fechaHoy)>=0)
-                       precioAux = precioOferta;
-                   else
-                       precioAux = precioPublico;
-               }
-               BigDecimal valorImpositivo = new BigDecimal(0);
-               valorImpositivo = precioAux.multiply(producto.getValorImpositivo().getValor());
-               valorImpositivo = valorImpositivo.divide(BigDecimal.valueOf(100));
-               precioAux = precioAux.add(valorImpositivo);
-               precioAux = precioAux.add(producto.getImpuestoInterno());
-               
+               BigDecimal precioAux=getPrecioUnitarioConIvaDescCliente();
+               precioAux = precioAux.add(getMontoImpuestoInterno());
                return precioAux;
         }
         
         @Transient
-        public BigDecimal getPrecioFinalConDescCliente(){
-            BigDecimal precioRef = getPrecioFinal();
+        public BigDecimal getPrecioUnitarioConIvaDescCliente(){
+            BigDecimal precioRef = getPrecioUnitarioConIva();
             BigDecimal descCliente = precioRef.multiply(getDescuentoCliente())
                     .divide(BigDecimal.valueOf(100));
-            BigDecimal precioAux=getPrecioFinal().subtract(descCliente);
-            
+            BigDecimal precioAux = getPrecioUnitarioConIva().subtract(descCliente);
             return precioAux;
         }
         
@@ -331,21 +315,40 @@ public class ListaPrecioProducto {
         }
         
         @Transient
+        public BigDecimal getPrecioUnitarioConIva(){
+            BigDecimal precioAux = getPrecioUnitario();
+            
+            BigDecimal valorImpositivo = new BigDecimal(0);
+            valorImpositivo = precioAux.multiply(producto.getValorImpositivo().getValor());
+            valorImpositivo = valorImpositivo.divide(BigDecimal.valueOf(100));
+            precioAux = precioAux.add(valorImpositivo);
+            return precioAux;
+        }
+        
+        /*@Transient
         public BigDecimal getPrecioUnitarioConDescCliente(){
             BigDecimal precioRef = getPrecioUnitario();
             BigDecimal descCliente = precioRef.multiply(getDescuentoCliente())
                     .divide(BigDecimal.valueOf(100));
             BigDecimal precioAux = getPrecioUnitario().subtract(descCliente);
             return precioAux;
-        }
+        }*/
                 
         
         @Transient
-        public BigDecimal getIva(){
+        private BigDecimal getIva(){
             BigDecimal valorImpositivo = null;
-            valorImpositivo = getPrecioFinalConDescCliente().multiply(producto.getValorImpositivo().getValor());
+            valorImpositivo = getPrecioUnitario().multiply(producto.getValorImpositivo().getValor());
             valorImpositivo = valorImpositivo.divide(BigDecimal.valueOf(100));
             return valorImpositivo;
+        }
+        
+        @Transient
+        public BigDecimal getIvaCompleto(){
+            if(producto.getValorImpositivo().getId()==0)
+                return getIva();
+            else
+                return BigDecimal.ZERO;
         }
         
         @Transient
@@ -356,13 +359,6 @@ public class ListaPrecioProducto {
                 return BigDecimal.ZERO;
         }
         
-        @Transient
-        public BigDecimal getIvaCompleto(){
-            if (producto.getValorImpositivo().getId()==0)
-                return getIva();
-            else
-                return BigDecimal.ZERO;
-        }
         
         @Transient
         public BigDecimal  getNeto(){
@@ -382,7 +378,7 @@ public class ListaPrecioProducto {
         
         @Transient
         public BigDecimal getExento(){
-            if (producto.getValorImpositivo().getId()==0)
+            if (producto.getValorImpositivo().getId()==1)
                 return getPrecioUnitario();
             else
                 return BigDecimal.ZERO;
@@ -391,7 +387,8 @@ public class ListaPrecioProducto {
         @Transient
         public BigDecimal getMontoImpuestoInterno(){
             BigDecimal montoii=null;
-            montoii = getPrecioFinalConDescCliente().multiply(producto.getImpuestoInterno());
+            montoii = getPrecioUnitario()
+                    .multiply(producto.getImpuestoInterno()).divide(BigDecimal.valueOf(100));
             return montoii;
         }
         
