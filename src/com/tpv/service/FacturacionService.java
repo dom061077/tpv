@@ -16,7 +16,6 @@ import com.tpv.modelo.FacturaDetalleCombo;
 import com.tpv.modelo.ProductoAgrupadoEnFactura;
 import com.tpv.modelo.enums.FacturaEstadoEnum;
 import com.tpv.util.Connection;
-import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -206,6 +205,7 @@ public class FacturacionService  {
 //    }
     
 
+    
     
     public Factura calcularCombos(Long id) throws TpvException{
         log.info("Calculando combos para id factura: "+id);

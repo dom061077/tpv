@@ -292,9 +292,7 @@ public class ListaPrecioProducto {
         @Transient
         public BigDecimal getPrecioUnitarioConIvaDescCliente(){
             BigDecimal precioRef = getPrecioUnitarioConIva();
-            BigDecimal descCliente = precioRef.multiply(getDescuentoCliente())
-                    .divide(BigDecimal.valueOf(100));
-            BigDecimal precioAux = getPrecioUnitarioConIva().subtract(descCliente);
+            BigDecimal precioAux = getPrecioUnitarioConIva().subtract(getDescuentoCliente());
             return precioAux;
         }
         

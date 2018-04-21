@@ -110,12 +110,16 @@ public class SupervisorController implements Initializable{
                                 stackPaneError.setVisible(true);
                                 labelError.requestFocus();
                             }else{
-                                if(Context.getInstance().currentDMTicket().getTipoTituloSupervisor()==TipoTituloSupervisorEnum.HABILITAR_NEGATIVO)
-                                    habilitarNegativos(true);
-                                if(Context.getInstance().currentDMTicket().getTipoTituloSupervisor()==TipoTituloSupervisorEnum.CANCELAR_TICKET)
-                                    cancelarTicketCompleto();
-                                keyEvent.consume();
-                                tabController.gotoFacturacion();
+                                if(Context.getInstance().currentDMTicket().getTipoTituloSupervisor()==TipoTituloSupervisorEnum.HABILITAR_MENU){
+                                    tabController.gotoMenuPrincipal();
+                                }else{
+                                    if(Context.getInstance().currentDMTicket().getTipoTituloSupervisor()==TipoTituloSupervisorEnum.HABILITAR_NEGATIVO)
+                                        habilitarNegativos(true);
+                                    if(Context.getInstance().currentDMTicket().getTipoTituloSupervisor()==TipoTituloSupervisorEnum.CANCELAR_TICKET)
+                                        cancelarTicketCompleto();
+                                    keyEvent.consume();
+                                    tabController.gotoFacturacion();
+                                }
                             }
                             
                     }catch(TpvException e){

@@ -34,7 +34,7 @@
          <children>
             <Label styleClass="label_titulo" text="1 - Cancelar Ticket" />
             <Label styleClass="label_titulo" text="2 - Cierre Z" />
-            <Label styleClass="label_titulo" text="Libro Y" />
+            <Label styleClass="label_titulo" text="3 - Cierre X" />
          </children>
       </VBox>
    </center>

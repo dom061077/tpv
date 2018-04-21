@@ -222,7 +222,7 @@ public class ConfirmaPagoTicketController implements Initializable{
                     
     }    
     
-    public void confirmarFactura(){
+    private void confirmarFactura(){
         try{
             log.info("Cerrando y confirmando factura ");
             Factura factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdFactura());
@@ -254,6 +254,7 @@ public class ConfirmaPagoTicketController implements Initializable{
             @Override
             public void commandExecuted(FiscalPrinter source, FiscalPacket command, FiscalPacket response){
                 log.debug("Se ejecutó correctamente el siguiente comando:");
+                String nroTicketEmitido = response.getString(3);
                 if(command.getCommandCode()==HasarCommands.CMD_CLOSE_FISCAL_RECEIPT){
                     try{
                             log.info("El cierre del ticket para el id de Factura : "+Context.getInstance().currentDMTicket().getIdFactura()
@@ -261,6 +262,7 @@ public class ConfirmaPagoTicketController implements Initializable{
                             List<FacturaFormaPagoDetalle> pagos = new ArrayList<FacturaFormaPagoDetalle>();
                             ListProperty<LineaPagoData> detallePagosData = Context.getInstance().currentDMTicket().getPagos();
                             Factura factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdFactura());
+                            factura.setNumeroComprobante(nroTicketEmitido);
                             log.info("Cantidad de combos a guardar en la base de datos: "+factura.getDetalleCombosAux().size());
                             for(Iterator<FacturaDetalleCombo> it = factura.getDetalleCombosAux().iterator();it.hasNext();){
                                 FacturaDetalleCombo fdc = it.next();

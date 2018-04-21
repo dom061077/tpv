@@ -286,13 +286,30 @@ public class ImpresoraService {
             response = getHfp().execute(request);
         }catch(FiscalPrinterStatusError e){
             fMsg = getHfp().getMessages();
-            log.warn("Error de estado en la impresora al hacer cierre diario",e);
+            log.warn("Error de estado en la impresora al hacer cierre diario Z",e);
             throw new TpvException(e.getMessage());
         }catch(FiscalPrinterIOException e){
-            log.warn("Error mecánico de impresora al hacer cierre diario",e);
+            log.warn("Error mecánico de impresora al hacer cierre diario Z",e);
             throw new TpvException(e.getMessage());
         }
         
+    }
+    
+    public void cierreX() throws TpvException{
+        FiscalPacket request;
+        FiscalPacket response;
+        FiscalMessages fMsg;
+        request = getHfp().cmdDailyClose("X");
+        try{
+            response = getHfp().execute(request);
+        }catch(FiscalPrinterStatusError e){
+            fMsg = getHfp().getMessages();
+            log.warn("Error de estado en la impresora al hacer cierre diario X",e);
+            throw new TpvException(e.getMessage());
+        }catch(FiscalPrinterIOException e){
+            log.warn("Error mecánico de impresora al hacer cierre diario X",e);
+            throw new TpvException(e.getMessage());
+        }
     }
 
     /**

@@ -278,10 +278,13 @@ public class FXMLMainController implements Initializable {
                     if(Context.getInstance().currentDMTicket().getDetalle().size()==0)
                         this.tabPaneController.gotoMenuPrincipal();
                     else{
-                        Alert alert = new Alert(AlertType.WARNING,
+                        /*Alert alert = new Alert(AlertType.WARNING,
                             "No se puede volver al menú principal cuando hay un ticket abierto"
                             , ButtonType.OK);
-                        alert.showAndWait();
+                        alert.showAndWait();*/
+                        Context.getInstance().currentDMTicket().setTipoTituloSupervisor(TipoTituloSupervisorEnum.HABILITAR_MENU);
+                        tabPaneController.gotoSupervisor();
+                        
                     }
                         
                 }
@@ -382,13 +385,14 @@ public class FXMLMainController implements Initializable {
                         this.tabPaneController.gotoMenuPrincipal();
                     else{
                         
-                        Alert alert = new Alert(AlertType.WARNING,
+                        /*Alert alert = new Alert(AlertType.WARNING,
                             "No se puede volver al menú principal cuando hay un ticket abierto"
                             , ButtonType.OK);
-//                        alert.getDialogPane().getStylesheets().add(Connection.getCss());
-//                        alert.getDialogPane().getStyleClass().add("dialog-pane");
                         alert.getDialogPane().getScene().getStylesheets().add(Connection.getCss());
-                        alert.showAndWait();
+                        alert.showAndWait();*/
+                        Context.getInstance().currentDMTicket().setTipoTituloSupervisor(TipoTituloSupervisorEnum.HABILITAR_MENU);
+                        tabPaneController.gotoSupervisor();
+                        
                     }
                 }
                 if(keyEvent.getCode() == KeyCode.F4){

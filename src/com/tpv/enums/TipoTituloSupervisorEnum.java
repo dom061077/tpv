@@ -11,7 +11,8 @@ package com.tpv.enums;
  */
 public enum TipoTituloSupervisorEnum {
     HABILITAR_NEGATIVO("Habilitar Negativos",1),
-    CANCELAR_TICKET("Cancelar Ticket",2);
+    CANCELAR_TICKET("Cancelar Ticket",2),
+    HABILITAR_MENU("Ir a Menu",3);
     
     
     private String titulo;

@@ -65,11 +65,19 @@ public class ConfiguracionImpresoraController implements Initializable {
                         Alert alert=new Alert(Alert.AlertType.INFORMATION,"El cierre diario fue correcto");
                         alert.showAndWait();
                     }catch(TpvException e){
-                        log.error("Error al tratar de hacer el cierre diario",e);
+                        log.error("Error al tratar de hacer el cierre diario Z",e);
                         Context.getInstance().currentDMTicket().setException(e);
                         Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CONTROLADOR);
                         tabController.gotoError();
                                 
+                    }
+                }
+                
+                if(keyEvent.getCode()==KeyCode.NUMPAD3){
+                    try{
+                      impresoraService.cierreX();
+                    }catch(TpvException e){
+                        log.error("Error al tratar de hacer el cierre diario X");
                     }
                 }
             });
