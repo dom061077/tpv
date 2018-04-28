@@ -116,8 +116,8 @@ public class ErrorController implements Initializable {
                             tabController.gotoControlador();
                         
                     }
-                    if(keyEvent.getCode()==KeyCode.F12)
-                        System.exit(0);
+                    if(keyEvent.getCode()==KeyCode.F11)
+                        tabController.gotoMenuPrincipal();
                     
                 });
             });

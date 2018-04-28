@@ -5,6 +5,8 @@
  */
 package com.tpv.principal;
 
+import java.math.BigDecimal;
+
 /**
  *
  * @author daniel
@@ -17,9 +19,43 @@ public class Context {
     }
     
     private DataModelTicket dataModelTicket = new DataModelTicket();
+    private String leyendaRetIngBrutosCliente;
+    private BigDecimal montoMinRetIngBrutos;
     
     public DataModelTicket currentDMTicket(){
         return dataModelTicket;
     }
+
+    /**
+     * @return the leyendaRetIngBrutosCliente
+     */
+    public String getLeyendaRetIngBrutosCliente() {
+        return leyendaRetIngBrutosCliente;
+    }
+
+    /**
+     * @param leyendaRetIngBrutosCliente the leyendaRetIngBrutosCliente to set
+     */
+    public void setLeyendaRetIngBrutosCliente(String leyendaRetIngBrutosCliente) {
+        this.leyendaRetIngBrutosCliente = leyendaRetIngBrutosCliente;
+    }
+
+    /**
+     * @return the montoMinRetIngBrutos
+     */
+    public BigDecimal getMontoMinRetIngBrutos() {
+        return montoMinRetIngBrutos;
+    }
+
+    /**
+     * @param montoMinRetIngBrutos the montoMinRetIngBrutos to set
+     */
+    public void setMontoMinRetIngBrutos(BigDecimal montoMinRetIngBrutos) {
+        this.montoMinRetIngBrutos = montoMinRetIngBrutos;
+    }
+    
+    
+    
+    
     
 }

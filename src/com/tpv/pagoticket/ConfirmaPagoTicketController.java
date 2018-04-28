@@ -8,6 +8,7 @@ package com.tpv.pagoticket;
 import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Factura;
+import com.tpv.modelo.FacturaDetalle;
 import com.tpv.modelo.FacturaDetalleCombo;
 import com.tpv.modelo.FacturaFormaPagoDetalle;
 import com.tpv.principal.Context;
@@ -222,10 +223,70 @@ public class ConfirmaPagoTicketController implements Initializable{
                     
     }    
     
+    private void setTotales(Factura factura) throws TpvException{
+            //-----------resumen de calculos en cabecera-----------
+            BigDecimal total= BigDecimal.ZERO;
+            BigDecimal costo = BigDecimal.ZERO;
+            BigDecimal neto = BigDecimal.ZERO;
+            BigDecimal netoReducido = BigDecimal.ZERO;
+            BigDecimal impuestoInterno= BigDecimal.ZERO;
+            BigDecimal descuento = BigDecimal.ZERO;
+            BigDecimal exento = BigDecimal.ZERO;
+            BigDecimal ivaReducido = BigDecimal.ZERO;
+            BigDecimal iva = BigDecimal.ZERO;
+
+
+            for(Iterator<FacturaDetalle>it = factura.getDetalle().iterator();it.hasNext();){
+                FacturaDetalle fd = it.next();
+                fd.getProducto().decStock(fd.getCantidad());
+                total=total.add(fd.getSubTotal());
+                costo = costo.add(fd.getPrecioUnitario());
+                neto = neto.add(fd.getNeto());
+                netoReducido = netoReducido.add(fd.getNetoReducido());
+                descuento = descuento.add(fd.getDescuento());
+                exento = exento.add(fd.getExento());
+                iva = iva.add(fd.getIva());
+                ivaReducido = ivaReducido.add(fd.getIvaReducido());
+                impuestoInterno = impuestoInterno.add(fd.getImpuestoInterno());
+
+            }
+            factura.setNeto(neto);
+            factura.setIva(iva);
+            factura.setIvaReducido(ivaReducido);
+            factura.setNetoReducido(netoReducido);
+            factura.setImpuestoInterno(impuestoInterno);
+            factura.setCosto(costo);
+            factura.setDescuento(descuento);
+            factura.setExento(exento);
+            factura.setTotal(total);
+            factura.setRetencion(BigDecimal.ZERO);
+            //---------fin cálculo en cabecera----
+            //--------verificacion y aplicacion de ingreso brutos si fuese necesario---------
+            if(factura.getCliente()!=null
+                    && factura.getCliente().getCondicionIva().getId()==2
+                    ){
+                BigDecimal porcentajeRet = factService.getRetencionIngBrutoCliente(Context.getInstance()
+                                .currentDMTicket().getCliente().getCuit());    
+                BigDecimal netoGral = factura.getNeto().add(factura.getNetoReducido());
+                BigDecimal montoRet = netoGral.multiply(porcentajeRet).divide(BigDecimal.valueOf(100));
+                montoRet = montoRet.setScale(2,BigDecimal.ROUND_HALF_EVEN);
+                if(montoRet.compareTo(Context.getInstance().getMontoMinRetIngBrutos())>0){
+                    factura.setRetencion(montoRet);
+                }
+            }
+            factura.setTotal(factura.getTotal().add(factura.getRetencion()));
+            //---------------------------------------------------------------------------------
+            
+        
+    }
+            
     private void confirmarFactura(){
         try{
             log.info("Cerrando y confirmando factura ");
             Factura factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdFactura());
+            
+            setTotales(factura);
+            
             for(Iterator<FacturaDetalleCombo> it = factura.getDetalleCombosAux().iterator();it.hasNext();){
                 FacturaDetalleCombo fdc = it.next();
                 //TODO en las bonificaciones de los combos
@@ -254,15 +315,23 @@ public class ConfirmaPagoTicketController implements Initializable{
             @Override
             public void commandExecuted(FiscalPrinter source, FiscalPacket command, FiscalPacket response){
                 log.debug("Se ejecutó correctamente el siguiente comando:");
-                String nroTicketEmitido = response.getString(3);
+                
                 if(command.getCommandCode()==HasarCommands.CMD_CLOSE_FISCAL_RECEIPT){
+                    String nroTicketEmitido = response.getString(3);
                     try{
                             log.info("El cierre del ticket para el id de Factura : "+Context.getInstance().currentDMTicket().getIdFactura()
                                 +" en la impresora fiscal fue correcto. A continuación se cierra el ticket en la base de datos");
                             List<FacturaFormaPagoDetalle> pagos = new ArrayList<FacturaFormaPagoDetalle>();
                             ListProperty<LineaPagoData> detallePagosData = Context.getInstance().currentDMTicket().getPagos();
                             Factura factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdFactura());
+                            setTotales(factura);
                             factura.setNumeroComprobante(nroTicketEmitido);
+                            
+
+
+                            
+                            
+                            
                             log.info("Cantidad de combos a guardar en la base de datos: "+factura.getDetalleCombosAux().size());
                             for(Iterator<FacturaDetalleCombo> it = factura.getDetalleCombosAux().iterator();it.hasNext();){
                                 FacturaDetalleCombo fdc = it.next();

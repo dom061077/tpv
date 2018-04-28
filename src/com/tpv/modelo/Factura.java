@@ -74,6 +74,10 @@ public class Factura {
     @Column(name = "IVAREDUCIDO")
     private BigDecimal ivaReducido; 
             
+    @Column(name = "EXENTO")
+    private BigDecimal exento;
+    
+    
     
     @Column(name = "IMPUESTOINTERNO")
     private BigDecimal impuestoInterno;
@@ -515,6 +519,90 @@ public class Factura {
     public void addFormaPago(FacturaFormaPagoDetalle fpd){
         getDetallePagos().add(fpd);
         
+    }
+
+    /**
+     * @return the costo
+     */
+    public BigDecimal getCosto() {
+        return costo;
+    }
+
+    /**
+     * @param costo the costo to set
+     */
+    public void setCosto(BigDecimal costo) {
+        this.costo = costo;
+    }
+
+    /**
+     * @return the netoReducido
+     */
+    public BigDecimal getNetoReducido() {
+        return netoReducido;
+    }
+
+    /**
+     * @param netoReducido the netoReducido to set
+     */
+    public void setNetoReducido(BigDecimal netoReducido) {
+        this.netoReducido = netoReducido;
+    }
+
+    /**
+     * @return the descuento
+     */
+    public BigDecimal getDescuento() {
+        return descuento;
+    }
+
+    /**
+     * @param descuento the descuento to set
+     */
+    public void setDescuento(BigDecimal descuento) {
+        this.descuento = descuento;
+    }
+
+    /**
+     * @return the ivaReducido
+     */
+    public BigDecimal getIvaReducido() {
+        return ivaReducido;
+    }
+
+    /**
+     * @param ivaReducido the ivaReducido to set
+     */
+    public void setIvaReducido(BigDecimal ivaReducido) {
+        this.ivaReducido = ivaReducido;
+    }
+
+    /**
+     * @return the exento
+     */
+    public BigDecimal getExento() {
+        return exento;
+    }
+
+    /**
+     * @param exento the exento to set
+     */
+    public void setExento(BigDecimal exento) {
+        this.exento = exento;
+    }
+
+    /**
+     * @return the retencion
+     */
+    public BigDecimal getRetencion() {
+        return retencion;
+    }
+
+    /**
+     * @param retencion the retencion to set
+     */
+    public void setRetencion(BigDecimal retencion) {
+        this.retencion = retencion;
     }
     
     

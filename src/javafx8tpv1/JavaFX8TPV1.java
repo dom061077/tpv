@@ -18,6 +18,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -152,7 +153,9 @@ public class JavaFX8TPV1 extends Application {
         //scene.setCursor(Cursor.NONE);
         String css = this.getClass().getResource("caspian.css").toExternalForm(); 
         scene.getStylesheets().add(css);        
+        
         //stage.setFullScreen(true); //full screen without borders (no program menu bars)
+        
         stage.setFullScreenExitHint(""); //Don't show "Press ESC to exit full screen"
         stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         

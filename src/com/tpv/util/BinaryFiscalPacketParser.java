@@ -5,6 +5,8 @@
  */
 package com.tpv.util;
 
+import com.tpv.principal.FXMLMainController;
+import org.apache.log4j.Logger;
 import org.tpv.print.fiscal.FiscalPacket;
 
 /**
@@ -12,21 +14,23 @@ import org.tpv.print.fiscal.FiscalPacket;
  * @author Daniel
  */
 public class BinaryFiscalPacketParser {
+    Logger log = Logger.getLogger(FXMLMainController.class);
+    
     FiscalPacket fiscalPacket;
-    private boolean errorComprobacionMemoriaFiscal;
-    private boolean errorComprobacionMemoriaTrabajo;
-    private boolean pocaBateria;
-    private boolean comandoNoReconocido;
-    private boolean campoDatosInvalido;
-    private boolean comandoFiscalNoValidoEnEstadoFiscal;
-    private boolean desbordamientoTotales;
-    private boolean memoriaFiscalLlena;
-    private boolean memoriaFiscalCasiLlena;
-    private boolean impresorFiscalCertificado;
-    private boolean impresorFiscalFiscalizado;
-    private boolean necesitaCierreJornadaFisOEnvioMaximoItems; //256 maximo items
-    private boolean documentoFiscalAbierto;
-    private boolean documentoFiscalAbiertoODocNoFiscalAbierto;
+    private boolean errorComprobacionMemoriaFiscal=false;
+    private boolean errorComprobacionMemoriaTrabajo=false;
+    private boolean pocaBateria=false;
+    private boolean comandoNoReconocido=false;
+    private boolean campoDatosInvalido=false;
+    private boolean comandoFiscalNoValidoEnEstadoFiscal=false;
+    private boolean desbordamientoTotales=false;
+    private boolean memoriaFiscalLlena=false;
+    private boolean memoriaFiscalCasiLlena=false;
+    private boolean impresorFiscalCertificado=false;
+    private boolean impresorFiscalFiscalizado=false;
+    private boolean necesitaCierreJornadaFisOEnvioMaximoItems=false; //256 maximo items
+    private boolean documentoFiscalAbierto=false;
+    private boolean documentoFiscalAbiertoODocNoFiscalAbierto=false;
     
     
     public BinaryFiscalPacketParser(FiscalPacket fiscalPacket){
@@ -37,6 +41,61 @@ public class BinaryFiscalPacketParser {
     
     private void translateFiscalStatus(){
         String fiscalStatus = fiscalPacket.getString(2);
+        log.debug("Fiscal status en string: "+fiscalStatus);
+        int num = Integer.parseInt(fiscalStatus,16);
+        String binaryStr = Integer.toBinaryString(num);
+        StringBuffer sb = new StringBuffer(16);
+        sb.append(binaryStr);
+        for(int i=1;i<=16-binaryStr.length();i++){
+            sb.append("0");
+        }
+        binaryStr = sb.toString();
+        //tomo el string en modo invertido
+        if(binaryStr.substring(2,3).compareTo("1")==0){
+            documentoFiscalAbiertoODocNoFiscalAbierto=true;
+        }
+        if(binaryStr.substring(3,4).compareTo("1")==0){
+            documentoFiscalAbierto=true;
+        }
+        if(binaryStr.substring(4,5).compareTo("1")==0){
+            necesitaCierreJornadaFisOEnvioMaximoItems=true;
+        }
+        if(binaryStr.substring(5,6).compareTo("1")==0){
+            impresorFiscalFiscalizado=true;
+        }
+        if(binaryStr.substring(6,7).compareTo("1")==0){
+            impresorFiscalCertificado=true;
+        }
+        if(binaryStr.substring(7,8).compareTo("1")==0){
+            memoriaFiscalCasiLlena=true;
+        }
+        if(binaryStr.substring(8,9).compareTo("1")==0){
+            memoriaFiscalLlena=true;
+        }
+        if(binaryStr.substring(9,10).compareTo("1")==0){
+            desbordamientoTotales=true;
+        }
+        if(binaryStr.substring(10,11).compareTo("1")==0){
+            comandoFiscalNoValidoEnEstadoFiscal=true;
+        }
+        if(binaryStr.substring(11,12).compareTo("1")==0){
+            campoDatosInvalido=true;
+        }
+        if(binaryStr.substring(12,13).compareTo("1")==0){
+            comandoNoReconocido=true;
+        }
+        if(binaryStr.substring(13,14).compareTo("1")==0){
+            pocaBateria=true;
+        }
+        if(binaryStr.substring(14,15).compareTo("1")==0){
+            errorComprobacionMemoriaTrabajo=true;
+        }
+        if(binaryStr.substring(15,16).compareTo("1")==0){
+            errorComprobacionMemoriaFiscal=true;
+        }
+        
+        
+        
         
     }
     

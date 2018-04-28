@@ -47,6 +47,8 @@ public class DataModelTicket {
     private OrigenPantallaErrorEnum origenPantalla;
     private boolean reinicioVerificado=false;
     private BigDecimal bonificaciones = BigDecimal.ZERO;
+    private boolean ticketAbierto = false;
+    private String modeloImpresora = "";
     
     
     public DataModelTicket(){
@@ -336,6 +338,24 @@ public class DataModelTicket {
      */
     public void setBonificaciones(BigDecimal bonificaciones) {
         this.bonificaciones = bonificaciones;
+    }
+
+    /**
+     * @return the ticketAbierto
+     */
+    public boolean isTicketAbierto() {
+        return ticketAbierto;
+    }
+
+    /**
+     * @param ticketAbierto the ticketAbierto to set
+     */
+    public void setTicketAbierto(boolean ticketAbierto) {
+        this.ticketAbierto = ticketAbierto;
+    }
+    
+    public void setModeloImpresora(String modelo){
+        this.modeloImpresora = modelo;
     }
 
     

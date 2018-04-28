@@ -65,22 +65,26 @@ public class LineaTicketData {
             ,BigDecimal precioUnitarioBase,BigDecimal neto,BigDecimal netoReducido,BigDecimal exento
             ,BigDecimal descuentoCliente,BigDecimal iva ,BigDecimal ivaReducido
             ,BigDecimal impuestoInterno,BigDecimal retencion ,boolean devuelto){
+        
+        BigDecimal montoSigno = BigDecimal.valueOf(1);
+        if(devuelto)
+            montoSigno = montoSigno.multiply(BigDecimal.valueOf(-1));
+        
         this.CodigoProducto = new SimpleIntegerProperty(codigoProducto);
         this.Descripcion = new SimpleStringProperty(descripcion);
         this.Cantidad = new SimpleObjectProperty(cantidad);
         this.PrecioUnitario = new SimpleObjectProperty(precioUnitario);
-        this.PrecioUnitarioBase = new SimpleObjectProperty(precioUnitarioBase);
-        this.neto = new SimpleObjectProperty(neto);
-        this.netoReducido = new SimpleObjectProperty(netoReducido);
-        this.exento = new SimpleObjectProperty(exento);
-        this.iva = new SimpleObjectProperty(iva);
-        this.ivaReducido = new SimpleObjectProperty(ivaReducido);
-        this.impuestoInterno = new SimpleObjectProperty(impuestoInterno);
-        this.descuentoCliente = new SimpleObjectProperty(descuentoCliente);
-        this.retencion = new SimpleObjectProperty(retencion);
+        this.PrecioUnitarioBase = new SimpleObjectProperty(precioUnitarioBase.multiply(montoSigno));
+        this.neto = new SimpleObjectProperty(neto.multiply(montoSigno));
+        this.netoReducido = new SimpleObjectProperty(netoReducido.multiply(montoSigno));
+        this.exento = new SimpleObjectProperty(exento.multiply(montoSigno));
+        this.iva = new SimpleObjectProperty(iva.multiply(montoSigno));
+        this.ivaReducido = new SimpleObjectProperty(ivaReducido.multiply(montoSigno));
+        this.impuestoInterno = new SimpleObjectProperty(impuestoInterno.multiply(montoSigno));
+        this.descuentoCliente = new SimpleObjectProperty(descuentoCliente.multiply(montoSigno));
+        this.retencion = new SimpleObjectProperty(retencion.multiply(montoSigno));
         this.Devuelto = new SimpleBooleanProperty(devuelto);
-        if(devuelto)
-            cantidad = cantidad.multiply(new BigDecimal(-1));
+        cantidad = cantidad.multiply(montoSigno);
         //this.SubTotal = new SimpleObjectProperty(new BigDecimal(precioUnitario.doubleValue()*cantidad));
         this.SubTotal = new SimpleObjectProperty(precioUnitario.multiply(cantidad));
     }

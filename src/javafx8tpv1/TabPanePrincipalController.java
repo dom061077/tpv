@@ -10,7 +10,6 @@ import com.tpv.combos.CombosController;
 import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.errorui.ErrorController;
 import com.tpv.login.LoginController;
-import com.tpv.modelo.Checkout;
 import com.tpv.principal.Context;
 import com.tpv.principal.FXMLMainController;
 import com.tpv.principal.MenuPrincipalController;
@@ -24,13 +23,16 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import org.apache.log4j.Logger;
 import com.tpv.exceptions.TpvException;
+import com.tpv.modelo.ParametroGeneral;
 import com.tpv.pagoticket.ConfirmaPagoTicketController;
 import com.tpv.pagoticket.PagoTicketController;
 import com.tpv.print.fiscal.ConfiguracionImpresoraController;
 import com.tpv.producto.BuscarPorDescProductoController;
 import com.tpv.service.UsuarioService;
+import com.tpv.service.UtilidadesService;
 import com.tpv.supervisor.SupervisorController;
 import com.tpv.util.Connection;
+import java.util.List;
 import javafx.application.Platform;
 import javafx.scene.Node;
 
@@ -101,6 +103,7 @@ public class TabPanePrincipalController implements Initializable {
         this.configImpresoraController.setTabController(this);
         this.combosController.setTabController(this);
         try{
+            initParametrosGenerale();
             initImpresora();
             gotoLogin();            
         }catch(TpvException e){
@@ -127,6 +130,20 @@ public class TabPanePrincipalController implements Initializable {
     private void initImpresora() throws TpvException{
             Connection.initFiscalPrinter();
         
+    }
+    
+    private void initParametrosGenerale() throws TpvException{
+        List<ParametroGeneral> list = UtilidadesService.getParametroGral();
+        list.forEach(param->{
+            if(param.getId().compareTo("RETENCION_ING_BRUTO_LEYENDA")==0)
+                Context.getInstance().setLeyendaRetIngBrutosCliente(param.getParametroCadena());
+            if(param.getId().compareTo("RETENCION_ING_BRUTO_MONTO_MINIMO")==0)
+                Context.getInstance().setMontoMinRetIngBrutos(param.getParametroNumerico());
+            
+        });
+        
+        
+
     }
     
 

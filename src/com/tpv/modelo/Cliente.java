@@ -33,6 +33,9 @@ public class Cliente {
     @Column(name = "CUIT")
     private String cuit;
     
+    @Column(name = "DIRECCION")
+    private String direccion;
+    
     @ManyToOne
     @JoinColumn(name = "idCONDICIONESIVA", referencedColumnName = "idCONDICIONESIVA", nullable=true)
     private CondicionIva condicionIva;
@@ -119,6 +122,20 @@ public class Cliente {
      */
     public Empresa getEmpresa() {
         return empresa;
+    }
+
+    /**
+     * @return the direccion
+     */
+    public String getDireccion() {
+        return direccion;
+    }
+
+    /**
+     * @param direccion the direccion to set
+     */
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
     
     

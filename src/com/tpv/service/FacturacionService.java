@@ -6,6 +6,7 @@
 package com.tpv.service;
 
 import com.tpv.exceptions.TpvException;
+import com.tpv.modelo.AlicuotaIngresosBrutos;
 import com.tpv.modelo.Combo;
 import com.tpv.modelo.ComboGrupo;
 import com.tpv.modelo.ComboGrupoDetalle;
@@ -41,15 +42,13 @@ public class FacturacionService  {
         try{
             tx = em.getTransaction();
             tx.begin(); 
-            if(factura.getCliente()==null){
-                factura.setCondicionIva(em.find(CondicionIva.class, 1));
-                factura.setTotal(BigDecimal.ZERO);
-                factura.setBonificaTarjeta(BigDecimal.ZERO);
-                factura.setIvaBonificaTarjeta(BigDecimal.ZERO);
-                factura.setImpuestoInterno(BigDecimal.ZERO);
-                
-                
-            }
+
+            factura.setTotal(BigDecimal.ZERO);
+            factura.setBonificaTarjeta(BigDecimal.ZERO);
+            factura.setIvaBonificaTarjeta(BigDecimal.ZERO);
+            factura.setImpuestoInterno(BigDecimal.ZERO);
+            factura.setCondicionIva(em.find(CondicionIva.class, 1));
+            
             em.persist(factura);
             tx.commit();
         }catch(RuntimeException e){
@@ -136,27 +135,6 @@ public class FacturacionService  {
             tx.begin();
             
             factura.setEstado(FacturaEstadoEnum.CERRADA);
-            BigDecimal total= BigDecimal.ZERO;
-            BigDecimal costo = BigDecimal.ZERO;
-            BigDecimal neto = BigDecimal.ZERO;
-            BigDecimal netoReducido = BigDecimal.ZERO;
-            BigDecimal impuestoInterno= BigDecimal.ZERO;
-            BigDecimal descuento = BigDecimal.ZERO;
-            BigDecimal exento = BigDecimal.ZERO;
-            
-            for(Iterator<FacturaDetalle>it = factura.getDetalle().iterator();it.hasNext();){
-                FacturaDetalle fd = it.next();
-                fd.getProducto().decStock(fd.getCantidad());
-                total=total.add(fd.getSubTotal());
-                costo = costo.add(fd.getPrecioUnitario());
-                neto = neto.add(fd.getNeto());
-                netoReducido = netoReducido.add(fd.getNetoReducido());
-                impuestoInterno = impuestoInterno.add(fd.getImpuestoInterno());
-                descuento = descuento.add(fd.getDescuento());
-                exento = exento.add(fd.getExento());
-                
-            }
-            factura.setTotal(total);
             factura=em.merge(factura);
             tx.commit();
             log.info("Factura guardada, id: "+factura.getId());
@@ -358,6 +336,32 @@ public class FacturacionService  {
             em.clear();
         }
         return factura;
+    }
+    
+    
+    public BigDecimal getRetencionIngBrutoCliente(String cuit) throws TpvException{
+        log.info("Calculando porcentaje de retención a CUIT: "+cuit);
+        AlicuotaIngresosBrutos alicuota=null;
+        EntityManager em = Connection.getEm();
+        BigDecimal porcentaje = BigDecimal.valueOf(7);
+        try{
+            Query q = em.createQuery("FROM AlicuotaIngresosBrutos a WHERE a.cuit = :cuit");
+            q.setParameter("cuit", cuit);
+            alicuota = (AlicuotaIngresosBrutos) q.getSingleResult();
+            porcentaje = alicuota.getPorcentaje();
+            if(alicuota.getConvenio().equals("CM")){
+                porcentaje=porcentaje.divide(BigDecimal.valueOf(2));
+            }
+            
+        }catch(NoResultException e){
+            log.info("CUIT no encontrado");
+        }catch(RuntimeException e){
+            log.error("Error en la capa de servicios de cliente al recuperar Alicuota de CUIT: "+cuit,e);
+            throw new TpvException("Error en la capa de servicios de cliente al recuperar cliente por cod. o D.N.I.");
+        }finally{
+            em.clear();
+        }
+        return porcentaje;
     }
     
 }

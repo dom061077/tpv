@@ -21,7 +21,6 @@ import com.tpv.service.ClienteService;
 import com.tpv.service.FacturacionService;
 import com.tpv.service.ImpresoraService;
 import com.tpv.service.ProductoService;
-import com.tpv.util.Connection;
 import com.tpv.util.ui.MaskTextField;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -37,7 +36,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -187,13 +185,14 @@ public class FXMLMainController implements Initializable {
         log.info("Ingresando a pantalla de facturación");
         stackPaneIngresos.requestFocus();
         textFieldCodCliente.requestFocus();
+        traerInfoImpresora();        
         configurarAnimacionIngresoNegativo();
         initTableViewTickets();
         verificarDetalleTableView();
         
         chequearInterfazNegativo();            
 
-        traerInfoImpresora();
+        impresoraService.getPrinterVersion();
         
         tableViewTickets.setItems(Context.getInstance().currentDMTicket().getDetalle());
         calcularTotalGeneral();
@@ -651,6 +650,7 @@ public class FXMLMainController implements Initializable {
                 String retorno[] = impresoraService.getPtoVtaNrosTicket();
                 Context.getInstance().currentDMTicket().setNroTicket(Integer.parseInt(retorno[1])+1);
                 Context.getInstance().currentDMTicket().setPuntoVenta(Long.parseLong(retorno[0]));
+                Context.getInstance().currentDMTicket().setTicketAbierto(Boolean.parseBoolean(retorno[3]));
 
 //            }catch(TpvException e){
 //                log.error(e.getMessage());
@@ -1048,34 +1048,40 @@ public class FXMLMainController implements Initializable {
             factura = factService.getFacturaAbiertaPorCheckout(Context.getInstance().currentDMTicket().getCheckout().getId()
                     ,Context.getInstance().currentDMTicket().getUsuario().getIdUsuario());
             if(factura!=null){
-                for(Iterator iterator = factura.getDetalle().iterator();iterator.hasNext();){
-                    FacturaDetalle fd = (FacturaDetalle)iterator.next();
+                if(!Context.getInstance().currentDMTicket().isTicketAbierto()){
+                    log.warn("Factura abierta en base de datos y cerrada en impresora. Se procede a cancelar en BD");
+                    factService.cancelarFactura(factura.getId());
+                }else{
+                    
+                        for(Iterator iterator = factura.getDetalle().iterator();iterator.hasNext();){
+                            FacturaDetalle fd = (FacturaDetalle)iterator.next();
 
-                    /*LineaTicketData(int codigoProducto,String descripcion,BigDecimal cantidad,BigDecimal precioUnitario
-                        ,BigDecimal precioUnitarioBase,BigDecimal neto,BigDecimal netoReducido,BigDecimal exento
-                        ,BigDecimal descuentoCliente,BigDecimal iva ,BigDecimal ivaReducido
-                        ,BigDecimal impuestoInterno,BigDecimal retencion ,boolean devuelto)*/
-        
-                    LineaTicketData lineaTicketData = new LineaTicketData(
-                                     fd.getProducto().getCodigoProducto()
-                                    ,fd.getProducto().getDescripcion(),fd.getCantidad()
-                                    ,fd.getPrecioUnitario()
-                                    ,fd.getPrecioUnitarioBase()
-                                    ,fd.getNeto(),fd.getNetoReducido(),fd.getExento()
-                                    ,fd.getDescuento()
-                                    ,fd.getIva()
-                                    ,fd.getIvaReducido()
-                                    ,fd.getImpuestoInterno()
-                                    ,new BigDecimal(0)
-                                    ,(fd.getSubTotal().compareTo(BigDecimal.ZERO)<0?true:false)
-                    );   
-                    if(factura.getCliente()!=null){
-                        Context.getInstance().currentDMTicket().setCliente(factura.getCliente());
-                    }
-                    Context.getInstance().currentDMTicket().setClienteSeleccionado(true);
-                    Context.getInstance().currentDMTicket().getDetalle().add(lineaTicketData);
+                            /*LineaTicketData(int codigoProducto,String descripcion,BigDecimal cantidad,BigDecimal precioUnitario
+                                ,BigDecimal precioUnitarioBase,BigDecimal neto,BigDecimal netoReducido,BigDecimal exento
+                                ,BigDecimal descuentoCliente,BigDecimal iva ,BigDecimal ivaReducido
+                                ,BigDecimal impuestoInterno,BigDecimal retencion ,boolean devuelto)*/
+
+                            LineaTicketData lineaTicketData = new LineaTicketData(
+                                             fd.getProducto().getCodigoProducto()
+                                            ,fd.getProducto().getDescripcion(),fd.getCantidad()
+                                            ,fd.getPrecioUnitario()
+                                            ,fd.getPrecioUnitarioBase()
+                                            ,fd.getNeto(),fd.getNetoReducido(),fd.getExento()
+                                            ,fd.getDescuento()
+                                            ,fd.getIva()
+                                            ,fd.getIvaReducido()
+                                            ,fd.getImpuestoInterno()
+                                            ,new BigDecimal(0)
+                                            ,(fd.getSubTotal().compareTo(BigDecimal.ZERO)<0?true:false)
+                            );   
+                            if(factura.getCliente()!=null){
+                                Context.getInstance().currentDMTicket().setCliente(factura.getCliente());
+                            }
+                            Context.getInstance().currentDMTicket().setClienteSeleccionado(true);
+                            Context.getInstance().currentDMTicket().getDetalle().add(lineaTicketData);
+                        }
+                        Context.getInstance().currentDMTicket().setIdFactura(factura.getId());
                 }
-                Context.getInstance().currentDMTicket().setIdFactura(factura.getId());
             }
             Context.getInstance().currentDMTicket().setReinicioVerificado(true);                    
         /*}catch(TpvException e){

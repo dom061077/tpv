@@ -8,16 +8,15 @@ package com.tpv.service;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Factura;
 import com.tpv.modelo.FacturaDetalleCombo;
+import com.tpv.principal.Context;
+import com.tpv.util.BinaryFiscalPacketParser;
 import com.tpv.util.Connection;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Iterator;
 import org.apache.log4j.Logger;
 import org.tpv.print.fiscal.FiscalPacket;
 import org.tpv.print.fiscal.exception.FiscalPrinterIOException;
 import org.tpv.print.fiscal.exception.FiscalPrinterStatusError;
-import org.tpv.print.fiscal.hasar.HasarFiscalPacket;
-import org.tpv.print.fiscal.hasar.HasarFiscalPrinter;
 import org.tpv.print.fiscal.hasar.HasarPrinterP715F;
 import org.tpv.print.fiscal.msg.FiscalMessages;
 
@@ -28,6 +27,31 @@ import org.tpv.print.fiscal.msg.FiscalMessages;
 public class ImpresoraService {
     Logger log = Logger.getLogger(ImpresoraService.class);
     private HasarPrinterP715F hfp;
+    
+    private static final String MODELOIMPRESORA_SMH_P_441F="SMH/P-441F";
+    
+    public static final String IVA_RESPONSABLE_INS = "I";
+    public static final String IVA_RESPONSABLE_NO_INS = "N";
+    public static final String IVA_EXENTO = "E";
+    public static final String IVA_NO_RESPONSABLE = "A";
+    public static final String IVA_CONSUMIDOR_FINAL = "C";
+    public static final String IVA_RESPONSALE_NO_INSCRIPTO = "B";
+    public static final String IVA_RESPONSABLE_MONOTRIBUTO = "M";
+    public static final String IVA_MONOTRIBUTO_SOCIAL = "S";
+    public static final String IVA_PEQUENIO_CONTRIBUYENTE_EVENTUAL = "V";
+    public static final String IVA_PEQUENIO_CONTRIBUYENTE_EVENTUAL_SOCIAL = "W";
+    public static final String IVA_NO_CATEGORIZADO = "T";
+    
+    public static final String TIPODOC_CUIT="C";
+    public static final String TIPODOC_CUIL="L";
+    public static final String TIPODOC_LIBRETA_ENROLAMIENTO="0";
+    public static final String TIPODOC_LIBRETA_CIVICA="1";
+    public static final String TIPODOC_DNI="2";
+    public static final String TIPODOC_PASAPORTE="3";
+    public static final String TIPODOC_CEDULA_IDENTIDAD="4";
+    public static final String TIPODOC_SIN_CALIFICADOR=" ";
+    
+    
     
     /**
      * Método para recuperar Nro. de punto de venta y Nro. de Ticket
@@ -56,6 +80,9 @@ public class ImpresoraService {
      * 
      * @return 
      */
+    
+    
+    
     public ImpresoraService(){
         hfp = new HasarPrinterP715F(Connection.getStcp());
     }
@@ -128,7 +155,7 @@ public class ImpresoraService {
     }
     
     public String[] getPtoVtaNrosTicket() throws TpvException{
-        String[] retorno = new String[3];
+        String[] retorno = new String[4];
         //HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
         FiscalPacket request;
         FiscalPacket response;
@@ -145,7 +172,11 @@ public class ImpresoraService {
         
         retorno[1]=response.getString(3);
         retorno[2]=response.getString(5);
-        response.getFiscalStatus();
+        
+        BinaryFiscalPacketParser binaryFP = new BinaryFiscalPacketParser(response);
+        retorno[3]=String.valueOf(binaryFP.isDocumentoFiscalAbierto());
+        
+        
         try{
            request = getHfp().cmdGetInitData();
            response = getHfp().execute(request);
@@ -155,6 +186,20 @@ public class ImpresoraService {
         retorno[0]=response.getString(7);
         
         return retorno;
+    }
+    
+    private String traducirIVAcmdCustomerData(int condicionIVA){
+        switch (condicionIVA){
+            case 1:
+                return IVA_CONSUMIDOR_FINAL;
+            case 2:
+                return IVA_RESPONSABLE_INS;
+            case 5:
+                return IVA_EXENTO;
+            case 6:
+                return IVA_RESPONSABLE_MONOTRIBUTO;
+        }
+        return "";
     }
     
     public void abrirTicket() throws TpvException{
@@ -168,7 +213,25 @@ public class ImpresoraService {
         FiscalMessages fMsg;
         
         try{
-            request = getHfp().cmdOpenFiscalReceipt("B");
+            if(Context.getInstance().currentDMTicket().getCliente()!=null){
+                if(Context.getInstance().currentDMTicket().getCliente().getCondicionIva().getId()!=1){
+                    //cmdSetCustomerData(String name, String customerDocNumber, String ivaResponsibility, String docType, String location)
+
+                    request = getHfp().cmdSetCustomerData(
+                            Context.getInstance().currentDMTicket().getCliente().getRazonSocial()
+                            , Context.getInstance().currentDMTicket().getCliente().getCuit()
+                            , traducirIVAcmdCustomerData(Context.getInstance().currentDMTicket().getCliente().getCondicionIva().getId())
+                            , TIPODOC_CUIT
+                            , Context.getInstance().currentDMTicket().getCliente().getDireccion());
+                    response = getHfp().execute(request);
+                }
+
+                if(Context.getInstance().currentDMTicket().getCliente().getCondicionIva().getId()==2)
+                    request = getHfp().cmdOpenFiscalReceipt("A");
+                else    
+                    request = getHfp().cmdOpenFiscalReceipt("B");
+            }else
+                request = getHfp().cmdOpenFiscalReceipt("B");
             response = getHfp().execute(request);
         }catch(FiscalPrinterStatusError e){
             fMsg = getHfp().getMessages();
@@ -221,6 +284,7 @@ public class ImpresoraService {
     
     public void cerrarTicket(Factura factura) throws TpvException{
         //HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
+        log.info("Cierre de factura en capa de servicios. Factura id: "+factura.getId());
         FiscalPacket request;
         FiscalPacket response;
         
@@ -233,14 +297,27 @@ public class ImpresoraService {
             try{
                 response = getHfp().execute(request);
             }catch(FiscalPrinterStatusError e){
-                log.warn("Error en estado fiscal de la impresora al cerrar el ticket fiscal",e);
+                log.warn("Error en estado fiscal de la impresora al imprimir descuentos por combos",e);
                 throw new TpvException(e.getMessage());
             
             }catch(FiscalPrinterIOException e){
-                log.error("Error de entrada/salida en la impresora fical",e);
+                log.warn("Error de entrada/salida en la impresora fical al imprimir descuentos por combos",e);
                 throw new TpvException(e.getMessage());
             }
           
+        }
+        
+        if(factura.getRetencion().compareTo(BigDecimal.ZERO)>0 ){
+            request = getHfp().cmdPerceptions(Context.getInstance().getLeyendaRetIngBrutosCliente(), factura.getRetencion(), null);
+            try{
+                response = getHfp().execute(request);
+            }catch(FiscalPrinterStatusError e){
+                log.warn("Error en estado fiscal de la impresora al imprimir retención");
+                throw new TpvException(e.getMessage());
+            }catch(FiscalPrinterIOException e){
+                log.warn("Error de entrada/salida en la impresora fiscal al imprimir retención",e);
+                throw new TpvException(e.getMessage());
+            }
         }
                         
         request = getHfp().cmdCloseFiscalReceipt(null);
@@ -333,7 +410,8 @@ public class ImpresoraService {
         request = getHfp().cmdGetFiscalDeviceVersion();
         try{
           response = getHfp().execute(request);
-          log.debug("Respuesta: "+response.toASCIIString());
+          if (response.getString(3).contains(MODELOIMPRESORA_SMH_P_441F))
+              Context.getInstance().currentDMTicket().setModeloImpresora(MODELOIMPRESORA_SMH_P_441F);
         }catch(FiscalPrinterStatusError e){
             fMsg = getHfp().getMessages();
             log.error(fMsg.getErrorsAsString());
