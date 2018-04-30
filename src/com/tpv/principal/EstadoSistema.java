@@ -5,13 +5,11 @@
  */
 package com.tpv.principal;
 
-import org.datafx.controller.flow.injection.FlowScoped;
 
 /**
  *
  * @author daniel
  */
-@FlowScoped
 public class EstadoSistema {
     private String mensaje;
     private boolean error;

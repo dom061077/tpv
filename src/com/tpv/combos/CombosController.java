@@ -32,7 +32,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx8tpv1.TabPanePrincipalController;
 import org.apache.log4j.Logger;
-import org.datafx.controller.flow.action.ActionTrigger;
 
 /**
  *

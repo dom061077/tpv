@@ -4468,4 +4468,13 @@ to the top and bottom -fx-padding values of the parent toolbar. */
 
 }
 
-
+.grid-pane-lines
+{
+    //-fx-padding: 10;
+    -fx-border-style: solid inside;
+    //-fx-background-color:  -fx-inner-border;    
+    -fx-border-width: 2;
+    -fx-border-insets: 5;
+    -fx-border-radius: 5;
+    -fx-border-color:  -fx-inner-border;    
+}

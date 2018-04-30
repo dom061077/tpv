@@ -60,7 +60,7 @@
             <Button fx:id="menuButton" focusTraversable="false" mnemonicParsing="false" text="Button" visible="false" GridPane.columnIndex="1" />
             <Button fx:id="confirmarTicketButton" focusTraversable="false" mnemonicParsing="false" text="Button" visible="false" GridPane.columnIndex="2" />
             <Label styleClass="label_shorcut" text="Esc- Para recuperar Sistema" />
-            <Label styleClass="System.exit(0);" text="F11- Para Cerrar Sistema" GridPane.columnIndex="1" />
+            <Label styleClass="System.exit(0);" text="F11- Ir a Menú Principal" GridPane.columnIndex="1" />
          </children>
       </GridPane>
    </bottom>

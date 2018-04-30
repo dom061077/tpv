@@ -110,6 +110,18 @@ public class ConfirmaPagoTicketController implements Initializable{
     private Label totalPagosLabel;
     
     @FXML
+    private Label totalNetoLabel;
+    
+    @FXML
+    private Label totalIVALabel;
+
+    @FXML
+    private Label totalInternoLabel;
+    
+    @FXML
+    private Label totalExentoIVALabel;    
+    
+    @FXML
     private Label totalBonificacionesLabel;
 
     @FXML
@@ -123,6 +135,12 @@ public class ConfirmaPagoTicketController implements Initializable{
             totalBonificacionesLabel.setText(df.format(Context.getInstance().currentDMTicket().getBonificaciones()));
             totalTicketLabel.setText(df.format(Context.getInstance().currentDMTicket().getTotalTicket()));
             cambioLabel.setText(df.format(Context.getInstance().currentDMTicket().getSaldo().abs()));
+            
+            totalNetoLabel.setText(df.format(Context.getInstance().currentDMTicket().getTotalNeto()));
+            totalIVALabel.setText(df.format(Context.getInstance().currentDMTicket().getTotalIva()));
+            totalInternoLabel.setText(df.format(Context.getInstance().currentDMTicket().getTotalInterno()));
+            totalExentoIVALabel.setText(df.format(Context.getInstance().currentDMTicket().getTotalExento()));
+            
             repeatFocus(borderPane);
                     
     }

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -32,9 +34,9 @@
       </GridPane>
    </bottom>
    <center>
-      <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <BorderPane prefHeight="200.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
          <center>
-            <TableView fx:id="tableViewPagos" prefHeight="352.0" prefWidth="1355.0" styleClass="tpv-table-view" BorderPane.alignment="CENTER">
+            <TableView fx:id="tableViewPagos" prefHeight="324.0" prefWidth="1024.0" styleClass="tpv-table-view" BorderPane.alignment="CENTER">
               <columns>
                   <TableColumn fx:id="codigoPagoColumn" text="Cod." visible="false" />
                 <TableColumn fx:id="descripcionPagoColumn" prefWidth="200.0" text="Descripción" />
@@ -48,27 +50,45 @@
             </TableView>
          </center>
          <bottom>
-            <GridPane prefHeight="160.0" prefWidth="1355.0" BorderPane.alignment="CENTER">
+            <GridPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="263.0" prefWidth="800.0" styleClass="rounded_corner" BorderPane.alignment="CENTER">
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="656.0" minWidth="10.0" prefWidth="656.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="580.0" minWidth="10.0" prefWidth="517.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="656.0" minWidth="10.0" prefWidth="516.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="580.0" minWidth="10.0" prefWidth="508.0" />
               </columnConstraints>
               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label alignment="TOP_LEFT" prefHeight="17.0" prefWidth="580.0" styleClass="label_total" text="Total Ticket:" />
-                  <Label alignment="TOP_LEFT" prefHeight="17.0" prefWidth="580.0" styleClass="label_total" text="Total Pago:" GridPane.rowIndex="2" />
-                  <Label alignment="TOP_LEFT" prefHeight="17.0" prefWidth="580.0" styleClass="label_total" text="Cambio del Cliente:" GridPane.rowIndex="3" />
-                  <Label fx:id="totalTicketLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="400.0" styleClass="label_total" textAlignment="RIGHT" GridPane.columnIndex="1" />
-                  <Label fx:id="totalPagosLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="400.0" styleClass="label_total" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <Label fx:id="cambioLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="400.0" styleClass="label_total" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <Label styleClass="label_total" text="Total Bonificaciones:" GridPane.rowIndex="1" />
-                  <Label fx:id="totalBonificacionesLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="400.0" styleClass="label_total" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label alignment="TOP_LEFT" prefHeight="17.0" prefWidth="580.0" styleClass="label_total" text="Total Ticket:" GridPane.rowIndex="4" />
+                  <Label alignment="TOP_LEFT" prefHeight="17.0" prefWidth="580.0" styleClass="label_total" text="Total Pago:" GridPane.rowIndex="6" />
+                  <Label alignment="TOP_LEFT" prefHeight="17.0" prefWidth="580.0" styleClass="label_total" text="Cambio del Cliente:" GridPane.rowIndex="7" />
+                  <Label fx:id="totalTicketLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="400.0" styleClass="label_total" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <Label fx:id="totalPagosLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="400.0" styleClass="label_total" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  <Label fx:id="cambioLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="400.0" styleClass="label_total" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                  <Label styleClass="label_total" text="Total Bonificaciones:" GridPane.rowIndex="5" />
+                  <Label fx:id="totalBonificacionesLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="400.0" styleClass="label_total" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <Label styleClass="label_total" text="Base Imponible:" />
+                  <Label styleClass="label_total" text="IVA:" GridPane.rowIndex="1" />
+                  <Label styleClass="label_total" text="Interno:" GridPane.rowIndex="2" />
+                  <Label styleClass="label_total" text="Exento IVA:" GridPane.rowIndex="3" />
+                  <Label fx:id="totalNetoLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="21.0" prefWidth="400.0" styleClass="label_total" textAlignment="RIGHT" GridPane.columnIndex="1" />
+                  <Label fx:id="totalIVALabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="21.0" prefWidth="400.0" styleClass="label_total" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label fx:id="totalInternoLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="21.0" prefWidth="400.0" styleClass="label_total" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Label fx:id="totalExentoIVALabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="21.0" prefWidth="400.0" styleClass="label_total" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                </children>
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
+               <effect>
+                  <Blend />
+               </effect>
             </GridPane>
          </bottom></BorderPane>
    </center>

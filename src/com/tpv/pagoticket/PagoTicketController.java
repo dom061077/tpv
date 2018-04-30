@@ -30,15 +30,12 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx8tpv1.TabPanePrincipalController;
 import org.apache.log4j.Logger;
-import org.datafx.controller.FXMLController;
-import org.datafx.controller.flow.action.ActionTrigger;
 import com.tpv.principal.Context;
 
 /**
  *|
  * @author daniel
  */
-@FXMLController(value="PagoTicket.fxml", title = "pago ticket")
 public class PagoTicketController implements Initializable {
     Logger log = Logger.getLogger(PagoTicketController.class);
     

@@ -23,9 +23,6 @@ import javafx.scene.layout.BorderPane;
 import javafx8tpv1.TabPanePrincipalController;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
-import org.datafx.controller.FXMLController;
-import org.datafx.controller.flow.context.FXMLViewFlowContext;
-import org.datafx.controller.flow.context.ViewFlowContext;
 import com.tpv.principal.Context;
 import javafx.scene.Node;
         
@@ -47,8 +44,6 @@ public class ErrorController implements Initializable {
 //    private Button reintentarButton;
     
     
-    @FXMLViewFlowContext
-    private ViewFlowContext context;    
     
     
     @FXML

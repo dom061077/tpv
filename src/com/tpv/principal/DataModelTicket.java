@@ -94,6 +94,53 @@ public class DataModelTicket {
         return BigDecimal.valueOf(total);
     }
     
+    public BigDecimal getTotalIva(){
+        ListProperty<LineaTicketData> innerList = getDetalle();
+        
+        BigDecimal totalIva = new BigDecimal(0);
+        for(Iterator iter = innerList.iterator();iter.hasNext();){
+            LineaTicketData ticket=(LineaTicketData)iter.next();
+            totalIva = totalIva.add(ticket.getIva());
+            totalIva = totalIva.add(ticket.getIvaReducido());
+        }
+        return totalIva;
+    }
+    
+    public BigDecimal getTotalInterno(){
+        ListProperty<LineaTicketData> innerList = getDetalle();
+        BigDecimal totalInterno = BigDecimal.valueOf(0);
+        for(Iterator iter = innerList.iterator();iter.hasNext();){
+            LineaTicketData ticket=(LineaTicketData)iter.next();
+            totalInterno = totalInterno.add(ticket.getImpuestoInterno());
+        }
+        
+        return totalInterno;
+    }
+    
+    public BigDecimal getTotalExento(){
+        ListProperty<LineaTicketData> innerList = getDetalle();
+        BigDecimal totalExento = BigDecimal.valueOf(0);
+        for(Iterator iter = innerList.iterator();iter.hasNext();){
+            LineaTicketData ticket = (LineaTicketData)iter.next();
+            totalExento = totalExento.add(ticket.getExento());
+        }
+        return totalExento;
+    }
+    
+    
+    /**
+     * Total Base imponible
+     */
+    public BigDecimal getTotalNeto(){
+        ListProperty<LineaTicketData> innerList = getDetalle();
+        BigDecimal totalNeto = BigDecimal.valueOf(0);
+        for(Iterator iter = innerList.iterator();iter.hasNext();){
+            LineaTicketData ticket = (LineaTicketData) iter.next();
+            totalNeto = totalNeto.add(ticket.getNeto());
+        }
+        return totalNeto;
+    }
+    
     public BigDecimal getSaldo(){
         BigDecimal saldo = getTotalTicket().subtract(getTotalPagos());
         saldo = saldo.subtract(getBonificaciones());

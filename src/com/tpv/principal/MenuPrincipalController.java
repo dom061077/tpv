@@ -24,8 +24,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx8tpv1.TabPanePrincipalController;
 import org.apache.log4j.Logger;
-import org.datafx.controller.flow.action.ActionTrigger;
-import org.datafx.controller.flow.action.LinkAction;
 
 
 /**
@@ -37,19 +35,15 @@ public class MenuPrincipalController implements Initializable {
     private TabPanePrincipalController tabController;
     Logger log = Logger.getLogger(MenuPrincipalController.class);
     @FXML
-    @LinkAction(FXMLMainController.class)
     private Button buttonFacturacion;
          
     @FXML
-    @LinkAction(ConfiguracionImpresoraController.class)
     private Button buttonControlador;
     
     @FXML
-    @ActionTrigger("retirarDinero")
     private Button buttonRetirarDinero;
     
     @FXML
-    @LinkAction(ErrorController.class)
     private Button buttonError;
     
     @FXML
@@ -121,6 +115,7 @@ public class MenuPrincipalController implements Initializable {
                 if(keyEvent.getCode()==KeyCode.NUMPAD2){
                     tabController.gotoControlador();
                 }
+                
                 keyEvent.consume();
             });
         });
