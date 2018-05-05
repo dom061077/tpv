@@ -20,6 +20,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.util.Collections;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -54,6 +56,13 @@ public class Combo {
     
     @Column(name = "COMBINARPRODUCTOS", columnDefinition = "TINYINT(1)") 
     private boolean combinarProductos;
+    
+    
+    @ManyToOne
+    @JoinColumn(name = "idVALORESIMPOSITIVOS"
+            ,referencedColumnName="idVALORESIMPOSITIVOS",nullable=false)
+    private ValorImpositivo valorImpositivo;    
+    
     
     @OneToMany(cascade = CascadeType.ALL,mappedBy="combo")
     private List<ComboGrupo> combosGrupo = new ArrayList<ComboGrupo>();
@@ -603,6 +612,20 @@ public class Combo {
     @Transient
     public BigDecimal getBonificacionFinal(){
         return bonificacionFinal;
+    }
+
+    /**
+     * @return the valorImpositivo
+     */
+    public ValorImpositivo getValorImpositivo() {
+        return valorImpositivo;
+    }
+
+    /**
+     * @param valorImpositivo the valorImpositivo to set
+     */
+    public void setValorImpositivo(ValorImpositivo valorImpositivo) {
+        this.valorImpositivo = valorImpositivo;
     }
     
 }

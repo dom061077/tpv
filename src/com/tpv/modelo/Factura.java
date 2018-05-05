@@ -65,6 +65,9 @@ public class Factura {
     @Column(name = "NETOREDUCIDO")
     private BigDecimal netoReducido;
     
+    /**
+     * Descuento de empleado
+     */
     @Column(name = "DESCUENTO")
     private BigDecimal descuento;
     
@@ -73,6 +76,20 @@ public class Factura {
     
     @Column(name = "IVAREDUCIDO")
     private BigDecimal ivaReducido; 
+    
+    /**
+     * Bonificacion de combos
+     */
+    @Column(name = "BONIFICACION")
+    private BigDecimal bonificacion;
+    
+    /**
+     * IVA de Bonificacion, es cargada por los usuarios de marketing
+    */
+    @Column(name = "IVABONIFICACION")
+    private BigDecimal ivaBonificacion;
+       
+    
             
     @Column(name = "EXENTO")
     private BigDecimal exento;
@@ -87,6 +104,7 @@ public class Factura {
     
     @Column(name = "INTERESTARJETA")
     private BigDecimal interesTarjeta;
+    
     
     @Column(name = "BONIFICATARJETA")
     private BigDecimal bonificaTarjeta;

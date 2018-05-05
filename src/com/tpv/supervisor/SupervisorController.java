@@ -10,6 +10,7 @@ import com.tpv.enums.TipoTituloSupervisorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Usuario;
 import com.tpv.principal.Context;
+import com.tpv.print.event.FiscalPrinterEvent;
 import com.tpv.service.FacturacionService;
 import com.tpv.service.ImpresoraService;
 import com.tpv.service.UsuarioService;
@@ -24,6 +25,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx8tpv1.TabPanePrincipalController;
 import org.apache.log4j.Logger;
+import org.tpv.print.fiscal.FiscalPacket;
+import org.tpv.print.fiscal.FiscalPrinter;
+import org.tpv.print.fiscal.hasar.HasarCommands;
+import static org.tpv.print.fiscal.hasar.HasarCommands.CMD_CANCEL_DOCUMENT;
 
 /**
  *
@@ -39,6 +44,7 @@ public class SupervisorController implements Initializable{
     private FacturacionService facturaService = new FacturacionService();
     private UsuarioService usuarioService = new UsuarioService();    
     private TabPanePrincipalController tabController;
+    private FiscalPrinterEvent fiscalPrinterEvent;
 
     
     @FXML
@@ -77,6 +83,7 @@ public class SupervisorController implements Initializable{
     @FXML
     public  void initialize(URL url, ResourceBundle rb) {
             log.info("Ingresando al método init");
+            asignarEvento();
             labelError.setOnKeyPressed(keyEvent -> {
                 if(keyEvent.getCode() == KeyCode.ESCAPE){
                     stackPaneError.setVisible(false);
@@ -148,15 +155,37 @@ public class SupervisorController implements Initializable{
     
     private void cancelarTicketCompleto() throws TpvException{
             impresoraService.cancelarTicket();
-            facturaService.cancelarFactura(Context.getInstance().currentDMTicket().getIdFactura());
-            Context.getInstance().currentDMTicket().setCliente(null);
-            Context.getInstance().currentDMTicket().setClienteSeleccionado(false);
-            Context.getInstance().currentDMTicket().getDetalle().clear();
-            Context.getInstance().currentDMTicket().getPagos().clear();
     }
     
     public void setTabController(TabPanePrincipalController tabController){
         this.tabController=tabController;
+    }
+    
+    private void asignarEvento(){
+        
+        this.fiscalPrinterEvent = new FiscalPrinterEvent(){
+            
+            @Override
+             public void commandExecuted(FiscalPrinter source, FiscalPacket command, FiscalPacket response){
+                log.debug("Evento despues de cerrar cancelar ticket");
+                if(command.getCommandCode()==HasarCommands.CMD_CANCEL_DOCUMENT){
+                    try{
+                        facturaService.cancelarFactura(Context.getInstance().currentDMTicket().getIdFactura());
+                        Context.getInstance().currentDMTicket().setCliente(null);
+                        Context.getInstance().currentDMTicket().setClienteSeleccionado(false);
+                        Context.getInstance().currentDMTicket().getDetalle().clear();
+                        Context.getInstance().currentDMTicket().getPagos().clear();
+                    }catch(TpvException e){
+                        Context.getInstance().currentDMTicket().setException(e);
+                        Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CONFIRMARTICKET);
+                        tabController.gotoError();
+                    }
+                }
+            }
+        };
+        
+        impresoraService.getHfp().setEventListener(this.fiscalPrinterEvent);
+        
     }
     
 }

@@ -337,11 +337,13 @@ public class ImpresoraService {
     
     public void cancelarTicket() throws TpvException{
         //HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
-        FiscalPacket request;
+        FiscalPacket request,requestStatus;
         FiscalPacket response;
         FiscalMessages fMsg;
         request = getHfp().cmdCancelDocument();
+        requestStatus = getHfp().cmdStatusRequest();
         try{
+          response = getHfp().execute(requestStatus);
           response = getHfp().execute(request);
         }catch(FiscalPrinterStatusError e){
             fMsg = getHfp().getMessages();

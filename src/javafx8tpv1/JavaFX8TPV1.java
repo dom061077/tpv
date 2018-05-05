@@ -45,9 +45,11 @@ public class JavaFX8TPV1 extends Application {
             alert.showAndWait();
             alert.getDialogPane().getStylesheets().add(Connection.getCss());
             log.error("Excepción no controlada",throwable);
-        });        
+        });   
         
+        DOMConfigurator.configure(getClass().getResource("log4j.xml"));
         
+       //ejecutarSpooler();
 
        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
@@ -77,7 +79,7 @@ public class JavaFX8TPV1 extends Application {
         
        
         
-        DOMConfigurator.configure(getClass().getResource("log4j.xml"));
+        
         
         /*Runnable task = () -> {
             while(true){
@@ -173,12 +175,14 @@ public class JavaFX8TPV1 extends Application {
 
     private void ejecutarSpooler(){
          try {
+            log.info("Antes de ejecutar spooler");
             Process process = Runtime
                     .getRuntime()
-                    .exec("E:\\JAVA TPV\\Hasar\\EMULADOR_HASAR_IF_NG\\HERRAMIENTAS\\WSPOOLER -k -p7");
+                    .exec("sudo -S <<< \"exito\" /home/tpv1/TPV/./spooler -pttyS0 -k");
             InputStream inputstream = process.getInputStream();
+            log.info("Despues de ejecutar spooler");           
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e);
         }       
     }
     

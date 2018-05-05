@@ -118,11 +118,20 @@ public class FacturaDetalleCombo {
         this.combo = combo;
     }
     
-    @Transient
+    /*@Transient
     public BigDecimal getBonificacionCalculada(){
         BigDecimal bonificacionCalculada = BigDecimal.ZERO;
         return bonificacionCalculada;
-    }
+    }*/
     
+    
+    @Transient
+    public BigDecimal getIVABonificacion(){
+        BigDecimal ivaBonificado = BigDecimal.ZERO;
+        BigDecimal porcien = combo.getValorImpositivo().getValor();
+        ivaBonificado = bonificacion.multiply(porcien).divide(BigDecimal.valueOf(100));
+                
+        return ivaBonificado;
+    }
     
 }

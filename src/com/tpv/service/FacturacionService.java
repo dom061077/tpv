@@ -133,7 +133,8 @@ public class FacturacionService  {
         try{
             tx = em.getTransaction();
             tx.begin();
-            
+            factura.setDescuento(BigDecimal.ZERO);
+            factura.getBonificacionCombos();
             factura.setEstado(FacturaEstadoEnum.CERRADA);
             factura=em.merge(factura);
             tx.commit();

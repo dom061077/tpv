@@ -45,6 +45,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -334,8 +335,9 @@ public class FXMLMainController implements Initializable {
                         textFieldCantidad.setVisible(false);
                     }
                     if(textFieldProducto.getText().trim().length()>0){
-
+                        textFieldProducto.setDisable(true);
                         enviarComandoLineaTicket();
+                        
                         scrollDown();
                     }else{
                         if(Context.getInstance().currentDMTicket().getDetalle().size()>0)
@@ -574,7 +576,8 @@ public class FXMLMainController implements Initializable {
         //
         //                    }
                     }
-                }
+                }else
+                    textFieldProducto.setDisable(false);
         }catch(TpvException e){
                 Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
                 Context.getInstance().currentDMTicket().setException(e);
@@ -590,7 +593,7 @@ public class FXMLMainController implements Initializable {
     
     public void iniciaIngresosVisibles(){
         
-        textFieldProducto = new MaskTextField();
+        textFieldProducto = textFieldProducto = new MaskTextField();
         textFieldProducto.setMask("N!");
         textFieldProducto.setVisible(false);
         textFieldProducto.getStyleClass().add("textfield_sin_border");
@@ -1009,11 +1012,11 @@ public class FXMLMainController implements Initializable {
 //                    log.debug("     Descripción: "+item.getDescription());
 //                    
 //                });
-                
+                textFieldProducto.setDisable(false);
             }
         };
         impresoraService.getHfp().setEventListener(this.fiscalPrinterEvent);
-                
+        
     }
     
     private void setBanner(){
