@@ -28,6 +28,8 @@ public class LineaTicketData {
     private ObjectProperty<BigDecimal> PrecioUnitario;
     private ObjectProperty<BigDecimal> PrecioUnitarioBase;//sin sin iva, impuestointerno pero si con posible descuento de cliente
     private ObjectProperty<BigDecimal> SubTotal;
+    
+    AGREGAR EL PORCENTAJE DEL IVA AQUI Y CONTINUAR
     /**
      * 
      *  neto de la línea de detalle sin el iva del 21 %

@@ -63,9 +63,21 @@ public class Combo {
             ,referencedColumnName="idVALORESIMPOSITIVOS",nullable=false)
     private ValorImpositivo valorImpositivo;    
     
+    /**
+     * es el registro en productos que corresponde al combo
+     */
+    @ManyToOne
+    @JoinColumn(name = "idPRODUCTOS"
+            ,referencedColumnName="idPRODUCTOS",nullable=false)
+    private Producto producto;
+    
+    
     
     @OneToMany(cascade = CascadeType.ALL,mappedBy="combo")
     private List<ComboGrupo> combosGrupo = new ArrayList<ComboGrupo>();
+    
+    @Transient
+    private List<FacturaDetalleComboAbierto> comoAbierto = new ArrayList<FacturaDetalleComboAbierto>();
 
     @Transient
     private BigDecimal bonificacionFinal = BigDecimal.ZERO;
@@ -214,7 +226,7 @@ public class Combo {
             return cantidadArmados;
     }
     
-    @Transient
+  /*  @Transient
     public BigDecimal getBonificacionSinCombinacion(){
         BigDecimal bonificacion = BigDecimal.ZERO,bonificacionAux = BigDecimal.ZERO;
         
@@ -248,7 +260,7 @@ public class Combo {
             }
         }
         return bonificacion;
-    }
+    }*/
     
    
     private boolean isMenorPrecioEnGrupo(ComboGrupo gp,ProductoAgrupadoEnFactura pafParam){
@@ -267,7 +279,7 @@ public class Combo {
         return false;
     }
     
-    @Transient
+    /*@Transient
     public BigDecimal getBonificacion(){
         BigDecimal bonificacion= BigDecimal.ZERO;
         int cantCombosArmados = this.getCantidadCombosArmados();
@@ -334,7 +346,7 @@ public class Combo {
 
         }
         return bonificacion;        
-    }
+    }*/
     
     @Transient
     private int getCantidadMinimaPorGrupo(){
@@ -365,12 +377,12 @@ public class Combo {
         this.combinarProductos = combinarProductos;
     }
     
-    public void calcularCombo(){
+    /*public void calcularCombo(){
         for(Iterator<ComboGrupo> itG = getCombosGrupo().iterator();itG.hasNext();){
             ComboGrupo cg = itG.next();
             
         }
-    }
+    }*/
 
     /**
      * @return the prioridad
@@ -529,9 +541,10 @@ public class Combo {
                                             cantidadADecrementar = 0;
                                         }
                                     if(cg.getMonto().compareTo(BigDecimal.ZERO)>0){
-                                        bonificacionFinal = bonificacionFinal.add(cdpp.getPaf()
-                                                .getPrecioUnitario().multiply(BigDecimal.valueOf(cantidadDecrementada))
-                                            );
+                                        //bonificacionFinal = bonificacionFinal.add(cdpp.getPaf()
+                                        //        .getPrecioUnitario().multiply(BigDecimal.valueOf(cantidadDecrementada))
+                                        //    );
+                                        
                                     }else{
                                         /*if (cg.getOrdenPorcentaje()==0)
                                             bonificacionFinal = bonificacionFinal.add(
@@ -626,6 +639,20 @@ public class Combo {
      */
     public void setValorImpositivo(ValorImpositivo valorImpositivo) {
         this.valorImpositivo = valorImpositivo;
+    }
+
+    /**
+     * @return the producto
+     */
+    public Producto getProducto() {
+        return producto;
+    }
+
+    /**
+     * @param producto the producto to set
+     */
+    public void setProducto(Producto producto) {
+        this.producto = producto;
     }
     
 }

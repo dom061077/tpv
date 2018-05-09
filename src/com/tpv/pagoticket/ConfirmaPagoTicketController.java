@@ -243,6 +243,31 @@ public class ConfirmaPagoTicketController implements Initializable{
     
     private void setTotales(Factura factura) throws TpvException{
             //-----------resumen de calculos en cabecera-----------
+            BigDecimal totalBonifCombos = BigDecimal.ZERO;
+            BigDecimal totalIvaBonifCombos = BigDecimal.ZERO;
+
+            FacturaDetalle facturaDetalle = new FacturaDetalle();
+            
+            for(Iterator<FacturaDetalleCombo> it = factura.getDetalleCombos().iterator();it.hasNext();){
+                FacturaDetalleCombo fdc = it.next();
+                facturaDetalle.setCantidad(BigDecimal.valueOf(fdc.getCantidad()));
+                facturaDetalle.setDescuento(BigDecimal.ZERO);
+                facturaDetalle.setExento(BigDecimal.ZERO);
+                facturaDetalle.setImpuestoInterno(BigDecimal.ZERO);
+                facturaDetalle.setIva(fdc.getIvaCompletoBonif().multiply(BigDecimal.valueOf(-1)));
+                facturaDetalle.setIvaReducido(fdc.getIvaCompletoBonif().multiply(BigDecimal.valueOf(-1)));
+                facturaDetalle.setNeto(fdc.getNetoBonif().multiply(BigDecimal.valueOf(-1)));
+                facturaDetalle.setNetoReducido(fdc.getNetoReducido().multiply(BigDecimal.valueOf(-1)));
+                facturaDetalle.setPrecioUnitario(BigDecimal.ZERO);
+                facturaDetalle.setPrecioUnitarioBase(BigDecimal.ZERO);
+                facturaDetalle.setSubTotal(fdc.getBonificacion().multiply(BigDecimal.valueOf(-1)));            
+                totalBonifCombos = totalBonifCombos.add(fdc.getBonificacion());
+                totalIvaBonifCombos = totalIvaBonifCombos.add(fdc.getIVABonificacion());
+                facturaDetalle.setProducto(fdc.getCombo().getProducto());
+                facturaDetalle.setFactura(factura);
+                factura.getDetalle().add(facturaDetalle);
+            }
+            
             BigDecimal total= BigDecimal.ZERO;
             BigDecimal costo = BigDecimal.ZERO;
             BigDecimal neto = BigDecimal.ZERO;
@@ -253,7 +278,7 @@ public class ConfirmaPagoTicketController implements Initializable{
             BigDecimal ivaReducido = BigDecimal.ZERO;
             BigDecimal iva = BigDecimal.ZERO;
 
-
+            
             for(Iterator<FacturaDetalle>it = factura.getDetalle().iterator();it.hasNext();){
                 FacturaDetalle fd = it.next();
                 fd.getProducto().decStock(fd.getCantidad());
@@ -266,7 +291,7 @@ public class ConfirmaPagoTicketController implements Initializable{
                 iva = iva.add(fd.getIva());
                 ivaReducido = ivaReducido.add(fd.getIvaReducido());
                 impuestoInterno = impuestoInterno.add(fd.getImpuestoInterno());
-
+                
             }
             factura.setNeto(neto);
             factura.setIva(iva);
@@ -278,8 +303,11 @@ public class ConfirmaPagoTicketController implements Initializable{
             factura.setExento(exento);
             factura.setTotal(total);
             factura.setRetencion(BigDecimal.ZERO);
+            factura.setBonificacion(totalBonifCombos);
+            factura.setIvaBonificacion(totalIvaBonifCombos);
             //---------fin cálculo en cabecera----
             //--------verificacion y aplicacion de ingreso brutos si fuese necesario---------
+            //TODO la condicion de iva está siendo usado con hard code en la ret.Ing.Brutos
             if(factura.getCliente()!=null
                     && factura.getCliente().getCondicionIva().getId()==2
                     ){
@@ -293,6 +321,8 @@ public class ConfirmaPagoTicketController implements Initializable{
                 }
             }
             factura.setTotal(factura.getTotal().add(factura.getRetencion()));
+            
+            
             //---------------------------------------------------------------------------------
             
         
@@ -303,15 +333,17 @@ public class ConfirmaPagoTicketController implements Initializable{
             log.info("Cerrando y confirmando factura ");
             Factura factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdFactura());
             
-            setTotales(factura);
+            setTotales(factura); //tengo que llamar de dos veces el cálculo de totales
+                                 //sino el comando de cierre de ticket de la impresora
+                                 //no funciona
             
-            for(Iterator<FacturaDetalleCombo> it = factura.getDetalleCombosAux().iterator();it.hasNext();){
+            /*for(Iterator<FacturaDetalleCombo> it = factura.getDetalleCombosAux().iterator();it.hasNext();){
                 FacturaDetalleCombo fdc = it.next();
                 //TODO en las bonificaciones de los combos
                 //impresoraService.imprimirLineaTicket(fdc.getCombo().getDescripcion(), fdc.getCantidad()
                 //            ,fdc.getBonificacion() ,producto.getValorImpositivo().getValor() ,Context.getInstance().currentDMTicket().isImprimeComoNegativo(), producto.getImpuestoInterno());
                 
-            }
+            }*/
             
             impresoraService.cerrarTicket(factura);
             
@@ -342,7 +374,7 @@ public class ConfirmaPagoTicketController implements Initializable{
                             List<FacturaFormaPagoDetalle> pagos = new ArrayList<FacturaFormaPagoDetalle>();
                             ListProperty<LineaPagoData> detallePagosData = Context.getInstance().currentDMTicket().getPagos();
                             Factura factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdFactura());
-                            setTotales(factura);
+                            
                             factura.setNumeroComprobante(nroTicketEmitido);
                             
 
@@ -351,9 +383,12 @@ public class ConfirmaPagoTicketController implements Initializable{
                             
                             
                             log.info("Cantidad de combos a guardar en la base de datos: "+factura.getDetalleCombosAux().size());
+
+                            
                             for(Iterator<FacturaDetalleCombo> it = factura.getDetalleCombosAux().iterator();it.hasNext();){
                                 FacturaDetalleCombo fdc = it.next();
                                 factura.getDetalleCombos().add(fdc);
+                                
                                 fdc.setFactura(factura);
                                 log.info("          Combo: "+fdc.getCombo().getDescripcion());
                             }
@@ -382,6 +417,7 @@ public class ConfirmaPagoTicketController implements Initializable{
                                 log.info("                  Código forma: "+item.getCodigoPago());
                             }
                             
+                            setTotales(factura);
                             factService.confirmarFactura(factura);
                             Context.getInstance().currentDMTicket().setCliente(null);
                             Context.getInstance().currentDMTicket().setClienteSeleccionado(false);

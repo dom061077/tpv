@@ -8,10 +8,8 @@ package com.tpv.modelo;
 import com.tpv.modelo.enums.FacturaEstadoEnum;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -84,7 +82,7 @@ public class Factura {
     private BigDecimal bonificacion;
     
     /**
-     * IVA de Bonificacion, es cargada por los usuarios de marketing
+     * IVA de Bonificacion, es cargada por los usuarios de marketing en el combo
     */
     @Column(name = "IVABONIFICACION")
     private BigDecimal ivaBonificacion;
@@ -499,8 +497,10 @@ public class Factura {
             ProductoAgrupadoEnFactura paf = it.next();
             if(paf.getProducto().equals(fd.getProducto())){
                 if(fd.getSubTotal().compareTo(BigDecimal.ZERO)<0)
+                    //TODO permitir cantidades con decimales
                     paf.decCantidad(fd.getCantidad().intValue());
                 else
+                    //TODO permitir cantidades con decimales
                     paf.incCantidad(fd.getCantidad().intValue());
                 return;
             }
@@ -621,6 +621,34 @@ public class Factura {
      */
     public void setRetencion(BigDecimal retencion) {
         this.retencion = retencion;
+    }
+
+    /**
+     * @return the ivaBonificacion
+     */
+    public BigDecimal getIvaBonificacion() {
+        return ivaBonificacion;
+    }
+
+    /**
+     * @param ivaBonificacion the ivaBonificacion to set
+     */
+    public void setIvaBonificacion(BigDecimal ivaBonificacion) {
+        this.ivaBonificacion = ivaBonificacion;
+    }
+
+    /**
+     * @return the bonificacion
+     */
+    public BigDecimal getBonificacion() {
+        return bonificacion;
+    }
+
+    /**
+     * @param bonificacion the bonificacion to set
+     */
+    public void setBonificacion(BigDecimal bonificacion) {
+        this.bonificacion = bonificacion;
     }
     
     

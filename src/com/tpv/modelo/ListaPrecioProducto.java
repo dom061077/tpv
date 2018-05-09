@@ -332,7 +332,6 @@ public class ListaPrecioProducto {
             return precioAux;
         }*/
                 
-        
         @Transient
         private BigDecimal getIva(){
             BigDecimal valorImpositivo = null;
@@ -340,7 +339,11 @@ public class ListaPrecioProducto {
             valorImpositivo = valorImpositivo.divide(BigDecimal.valueOf(100));
             return valorImpositivo;
         }
-        
+
+        /**
+         * Es el IVA del 21%
+         * @return 
+         */
         @Transient
         public BigDecimal getIvaCompleto(){
             if(producto.getValorImpositivo().getId()==0)
@@ -349,6 +352,10 @@ public class ListaPrecioProducto {
                 return BigDecimal.ZERO;
         }
         
+        /**
+         * Es el IVA del 10,5%
+         * @return 
+         */
         @Transient
         public BigDecimal getIvaReducido(){
             if (producto.getValorImpositivo().getId()==2)

@@ -66,6 +66,9 @@ public class FacturaDetalle {
     @Column(name = "TOTAL")
     private BigDecimal subTotal;
     
+    @Column(name = "PORCENTAJEIVA")
+    private BigDecimal porcentajeIva;
+    
     
     @Transient
     private int cantidadAuxCombo;

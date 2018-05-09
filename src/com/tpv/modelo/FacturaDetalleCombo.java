@@ -47,6 +47,10 @@ public class FacturaDetalleCombo {
     @ManyToOne
     @JoinColumn(name = "idCOMBOS", referencedColumnName = "idCOMBOS", nullable=false)
     private Combo combo;
+    
+    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL,mappedBy="fdCombo")
+    private List<FacturaDetalleComboAbierto> detalleAbierto = new ArrayList<FacturaDetalleComboAbierto>();    
+   
 
     /**
      * @return the id
@@ -132,6 +136,40 @@ public class FacturaDetalleCombo {
         ivaBonificado = bonificacion.multiply(porcien).divide(BigDecimal.valueOf(100));
                 
         return ivaBonificado;
+    }
+    
+    @Transient
+    public BigDecimal getIvaCompletoBonif(){
+        if(combo.getValorImpositivo().getId()==0)
+            return getIVABonificacion();
+        else
+            return BigDecimal.ZERO;
+    }
+    
+    @Transient
+    public BigDecimal getIvaReducidoBonif(){
+        if(combo.getValorImpositivo().getId()==2)
+            return getIVABonificacion();
+        else
+            return BigDecimal.ZERO;
+    }
+    
+    @Transient
+    public BigDecimal getNetoBonif(){
+        if(combo.getValorImpositivo().getId()==0){
+            return getBonificacion().subtract(getIvaCompletoBonif());
+        }else
+            return BigDecimal.ZERO;
+            
+    }
+    
+    @Transient
+    public BigDecimal getNetoReducido(){
+        if(combo.getValorImpositivo().getId()==2)
+            return getBonificacion().subtract(getIvaReducidoBonif());
+        else
+            return BigDecimal.ZERO;
+                
     }
     
 }
