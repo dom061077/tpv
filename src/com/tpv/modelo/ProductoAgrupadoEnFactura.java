@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 public class ProductoAgrupadoEnFactura {
     private Producto producto;
     private BigDecimal precioUnitario;
+    private BigDecimal precioUnitarioBase;
     private int cantidad;
     private int cantidadAux;
 
@@ -81,6 +82,20 @@ public class ProductoAgrupadoEnFactura {
     
     public void decCantidadAux(int dec){
         cantidadAux-=dec;
+    }
+
+    /**
+     * @return the precioUnitarioBase
+     */
+    public BigDecimal getPrecioUnitarioBase() {
+        return precioUnitarioBase;
+    }
+
+    /**
+     * @param precioUnitarioBase the precioUnitarioBase to set
+     */
+    public void setPrecioUnitarioBase(BigDecimal precioUnitarioBase) {
+        this.precioUnitarioBase = precioUnitarioBase;
     }
     
 }

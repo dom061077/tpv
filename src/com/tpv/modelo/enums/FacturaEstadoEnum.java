@@ -11,6 +11,7 @@ package com.tpv.modelo.enums;
  */
 public enum FacturaEstadoEnum {
     ANULADA,
+    ANULADA_SUPERVISOR,
     ABIERTA,
     CERRADA;
 }

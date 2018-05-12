@@ -286,15 +286,18 @@ public class ImpresoraService {
         //HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
         log.info("Cierre de factura en capa de servicios. Factura id: "+factura.getId());
         FiscalPacket request;
+        FiscalPacket requestStatus;
         FiscalPacket response;
-        
+        requestStatus = getHfp().cmdStatusRequest();
         for(Iterator<FacturaDetalleCombo> it = factura.getDetalleCombosAux().iterator();it.hasNext();){
             FacturaDetalleCombo fdc = it.next();
+            
             request = getHfp().cmdReturnRecharge(fdc.getCombo().getDescripcion(),
                             fdc.getBonificacion(),
                             BigDecimal.valueOf(21), true,
                             BigDecimal.ZERO, false, 0, "B");
             try{
+                response = getHfp().execute(requestStatus);
                 response = getHfp().execute(request);
             }catch(FiscalPrinterStatusError e){
                 log.warn("Error en estado fiscal de la impresora al imprimir descuentos por combos",e);
@@ -310,6 +313,7 @@ public class ImpresoraService {
         if(factura.getRetencion().compareTo(BigDecimal.ZERO)>0 ){
             request = getHfp().cmdPerceptions(Context.getInstance().getLeyendaRetIngBrutosCliente(), factura.getRetencion(), null);
             try{
+                response = getHfp().execute(requestStatus);
                 response = getHfp().execute(request);
             }catch(FiscalPrinterStatusError e){
                 log.warn("Error en estado fiscal de la impresora al imprimir retención");
@@ -322,6 +326,7 @@ public class ImpresoraService {
                         
         request = getHfp().cmdCloseFiscalReceipt(null);
         try{
+          response = getHfp().execute(requestStatus);
           response = getHfp().execute(request);
         }catch(FiscalPrinterStatusError e){
             log.warn("Error en estado fiscal de la impresora al cerrar el ticket fiscal",e);

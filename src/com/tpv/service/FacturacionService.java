@@ -14,6 +14,7 @@ import com.tpv.modelo.CondicionIva;
 import com.tpv.modelo.Factura;
 import com.tpv.modelo.FacturaDetalle;
 import com.tpv.modelo.FacturaDetalleCombo;
+import com.tpv.modelo.FacturaDetalleComboAbierto;
 import com.tpv.modelo.ProductoAgrupadoEnFactura;
 import com.tpv.modelo.enums.FacturaEstadoEnum;
 import com.tpv.util.Connection;
@@ -305,6 +306,11 @@ public class FacturacionService  {
                     fd.setCombo(combo);
                     fd.setCantidad(cantidadArmada);
                     fd.setBonificacion(combo.getBonificacionFinal().setScale(2,BigDecimal.ROUND_HALF_EVEN));
+                    for(Iterator<FacturaDetalleComboAbierto> it = combo.getComboAbierto().iterator();it.hasNext();){
+                        FacturaDetalleComboAbierto fca = it.next();
+                        fca.setFdCombo(fd);
+                        fd.getDetalleAbierto().add(fca);
+                    }
                     factura.getDetalleCombosAux().add(fd);
                 }
                 

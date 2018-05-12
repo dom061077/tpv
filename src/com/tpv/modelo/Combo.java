@@ -58,10 +58,6 @@ public class Combo {
     private boolean combinarProductos;
     
     
-    @ManyToOne
-    @JoinColumn(name = "idVALORESIMPOSITIVOS"
-            ,referencedColumnName="idVALORESIMPOSITIVOS",nullable=false)
-    private ValorImpositivo valorImpositivo;    
     
     /**
      * es el registro en productos que corresponde al combo
@@ -77,7 +73,7 @@ public class Combo {
     private List<ComboGrupo> combosGrupo = new ArrayList<ComboGrupo>();
     
     @Transient
-    private List<FacturaDetalleComboAbierto> comoAbierto = new ArrayList<FacturaDetalleComboAbierto>();
+    private List<FacturaDetalleComboAbierto> comboAbierto = new ArrayList<FacturaDetalleComboAbierto>();
 
     @Transient
     private BigDecimal bonificacionFinal = BigDecimal.ZERO;
@@ -426,9 +422,54 @@ public class Combo {
         this.cantidadMaxima = cantidadMaxima;
     }
 
+    
+    private void addComboAbierto(ComboGrupoDetallePrecioProducto cgdpp,int cantidad,BigDecimal porcentajeDesc){
+        FacturaDetalleComboAbierto fdca = new FacturaDetalleComboAbierto();
+        fdca.setCantidad(BigDecimal.valueOf(cantidad));
+        fdca.setImpuestoInterno(
+                cgdpp.getPaf().getPrecioUnitarioBase()
+                        .multiply(cgdpp.getPaf().getProducto().getImpuestoInterno())
+                        .divide(BigDecimal.valueOf(100))
+                        .multiply(BigDecimal.valueOf(cantidad))
+                        .multiply(porcentajeDesc)
+                        .divide(BigDecimal.valueOf(100))
+            );
+
+        fdca.setIva(cgdpp.getPaf().getPrecioUnitarioBase()
+                    .multiply(cgdpp.getPaf().getProducto().getValorImpositivo().getValor())
+                    .divide(BigDecimal.valueOf(100))
+                    .multiply(BigDecimal.valueOf(cantidad))
+                    .multiply(porcentajeDesc)
+                    .divide(BigDecimal.valueOf(100))
+                
+        );
+        fdca.setNeto(
+                cgdpp.getPaf().getPrecioUnitarioBase()
+                 .multiply(BigDecimal.valueOf(cantidad))
+                 .multiply(porcentajeDesc)
+                 .divide(BigDecimal.valueOf(100))
+                
+        );
+        fdca.setTotal(cgdpp.getPaf().getPrecioUnitario()
+                        .multiply(BigDecimal.valueOf(cantidad))
+                        .multiply(porcentajeDesc)
+                        .divide(BigDecimal.valueOf(100))
+                     );
+        fdca.setTotalSinBonif(cgdpp.getPaf().getPrecioUnitario()
+                        .multiply(BigDecimal.valueOf(cantidad)));
+        fdca.setPorcentjeIva(cgdpp.getPaf().getProducto().getValorImpositivo().getValor());
+        fdca.setProducto(cgdpp.getPaf().getProducto());
+        getComboAbierto().add(fdca);
+        
+    }
+    
     @Transient
     public int getCantidadArmada(){
         int cantidadCombos=0;
+        
+        //limpio el detalle del combo abierto
+        getComboAbierto().clear();
+        
         for(Iterator<ComboGrupo> itcg = getCombosGrupo().iterator();itcg.hasNext();){
             ComboGrupo cg = itcg.next();
             for(Iterator<ComboGrupoDetallePrecioProducto> itcdpp = cg.getDetallePreciosProductos().iterator()
@@ -561,7 +602,7 @@ public class Combo {
                                                             .divide(BigDecimal.valueOf(100))
                                                             .multiply(BigDecimal.valueOf(cantidadDecrementada))
                                                     );
-                                        
+                                                    addComboAbierto(cdpp,cantidadDecrementada,cg.getPorcentaje());    
 
                                     }
                                     if(cantidadADecrementar==0)
@@ -606,6 +647,7 @@ public class Combo {
                                     .divide(BigDecimal.valueOf(100))
                                     .multiply(BigDecimal.valueOf(cantidadDecrementada*cg.getCantidad()))
                             );
+                            addComboAbierto(cdpp,cantidadDecrementada*cg.getCantidad(),porcien);    
                         //}
                                 
                     }
@@ -627,19 +669,7 @@ public class Combo {
         return bonificacionFinal;
     }
 
-    /**
-     * @return the valorImpositivo
-     */
-    public ValorImpositivo getValorImpositivo() {
-        return valorImpositivo;
-    }
 
-    /**
-     * @param valorImpositivo the valorImpositivo to set
-     */
-    public void setValorImpositivo(ValorImpositivo valorImpositivo) {
-        this.valorImpositivo = valorImpositivo;
-    }
 
     /**
      * @return the producto
@@ -653,6 +683,13 @@ public class Combo {
      */
     public void setProducto(Producto producto) {
         this.producto = producto;
+    }
+
+    /**
+     * @return the comboAbierto
+     */
+    public List<FacturaDetalleComboAbierto> getComboAbierto() {
+        return comboAbierto;
     }
     
 }

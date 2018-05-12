@@ -252,20 +252,22 @@ public class ConfirmaPagoTicketController implements Initializable{
                 FacturaDetalleCombo fdc = it.next();
                 facturaDetalle.setCantidad(BigDecimal.valueOf(fdc.getCantidad()));
                 facturaDetalle.setDescuento(BigDecimal.ZERO);
-                facturaDetalle.setExento(BigDecimal.ZERO);
-                facturaDetalle.setImpuestoInterno(BigDecimal.ZERO);
+                facturaDetalle.setExento(fdc.getExento());
+                facturaDetalle.setImpuestoInterno(fdc.getImpuestoInterno());
                 facturaDetalle.setIva(fdc.getIvaCompletoBonif().multiply(BigDecimal.valueOf(-1)));
                 facturaDetalle.setIvaReducido(fdc.getIvaCompletoBonif().multiply(BigDecimal.valueOf(-1)));
                 facturaDetalle.setNeto(fdc.getNetoBonif().multiply(BigDecimal.valueOf(-1)));
                 facturaDetalle.setNetoReducido(fdc.getNetoReducido().multiply(BigDecimal.valueOf(-1)));
                 facturaDetalle.setPrecioUnitario(BigDecimal.ZERO);
                 facturaDetalle.setPrecioUnitarioBase(BigDecimal.ZERO);
+                facturaDetalle.setPorcentajeIva(BigDecimal.ZERO);
                 facturaDetalle.setSubTotal(fdc.getBonificacion().multiply(BigDecimal.valueOf(-1)));            
                 totalBonifCombos = totalBonifCombos.add(fdc.getBonificacion());
                 totalIvaBonifCombos = totalIvaBonifCombos.add(fdc.getIVABonificacion());
                 facturaDetalle.setProducto(fdc.getCombo().getProducto());
                 facturaDetalle.setFactura(factura);
                 factura.getDetalle().add(facturaDetalle);
+                
             }
             
             BigDecimal total= BigDecimal.ZERO;

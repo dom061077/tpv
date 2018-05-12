@@ -507,6 +507,7 @@ public class Factura {
         }
         ProductoAgrupadoEnFactura paf = new ProductoAgrupadoEnFactura();
         paf.setPrecioUnitario(fd.getPrecioUnitario());
+        paf.setPrecioUnitarioBase(fd.getPrecioUnitarioBase());
         paf.setProducto(fd.getProducto());
         paf.setCantidad(fd.getCantidad().intValue());
         getProductosAgrupados().add(paf);

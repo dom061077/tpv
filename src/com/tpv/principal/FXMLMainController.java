@@ -557,6 +557,7 @@ public class FXMLMainController implements Initializable {
                                 , lpp.getIvaReducido().multiply(cantidad)
                                 , lpp.getMontoImpuestoInterno().multiply(cantidad)
                                 , new BigDecimal(0)
+                                , producto.getValorImpositivo().getValor()
                                 , Context.getInstance().currentDMTicket().isImprimeComoNegativo());
 
                         if(Context.getInstance().currentDMTicket().isImprimeComoNegativo()){
@@ -816,6 +817,7 @@ public class FXMLMainController implements Initializable {
             facturaDetalle.setSubTotal(item.getSubTotal());
             facturaDetalle.setDescuento(BigDecimal.ZERO);
             facturaDetalle.setPrecioUnitario(item.getPrecioUnitario());
+            facturaDetalle.setPorcentajeIva(item.getPorcentajeIva());
             factura.getDetalle().add(facturaDetalle);
         });
         Factura facturaGuardada=null;
@@ -852,7 +854,9 @@ public class FXMLMainController implements Initializable {
         facturaDetalle.setNetoReducido(lineaTicketData.getNetoReducido());
         facturaDetalle.setPrecioUnitario(lineaTicketData.getPrecioUnitario());
         facturaDetalle.setPrecioUnitarioBase(lineaTicketData.getPrecioUnitarioBase());
+        facturaDetalle.setCosto(BigDecimal.ZERO);
         facturaDetalle.setSubTotal(lineaTicketData.getSubTotal());
+        facturaDetalle.setPorcentajeIva(lineaTicketData.getPorcentajeIva());
         Producto producto ;
         
 
@@ -1075,6 +1079,7 @@ public class FXMLMainController implements Initializable {
                                             ,fd.getIvaReducido()
                                             ,fd.getImpuestoInterno()
                                             ,new BigDecimal(0)
+                                            ,fd.getPorcentajeIva()
                                             ,(fd.getSubTotal().compareTo(BigDecimal.ZERO)<0?true:false)
                             );   
                             if(factura.getCliente()!=null){

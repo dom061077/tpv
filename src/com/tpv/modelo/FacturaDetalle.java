@@ -39,8 +39,12 @@ public class FacturaDetalle {
     @Column(name = "VALORUNITARIO")
     private BigDecimal precioUnitario;
     
-    @Column(name = "COSTO")
+    @Column(name="VALORUNITARIOBASE")
     private BigDecimal precioUnitarioBase;
+    
+    @Column(name = "COSTO")
+    private BigDecimal costo = BigDecimal.ZERO;
+    
     
     @Column(name = "IVA")
     private BigDecimal iva;
@@ -311,6 +315,34 @@ public class FacturaDetalle {
      */
     public void setPrecioUnitarioBase(BigDecimal precioUnitarioBase) {
         this.precioUnitarioBase = precioUnitarioBase;
+    }
+
+    /**
+     * @return the porcentajeIva
+     */
+    public BigDecimal getPorcentajeIva() {
+        return porcentajeIva;
+    }
+
+    /**
+     * @param porcentajeIva the porcentajeIva to set
+     */
+    public void setPorcentajeIva(BigDecimal porcentajeIva) {
+        this.porcentajeIva = porcentajeIva;
+    }
+
+    /**
+     * @return the costo
+     */
+    public BigDecimal getCosto() {
+        return costo;
+    }
+
+    /**
+     * @param costo the costo to set
+     */
+    public void setCosto(BigDecimal costo) {
+        this.costo = costo;
     }
     
     

@@ -29,7 +29,8 @@ public class LineaTicketData {
     private ObjectProperty<BigDecimal> PrecioUnitarioBase;//sin sin iva, impuestointerno pero si con posible descuento de cliente
     private ObjectProperty<BigDecimal> SubTotal;
     
-    AGREGAR EL PORCENTAJE DEL IVA AQUI Y CONTINUAR
+    
+    
     /**
      * 
      *  neto de la línea de detalle sin el iva del 21 %
@@ -38,6 +39,13 @@ public class LineaTicketData {
     /**
      * neto de la linea de detalle sin el iva del 10.5 %
      */
+    
+    /**
+     * se guarda el porcentaje del iva
+     */
+    private ObjectProperty<BigDecimal> porcentajeIva;
+    
+    
     private ObjectProperty<BigDecimal> netoReducido;
     /**
      *  iva del 21% de la línea de detalle
@@ -66,7 +74,9 @@ public class LineaTicketData {
     public LineaTicketData(int codigoProducto,String descripcion,BigDecimal cantidad,BigDecimal precioUnitario
             ,BigDecimal precioUnitarioBase,BigDecimal neto,BigDecimal netoReducido,BigDecimal exento
             ,BigDecimal descuentoCliente,BigDecimal iva ,BigDecimal ivaReducido
-            ,BigDecimal impuestoInterno,BigDecimal retencion ,boolean devuelto){
+            ,BigDecimal impuestoInterno,BigDecimal retencion
+            ,BigDecimal porcentajeIva
+            ,boolean devuelto){
         
         BigDecimal montoSigno = BigDecimal.valueOf(1);
         if(devuelto)
@@ -89,6 +99,7 @@ public class LineaTicketData {
         cantidad = cantidad.multiply(montoSigno);
         //this.SubTotal = new SimpleObjectProperty(new BigDecimal(precioUnitario.doubleValue()*cantidad));
         this.SubTotal = new SimpleObjectProperty(precioUnitario.multiply(cantidad));
+        this.porcentajeIva = new SimpleObjectProperty(porcentajeIva);
     }
     
     public int getCodigoProducto(){
@@ -277,6 +288,20 @@ public class LineaTicketData {
      */
     public void setNeto(ObjectProperty<BigDecimal> neto) {
         this.neto = neto;
+    }
+
+    /**
+     * @return the porcentajeIva
+     */
+    public BigDecimal getPorcentajeIva() {
+        return porcentajeIva.get();
+    }
+
+    /**
+     * @param porcentajeIva the porcentajeIva to set
+     */
+    public void setPorcentajeIva(ObjectProperty<BigDecimal> porcentajeIva) {
+        this.porcentajeIva = porcentajeIva;
     }
     
     

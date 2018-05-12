@@ -7,6 +7,7 @@ package com.tpv.modelo;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -132,44 +133,84 @@ public class FacturaDetalleCombo {
     @Transient
     public BigDecimal getIVABonificacion(){
         BigDecimal ivaBonificado = BigDecimal.ZERO;
-        BigDecimal porcien = combo.getValorImpositivo().getValor();
-        ivaBonificado = bonificacion.multiply(porcien).divide(BigDecimal.valueOf(100));
-                
+        for(Iterator<FacturaDetalleComboAbierto> it = getDetalleAbierto().iterator();it.hasNext();){
+            ivaBonificado = ivaBonificado.add(it.next().getIva());
+        }
         return ivaBonificado;
     }
     
     @Transient
     public BigDecimal getIvaCompletoBonif(){
-        if(combo.getValorImpositivo().getId()==0)
-            return getIVABonificacion();
-        else
-            return BigDecimal.ZERO;
+        BigDecimal ivaCompleto = BigDecimal.ZERO;
+        for(Iterator<FacturaDetalleComboAbierto> it = getDetalleAbierto().iterator();it.hasNext();){
+            FacturaDetalleComboAbierto fdca = it.next();
+            if(fdca.getProducto().getValorImpositivo().getId()==0)
+                ivaCompleto = ivaCompleto.add(fdca.getIva());
+        }
+        return ivaCompleto;
     }
     
     @Transient
     public BigDecimal getIvaReducidoBonif(){
-        if(combo.getValorImpositivo().getId()==2)
-            return getIVABonificacion();
-        else
-            return BigDecimal.ZERO;
+        BigDecimal ivaReducido = BigDecimal.ZERO;
+        for(Iterator<FacturaDetalleComboAbierto> it = getDetalleAbierto().iterator();it.hasNext();){
+            FacturaDetalleComboAbierto fdca = it.next();
+            if(fdca.getProducto().getValorImpositivo().getId()==2)
+                ivaReducido = ivaReducido.add(fdca.getIva());
+        }
+        return ivaReducido;
     }
     
     @Transient
     public BigDecimal getNetoBonif(){
-        if(combo.getValorImpositivo().getId()==0){
-            return getBonificacion().subtract(getIvaCompletoBonif());
-        }else
-            return BigDecimal.ZERO;
-            
+        BigDecimal neto = BigDecimal.ZERO;
+        for(Iterator<FacturaDetalleComboAbierto> it = getDetalleAbierto().iterator();it.hasNext();){
+            FacturaDetalleComboAbierto fdca = it.next();
+            if(fdca.getProducto().getValorImpositivo().getId()==0)
+                neto = neto.add(fdca.getNeto());
+        }
+        return neto;    
     }
     
     @Transient
+    public BigDecimal getExento(){
+        BigDecimal exento = BigDecimal.ZERO;
+        for(Iterator<FacturaDetalleComboAbierto> it = getDetalleAbierto().iterator();it.hasNext();){
+            FacturaDetalleComboAbierto fdca = it.next();
+            if(fdca.getProducto().getValorImpositivo().getId()==1)
+                exento = exento.add(fdca.getNeto());
+        }
+        return exento;
+    }
+    
+    
+    @Transient
     public BigDecimal getNetoReducido(){
-        if(combo.getValorImpositivo().getId()==2)
-            return getBonificacion().subtract(getIvaReducidoBonif());
-        else
-            return BigDecimal.ZERO;
-                
+        BigDecimal neto = BigDecimal.ZERO;
+        for(Iterator<FacturaDetalleComboAbierto> it = getDetalleAbierto().iterator();it.hasNext();){
+            FacturaDetalleComboAbierto fdca = it.next();
+            if(fdca.getProducto().getValorImpositivo().getId()==2)
+                neto = neto.add(fdca.getNeto());
+        }
+        return neto;
+    }
+    
+    
+    @Transient
+    public BigDecimal getImpuestoInterno(){
+        BigDecimal impuestoInterno=BigDecimal.ZERO;
+        for(Iterator<FacturaDetalleComboAbierto> it = getDetalleAbierto().iterator();it.hasNext();){
+            FacturaDetalleComboAbierto fdca = it.next();
+            impuestoInterno = impuestoInterno.add(fdca.getImpuestoInterno());
+        }
+        return impuestoInterno;
+    }
+
+    /**
+     * @return the detalleAbierto
+     */
+    public List<FacturaDetalleComboAbierto> getDetalleAbierto() {
+        return detalleAbierto;
     }
     
 }
