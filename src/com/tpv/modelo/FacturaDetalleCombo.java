@@ -162,18 +162,17 @@ public class FacturaDetalleCombo {
     }
     
     @Transient
-    public BigDecimal getNetoBonif(){
+    public BigDecimal getNetoCompletoBonif(){
         BigDecimal neto = BigDecimal.ZERO;
         for(Iterator<FacturaDetalleComboAbierto> it = getDetalleAbierto().iterator();it.hasNext();){
             FacturaDetalleComboAbierto fdca = it.next();
-            if(fdca.getProducto().getValorImpositivo().getId()==0)
-                neto = neto.add(fdca.getNeto());
+            neto = neto.add(fdca.getNetoCompleto());
         }
         return neto;    
     }
     
     @Transient
-    public BigDecimal getExento(){
+    public BigDecimal getExentoBonif(){
         BigDecimal exento = BigDecimal.ZERO;
         for(Iterator<FacturaDetalleComboAbierto> it = getDetalleAbierto().iterator();it.hasNext();){
             FacturaDetalleComboAbierto fdca = it.next();
@@ -185,12 +184,11 @@ public class FacturaDetalleCombo {
     
     
     @Transient
-    public BigDecimal getNetoReducido(){
+    public BigDecimal getNetoReducidoBonif(){
         BigDecimal neto = BigDecimal.ZERO;
         for(Iterator<FacturaDetalleComboAbierto> it = getDetalleAbierto().iterator();it.hasNext();){
             FacturaDetalleComboAbierto fdca = it.next();
-            if(fdca.getProducto().getValorImpositivo().getId()==2)
-                neto = neto.add(fdca.getNeto());
+            neto = neto.add(fdca.getNetoReducido());
         }
         return neto;
     }

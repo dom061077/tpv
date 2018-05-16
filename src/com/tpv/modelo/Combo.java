@@ -602,7 +602,8 @@ public class Combo {
                                                             .divide(BigDecimal.valueOf(100))
                                                             .multiply(BigDecimal.valueOf(cantidadDecrementada))
                                                     );
-                                                    addComboAbierto(cdpp,cantidadDecrementada,cg.getPorcentaje());    
+                                                    if(cantidadDecrementada>0)
+                                                        addComboAbierto(cdpp,cantidadDecrementada,cg.getPorcentaje());    
 
                                     }
                                     if(cantidadADecrementar==0)
@@ -647,7 +648,8 @@ public class Combo {
                                     .divide(BigDecimal.valueOf(100))
                                     .multiply(BigDecimal.valueOf(cantidadDecrementada*cg.getCantidad()))
                             );
-                            addComboAbierto(cdpp,cantidadDecrementada*cg.getCantidad(),porcien);    
+                            if(cantidadDecrementada>0)
+                                addComboAbierto(cdpp,cantidadDecrementada*cg.getCantidad(),porcien);    
                         //}
                                 
                     }

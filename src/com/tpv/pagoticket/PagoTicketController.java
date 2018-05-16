@@ -65,6 +65,9 @@ public class PagoTicketController implements Initializable {
     private Label totalGral;
     
     @FXML
+    private Label totalVenta;
+    
+    @FXML
     private Label saldoPagar;
     
     @FXML
@@ -134,7 +137,7 @@ public class PagoTicketController implements Initializable {
         Context.getInstance().currentDMTicket().getPagos();
         //textFieldCantidadCuotas.setDisable(true);
         DecimalFormat df = new DecimalFormat("##,###,##0.00");
-        totalGral.setText(df.format(Context.getInstance().currentDMTicket().getTotalTicket()));
+        totalVenta.setText(df.format(Context.getInstance().currentDMTicket().getTotalTicket()));
         //saldoPagar.setText(df.format(Context.getInstance().currentDMTicket().getTotalTicket().subtract(Context.getInstance().currentDMTicket().getTotalPagos())));
         textFieldMonto.setText(Context.getInstance().currentDMTicket().getSaldo().toString());
         bonificaciones.setText(df.format(Context.getInstance().currentDMTicket().getBonificaciones()));

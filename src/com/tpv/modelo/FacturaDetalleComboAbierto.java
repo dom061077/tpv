@@ -148,7 +148,7 @@ public class FacturaDetalleComboAbierto {
      * @return the porcentjeIva
      */
     public BigDecimal getPorcentjeIva() {
-        return porcentajeIva;
+        return getPorcentajeIva();
     }
 
     /**
@@ -199,5 +199,37 @@ public class FacturaDetalleComboAbierto {
     public void setTotalSinBonif(BigDecimal totalSinBonif) {
         this.totalSinBonif = totalSinBonif;
     }
+
+    /**
+     * @return the porcentajeIva
+     */
+    public BigDecimal getPorcentajeIva() {
+        return porcentajeIva;
+    }
+    
+    /**
+     * transient que trae el neto reducido
+     */
+    public BigDecimal getNetoReducido(){
+        BigDecimal netoCalculado = BigDecimal.ZERO;
+        if (producto.getValorImpositivo().getId()==2)
+            netoCalculado = getNeto();
+        return netoCalculado;
+    }
+    
+    public BigDecimal getNetoCompleto(){
+        BigDecimal netoCalculado = BigDecimal.ZERO;
+        if (producto.getValorImpositivo().getId()==0)
+            netoCalculado = getNeto();
+        return netoCalculado;    
+    }
+    
+    public BigDecimal getExento(){
+        BigDecimal exento = BigDecimal.ZERO;
+        if (producto.getValorImpositivo().getId()==1)
+            exento = getNeto();
+        return exento;    
+    }
+    
     
 }
