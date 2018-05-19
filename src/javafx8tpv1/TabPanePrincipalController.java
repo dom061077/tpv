@@ -139,7 +139,8 @@ public class TabPanePrincipalController implements Initializable {
                 Context.getInstance().setLeyendaRetIngBrutosCliente(param.getParametroCadena());
             if(param.getId().compareTo("RETENCION_ING_BRUTO_MONTO_MINIMO")==0)
                 Context.getInstance().setMontoMinRetIngBrutos(param.getParametroNumerico());
-            
+            if(param.getId().compareTo("INTERES_IVA_TARJETA")==0)
+                Context.getInstance().setPorcentajeIvaTarjeta(param.getParametroNumerico());
         });
         
         

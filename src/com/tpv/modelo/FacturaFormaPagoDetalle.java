@@ -6,7 +6,6 @@
 package com.tpv.modelo;
 
 import java.math.BigDecimal;
-import java.util.Iterator;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,8 +33,16 @@ public class FacturaFormaPagoDetalle {
     @Column(name="INTERES")
     private BigDecimal interes;
     
+    @Column(name="IVAINTERES")
+    private BigDecimal ivaInteres;
+    
     @Column(name="BONIFICACION")
     private BigDecimal bonificacion;
+    
+    @Column(name="IVABONIFICACION")
+    private BigDecimal ivaBonificacion;
+    
+    
     
     @Column(name="CUOTA")
     private int cuota;
@@ -145,6 +152,34 @@ public class FacturaFormaPagoDetalle {
      */
     public void setCuota(int cuota) {
         this.cuota = cuota;
+    }
+
+    /**
+     * @return the ivaInteres
+     */
+    public BigDecimal getIvaInteres() {
+        return ivaInteres;
+    }
+
+    /**
+     * @param ivaInteres the ivaInteres to set
+     */
+    public void setIvaInteres(BigDecimal ivaInteres) {
+        this.ivaInteres = ivaInteres;
+    }
+
+    /**
+     * @return the ivaBonificacion
+     */
+    public BigDecimal getIvaBonificacion() {
+        return ivaBonificacion;
+    }
+
+    /**
+     * @param ivaBonificacion the ivaBonificacion to set
+     */
+    public void setIvaBonificacion(BigDecimal ivaBonificacion) {
+        this.ivaBonificacion = ivaBonificacion;
     }
     
     

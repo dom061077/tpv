@@ -29,6 +29,20 @@ import javafx.collections.ObservableList;
 
 
 public class DataModelTicket {
+
+    /**
+     * @param totalIva the totalIva to set
+     */
+    public void setTotalIva(BigDecimal totalIva) {
+        this.totalIva = totalIva;
+    }
+
+    /**
+     * @param totalNeto the totalNeto to set
+     */
+    public void setTotalNeto(BigDecimal totalNeto) {
+        this.totalNeto = totalNeto;
+    }
     private ListProperty<LineaTicketData> detalle;
     private ListProperty<LineaPagoData> pagos;
     private Usuario usuario = null;
@@ -49,6 +63,10 @@ public class DataModelTicket {
     private BigDecimal bonificaciones = BigDecimal.ZERO;
     private boolean ticketAbierto = false;
     private String modeloImpresora = "";
+    private BigDecimal totalNeto;
+    private BigDecimal totalIva;
+    private BigDecimal totalImpuestoInterno;
+    private BigDecimal totalExento;
     
     
     public DataModelTicket(){
@@ -403,6 +421,34 @@ public class DataModelTicket {
     
     public void setModeloImpresora(String modelo){
         this.modeloImpresora = modelo;
+    }
+
+    /**
+     * @return the totalImpuestoInterno
+     */
+    public BigDecimal getTotalImpuestoInterno() {
+        return totalImpuestoInterno;
+    }
+
+    /**
+     * @param totalImpuestoInterno the totalImpuestoInterno to set
+     */
+    public void setTotalImpuestoInterno(BigDecimal totalImpuestoInterno) {
+        this.totalImpuestoInterno = totalImpuestoInterno;
+    }
+
+    /**
+     * @return the totalGral con cálculo local
+     */
+    public String getTotalGral() {
+        BigDecimal totalGral = getTotalTicket();
+        totalGral = totalGral.subtract(getBonificaciones());
+        totalGral = totalGral.subtract(getBonificacionPorPagoTotal());
+        totalGral = totalGral.add(getInteresPorPagoTotal());
+        totalGral = totalGral.setScale(2,BigDecimal.ROUND_HALF_EVEN);
+        DecimalFormat df = new DecimalFormat("###,###,###,##0.00");
+        
+        return df.format(totalGral.doubleValue());
     }
 
     

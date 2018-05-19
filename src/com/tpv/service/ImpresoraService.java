@@ -323,6 +323,18 @@ public class ImpresoraService {
                 throw new TpvException(e.getMessage());
             }
         }
+        if(factura.getBonificaTarjeta().compareTo(BigDecimal.ZERO)>0){
+            request = getHfp().cmdReturnRecharge("Leyenda Bonif.Tarj",
+                            factura.getBonificaTarjeta(),
+                            BigDecimal.valueOf(21), true,
+                            BigDecimal.ZERO, false, 0, "B");
+        }
+        if(factura.getInteresTarjeta().compareTo(BigDecimal.ZERO)>0){
+            request = getHfp().cmdReturnRecharge("Leyenda Bonif.Tarj",
+                            factura.getBonificaTarjeta(),
+                            BigDecimal.valueOf(21), false,
+                            BigDecimal.ZERO, false, 0, "B");
+        }
                         
         request = getHfp().cmdCloseFiscalReceipt(null);
         try{

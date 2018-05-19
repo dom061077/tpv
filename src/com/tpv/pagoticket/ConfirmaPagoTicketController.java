@@ -10,7 +10,6 @@ import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Factura;
 import com.tpv.modelo.FacturaDetalle;
 import com.tpv.modelo.FacturaDetalleCombo;
-import com.tpv.modelo.FacturaFormaPagoDetalle;
 import com.tpv.principal.Context;
 import com.tpv.print.event.FiscalPrinterEvent;
 import com.tpv.service.FacturacionService;
@@ -20,12 +19,9 @@ import com.tpv.service.ProductoService;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
-import javafx.beans.property.ListProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -37,6 +33,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx8tpv1.TabPanePrincipalController;
 import org.apache.log4j.Logger;
 import org.tpv.print.fiscal.FiscalPacket;
@@ -123,17 +120,23 @@ public class ConfirmaPagoTicketController implements Initializable{
     
     @FXML
     private Label totalBonificacionesLabel;
+    
+    @FXML
+    private Label ingBrutosLabel;
 
     @FXML
     private TabPanePrincipalController tabPaneController;
     
+            
+            
     public void configurarInicio(){
+            
             log.info("Ingresando a la confirmación de pago");
             DecimalFormat df = new DecimalFormat("##,##0.00");
             
             totalPagosLabel.setText(df.format(Context.getInstance().currentDMTicket().getTotalPagos()));
             totalBonificacionesLabel.setText(df.format(Context.getInstance().currentDMTicket().getBonificaciones()));
-            totalTicketLabel.setText(df.format(Context.getInstance().currentDMTicket().getTotalTicket()));
+            totalTicketLabel.setText(df.format(Context.getInstance().currentDMTicket().getTotalGral()));
             cambioLabel.setText(df.format(Context.getInstance().currentDMTicket().getSaldo().abs()));
             
             totalNetoLabel.setText(df.format(Context.getInstance().currentDMTicket().getTotalNeto()));
@@ -343,12 +346,14 @@ public class ConfirmaPagoTicketController implements Initializable{
         try{
             log.info("Cerrando y confirmando factura ");
             
-            Factura factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdFactura());
+            //Factura factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdFactura());
+            Factura factura = factService.getFacturaConTotalesConPagos(Context.getInstance().currentDMTicket().getIdFactura()
+                                    ,Context.getInstance().currentDMTicket().getPagos().iterator());
             
-            log.info("Cantidad de combos a guardar en la base de datos: "+factura.getDetalleCombosAux().size());
+            //log.info("Cantidad de combos a guardar en la base de datos: "+factura.getDetalleCombosAux().size());
            
             
-            setTotales(factura); //tengo que llamar de dos veces el cálculo de totales
+            //setTotales(factura); //tengo que llamar de dos veces el cálculo de totales
                                  //sino el comando de cierre de ticket de la impresora
                                  //no funciona
             
@@ -386,9 +391,13 @@ public class ConfirmaPagoTicketController implements Initializable{
                     try{
                             log.info("El cierre del ticket para el id de Factura : "+Context.getInstance().currentDMTicket().getIdFactura()
                                 +" en la impresora fiscal fue correcto. A continuación se cierra el ticket en la base de datos");
-                            List<FacturaFormaPagoDetalle> pagos = new ArrayList<FacturaFormaPagoDetalle>();
-                            ListProperty<LineaPagoData> detallePagosData = Context.getInstance().currentDMTicket().getPagos();
-                            Factura factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdFactura());
+                            //List<FacturaFormaPagoDetalle> pagos = new ArrayList<FacturaFormaPagoDetalle>();
+                            //ListProperty<LineaPagoData> detallePagosData = Context.getInstance().currentDMTicket().getPagos();
+                            //Factura factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdFactura());
+                            
+                            Factura factura = factService
+                                       .getFacturaConTotalesConPagos(Context.getInstance().currentDMTicket().getIdFactura()
+                                                ,Context.getInstance().currentDMTicket().getPagos().iterator());
                             
                             factura.setNumeroComprobante(nroTicketEmitido);
                             
@@ -400,7 +409,7 @@ public class ConfirmaPagoTicketController implements Initializable{
 
                             
                             //Factura factura = factService.getFactura(Context.getInstance().currentDMTicket().getIdFactura());
-                            log.info("Cantidad de formas de pago: "+detallePagosData.size());
+                            /*log.info("Cantidad de formas de pago: "+detallePagosData.size());
                             for(Iterator<LineaPagoData> it = detallePagosData.iterator();it.hasNext();){
                                 LineaPagoData item = it.next();
                                 FacturaFormaPagoDetalle formaPagoDetalle = new FacturaFormaPagoDetalle();
@@ -411,19 +420,22 @@ public class ConfirmaPagoTicketController implements Initializable{
                                         Context.getInstance().currentDMTicket().setException(e);
                                         tabPaneController.gotoError();
                                 }
-
+                                
                                 formaPagoDetalle.setFactura(factura);
                                 
                                 formaPagoDetalle.setMontoPago(item.getMonto());
                                 formaPagoDetalle.setCuota(item.getCantidadCuotas());
                                 formaPagoDetalle.setInteres(item.getInteres());
                                 formaPagoDetalle.setBonificacion(item.getBonificacion());
+                                formaPagoDetalle.setIvaInteres(item.getIvaInteres());
+                                formaPagoDetalle.setIvaBonificacion(item.getIvaBonficacion());
 //                                factura.getDetallePagos().add(formaPagoDetalle);
                                 factura.addFormaPago(formaPagoDetalle);
                                 log.info("                  Código forma: "+item.getCodigoPago());
-                            }
+                            }*/
                             
-                            setTotales(factura);
+                            //setTotales(factura);
+                            
                             factService.confirmarFactura(factura);
                             Context.getInstance().currentDMTicket().setCliente(null);
                             Context.getInstance().currentDMTicket().setClienteSeleccionado(false);

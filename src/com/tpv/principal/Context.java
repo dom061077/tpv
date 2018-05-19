@@ -21,6 +21,7 @@ public class Context {
     private DataModelTicket dataModelTicket = new DataModelTicket();
     private String leyendaRetIngBrutosCliente;
     private BigDecimal montoMinRetIngBrutos;
+    private BigDecimal porcentajeIvaTarjeta;
     
     public DataModelTicket currentDMTicket(){
         return dataModelTicket;
@@ -52,6 +53,20 @@ public class Context {
      */
     public void setMontoMinRetIngBrutos(BigDecimal montoMinRetIngBrutos) {
         this.montoMinRetIngBrutos = montoMinRetIngBrutos;
+    }
+
+    /**
+     * @return the porcentajeIvaTarjeta
+     */
+    public BigDecimal getPorcentajeIvaTarjeta() {
+        return porcentajeIvaTarjeta;
+    }
+
+    /**
+     * @param porcentajeIvaTarjeta the porcentajeIvaTarjeta to set
+     */
+    public void setPorcentajeIvaTarjeta(BigDecimal porcentajeIvaTarjeta) {
+        this.porcentajeIvaTarjeta = porcentajeIvaTarjeta;
     }
     
     

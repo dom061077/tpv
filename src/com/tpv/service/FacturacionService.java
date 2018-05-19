@@ -5,6 +5,7 @@
  */
 package com.tpv.service;
 
+import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.AlicuotaIngresosBrutos;
 import com.tpv.modelo.Combo;
@@ -15,8 +16,11 @@ import com.tpv.modelo.Factura;
 import com.tpv.modelo.FacturaDetalle;
 import com.tpv.modelo.FacturaDetalleCombo;
 import com.tpv.modelo.FacturaDetalleComboAbierto;
+import com.tpv.modelo.FacturaFormaPagoDetalle;
 import com.tpv.modelo.ProductoAgrupadoEnFactura;
 import com.tpv.modelo.enums.FacturaEstadoEnum;
+import com.tpv.pagoticket.LineaPagoData;
+import com.tpv.principal.Context;
 import com.tpv.util.Connection;
 import java.util.Iterator;
 import java.util.List;
@@ -27,6 +31,7 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 import org.apache.log4j.Logger;
 import java.math.BigDecimal;
+import java.math.MathContext;
 
 /**
  *
@@ -370,5 +375,147 @@ public class FacturacionService  {
         }
         return porcentaje;
     }
+    
+    
+    
+    public Factura getFacturaConTotalesSinPagos(Long id)throws TpvException{
+            Factura factura = calcularCombos(id);
+        
+        
+            //-----------resumen de calculos en cabecera-----------
+            BigDecimal totalBonifCombos = BigDecimal.ZERO;
+            BigDecimal totalIvaBonifCombos = BigDecimal.ZERO;
+
+            for(Iterator<FacturaDetalleCombo> it = factura.getDetalleCombosAux().iterator();it.hasNext();){
+                FacturaDetalleCombo fdc = it.next();
+                factura.getDetalleCombos().add(fdc);
+
+                fdc.setFactura(factura);
+                log.info("          Combo: "+fdc.getCombo().getDescripcion());
+            }             
+
+            FacturaDetalle facturaDetalle = new FacturaDetalle();
+            
+            for(Iterator<FacturaDetalleCombo> it = factura.getDetalleCombos().iterator();it.hasNext();){
+                FacturaDetalleCombo fdc = it.next();
+                facturaDetalle.setCantidad(BigDecimal.valueOf(fdc.getCantidad()));
+                facturaDetalle.setDescuento(BigDecimal.ZERO);
+                facturaDetalle.setExento(fdc.getExentoBonif());
+                facturaDetalle.setImpuestoInterno(fdc.getImpuestoInterno().multiply(BigDecimal.valueOf(-1)));
+                facturaDetalle.setIva(fdc.getIvaCompletoBonif().multiply(BigDecimal.valueOf(-1)));
+                facturaDetalle.setIvaReducido(fdc.getIvaReducidoBonif().multiply(BigDecimal.valueOf(-1)));
+                facturaDetalle.setNeto(fdc.getNetoCompletoBonif().multiply(BigDecimal.valueOf(-1)));
+                facturaDetalle.setNetoReducido(fdc.getNetoReducidoBonif().multiply(BigDecimal.valueOf(-1)));
+                facturaDetalle.setPrecioUnitario(BigDecimal.ZERO);
+                facturaDetalle.setPrecioUnitarioBase(BigDecimal.ZERO);
+                facturaDetalle.setPorcentajeIva(BigDecimal.ZERO);
+                facturaDetalle.setSubTotal(fdc.getBonificacion().multiply(BigDecimal.valueOf(-1)));            
+                totalBonifCombos = totalBonifCombos.add(fdc.getBonificacion());
+                totalIvaBonifCombos = totalIvaBonifCombos.add(fdc.getIVABonificacion());
+                facturaDetalle.setProducto(fdc.getCombo().getProducto());
+                facturaDetalle.setFactura(factura);
+                factura.getDetalle().add(facturaDetalle);
+                
+            }
+            
+            BigDecimal total= BigDecimal.ZERO;
+            BigDecimal costo = BigDecimal.ZERO;
+            BigDecimal neto = BigDecimal.ZERO;
+            BigDecimal netoReducido = BigDecimal.ZERO;
+            BigDecimal impuestoInterno= BigDecimal.ZERO;
+            BigDecimal descuento = BigDecimal.ZERO;
+            BigDecimal exento = BigDecimal.ZERO;
+            BigDecimal ivaReducido = BigDecimal.ZERO;
+            BigDecimal iva = BigDecimal.ZERO;
+
+            
+            for(Iterator<FacturaDetalle>it = factura.getDetalle().iterator();it.hasNext();){
+                FacturaDetalle fd = it.next();
+                fd.getProducto().decStock(fd.getCantidad());
+                total=total.add(fd.getSubTotal());
+                costo = costo.add(fd.getPrecioUnitario());
+                neto = neto.add(fd.getNeto());
+                netoReducido = netoReducido.add(fd.getNetoReducido());
+                descuento = descuento.add(fd.getDescuento());
+                exento = exento.add(fd.getExento());
+                iva = iva.add(fd.getIva());
+                ivaReducido = ivaReducido.add(fd.getIvaReducido());
+                impuestoInterno = impuestoInterno.add(fd.getImpuestoInterno());
+                
+            }
+            factura.setNeto(neto);
+            factura.setIva(iva);
+            factura.setIvaReducido(ivaReducido);
+            factura.setNetoReducido(netoReducido);
+            factura.setImpuestoInterno(impuestoInterno);
+            //TODO asignar el valor correcto
+            factura.setCosto(costo);
+            factura.setDescuento(descuento);
+            factura.setExento(exento);
+            factura.setTotal(total);
+            factura.setRetencion(BigDecimal.ZERO);
+            factura.setBonificacion(totalBonifCombos);
+            factura.setIvaBonificacion(totalIvaBonifCombos);
+            //---------fin cálculo en cabecera----
+            //--------verificacion y aplicacion de ingreso brutos si fuese necesario---------
+            //TODO la condicion de iva está siendo usado con hard code en la ret.Ing.Brutos
+            if(factura.getCliente()!=null
+                    && factura.getCliente().getCondicionIva().getId()==2
+                    ){
+                BigDecimal porcentajeRet = getRetencionIngBrutoCliente(Context.getInstance()
+                                .currentDMTicket().getCliente().getCuit());    
+                BigDecimal netoGral = factura.getNeto().add(factura.getNetoReducido());
+                BigDecimal montoRet = netoGral.multiply(porcentajeRet).divide(BigDecimal.valueOf(100));
+                montoRet = montoRet.setScale(2,BigDecimal.ROUND_HALF_EVEN);
+                if(montoRet.compareTo(Context.getInstance().getMontoMinRetIngBrutos())>0){
+                    factura.setRetencion(montoRet);
+                }
+            }
+            
+            factura.setTotal(factura.getTotal().add(factura.getRetencion()));
+            
+            
+            return factura;
+    }
+    
+    public Factura getFacturaConTotalesConPagos(Long id,Iterator<LineaPagoData> pagos)throws TpvException{
+        Factura factura = getFacturaConTotalesSinPagos(id);
+        
+        
+        PagoService pagoService = new PagoService();
+        BigDecimal totalIvaInteresPago = BigDecimal.ZERO;
+        BigDecimal totalIvaBonificacionPago = BigDecimal.ZERO;
+        BigDecimal totalInteresPago = BigDecimal.ZERO;
+        BigDecimal totalBonificacionPago = BigDecimal.ZERO;
+        for(Iterator<LineaPagoData> it = pagos;it.hasNext();){
+            LineaPagoData item = it.next();
+            FacturaFormaPagoDetalle formaPagoDetalle = new FacturaFormaPagoDetalle();
+                formaPagoDetalle.setFormaPago(pagoService.getFormaPago(item.getCodigoPago()));
+
+            formaPagoDetalle.setFactura(factura);
+
+            formaPagoDetalle.setMontoPago(item.getMonto());
+            formaPagoDetalle.setCuota(item.getCantidadCuotas());
+            formaPagoDetalle.setInteres(item.getInteres());
+            formaPagoDetalle.setBonificacion(item.getBonificacion());
+            formaPagoDetalle.setIvaInteres(item.getIvaInteres());
+            formaPagoDetalle.setIvaBonificacion(item.getIvaBonficacion());
+            factura.addFormaPago(formaPagoDetalle);
+            
+            totalIvaInteresPago = totalIvaInteresPago.add(item.getIvaInteres());
+            totalIvaBonificacionPago = totalIvaBonificacionPago.add(item.getIvaBonficacion());
+            totalInteresPago = totalInteresPago.add(item.getInteres());
+            totalBonificacionPago = totalBonificacionPago.add(item.getBonificacion());
+        }
+        
+        factura.setBonificaTarjeta(totalBonificacionPago);
+        factura.setInteresTarjeta(totalInteresPago);
+        factura.setIvaBonificaTarjeta(totalIvaBonificacionPago);
+        factura.setIvaTarjeta(totalInteresPago);
+        BigDecimal totalFactura = factura.getTotal();
+        totalFactura = totalFactura.subtract(totalBonificacionPago).add(totalInteresPago);
+        factura.setTotal(totalFactura);
+        return factura;
+    } 
     
 }

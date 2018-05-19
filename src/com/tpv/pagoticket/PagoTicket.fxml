@@ -18,7 +18,7 @@
 
 <BorderPane prefHeight="650.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.pagoticket.PagoTicketController">
    <center>
-      <TableView fx:id="tableViewPagos" focusTraversable="false" prefHeight="327.0" prefWidth="1024.0" styleClass="tpv-table-view" BorderPane.alignment="CENTER">
+      <TableView fx:id="tableViewPagos" focusTraversable="false" prefHeight="200.0" prefWidth="1024.0" styleClass="tpv-table-view" BorderPane.alignment="CENTER">
         <columns>
           <TableColumn fx:id="codigoPagoColumn" text="Cod. " visible="false" />
             <TableColumn fx:id="descripcionPagoColumn" prefWidth="200.0" text="Descripción Pago" />
@@ -51,9 +51,9 @@
       </GridPane>
    </bottom>
    <top>
-      <Pane prefHeight="400.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <Pane prefHeight="430.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <StackPane layoutX="470.0" layoutY="66.0" prefHeight="304.0" prefWidth="500.0" styleClass="rounded_corner">
+            <StackPane layoutX="470.0" layoutY="115.0" prefHeight="304.0" prefWidth="500.0" styleClass="rounded_corner">
                <children>
                   <GridPane prefHeight="273.0" prefWidth="500.0">
                     <columnConstraints>

@@ -14,6 +14,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import org.hibernate.annotations.Formula;
 
 /**
  *
@@ -31,6 +32,10 @@ public class FormaPago {
     
     @Column(name="MAXIMOCUOTAS")
     private int maxiCuotas;
+    
+    @Formula("(SELECT current_date())")
+    private java.sql.Date fechaHoy;
+
 
     @OneToMany(fetch = FetchType.EAGER,mappedBy = "formaPago")
     private List<InteresTarjeta> interesesTarjeta;
@@ -91,21 +96,28 @@ public class FormaPago {
         this.interesesTarjeta = interesesTarjeta;
     }
     
-    public BigDecimal getBonificacionEnFormaPago(int cantCuotas){
+    public BigDecimal getBonificacionEnFormaPago(int cantCuotas,BigDecimal monto){
         BigDecimal bonificaciones = BigDecimal.ZERO;
+        BigDecimal bonifAux = BigDecimal.ZERO;
         for(Iterator<InteresTarjeta> it = interesesTarjeta.iterator();it.hasNext();){
             InteresTarjeta intTarj = it.next();
-            bonificaciones=bonificaciones.add(intTarj.getBonificacion(cantCuotas));
+            bonifAux = monto.multiply(intTarj.getBonificacion(cantCuotas))
+                    .divide(BigDecimal.valueOf(100));
+            bonificaciones=bonificaciones.add(bonifAux);
         }
         return bonificaciones;
     }
     
-    public BigDecimal getInteresEnFormaPago(int cantCuotas){
+    public BigDecimal getInteresEnFormaPago(int cantCuotas,BigDecimal monto){
         BigDecimal intereses = BigDecimal.ZERO;
+        BigDecimal interesAux = BigDecimal.ZERO;
         for(Iterator<InteresTarjeta> it = interesesTarjeta.iterator();it.hasNext();){
             InteresTarjeta intTarj = it.next();
-            intereses=intereses.add(intTarj.getInteres(cantCuotas));
+            interesAux = monto.multiply(intTarj.getInteres(cantCuotas))
+                        .divide(BigDecimal.valueOf(100));
+            intereses=intereses.add(interesAux);
         }
+        intereses = intereses.setScale(2,BigDecimal.ROUND_HALF_EVEN);
         return intereses;
     }
     

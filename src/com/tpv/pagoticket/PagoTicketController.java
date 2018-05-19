@@ -9,7 +9,6 @@ import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Factura;
 import com.tpv.modelo.FormaPago;
-import com.tpv.principal.DataModelTicket;
 import com.tpv.service.FacturacionService;
 import com.tpv.service.PagoService;
 import com.tpv.util.ui.MaskTextField;
@@ -20,7 +19,6 @@ import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -31,6 +29,7 @@ import javafx.scene.layout.GridPane;
 import javafx8tpv1.TabPanePrincipalController;
 import org.apache.log4j.Logger;
 import com.tpv.principal.Context;
+import java.math.RoundingMode;
 
 /**
  *|
@@ -117,8 +116,16 @@ public class PagoTicketController implements Initializable {
     public void configurarInicio(){
         
         try{
-            Factura factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdFactura());
+            //Factura factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdFactura());
+            Factura factura = factService.getFacturaConTotalesSinPagos(Context.getInstance().currentDMTicket().getIdFactura());
             Context.getInstance().currentDMTicket().setBonificaciones(factura.getBonificacionCombosAux());
+            Context.getInstance().currentDMTicket().setTotalIva(factura.getIva());
+            Context.getInstance().currentDMTicket().setTotalNeto(factura.getNeto().add(
+                    factura.getNetoReducido()
+            ));
+            Context.getInstance().currentDMTicket()
+                    .setTotalImpuestoInterno(factura.getImpuestoInterno());
+            
         }catch(TpvException e)    {
             log.error("Error en capa controller "+e.getMessage());
             Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_PAGOTICKET);
@@ -144,7 +151,7 @@ public class PagoTicketController implements Initializable {
         saldoPagar.setText(Context.getInstance().currentDMTicket().getFormatSaldo());        
         bonificacionPorPagoTotal.setText(Context.getInstance().currentDMTicket().getFormatBonificacionPorPagoTotal());
         interesPorPagoTotal.setText(Context.getInstance().currentDMTicket().getFormatInteresPorPagoTotal());
-        
+        totalGral.setText(Context.getInstance().currentDMTicket().getTotalGral());
     }
 
     
@@ -271,7 +278,7 @@ public class PagoTicketController implements Initializable {
                 if(keyEvent.getCode() == KeyCode.SUBTRACT){
                     eliminarLineaPago();
                     refrescarTextFieldSaldo();
-                    keyEvent.consume();;
+                    keyEvent.consume();
                     return;
                 }
                     
@@ -465,18 +472,24 @@ public class PagoTicketController implements Initializable {
     }
     
     private void agregarLineaPago(){
-        BigDecimal pagoParcial = new BigDecimal(textFieldMonto.getText());
-        pagoParcial = pagoParcial.add(Context.getInstance().currentDMTicket().getTotalPagos());
+        //BigDecimal pagoParcial = new BigDecimal(textFieldMonto.getText());
+        //pagoParcial = pagoParcial.add(Context.getInstance().currentDMTicket().getTotalPagos());
         //if(pagoParcial.compareTo(Context.getInstance().currentDMTicket().getTotalTicket())==1)
         //    return;
             
+//(int codigoPago,String descripcion,BigDecimal monto
+            //,int cantidadCuotas, int codigoCupon)        
         int codigoPago = 0;int cantidadCuotas=0;long codigoCupon=0;
         long nroTarjeta = 0;
         BigDecimal monto = new BigDecimal(0);
-//(int codigoPago,String descripcion,BigDecimal monto
-            //,int cantidadCuotas, int codigoCupon)        
         codigoPago = Integer.parseInt(textFieldTipoPago.getText());
         monto = new BigDecimal(textFieldMonto.getText());
+        BigDecimal netoBonifTarjeta = BigDecimal.ZERO;
+        BigDecimal ivaBonifTarjeta = BigDecimal.ZERO;
+        BigDecimal netoInteresTarjeta = BigDecimal.ZERO;
+        BigDecimal ivaInteresTarjeta = BigDecimal.ZERO;
+        
+        
         try{
             cantidadCuotas = Integer.parseInt(textFieldCantidadCuotas.getText());
         }catch(Exception e){
@@ -492,15 +505,32 @@ public class PagoTicketController implements Initializable {
         }catch(Exception e){
             nroTarjeta = 0;
         }
-            
         
+        BigDecimal auxTarjeta = BigDecimal
+                    .valueOf(1 + Context.getInstance().getPorcentajeIvaTarjeta().doubleValue()/100);
+        netoBonifTarjeta = formaPago
+                    .getBonificacionEnFormaPago(cantidadCuotas, monto)
+                    .divide(auxTarjeta,RoundingMode.HALF_EVEN);
+        ivaBonifTarjeta = formaPago
+                    .getBonificacionEnFormaPago(cantidadCuotas, monto)
+                    .subtract(netoBonifTarjeta);
+        auxTarjeta = BigDecimal
+                    .valueOf(1 + Context.getInstance().getPorcentajeIvaTarjeta().doubleValue()/100);
+        netoInteresTarjeta = formaPago
+                    .getInteresEnFormaPago(cantidadCuotas, monto)
+                    .divide(auxTarjeta,RoundingMode.HALF_EVEN);
+        ivaInteresTarjeta = formaPago
+                    .getInteresEnFormaPago(cantidadCuotas, monto)
+                    .subtract(auxTarjeta);
+        
+                
         Context.getInstance().currentDMTicket().getPagos().add(new LineaPagoData(
             codigoPago,labelFormaPagoDescripcion.getText(),monto
             ,cantidadCuotas,nroTarjeta,codigoCupon
-            ,formaPago.getInteresEnFormaPago(cantidadCuotas)
-                    .multiply(monto).divide(BigDecimal.valueOf(100))
-            ,formaPago.getBonificacionEnFormaPago(cantidadCuotas)
-                    .multiply(monto).divide(BigDecimal.valueOf(100))
+            ,formaPago.getInteresEnFormaPago(cantidadCuotas,monto)
+            ,formaPago.getBonificacionEnFormaPago(cantidadCuotas,monto)
+            ,ivaInteresTarjeta
+            ,ivaBonifTarjeta
         ));
         //BigDecimal saldoParcial = Context.getInstance().currentDMTicket().getTotalTicket().subtract(Context.getInstance().currentDMTicket().getTotalPagos());
         if (Context.getInstance().currentDMTicket().getSaldo().compareTo(BigDecimal.valueOf(0))>0)
@@ -543,6 +573,7 @@ public class PagoTicketController implements Initializable {
         saldoPagar.setText(Context.getInstance().currentDMTicket().getFormatSaldo());
         bonificacionPorPagoTotal.setText(Context.getInstance().currentDMTicket().getFormatBonificacionPorPagoTotal());
         interesPorPagoTotal.setText(Context.getInstance().currentDMTicket().getFormatInteresPorPagoTotal());
+        totalGral.setText(Context.getInstance().currentDMTicket().getTotalGral());
     }
     
     public void setTabController(TabPanePrincipalController tabPaneController){

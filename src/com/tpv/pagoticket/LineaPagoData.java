@@ -29,6 +29,9 @@ public class LineaPagoData {
     private LongProperty NroTarjeta;
     private ObjectProperty<BigDecimal> Interes;
     private ObjectProperty<BigDecimal> Bonificacion;
+    private ObjectProperty<BigDecimal> IvaInteres;
+    private ObjectProperty<BigDecimal> IvaBonificacion;
+    
     
     public LineaPagoData(){
         
@@ -36,7 +39,8 @@ public class LineaPagoData {
     
     public LineaPagoData(int codigoPago,String descripcion,BigDecimal monto
             ,int cantidadCuotas,long nroTarjeta, long codigoCupon
-            ,BigDecimal interesTarjeta,BigDecimal bonificacionTarjeta){
+            ,BigDecimal interesTarjeta,BigDecimal bonificacionTarjeta
+            ,BigDecimal ivaInteres,BigDecimal ivaBonificacion){
         this.CodigoPago = new SimpleIntegerProperty(codigoPago);
         this.Descripcion = new SimpleStringProperty(descripcion);
         this.Monto = new SimpleObjectProperty(monto);
@@ -45,6 +49,8 @@ public class LineaPagoData {
         this.NroTarjeta = new SimpleLongProperty(nroTarjeta);
         this.Interes =new SimpleObjectProperty(interesTarjeta);
         this.Bonificacion = new SimpleObjectProperty(bonificacionTarjeta);
+        this.IvaBonificacion = new SimpleObjectProperty(ivaBonificacion);
+        this.IvaInteres = new SimpleObjectProperty(ivaInteres);
     }
 
     /**
@@ -148,6 +154,23 @@ public class LineaPagoData {
     public long getNroTarjeta(){
         return nroTarjetaProperty().get();
     }
+
+    /**
+     * @return the IvaInteres
+     */
+    public BigDecimal getIvaInteres() {
+        return IvaInteres.get();
+    }
+
+
+    /**
+     * @return the IvaBoficacion
+     */
+    public BigDecimal getIvaBonficacion() {
+        return IvaBonificacion.get();
+    }
+
+
     
     
 }

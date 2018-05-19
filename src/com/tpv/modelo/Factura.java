@@ -33,6 +33,20 @@ import javax.persistence.Transient;
 @Entity
 @Table(name="facturas")
 public class Factura {
+
+    /**
+     * @return the ivaTarjeta
+     */
+    public BigDecimal getIvaTarjeta() {
+        return ivaTarjeta;
+    }
+
+    /**
+     * @param ivaTarjeta the ivaTarjeta to set
+     */
+    public void setIvaTarjeta(BigDecimal ivaTarjeta) {
+        this.ivaTarjeta = ivaTarjeta;
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "idFACTURAS")
@@ -87,7 +101,8 @@ public class Factura {
     @Column(name = "IVABONIFICACION")
     private BigDecimal ivaBonificacion;
        
-    
+    @Column(name = "IVATARJETA")
+    private BigDecimal ivaTarjeta;
             
     @Column(name = "EXENTO")
     private BigDecimal exento;
@@ -650,6 +665,20 @@ public class Factura {
      */
     public void setBonificacion(BigDecimal bonificacion) {
         this.bonificacion = bonificacion;
+    }
+
+    /**
+     * @return the interesTarjeta
+     */
+    public BigDecimal getInteresTarjeta() {
+        return interesTarjeta;
+    }
+
+    /**
+     * @param interesTarjeta the interesTarjeta to set
+     */
+    public void setInteresTarjeta(BigDecimal interesTarjeta) {
+        this.interesTarjeta = interesTarjeta;
     }
     
     
