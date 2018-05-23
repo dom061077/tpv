@@ -335,7 +335,6 @@ public class FXMLMainController implements Initializable {
                         textFieldCantidad.setVisible(false);
                     }
                     if(textFieldProducto.getText().trim().length()>0){
-                        textFieldProducto.setDisable(true);
                         enviarComandoLineaTicket();
                         
                         scrollDown();
@@ -526,12 +525,11 @@ public class FXMLMainController implements Initializable {
                     if(precio.compareTo(BigDecimal.valueOf(0))>0){
                         if(Context.getInstance().currentDMTicket().getDetalle().size()==0){
                                 impresoraService.abrirTicket();
-                                //guardarFacturaPrimeraVez();
                         }
-                        descripcion = producto.getCodigoProducto()+" "+ producto.getDescripcion();
+                        /*descripcion = producto.getCodigoProducto()+" "+ producto.getDescripcion();
                         if(producto.isProductoVilleco()){
                             descripcion="#"+descripcion;
-                        }
+                        }*/
 
                         if(Context.getInstance().currentDMTicket().isImprimeComoNegativo())
                             if(!anulaItemIngresado(producto.getCodigoProducto(), cantidad)){
@@ -565,7 +563,7 @@ public class FXMLMainController implements Initializable {
                             cantidad = cantidad.multiply(new BigDecimal(-1));
                         }    
                         precio = precio.setScale(2,BigDecimal.ROUND_HALF_EVEN);
-                        impresoraService.imprimirLineaTicket(descripcion, cantidad
+                        impresoraService.imprimirLineaTicket(producto.getDescripcionConCodigo(), cantidad
                                     ,precio ,producto.getValorImpositivo().getValor() ,Context.getInstance().currentDMTicket().isImprimeComoNegativo(), producto.getImpuestoInterno());
                         
                   
@@ -577,8 +575,7 @@ public class FXMLMainController implements Initializable {
         //
         //                    }
                     }
-                }else
-                    textFieldProducto.setDisable(false);
+                }
         }catch(TpvException e){
                 Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
                 Context.getInstance().currentDMTicket().setException(e);
@@ -1016,7 +1013,7 @@ public class FXMLMainController implements Initializable {
 //                    log.debug("     Descripción: "+item.getDescription());
 //                    
 //                });
-                textFieldProducto.setDisable(false);
+                
             }
         };
         impresoraService.getHfp().setEventListener(this.fiscalPrinterEvent);
@@ -1041,7 +1038,11 @@ public class FXMLMainController implements Initializable {
         //mp.play();
     }
             
-    
+    /**
+     * Verifica si hay una factura abierta. Si la hay debe ser anulada
+     * en base de datos y cancelada en controlador fiscal
+     * @throws TpvException 
+     */
     private void verificarDetalleTableView() throws TpvException{
         log.info("Verificando detalle de TableView");
         if(Context.getInstance().currentDMTicket().isReinicioVerificado()){
@@ -1055,20 +1056,24 @@ public class FXMLMainController implements Initializable {
             factura = factService.getFacturaAbiertaPorCheckout(Context.getInstance().currentDMTicket().getCheckout().getId()
                     ,Context.getInstance().currentDMTicket().getUsuario().getIdUsuario());
             if(factura!=null){
-                if(!Context.getInstance().currentDMTicket().isTicketAbierto()){
+                factService.cancelarFactura(factura.getId());
+                if(Context.getInstance().currentDMTicket().isTicketAbierto()){
                     log.warn("Factura abierta en base de datos y cerrada en impresora. Se procede a cancelar en BD");
-                    factService.cancelarFactura(factura.getId());
-                }else{
+                   impresoraService.cancelarTicket();
+                }
+                //}else{
+                if(factura.getCliente()!=null){
+                    Context.getInstance().currentDMTicket().setCliente(factura.getCliente());
+                    Context.getInstance().currentDMTicket().setClienteSeleccionado(true);
+                }
+                
+                impresoraService.abrirTicket();
                     
                         for(Iterator iterator = factura.getDetalle().iterator();iterator.hasNext();){
                             FacturaDetalle fd = (FacturaDetalle)iterator.next();
 
-                            /*LineaTicketData(int codigoProducto,String descripcion,BigDecimal cantidad,BigDecimal precioUnitario
-                                ,BigDecimal precioUnitarioBase,BigDecimal neto,BigDecimal netoReducido,BigDecimal exento
-                                ,BigDecimal descuentoCliente,BigDecimal iva ,BigDecimal ivaReducido
-                                ,BigDecimal impuestoInterno,BigDecimal retencion ,boolean devuelto)*/
 
-                            LineaTicketData lineaTicketData = new LineaTicketData(
+                            lineaTicketData = new LineaTicketData(
                                              fd.getProducto().getCodigoProducto()
                                             ,fd.getProducto().getDescripcion(),fd.getCantidad()
                                             ,fd.getPrecioUnitario()
@@ -1082,14 +1087,18 @@ public class FXMLMainController implements Initializable {
                                             ,fd.getPorcentajeIva()
                                             ,(fd.getSubTotal().compareTo(BigDecimal.ZERO)<0?true:false)
                             );   
-                            if(factura.getCliente()!=null){
-                                Context.getInstance().currentDMTicket().setCliente(factura.getCliente());
-                            }
-                            Context.getInstance().currentDMTicket().setClienteSeleccionado(true);
-                            Context.getInstance().currentDMTicket().getDetalle().add(lineaTicketData);
+                            //Context.getInstance().currentDMTicket().getDetalle().add(lineaTicketData);
+                            impresoraService.imprimirLineaTicket(
+                                    fd.getProducto().getDescripcionConCodigo()
+                                    ,fd.getCantidad()
+                                    ,fd.getPrecioUnitario()
+                                    ,fd.getProducto().getValorImpositivo().getValor() 
+                                    ,(fd.getSubTotal().compareTo(BigDecimal.ZERO)<0?true:false)
+                                    ,fd.getProducto().getImpuestoInterno());
+
                         }
-                        Context.getInstance().currentDMTicket().setIdFactura(factura.getId());
-                }
+                        //Context.getInstance().currentDMTicket().setIdFactura(factura.getId());
+                //}
             }
             Context.getInstance().currentDMTicket().setReinicioVerificado(true);                    
         /*}catch(TpvException e){

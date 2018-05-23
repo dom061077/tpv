@@ -440,17 +440,20 @@ public class DataModelTicket {
     /**
      * @return the totalGral con cálculo local
      */
-    public String getTotalGral() {
+    public BigDecimal getTotalGral() {
         BigDecimal totalGral = getTotalTicket();
         totalGral = totalGral.subtract(getBonificaciones());
         totalGral = totalGral.subtract(getBonificacionPorPagoTotal());
         totalGral = totalGral.add(getInteresPorPagoTotal());
         totalGral = totalGral.setScale(2,BigDecimal.ROUND_HALF_EVEN);
-        DecimalFormat df = new DecimalFormat("###,###,###,##0.00");
-        
-        return df.format(totalGral.doubleValue());
+        return totalGral;
     }
 
+    public String getFormatTotalGral(){
+        DecimalFormat df = new DecimalFormat("###,###,###,##0.00");
+        BigDecimal totalGralAFormatear = getTotalGral();
+        return df.format(totalGralAFormatear.doubleValue());
+    }
     
     
     

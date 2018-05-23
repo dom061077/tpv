@@ -151,7 +151,7 @@ public class PagoTicketController implements Initializable {
         saldoPagar.setText(Context.getInstance().currentDMTicket().getFormatSaldo());        
         bonificacionPorPagoTotal.setText(Context.getInstance().currentDMTicket().getFormatBonificacionPorPagoTotal());
         interesPorPagoTotal.setText(Context.getInstance().currentDMTicket().getFormatInteresPorPagoTotal());
-        totalGral.setText(Context.getInstance().currentDMTicket().getTotalGral());
+        totalGral.setText(df.format(Context.getInstance().currentDMTicket().getTotalGral()));
     }
 
     
@@ -573,7 +573,8 @@ public class PagoTicketController implements Initializable {
         saldoPagar.setText(Context.getInstance().currentDMTicket().getFormatSaldo());
         bonificacionPorPagoTotal.setText(Context.getInstance().currentDMTicket().getFormatBonificacionPorPagoTotal());
         interesPorPagoTotal.setText(Context.getInstance().currentDMTicket().getFormatInteresPorPagoTotal());
-        totalGral.setText(Context.getInstance().currentDMTicket().getTotalGral());
+        totalGral.setText(Context.getInstance().currentDMTicket().getFormatTotalGral());
+        
     }
     
     public void setTabController(TabPanePrincipalController tabPaneController){

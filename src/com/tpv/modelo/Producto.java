@@ -245,5 +245,13 @@ public class Producto {
         }
         return false;
     }
+    
+    public String getDescripcionConCodigo(){
+            String descConCodigo = getCodigoProducto()+" "+ getDescripcion();
+            if(isProductoVilleco()){
+                descConCodigo="#"+descConCodigo;
+            }        
+            return descConCodigo;
+    }
          
 }
