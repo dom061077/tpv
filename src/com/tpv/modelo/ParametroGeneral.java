@@ -32,8 +32,7 @@ public class ParametroGeneral {
     @Column(name = "PARAMETROCADENA")
     private String parametroCadena;
     
-    @Column(name = "PORCENTAJEIVATARJETA")
-    private BigDecimal ivaTarjeta;
+
 
     /**
      * @return the id
@@ -91,17 +90,5 @@ public class ParametroGeneral {
         this.parametroCadena = parametroCadena;
     }
 
-    /**
-     * @return the ivaTarjeta
-     */
-    public BigDecimal getIvaTarjeta() {
-        return ivaTarjeta;
-    }
 
-    /**
-     * @param ivaTarjeta the ivaTarjeta to set
-     */
-    public void setIvaTarjeta(BigDecimal ivaTarjeta) {
-        this.ivaTarjeta = ivaTarjeta;
-    }
 }

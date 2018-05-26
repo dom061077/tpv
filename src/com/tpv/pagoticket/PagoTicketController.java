@@ -507,7 +507,7 @@ public class PagoTicketController implements Initializable {
         }
         
         BigDecimal auxTarjeta = BigDecimal
-                    .valueOf(1 + Context.getInstance().getPorcentajeIvaTarjeta().doubleValue()/100);
+                    .valueOf(1 + Context.getInstance().getPorcentajeIvaBonifTarjeta().doubleValue()/100);
         netoBonifTarjeta = formaPago
                     .getBonificacionEnFormaPago(cantidadCuotas, monto)
                     .divide(auxTarjeta,RoundingMode.HALF_EVEN);
@@ -515,7 +515,7 @@ public class PagoTicketController implements Initializable {
                     .getBonificacionEnFormaPago(cantidadCuotas, monto)
                     .subtract(netoBonifTarjeta);
         auxTarjeta = BigDecimal
-                    .valueOf(1 + Context.getInstance().getPorcentajeIvaTarjeta().doubleValue()/100);
+                    .valueOf(1 + Context.getInstance().getPorcentajeIvaIntTarjeta().doubleValue()/100);
         netoInteresTarjeta = formaPago
                     .getInteresEnFormaPago(cantidadCuotas, monto)
                     .divide(auxTarjeta,RoundingMode.HALF_EVEN);

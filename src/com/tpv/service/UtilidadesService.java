@@ -23,11 +23,26 @@ public class UtilidadesService {
         try{
             parametros = em.createQuery("FROM ParametroGeneral").getResultList();
         }catch(RuntimeException e){
-            throw new TpvException("Error en la capa de servicios al devolver la factura.");
+            throw new TpvException("Error en la capa de servicios al devolver parámetros generales.");
         }finally{
             em.clear();
         }
         return parametros;
     } 
+    
+    public static ParametroGeneral getParametroGral(String id) throws TpvException{
+        ParametroGeneral param = null;
+        EntityManager em = Connection.getEm();
+        try{
+            param = em.find(ParametroGeneral.class, id);
+        }catch(RuntimeException e){
+           throw new TpvException("Error en tiempo de ejecución"); 
+        }finally{
+            em.clear();
+        }
+        if(param==null)
+            throw new TpvException("El parámetro gral "+id+" no existe.");
+        return param;
+    }
     
 }

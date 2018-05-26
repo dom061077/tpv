@@ -324,16 +324,35 @@ public class ImpresoraService {
             }
         }
         if(factura.getBonificaTarjeta().compareTo(BigDecimal.ZERO)>0){
-            request = getHfp().cmdReturnRecharge("Leyenda Bonif.Tarj",
+            request = getHfp().cmdReturnRecharge(Context.getInstance().getLeyendaBonifTarjeta(),
                             factura.getBonificaTarjeta(),
                             BigDecimal.valueOf(21), true,
                             BigDecimal.ZERO, false, 0, "B");
+            try{
+                response = getHfp().execute(requestStatus);
+                response = getHfp().execute(request);
+            }catch(FiscalPrinterStatusError e){
+                log.warn("Error en estado fiscal de la impresora al imprimir bonificación de tarjeta",e);
+                throw new TpvException(e.getMessage());
+            }catch(FiscalPrinterIOException e){
+                log.warn("Error de entrada/salida en la impresora fiscal al imprimir bonificación de tarjeta",e);
+            }
         }
         if(factura.getInteresTarjeta().compareTo(BigDecimal.ZERO)>0){
-            request = getHfp().cmdReturnRecharge("Leyenda Bonif.Tarj",
-                            factura.getBonificaTarjeta(),
+            request = getHfp().cmdReturnRecharge(Context.getInstance().getLeyendaIntTarjeta(),
+                            factura.getInteresTarjeta(),
                             BigDecimal.valueOf(21), false,
                             BigDecimal.ZERO, false, 0, "B");
+            try{
+                response = getHfp().execute(requestStatus);
+                response = getHfp().execute(request);
+            }catch(FiscalPrinterStatusError e){
+                log.warn("Error en estado fiscal de la impresora al imprimir interés de tarjeta",e);
+                throw new TpvException(e.getMessage());
+            }catch(FiscalPrinterIOException e){
+                log.warn("Error de entrada/salida en la impresora fiscal al imprimir interés de tarjeta",e);
+            }
+            
         }
                         
         request = getHfp().cmdCloseFiscalReceipt(null);

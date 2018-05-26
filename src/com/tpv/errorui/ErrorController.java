@@ -87,7 +87,6 @@ public class ErrorController implements Initializable {
             Platform.runLater(()->{
                 textAreaError.setOnKeyPressed(keyEvent->{
                     if(keyEvent.getCode()==KeyCode.ESCAPE){
-                        log.debug("Tecla Escape pulsada");
                         recuperarFallo();
                         if(Context.getInstance().currentDMTicket().getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_FACTURACION)
                             tabController.gotoFacturacion();
@@ -112,7 +111,7 @@ public class ErrorController implements Initializable {
                         
                     }
                     if(keyEvent.getCode()==KeyCode.F11)
-                        tabController.gotoMenuPrincipal();
+                        System.exit(0);
                     
                 });
             });
@@ -126,6 +125,7 @@ public class ErrorController implements Initializable {
             reconectarImpresora();
         }
     }
+    
     
     private void reconectarImpresora(){
         try{

@@ -21,7 +21,10 @@ public class Context {
     private DataModelTicket dataModelTicket = new DataModelTicket();
     private String leyendaRetIngBrutosCliente;
     private BigDecimal montoMinRetIngBrutos;
-    private BigDecimal porcentajeIvaTarjeta;
+    private BigDecimal porcentajeIvaIntTarjeta;
+    private String leyendaIntTarjeta;
+    private BigDecimal porcentajeIvaBonifTarjeta;
+    private String leyendaBonifTarjeta;
     
     public DataModelTicket currentDMTicket(){
         return dataModelTicket;
@@ -56,19 +59,63 @@ public class Context {
     }
 
     /**
-     * @return the porcentajeIvaTarjeta
+     * @return the porcentajeIvaIntTarjeta
      */
-    public BigDecimal getPorcentajeIvaTarjeta() {
-        return porcentajeIvaTarjeta;
+    public BigDecimal getPorcentajeIvaIntTarjeta() {
+        return porcentajeIvaIntTarjeta;
     }
 
     /**
-     * @param porcentajeIvaTarjeta the porcentajeIvaTarjeta to set
+     * @param porcentajeIvaIntTarjeta the porcentajeIvaIntTarjeta to set
      */
-    public void setPorcentajeIvaTarjeta(BigDecimal porcentajeIvaTarjeta) {
-        this.porcentajeIvaTarjeta = porcentajeIvaTarjeta;
+    public void setPorcentajeIvaIntTarjeta(BigDecimal porcentajeIvaIntTarjeta) {
+        this.porcentajeIvaIntTarjeta = porcentajeIvaIntTarjeta;
     }
+
+    /**
+     * @return the porcentajeIvaBonifTarjeta
+     */
+    public BigDecimal getPorcentajeIvaBonifTarjeta() {
+        return porcentajeIvaBonifTarjeta;
+    }
+
+    /**
+     * @param porcentajeIvaBonifTarjeta the porcentajeIvaBonifTarjeta to set
+     */
+    public void setPorcentajeIvaBonifTarjeta(BigDecimal porcentajeIvaBonifTarjeta) {
+        this.porcentajeIvaBonifTarjeta = porcentajeIvaBonifTarjeta;
+    }
+
+    /**
+     * @return the leyendaIntTarjeta
+     */
+    public String getLeyendaIntTarjeta() {
+        return leyendaIntTarjeta;
+    }
+
+    /**
+     * @param leyendaIntTarjeta the leyendaIntTarjeta to set
+     */
+    public void setLeyendaIntTarjeta(String leyendaIntTarjeta) {
+        this.leyendaIntTarjeta = leyendaIntTarjeta;
+    }
+
+    /**
+     * @return the leyendaBonifTarjeta
+     */
+    public String getLeyendaBonifTarjeta() {
+        return leyendaBonifTarjeta;
+    }
+
+    /**
+     * @param leyendaBonifTarjeta the leyendaBonifTarjeta to set
+     */
+    public void setLeyendaBonifTarjeta(String leyendaBonifTarjeta) {
+        this.leyendaBonifTarjeta = leyendaBonifTarjeta;
+    }
+
     
+
     
     
     

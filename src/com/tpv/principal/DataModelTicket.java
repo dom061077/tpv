@@ -155,6 +155,7 @@ public class DataModelTicket {
         for(Iterator iter = innerList.iterator();iter.hasNext();){
             LineaTicketData ticket = (LineaTicketData) iter.next();
             totalNeto = totalNeto.add(ticket.getNeto());
+            totalNeto = totalNeto.add(ticket.getNetoReducido());
         }
         return totalNeto;
     }

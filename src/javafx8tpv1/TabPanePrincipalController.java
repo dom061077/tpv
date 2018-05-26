@@ -103,13 +103,13 @@ public class TabPanePrincipalController implements Initializable {
         this.configImpresoraController.setTabController(this);
         this.combosController.setTabController(this);
         try{
-            initParametrosGenerale();
+            initParametrosGenerales();
             initImpresora();
             gotoLogin();            
         }catch(TpvException e){
             log.error(e.getMessage());
             Context.getInstance().currentDMTicket().setException(e);
-            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_LOGIN);
+            //Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_LOGIN);
             this.gotoError();
         }
 
@@ -132,16 +132,20 @@ public class TabPanePrincipalController implements Initializable {
         
     }
     
-    private void initParametrosGenerale() throws TpvException{
-        List<ParametroGeneral> list = UtilidadesService.getParametroGral();
-        list.forEach(param->{
-            if(param.getId().compareTo("RETENCION_ING_BRUTO_LEYENDA")==0)
-                Context.getInstance().setLeyendaRetIngBrutosCliente(param.getParametroCadena());
-            if(param.getId().compareTo("RETENCION_ING_BRUTO_MONTO_MINIMO")==0)
-                Context.getInstance().setMontoMinRetIngBrutos(param.getParametroNumerico());
-            if(param.getId().compareTo("INTERES_IVA_TARJETA")==0)
-                Context.getInstance().setPorcentajeIvaTarjeta(param.getParametroNumerico());
-        });
+    private void initParametrosGenerales() throws TpvException{
+
+        ParametroGeneral param = UtilidadesService.getParametroGral("RETENCION_ING_BRUTO_LEYENDA");
+        Context.getInstance().setLeyendaRetIngBrutosCliente(param.getParametroCadena());
+        param = UtilidadesService.getParametroGral("RETENCION_ING_BRUTO_MONTO_MINIMO");
+        Context.getInstance().setMontoMinRetIngBrutos(param.getParametroNumerico());
+        
+        param = UtilidadesService.getParametroGral("INTERES_IVA_TARJETA");
+        Context.getInstance().setPorcentajeIvaIntTarjeta(param.getParametroNumerico());
+        Context.getInstance().setLeyendaIntTarjeta(param.getParametroCadena());
+        
+        param = UtilidadesService.getParametroGral("BONIFICACION_IVA_TARJETA");
+        Context.getInstance().setPorcentajeIvaBonifTarjeta(param.getParametroNumerico());
+        Context.getInstance().setLeyendaBonifTarjeta(param.getParametroCadena());
         
         
 

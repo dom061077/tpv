@@ -1064,8 +1064,9 @@ public class FXMLMainController implements Initializable {
                 //}else{
                 if(factura.getCliente()!=null){
                     Context.getInstance().currentDMTicket().setCliente(factura.getCliente());
-                    Context.getInstance().currentDMTicket().setClienteSeleccionado(true);
+                    
                 }
+                Context.getInstance().currentDMTicket().setClienteSeleccionado(true);
                 
                 impresoraService.abrirTicket();
                     
