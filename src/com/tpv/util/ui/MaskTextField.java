@@ -163,7 +163,7 @@ public class MaskTextField extends TextField {
             tempMask += regex;
 
         }
-
+//^[0-9]{6}+\\.[0-9]{2}+
         this.mask = tempMask + "$";
 
     }

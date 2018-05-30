@@ -6,6 +6,7 @@
 package com.tpv.modelo;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import javax.persistence.Column;
@@ -105,6 +106,7 @@ public class FormaPago {
                     .divide(BigDecimal.valueOf(100));
             bonificaciones=bonificaciones.add(bonifAux);
         }
+        bonificaciones = bonificaciones.setScale(2,BigDecimal.ROUND_HALF_EVEN);
         return bonificaciones;
     }
     
@@ -121,5 +123,10 @@ public class FormaPago {
         return intereses;
     }
     
+    public List<InteresTarjeta> getInteresesBonifEnFormaPago(){
+        return Collections.sort(interesesTarjeta,(o1,o2)->{
+            return true;
+        });
+    }
     
 }

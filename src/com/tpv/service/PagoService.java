@@ -7,12 +7,10 @@ package com.tpv.service;
 
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.FormaPago;
-import com.tpv.modelo.Producto;
+import com.tpv.modelo.InteresTarjeta;
 import com.tpv.util.Connection;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
-import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 import org.apache.log4j.Logger;
 
@@ -44,5 +42,7 @@ public class PagoService {
         }
         return formaPago;
     }
+    
+
     
 }

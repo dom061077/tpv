@@ -9,6 +9,7 @@ import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Factura;
 import com.tpv.modelo.FormaPago;
+import com.tpv.modelo.InteresTarjeta;
 import com.tpv.service.FacturacionService;
 import com.tpv.service.PagoService;
 import com.tpv.util.ui.MaskTextField;
@@ -30,6 +31,7 @@ import javafx8tpv1.TabPanePrincipalController;
 import org.apache.log4j.Logger;
 import com.tpv.principal.Context;
 import java.math.RoundingMode;
+import java.util.Iterator;
 
 /**
  *|
@@ -107,10 +109,29 @@ public class PagoTicketController implements Initializable {
     private TableColumn bonificacionTarjetaColumn;
     
     @FXML
+    private TableColumn cuotasColumn;
+    
+    @FXML
+    private TableColumn interesBonifColumn;
+    
+    @FXML
+    private TableColumn montoInteresBonifColumn;
+    
+    @FXML
+    private TableColumn totalPagoColumn;
+    
+    
+    @FXML
     private GridPane gridPanePagos;
     
     @FXML
     private Label labelCantidadCuotas;
+    
+    @FXML
+    private Label tituloFormaPagoLabel;
+    
+    @FXML
+    private Label stackPaneIntereses;
     
     
     public void configurarInicio(){
@@ -159,6 +180,9 @@ public class PagoTicketController implements Initializable {
     @FXML
     public  void initialize(URL url, ResourceBundle rb) {
         log.info("Ingresando al mètodo init");
+        stackPaneIntereses.setVisible(false);
+        initTableViewInteresesBonif();
+        
         codigoPagoColumn.setCellValueFactory(new PropertyValueFactory<LineaPagoData,Integer>("codigoPago"));
         codigoPagoColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
         descripcionPagoColumn.setCellValueFactory(new PropertyValueFactory("descripcion"));
@@ -346,6 +370,11 @@ public class PagoTicketController implements Initializable {
                     return;
                 }
                 if(keyEvent.getCode() == KeyCode.ENTER){
+                    if (formaPago.getMaxiCuotas()>0){
+                        stackPaneIntereses.setVisible(true);
+                        
+                        --dffd-d-f-fd
+                    }
                     if(textFieldCantidadCuotas.isVisible()){
                         textFieldCantidadCuotas.setDisable(false);
                         textFieldCantidadCuotas.requestFocus();
@@ -471,6 +500,12 @@ public class PagoTicketController implements Initializable {
         
     }
     
+    private void cargarInteresesBonif(){
+        for(Iterator<InteresTarjeta> it = formaPago.getInteresesTarjeta().iterator();it.hasNext();){
+            InteresTarjeta intTarj = it.next();
+        }
+    }
+    
     private void agregarLineaPago(){
         //BigDecimal pagoParcial = new BigDecimal(textFieldMonto.getText());
         //pagoParcial = pagoParcial.add(Context.getInstance().currentDMTicket().getTotalPagos());
@@ -560,6 +595,26 @@ public class PagoTicketController implements Initializable {
             Context.getInstance().currentDMTicket().getPagos().remove(lineaPagoData);
        }
     }
+    
+    private void initTableViewInteresesBonif(){
+        cuotasColumn.setCellValueFactory(new PropertyValueFactory<LineaPagoData,Integer>("cuotas"));
+        cuotasColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+        
+        interesBonifColumn.setCellValueFactory(new PropertyValueFactory<LineaPagoData,Integer>("interesBonif"));
+        interesBonifColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+        
+        montoInteresBonifColumn.setCellValueFactory(new PropertyValueFactory<LineaPagoData,Integer>("montoInteresesBonif"));
+        montoInteresBonifColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+        
+        totalPagoColumn.setCellValueFactory(new PropertyValueFactory<LineaPagoData,Integer>("totalPago"));
+        totalPagoColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+                
+    }
+    
+    private void agregarDatosTableViewInteresesBonif(){
+        for(Iterator<InteresTarjeta> it = formaPago.getBonificacionEnFormaPago(0, BigDecimal.ONE))
+    }
+            
 
     private void scrollDown(){
             if(tableViewPagos.getItems().size()>0){

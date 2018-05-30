@@ -310,19 +310,7 @@ public class ImpresoraService {
           
         }
         
-        if(factura.getRetencion().compareTo(BigDecimal.ZERO)>0 ){
-            request = getHfp().cmdPerceptions(Context.getInstance().getLeyendaRetIngBrutosCliente(), factura.getRetencion(), null);
-            try{
-                response = getHfp().execute(requestStatus);
-                response = getHfp().execute(request);
-            }catch(FiscalPrinterStatusError e){
-                log.warn("Error en estado fiscal de la impresora al imprimir retención");
-                throw new TpvException(e.getMessage());
-            }catch(FiscalPrinterIOException e){
-                log.warn("Error de entrada/salida en la impresora fiscal al imprimir retención",e);
-                throw new TpvException(e.getMessage());
-            }
-        }
+
         if(factura.getBonificaTarjeta().compareTo(BigDecimal.ZERO)>0){
             request = getHfp().cmdReturnRecharge(Context.getInstance().getLeyendaBonifTarjeta(),
                             factura.getBonificaTarjeta(),
@@ -354,6 +342,20 @@ public class ImpresoraService {
             }
             
         }
+        
+        if(factura.getRetencion().compareTo(BigDecimal.ZERO)>0 ){
+            request = getHfp().cmdPerceptions(Context.getInstance().getLeyendaRetIngBrutosCliente(), factura.getRetencion(), null);
+            try{
+                response = getHfp().execute(requestStatus);
+                response = getHfp().execute(request);
+            }catch(FiscalPrinterStatusError e){
+                log.warn("Error en estado fiscal de la impresora al imprimir retención");
+                throw new TpvException(e.getMessage());
+            }catch(FiscalPrinterIOException e){
+                log.warn("Error de entrada/salida en la impresora fiscal al imprimir retención",e);
+                throw new TpvException(e.getMessage());
+            }
+        }        
                         
         request = getHfp().cmdCloseFiscalReceipt(null);
         try{

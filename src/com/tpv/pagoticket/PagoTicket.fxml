@@ -115,6 +115,25 @@
                   <Label fx:id="labelFormaPagoDescripcion" prefHeight="17.0" prefWidth="339.0" styleClass="label_textfield" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="1" />
                </children>
             </GridPane>
+            <StackPane fx:id="stackPaneIntereses" layoutX="269.0" layoutY="150.0" prefHeight="400.0" prefWidth="603.0" styleClass="rounded_corner">
+               <children>
+                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                     <center>
+                        <TableView prefHeight="200.0" prefWidth="200.0" styleClass="tpv-table-view" BorderPane.alignment="CENTER">
+                          <columns>
+                            <TableColumn fx:id="cuotasColumn" prefWidth="128.0" text="Cuotas" />
+                            <TableColumn fx:id="interesBonifColumn" prefWidth="171.0" text="\% Interés/Bonif." />
+                              <TableColumn fx:id="montoInteresBonifColumn" prefWidth="136.0" text="\$ Interés/Bonif." />
+                              <TableColumn fx:id="totalPagoColumn" prefWidth="119.0" text="\$ Total Pago" />
+                          </columns>
+                        </TableView>
+                     </center>
+                     <top>
+                        <Label fx:id="tituloFormaPagoLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="21.0" prefWidth="485.0" styleClass="label_titulo" text="Label" textAlignment="CENTER" BorderPane.alignment="CENTER" />
+                     </top>
+                  </BorderPane>
+               </children>
+            </StackPane>
          </children>
       </Pane>
    </top>

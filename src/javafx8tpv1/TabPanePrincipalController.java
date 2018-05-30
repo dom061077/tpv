@@ -147,7 +147,9 @@ public class TabPanePrincipalController implements Initializable {
         Context.getInstance().setPorcentajeIvaBonifTarjeta(param.getParametroNumerico());
         Context.getInstance().setLeyendaBonifTarjeta(param.getParametroCadena());
         
-        
+         param = UtilidadesService.getParametroGral("FORMAT_NUMERO_DINERO");
+        Context.getInstance().setFormatNumeroDinero(param.getParametroCadena());
+       
 
     }
     

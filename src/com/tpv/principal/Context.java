@@ -12,6 +12,20 @@ import java.math.BigDecimal;
  * @author daniel
  */
 public class Context {
+
+    /**
+     * @return the formatNumeroDinero
+     */
+    public String getFormatNumeroDinero() {
+        return formatNumeroDinero;
+    }
+
+    /**
+     * @param formatNumeroDinero the formatNumeroDinero to set
+     */
+    public void setFormatNumeroDinero(String formatNumeroDinero) {
+        this.formatNumeroDinero = formatNumeroDinero;
+    }
     private final static Context instance = new Context();
     
     public static Context getInstance(){
@@ -25,9 +39,10 @@ public class Context {
     private String leyendaIntTarjeta;
     private BigDecimal porcentajeIvaBonifTarjeta;
     private String leyendaBonifTarjeta;
+    private String formatNumeroDinero;
     
     public DataModelTicket currentDMTicket(){
-        return dataModelTicket;
+        return getDataModelTicket();
     }
 
     /**
@@ -112,6 +127,20 @@ public class Context {
      */
     public void setLeyendaBonifTarjeta(String leyendaBonifTarjeta) {
         this.leyendaBonifTarjeta = leyendaBonifTarjeta;
+    }
+
+    /**
+     * @return the dataModelTicket
+     */
+    public DataModelTicket getDataModelTicket() {
+        return dataModelTicket;
+    }
+
+    /**
+     * @param dataModelTicket the dataModelTicket to set
+     */
+    public void setDataModelTicket(DataModelTicket dataModelTicket) {
+        this.dataModelTicket = dataModelTicket;
     }
 
     
