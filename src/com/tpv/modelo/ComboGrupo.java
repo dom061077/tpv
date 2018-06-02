@@ -37,7 +37,7 @@ public class ComboGrupo {
     private Long id;
     
     @Column(name = "CANTIDADPRODUCTO")
-    private int cantidad;
+    private BigDecimal cantidad;
             
     @Column(name = "PORCENTAJE")
     private BigDecimal porcentaje;
@@ -79,14 +79,14 @@ public class ComboGrupo {
     /**
      * @return the cantidad
      */
-    public int getCantidad() {
+    public BigDecimal getCantidad() {
         return cantidad;
     }
 
     /**
      * @param cantidad the cantidad to set
      */
-    public void setCantidad(int cantidad) {
+    public void setCantidad(BigDecimal cantidad) {
         this.cantidad = cantidad;
     }
 
@@ -196,12 +196,12 @@ public class ComboGrupo {
     }
     
     @Transient
-    private int getCantidadEnCombinacion(){
-        int cantAcumulada = 0;
+    private BigDecimal getCantidadEnCombinacion(){
+        BigDecimal cantAcumulada = BigDecimal.ZERO;
         for(Iterator<ComboGrupoDetallePrecioProducto> iterator = getDetallePreciosProductos().iterator();
                 iterator.hasNext();){
             ComboGrupoDetallePrecioProducto cGrupoDet = iterator.next();
-            cantAcumulada+=cGrupoDet.getCantidad();
+            cantAcumulada = cantAcumulada.add(cGrupoDet.getCantidad());
         }
         return cantAcumulada;
     }
@@ -209,19 +209,17 @@ public class ComboGrupo {
     @Transient
     public int getCantidadGrupos(){
         int cantGruposArmados = 0;
-       
         if(getCombo().isCombinarProductos()){
-            if(getCantidadEnCombinacion()<cantidad)
+            if(getCantidadEnCombinacion().compareTo(cantidad)<0) //if(getCantidadEnCombinacion()<cantidad)
                 cantGruposArmados = 0;
             else
-                cantGruposArmados = getCantidadEnCombinacion()/cantidad;
+                cantGruposArmados = getCantidadEnCombinacion().divide(cantidad).intValue();  //getCantidadEnCombinacion()/cantidad;
         }else{
             for(Iterator<ComboGrupoDetallePrecioProducto> it = getDetallePreciosProductos().iterator();it.hasNext();){
                 ComboGrupoDetallePrecioProducto cgdPP = it.next();
-                cantGruposArmados += cgdPP.getCantidad()/cantidad;
+                cantGruposArmados = cgdPP.getCantidad().divide(cantidad).intValue();//cantGruposArmados += cgdPP.getCantidad()/cantidad;
             }
         }
-        
         return cantGruposArmados;
     }    
     

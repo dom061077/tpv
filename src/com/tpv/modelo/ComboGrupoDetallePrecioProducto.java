@@ -13,9 +13,9 @@ import javax.persistence.Transient;
  * @author daniel
  */
 public class ComboGrupoDetallePrecioProducto {
-    private int cantidad;
+    private BigDecimal cantidad;
     
-    private int cantidadAux;
+    private BigDecimal cantidadAux;
     
     private ProductoAgrupadoEnFactura paf;
     
@@ -24,14 +24,14 @@ public class ComboGrupoDetallePrecioProducto {
     /**
      * @return the cantidad
      */
-    public int getCantidad() {
+    public BigDecimal getCantidad() {
         return cantidad;
     }
 
     /**
      * @param cantidad the cantidad to set
      */
-    public void setCantidad(int cantidad) {
+    public void setCantidad(BigDecimal cantidad) {
         this.cantidad = cantidad;
     }
 
@@ -57,9 +57,9 @@ public class ComboGrupoDetallePrecioProducto {
 
     public BigDecimal getBonificacion(){
         BigDecimal bonif =  paf.getPrecioUnitario();
-        int cantReferencia = cantidad / comboGrupo.getCantidad();
-        cantReferencia = cantReferencia * comboGrupo.getCantidad();
-        bonif = bonif.multiply(BigDecimal.valueOf(cantReferencia));
+        BigDecimal cantReferencia = cantidad.divide(comboGrupo.getCantidad());
+        cantReferencia = cantReferencia.multiply(comboGrupo.getCantidad());
+        bonif = bonif.multiply(cantReferencia);
         bonif = bonif.multiply(comboGrupo.getPorcentaje()).divide(BigDecimal.valueOf(100));
         return bonif;
     }
@@ -68,21 +68,21 @@ public class ComboGrupoDetallePrecioProducto {
         setCantidadAux(cantidad);
     }
     
-    public void decrementarCantAux(int decremento){
-        this.setCantidadAux(getCantidadAux() - decremento);
+    public void decrementarCantAux(BigDecimal decremento){
+        this.setCantidadAux(getCantidadAux().subtract(decremento));
     }
 
     /**
      * @return the cantidadAux
      */
-    public int getCantidadAux() {
+    public BigDecimal getCantidadAux() {
         return cantidadAux;
     }
 
     /**
      * @param cantidadAux the cantidadAux to set
      */
-    public void setCantidadAux(int cantidadAux) {
+    public void setCantidadAux(BigDecimal cantidadAux) {
         this.cantidadAux = cantidadAux;
     }
 

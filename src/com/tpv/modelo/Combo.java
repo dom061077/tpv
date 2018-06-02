@@ -423,14 +423,14 @@ public class Combo {
     }
 
     
-    private void addComboAbierto(ComboGrupoDetallePrecioProducto cgdpp,int cantidad,BigDecimal porcentajeDesc){
+    private void addComboAbierto(ComboGrupoDetallePrecioProducto cgdpp,BigDecimal cantidad,BigDecimal porcentajeDesc){
         FacturaDetalleComboAbierto fdca = new FacturaDetalleComboAbierto();
-        fdca.setCantidad(BigDecimal.valueOf(cantidad));
+        fdca.setCantidad(cantidad);
         fdca.setImpuestoInterno(
                 cgdpp.getPaf().getPrecioUnitarioBase()
                         .multiply(cgdpp.getPaf().getProducto().getImpuestoInterno())
                         .divide(BigDecimal.valueOf(100))
-                        .multiply(BigDecimal.valueOf(cantidad))
+                        .multiply(cantidad)
                         .multiply(porcentajeDesc)
                         .divide(BigDecimal.valueOf(100))
             );
@@ -438,25 +438,25 @@ public class Combo {
         fdca.setIva(cgdpp.getPaf().getPrecioUnitarioBase()
                     .multiply(cgdpp.getPaf().getProducto().getValorImpositivo().getValor())
                     .divide(BigDecimal.valueOf(100))
-                    .multiply(BigDecimal.valueOf(cantidad))
+                    .multiply(cantidad)
                     .multiply(porcentajeDesc)
                     .divide(BigDecimal.valueOf(100))
                 
         );
         fdca.setNeto(
                 cgdpp.getPaf().getPrecioUnitarioBase()
-                 .multiply(BigDecimal.valueOf(cantidad))
+                 .multiply(cantidad)
                  .multiply(porcentajeDesc)
                  .divide(BigDecimal.valueOf(100))
                 
         );
         fdca.setTotal(cgdpp.getPaf().getPrecioUnitario()
-                        .multiply(BigDecimal.valueOf(cantidad))
+                        .multiply(cantidad)
                         .multiply(porcentajeDesc)
                         .divide(BigDecimal.valueOf(100))
                      );
         fdca.setTotalSinBonif(cgdpp.getPaf().getPrecioUnitario()
-                        .multiply(BigDecimal.valueOf(cantidad)));
+                        .multiply(cantidad));
         fdca.setPorcentjeIva(cgdpp.getPaf().getProducto().getValorImpositivo().getValor());
         fdca.setProducto(cgdpp.getPaf().getProducto());
         getComboAbierto().add(fdca);
@@ -488,7 +488,7 @@ public class Combo {
                      for(Iterator<ComboGrupoDetallePrecioProducto> itcdpp = cgaux.getDetallePreciosProductos().iterator()
                          ;itcdpp.hasNext();){
                          ComboGrupoDetallePrecioProducto cdpp = itcdpp.next();
-                        if(cgaux.getCantidad()<=cdpp.getPaf().getCantidadAux()){
+                        if(cgaux.getCantidad().compareTo(cdpp.getPaf().getCantidadAux())<=0){//if(cgaux.getCantidad()<=cdpp.getPaf().getCantidadAux()){
                             hayCombo=true;
                             cdpp.getPaf().decCantidadAux(cgaux.getCantidad());
                             break;
@@ -502,29 +502,31 @@ public class Combo {
             while(hayCombo){
                 for(Iterator<ComboGrupo>itcg = getCombosGrupo().iterator();itcg.hasNext();){
                     cgaux = itcg.next();
-                    int cantidadAcumulada=0;
+                    BigDecimal cantidadAcumulada=BigDecimal.ZERO;
                     boolean isDecrementar=true;
                     for(Iterator<ComboGrupoDetallePrecioProducto> itcdpp = 
                             cgaux.getDetallePreciosProductos().iterator();itcdpp.hasNext();){
                         ComboGrupoDetallePrecioProducto cdpp = itcdpp.next();
-                        cantidadAcumulada+=cdpp.getPaf().getCantidadAux();
+                        cantidadAcumulada=cantidadAcumulada.add(cdpp.getPaf().getCantidadAux());//cantidadAcumulada+=cdpp.getPaf().getCantidadAux();
                     }
-                    if(cantidadAcumulada>=cgaux.getCantidad()){
-                        int cantidadDecrementada=0;
+                    if(cantidadAcumulada.compareTo(cgaux.getCantidad())>=0){//if(cantidadAcumulada>=cgaux.getCantidad()){
+                        BigDecimal cantidadDecrementada=BigDecimal.ZERO;
                         for(Iterator<ComboGrupoDetallePrecioProducto> itcdpp =
                                 cgaux.getDetallePreciosProductos().iterator();itcdpp.hasNext();){
                             ComboGrupoDetallePrecioProducto cdpp = itcdpp.next();
-                            if(cantidadDecrementada==cgaux.getCantidad())
+                            if(cantidadDecrementada.compareTo(cgaux.getCantidad())==0)//if(cantidadDecrementada==cgaux.getCantidad())
                                 break;
-                            if(cantidadDecrementada+cdpp.getPaf().getCantidadAux()<=cgaux.getCantidad()){
-                                cantidadDecrementada+=cdpp.getPaf().getCantidadAux();
+                            if(cantidadDecrementada.add(cdpp.getPaf().getCantidadAux()).compareTo(cgaux.getCantidad())<=0){//if(cantidadDecrementada+cdpp.getPaf().getCantidadAux()<=cgaux.getCantidad()){
+                                cantidadDecrementada = cantidadDecrementada.add(cdpp.getPaf().getCantidadAux());//cantidadDecrementada+=cdpp.getPaf().getCantidadAux();
                                 
                                 cdpp.getPaf().decCantidadAux(cdpp.getPaf().getCantidadAux());
                             }else{
-                                if(cantidadDecrementada==0)
+                                if(cantidadDecrementada.compareTo(BigDecimal.ZERO)==0)//if(cantidadDecrementada==0)
                                     cdpp.getPaf().decCantidadAux(cgaux.getCantidad());
                                 else
-                                    cdpp.getPaf().decCantidadAux(cantidadDecrementada+cdpp.getPaf().getCantidadAux()-cgaux.getCantidad());
+                                    cdpp.getPaf().decCantidad(
+                                            cantidadDecrementada.add(cdpp.getPaf().getCantidadAux()).subtract(cgaux.getCantidad())
+                                    );//cdpp.getPaf().decCantidadAux(cantidadDecrementada+cdpp.getPaf().getCantidadAux()-cgaux.getCantidad());
                                 break;
                             }  
                         }  
@@ -561,26 +563,26 @@ public class Combo {
                     for(Iterator<ComboGrupo> itcg = getCombosGrupo().iterator();itcg.hasNext();){ 
                                         
                             ComboGrupo cg = itcg.next();
-                            int cantidadADecrementar = cg.getCantidad();                    
-                            while(cantidadADecrementar>0){
+                            BigDecimal cantidadADecrementar = cg.getCantidad();                    
+                            while(cantidadADecrementar.compareTo(BigDecimal.ZERO)>0){//while(cantidadADecrementar>0){
                                 int orden=1;
                                 for(Iterator<ComboGrupoDetallePrecioProducto> itcdpp = cg.getDetallePreciosProductos().iterator()
                                     ;itcdpp.hasNext();){
                                     ComboGrupoDetallePrecioProducto cdpp = itcdpp.next();
-                                    int cantidadDecrementada = 0;
-                                    if(cantidadADecrementar==0)
+                                    BigDecimal cantidadDecrementada = BigDecimal.ZERO;
+                                    if(cantidadADecrementar.compareTo(BigDecimal.ZERO)==0)//if(cantidadADecrementar==0)
                                         break;
-                                        if(cantidadADecrementar>=cdpp.getPaf().getCantidad()){
-                                            cantidadADecrementar -=cdpp.getPaf().getCantidad();
-                                            cantidadDecrementada = cdpp.getPaf().getCantidad();
-                                            cdpp.getPaf().setCantidad(0);
+                                    if(cantidadADecrementar.compareTo(cdpp.getPaf().getCantidad())>=0){//if(cantidadADecrementar>=cdpp.getPaf().getCantidad()){
+                                        cantidadADecrementar=cantidadADecrementar.subtract(cdpp.getPaf().getCantidad());//cantidadADecrementar -=cdpp.getPaf().getCantidad();
+                                        cantidadDecrementada=cdpp.getPaf().getCantidad();//cantidadDecrementada = cdpp.getPaf().getCantidad();
+                                        cdpp.getPaf().setCantidad(BigDecimal.ZERO);
 
-                                        }else{
+                                    }else{
 
-                                            cantidadDecrementada = cantidadADecrementar;
-                                            cdpp.getPaf().decCantidad(cantidadADecrementar);
-                                            cantidadADecrementar = 0;
-                                        }
+                                        cantidadDecrementada = cantidadADecrementar;
+                                        cdpp.getPaf().decCantidad(cantidadADecrementar);
+                                        cantidadADecrementar = BigDecimal.ZERO;
+                                    }
                                     if(cg.getMonto().compareTo(BigDecimal.ZERO)>0){
                                         //bonificacionFinal = bonificacionFinal.add(cdpp.getPaf()
                                         //        .getPrecioUnitario().multiply(BigDecimal.valueOf(cantidadDecrementada))
@@ -600,13 +602,13 @@ public class Combo {
                                                             cdpp.getPaf().getPrecioUnitario()
                                                             .multiply(cg.getPorcentaje())
                                                             .divide(BigDecimal.valueOf(100))
-                                                            .multiply(BigDecimal.valueOf(cantidadDecrementada))
+                                                            .multiply(cantidadDecrementada)
                                                     );
-                                                    if(cantidadDecrementada>0)
+                                                    if(cantidadDecrementada.compareTo(BigDecimal.ZERO)>0)//if(cantidadDecrementada>0)
                                                         addComboAbierto(cdpp,cantidadDecrementada,cg.getPorcentaje());    
 
                                     }
-                                    if(cantidadADecrementar==0)
+                                    if(cantidadADecrementar.compareTo(BigDecimal.ZERO)==0)//if(cantidadADecrementar==0)
                                         break;
                                     orden++;
                                 }
@@ -625,8 +627,8 @@ public class Combo {
                 for(Iterator<ComboGrupoDetallePrecioProducto> itcdpp = cg.getDetallePreciosProductos().iterator()
                         ;itcdpp.hasNext();){
                     ComboGrupoDetallePrecioProducto cdpp = itcdpp.next();
-                    int cantidadDecrementada = cdpp.getPaf().getCantidad()/cg.getCantidad();
-                    cdpp.getPaf().decCantidad(cantidadDecrementada*cg.getCantidad());
+                    BigDecimal cantidadDecrementada = cdpp.getPaf().getCantidad().divide(cg.getCantidad()); //cdpp.getPaf().getCantidad()/cg.getCantidad();
+                    cdpp.getPaf().decCantidad();//cdpp.getPaf().decCantidad(cantidadDecrementada*cg.getCantidad());
                     if(cg.getMonto().compareTo(BigDecimal.ZERO)>0){
                         //bonificacionFinal = bonificacionFinal.add(cdpp.getPaf()
                         //        .getPrecioUnitario().multiply(BigDecimal.valueOf(cantidadDecrementada*cg.getCantidad()))

@@ -247,7 +247,7 @@ public class FacturacionService  {
                         hayDetalleGrupo=false;
                         for(Iterator itDetalle = grupo.getGruposDetalle().iterator();itDetalle.hasNext();){
                             ComboGrupoDetalle gDetalle = (ComboGrupoDetalle)itDetalle.next();
-                            if(paf.getCantidad()<=0)
+                            if(paf.getCantidad().compareTo(BigDecimal.ZERO)<=0)//if(paf.getCantidad()<=0)
                                 continue;
                             if(gDetalle.getProducto()!=null){
                                 if(gDetalle.getProducto().equals(paf.getProducto())){

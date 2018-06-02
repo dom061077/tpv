@@ -15,8 +15,8 @@ public class ProductoAgrupadoEnFactura {
     private Producto producto;
     private BigDecimal precioUnitario;
     private BigDecimal precioUnitarioBase;
-    private int cantidad;
-    private int cantidadAux;
+    private BigDecimal cantidad;
+    private BigDecimal cantidadAux;
 
     /**
      * @return the producto
@@ -46,33 +46,33 @@ public class ProductoAgrupadoEnFactura {
         this.precioUnitario = precioUnitario;
     }
     
-    public void incCantidad(int inc){
-        cantidad+=inc;
+    public void incCantidad(BigDecimal inc){
+        cantidad=cantidad.add(inc);//cantidad+=inc;
     }
     
-    public void decCantidad(int dec){
-        cantidad-=dec;
+    public void decCantidad(BigDecimal dec){
+        cantidad=dec.subtract(dec);//cantidad-=dec;
     }
     
 
     /**
      * @return the cantidad
      */
-    public int getCantidad() {
+    public BigDecimal getCantidad() {
         return cantidad;
     }
 
     /**
      * @param cantidad the cantidad to set
      */
-    public void setCantidad(int cantidad) {
+    public void setCantidad(BigDecimal cantidad) {
         this.cantidad = cantidad;
     }
 
     /**
      * @return the cantidadAux
      */
-    public int getCantidadAux() {
+    public BigDecimal getCantidadAux() {
         return cantidadAux;
     }
     
@@ -80,8 +80,8 @@ public class ProductoAgrupadoEnFactura {
         cantidadAux = cantidad;
     }
     
-    public void decCantidadAux(int dec){
-        cantidadAux-=dec;
+    public void decCantidadAux(BigDecimal dec){
+        cantidadAux=cantidadAux.subtract(dec);//cantidadAux-=dec;
     }
 
     /**
