@@ -30,8 +30,14 @@ import javafx.scene.layout.GridPane;
 import javafx8tpv1.TabPanePrincipalController;
 import org.apache.log4j.Logger;
 import com.tpv.principal.Context;
+import com.tpv.principal.LineaTicketData;
 import java.math.RoundingMode;
 import java.util.Iterator;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.layout.StackPane;
 
 /**
  *|
@@ -49,6 +55,7 @@ public class PagoTicketController implements Initializable {
     private boolean tieneCuponPago;
     private FormaPago formaPago;
     private TabPanePrincipalController tabPaneController;
+    private ListProperty<LineaInteresTarjetaData> intBonifData;
     
     PagoService pagoService = new PagoService();
     FacturacionService factService = new FacturacionService();
@@ -82,6 +89,9 @@ public class PagoTicketController implements Initializable {
             
     @FXML
     private TableView tableViewPagos;
+    
+    @FXML
+    private TableView tableViewIntTarjeta;
                       
     
     @FXML
@@ -112,10 +122,10 @@ public class PagoTicketController implements Initializable {
     private TableColumn cuotasColumn;
     
     @FXML
-    private TableColumn interesBonifColumn;
+    private TableColumn porcentajeColumn;
     
     @FXML
-    private TableColumn montoInteresBonifColumn;
+    private TableColumn descripcionColumn;
     
     @FXML
     private TableColumn totalPagoColumn;
@@ -131,7 +141,10 @@ public class PagoTicketController implements Initializable {
     private Label tituloFormaPagoLabel;
     
     @FXML
-    private Label stackPaneIntereses;
+    private StackPane stackPaneIntereses;
+    
+    
+    
     
     
     public void configurarInicio(){
@@ -168,6 +181,11 @@ public class PagoTicketController implements Initializable {
         totalVenta.setText(df.format(Context.getInstance().currentDMTicket().getTotalTicket()));
         //saldoPagar.setText(df.format(Context.getInstance().currentDMTicket().getTotalTicket().subtract(Context.getInstance().currentDMTicket().getTotalPagos())));
         textFieldMonto.setText(Context.getInstance().currentDMTicket().getSaldo().toString());
+        textFieldCantidadCuotas.setText("");
+        textFieldNroCupon.setText("");
+        textFieldNroTarjeta.setText("");
+        
+        
         bonificaciones.setText(df.format(Context.getInstance().currentDMTicket().getBonificaciones()));
         saldoPagar.setText(Context.getInstance().currentDMTicket().getFormatSaldo());        
         bonificacionPorPagoTotal.setText(Context.getInstance().currentDMTicket().getFormatBonificacionPorPagoTotal());
@@ -297,6 +315,34 @@ public class PagoTicketController implements Initializable {
         
         Platform.runLater(() -> {
 
+            tableViewIntTarjeta.setOnKeyPressed(keyEvent->{
+                if ( keyEvent.getCode() == KeyCode.UP ){
+                    int index;
+                    tableViewIntTarjeta.getSelectionModel().selectPrevious();
+                    index = tableViewIntTarjeta.getSelectionModel().getSelectedIndex();
+                    tableViewIntTarjeta.scrollTo(index);
+                }
+                if ( keyEvent.getCode() == KeyCode.DOWN ){
+                    int index;
+                    tableViewIntTarjeta.getSelectionModel().selectNext();
+                    index = tableViewIntTarjeta.getSelectionModel().getSelectedIndex();
+                    tableViewIntTarjeta.scrollTo(index);
+                }
+                if ( keyEvent.getCode() == KeyCode.ESCAPE){
+                    stackPaneIntereses.setVisible(false);
+                    textFieldCantidadCuotas.setDisable(false);
+                    tabPaneController.repeatFocus(textFieldCantidadCuotas);
+                }
+                if (keyEvent.getCode() == KeyCode.ENTER){
+                    stackPaneIntereses.setVisible(false);
+                    textFieldCantidadCuotas.setDisable(false);
+                    textFieldCantidadCuotas.setText( ""+((LineaInteresTarjetaData)tableViewIntTarjeta.getSelectionModel().getSelectedItem()).getCuotas() );
+                    tabPaneController.repeatFocus(textFieldCantidadCuotas);
+                }
+                keyEvent.consume();
+                return;                
+                
+            });
             
             textFieldTipoPago.setOnKeyPressed(keyEvent -> {
                 if(keyEvent.getCode() == KeyCode.SUBTRACT){
@@ -370,18 +416,20 @@ public class PagoTicketController implements Initializable {
                     return;
                 }
                 if(keyEvent.getCode() == KeyCode.ENTER){
-                    if (formaPago.getMaxiCuotas()>0){
+                    if (formaPago.getInteresesTarjeta().size()>0){
+                        cargarDatosTableViewInteresesTarjeta();
                         stackPaneIntereses.setVisible(true);
-                        
-                        --dffd-d-f-fd
-                    }
-                    if(textFieldCantidadCuotas.isVisible()){
-                        textFieldCantidadCuotas.setDisable(false);
-                        textFieldCantidadCuotas.requestFocus();
+                        tableViewIntTarjeta.getSelectionModel().select(0);
+                        tabPaneController.repeatFocus(tableViewIntTarjeta);
                     }else{
-                        agregarLineaPago();
-                        refrescarTextFieldSaldo();
-                        scrollDown();
+                        if(textFieldCantidadCuotas.isVisible()){
+                            textFieldCantidadCuotas.setDisable(false);
+                            textFieldCantidadCuotas.requestFocus();
+                        }else{
+                            agregarLineaPago();
+                            refrescarTextFieldSaldo();
+                            scrollDown();
+                        }
                     }
                     keyEvent.consume();
                     return;
@@ -500,12 +548,7 @@ public class PagoTicketController implements Initializable {
         
     }
     
-    private void cargarInteresesBonif(){
-        for(Iterator<InteresTarjeta> it = formaPago.getInteresesTarjeta().iterator();it.hasNext();){
-            InteresTarjeta intTarj = it.next();
-        }
-    }
-    
+   
     private void agregarLineaPago(){
         //BigDecimal pagoParcial = new BigDecimal(textFieldMonto.getText());
         //pagoParcial = pagoParcial.add(Context.getInstance().currentDMTicket().getTotalPagos());
@@ -600,19 +643,38 @@ public class PagoTicketController implements Initializable {
         cuotasColumn.setCellValueFactory(new PropertyValueFactory<LineaPagoData,Integer>("cuotas"));
         cuotasColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
         
-        interesBonifColumn.setCellValueFactory(new PropertyValueFactory<LineaPagoData,Integer>("interesBonif"));
-        interesBonifColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+        descripcionColumn.setCellValueFactory(new PropertyValueFactory<LineaPagoData,Integer>("descripcion"));
+        descripcionColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
         
-        montoInteresBonifColumn.setCellValueFactory(new PropertyValueFactory<LineaPagoData,Integer>("montoInteresesBonif"));
-        montoInteresBonifColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+        porcentajeColumn.setCellValueFactory(new PropertyValueFactory<LineaPagoData,Integer>("porcentaje"));
+        porcentajeColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
         
         totalPagoColumn.setCellValueFactory(new PropertyValueFactory<LineaPagoData,Integer>("totalPago"));
         totalPagoColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+        
+        //inicializo el data del tableview de intereses y bonificaciones
+        ObservableList<LineaInteresTarjetaData> innerList = FXCollections.observableArrayList();
+        intBonifData = new SimpleListProperty<>(innerList);
+        tableViewIntTarjeta.setItems(intBonifData);
+        
                 
     }
     
-    private void agregarDatosTableViewInteresesBonif(){
-        for(Iterator<InteresTarjeta> it = formaPago.getBonificacionEnFormaPago(0, BigDecimal.ONE))
+    private void cargarDatosTableViewInteresesTarjeta(){
+    /*public LineaInteresTarjetaData(int cuotas
+                ,String Descripcion
+                ,BigDecimal porcentaje
+                ,BigDecimal totalPago)
+            */
+        BigDecimal totalPago = new BigDecimal(textFieldMonto.getText());
+        tableViewIntTarjeta.getItems().clear();
+        for(Iterator<InteresTarjeta> it=formaPago.getInteresesTarjeta().iterator();it.hasNext();){
+            InteresTarjeta intTarj = it.next();
+            tableViewIntTarjeta.getItems().add(new LineaInteresTarjetaData(
+                    intTarj.getCuota(),intTarj.getTipo().toString()
+                    ,intTarj.getPorcentaje(),totalPago.add(intTarj.getMonto(totalPago)) )
+            );
+        }
     }
             
 

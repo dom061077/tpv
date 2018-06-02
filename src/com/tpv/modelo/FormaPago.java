@@ -87,7 +87,12 @@ public class FormaPago {
      * @return the interesesTarjeta
      */
     public List<InteresTarjeta> getInteresesTarjeta() {
+        //return interesesTarjeta;
+        Collections.sort(interesesTarjeta,(o1,o2)->
+            o1.getCuota()-o2.getCuota()
+        );
         return interesesTarjeta;
+        
     }
 
     /**
@@ -102,7 +107,7 @@ public class FormaPago {
         BigDecimal bonifAux = BigDecimal.ZERO;
         for(Iterator<InteresTarjeta> it = interesesTarjeta.iterator();it.hasNext();){
             InteresTarjeta intTarj = it.next();
-            bonifAux = monto.multiply(intTarj.getBonificacion(cantCuotas))
+            bonifAux = monto.multiply(intTarj.getPorcentajeBonificacion(cantCuotas))
                     .divide(BigDecimal.valueOf(100));
             bonificaciones=bonificaciones.add(bonifAux);
         }
@@ -115,7 +120,7 @@ public class FormaPago {
         BigDecimal interesAux = BigDecimal.ZERO;
         for(Iterator<InteresTarjeta> it = interesesTarjeta.iterator();it.hasNext();){
             InteresTarjeta intTarj = it.next();
-            interesAux = monto.multiply(intTarj.getInteres(cantCuotas))
+            interesAux = monto.multiply(intTarj.getPorcentajeInteres(cantCuotas))
                         .divide(BigDecimal.valueOf(100));
             intereses=intereses.add(interesAux);
         }
@@ -123,10 +128,6 @@ public class FormaPago {
         return intereses;
     }
     
-    public List<InteresTarjeta> getInteresesBonifEnFormaPago(){
-        return Collections.sort(interesesTarjeta,(o1,o2)->{
-            return true;
-        });
-    }
+    
     
 }

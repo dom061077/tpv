@@ -5,9 +5,12 @@
  */
 package com.tpv.modelo;
 
+import com.tpv.modelo.enums.InteresBonifTarjetaEnum;
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -29,23 +32,20 @@ public class InteresTarjeta {
     @Column(name="CUOTA")
     private int cuota;
     
-    @Column(name="INTERESTARJETA")
-    private BigDecimal interesTarjeta;
+    @Column(name="PORCENTAJE")
+    private BigDecimal porcentaje;
     
-    @Column(name="DESDEINTTARJETA")
-    private java.sql.Date desdeIntTarjeta;
+    @Column(name = "TIPO",nullable = false)
+    @Enumerated(EnumType.STRING)
+    private InteresBonifTarjetaEnum tipo;
     
-    @Column(name="HASTAINTTARJETA")
-    private java.sql.Date hastaIntTarjeta;
+    @Column(name = "VIGENCIADESDE", nullable = false)
+    private java.sql.Date vigenciaDesde;
     
-    @Column(name="BONIFICATARJETA")
-    private BigDecimal bonificaTarjeta;
-    
-    @Column(name="DESDEBONTARJETA")
-    private java.sql.Date desdeBonTarjeta;
+    @Column(name = "VIGENCIAHASTA", nullable = false)
+    private java.sql.Date vigenciaHasta;
 
-    @Column(name="HASTABONTARJETA")
-    private java.sql.Date hastaBonTarjeta;
+
     
     @ManyToOne
     @JoinColumn(name = "idFORMAPAGO"
@@ -85,89 +85,6 @@ public class InteresTarjeta {
         this.cuota = cuota;
     }
 
-    /**
-     * @return the interesTarjeta
-     */
-    public BigDecimal getInteresTarjeta() {
-        return interesTarjeta;
-    }
-
-    /**
-     * @param interesTarjeta the interesTarjeta to set
-     */
-    public void setInteresTarjeta(BigDecimal interesTarjeta) {
-        this.interesTarjeta = interesTarjeta;
-    }
-
-    /**
-     * @return the desdeIntTarjeta
-     */
-    public java.sql.Date getDesdeIntTarjeta() {
-        return desdeIntTarjeta;
-    }
-
-    /**
-     * @param desdeIntTarjeta the desdeIntTarjeta to set
-     */
-    public void setDesdeIntTarjeta(java.sql.Date desdeIntTarjeta) {
-        this.desdeIntTarjeta = desdeIntTarjeta;
-    }
-
-    /**
-     * @return the hastaIntTarjeta
-     */
-    public java.sql.Date getHastaIntTarjeta() {
-        return hastaIntTarjeta;
-    }
-
-    /**
-     * @param hastaIntTarjeta the hastaIntTarjeta to set
-     */
-    public void setHastaIntTarjeta(java.sql.Date hastaIntTarjeta) {
-        this.hastaIntTarjeta = hastaIntTarjeta;
-    }
-
-    /**
-     * @return the bonificaTarjeta
-     */
-    public BigDecimal getBonificaTarjeta() {
-        return bonificaTarjeta;
-    }
-
-    /**
-     * @param bonificaTarjeta the bonificaTarjeta to set
-     */
-    public void setBonificaTarjeta(BigDecimal bonificaTarjeta) {
-        this.bonificaTarjeta = bonificaTarjeta;
-    }
-
-    /**
-     * @return the desdeBonTarjeta
-     */
-    public java.sql.Date getDesdeBonTarjeta() {
-        return desdeBonTarjeta;
-    }
-
-    /**
-     * @param desdeBonTarjeta the desdeBonTarjeta to set
-     */
-    public void setDesdeBonTarjeta(java.sql.Date desdeBonTarjeta) {
-        this.desdeBonTarjeta = desdeBonTarjeta;
-    }
-
-    /**
-     * @return the hastaBonTarjeta
-     */
-    public java.sql.Date getHastaBonTarjeta() {
-        return hastaBonTarjeta;
-    }
-
-    /**
-     * @param hastaBonTarjeta the hastaBonTarjeta to set
-     */
-    public void setHastaBonTarjeta(java.sql.Date hastaBonTarjeta) {
-        this.hastaBonTarjeta = hastaBonTarjeta;
-    }
 
     /**
      * @return the formaPago
@@ -184,26 +101,122 @@ public class InteresTarjeta {
     }
     
     
+    
+    
+    
     @Transient
-    public BigDecimal getInteres(int cantCuotas){
+    public BigDecimal getPorcentajeInteres(int cantCuotas){
         BigDecimal interes=BigDecimal.ZERO;
-        if(desdeIntTarjeta.compareTo(fechaHoy)<=0 &&
-            hastaIntTarjeta.compareTo(fechaHoy)>=0 &&
-            cuota == cantCuotas){
-            interes = interesTarjeta;
+        if(tipo == InteresBonifTarjetaEnum.INTERES){
+            if(vigenciaDesde.compareTo(fechaHoy)<=0 &&
+                vigenciaHasta.compareTo(fechaHoy)>=0 &&
+                cuota == cantCuotas){
+                interes = getPorcentaje();
+            }
         }
         return interes;
     } 
     
+    public BigDecimal getMontoInteres(BigDecimal monto){
+        BigDecimal interes = BigDecimal.ZERO;
+        if(tipo == InteresBonifTarjetaEnum.INTERES){
+            if(vigenciaDesde.compareTo(fechaHoy)<=0 &&
+                vigenciaHasta.compareTo(fechaHoy)>=0){
+                interes = interes.multiply(getPorcentaje()).divide(BigDecimal.valueOf(100));
+            }
+        }
+        return interes;
+    }
+    
     @Transient
-    public BigDecimal getBonificacion(int cantCuotas){
+    public BigDecimal getPorcentajeBonificacion(int cantCuotas){
         BigDecimal bonificacion=BigDecimal.ZERO;
-        if(desdeBonTarjeta.compareTo(fechaHoy)<=0 &&
-            hastaBonTarjeta.compareTo(fechaHoy)>=0 &&
-            cuota == cantCuotas){
-            bonificacion = bonificaTarjeta;
+        if(tipo == InteresBonifTarjetaEnum.BONIFICACION){
+            if(vigenciaDesde.compareTo(fechaHoy)<=0 &&
+                vigenciaHasta.compareTo(fechaHoy)>=0 &&
+                cuota == cantCuotas){
+                bonificacion = getPorcentaje();
+            }
         }
         return bonificacion;
+    }
+    
+    public BigDecimal getMontoBonificacion(BigDecimal monto){
+        BigDecimal bonificacion = BigDecimal.ZERO;
+                if(tipo == InteresBonifTarjetaEnum.BONIFICACION){
+            if(vigenciaDesde.compareTo(fechaHoy)<=0 &&
+                vigenciaHasta.compareTo(fechaHoy)>=0){
+                bonificacion = monto.multiply(getPorcentaje()).divide(BigDecimal.valueOf(100));
+            }
+        }
+
+        return bonificacion;
+    }
+    
+    public BigDecimal getMonto(BigDecimal monto){
+        BigDecimal montoResultante = BigDecimal.ZERO;
+            if(vigenciaDesde.compareTo(fechaHoy)<=0 &&
+                vigenciaHasta.compareTo(fechaHoy)>=0){
+                montoResultante = monto.multiply(getPorcentaje()).divide(BigDecimal.valueOf(100));
+        }
+
+        return montoResultante.setScale(2,BigDecimal.ROUND_HALF_EVEN);
+    }
+
+    /**
+     * @return the tipo
+     */
+    public InteresBonifTarjetaEnum getTipo() {
+        return tipo;
+    }
+
+    /**
+     * @param tipo the tipo to set
+     */
+    public void setTipo(InteresBonifTarjetaEnum tipo) {
+        this.tipo = tipo;
+    }
+
+    /**
+     * @return the vigenciaDesde
+     */
+    public java.sql.Date getVigenciaDesde() {
+        return vigenciaDesde;
+    }
+
+    /**
+     * @param vigenciaDesde the vigenciaDesde to set
+     */
+    public void setVigenciaDesde(java.sql.Date vigenciaDesde) {
+        this.vigenciaDesde = vigenciaDesde;
+    }
+
+    /**
+     * @return the vigenciaHasta
+     */
+    public java.sql.Date getVigenciaHasta() {
+        return vigenciaHasta;
+    }
+
+    /**
+     * @param vigenciaHasta the vigenciaHasta to set
+     */
+    public void setVigenciaHasta(java.sql.Date vigenciaHasta) {
+        this.vigenciaHasta = vigenciaHasta;
+    }
+
+    /**
+     * @return the porcentaje
+     */
+    public BigDecimal getPorcentaje() {
+        return porcentaje;
+    }
+
+    /**
+     * @param porcentaje the porcentaje to set
+     */
+    public void setPorcentaje(BigDecimal porcentaje) {
+        this.porcentaje = porcentaje;
     }
     
     
