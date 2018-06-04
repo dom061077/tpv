@@ -628,7 +628,7 @@ public class Combo {
                         ;itcdpp.hasNext();){
                     ComboGrupoDetallePrecioProducto cdpp = itcdpp.next();
                     BigDecimal cantidadDecrementada = cdpp.getPaf().getCantidad().divide(cg.getCantidad()); //cdpp.getPaf().getCantidad()/cg.getCantidad();
-                    cdpp.getPaf().decCantidad();//cdpp.getPaf().decCantidad(cantidadDecrementada*cg.getCantidad());
+                    cdpp.getPaf().decCantidad(cantidadDecrementada.multiply(cg.getCantidad()));//cdpp.getPaf().decCantidad(cantidadDecrementada*cg.getCantidad());
                     if(cg.getMonto().compareTo(BigDecimal.ZERO)>0){
                         //bonificacionFinal = bonificacionFinal.add(cdpp.getPaf()
                         //        .getPrecioUnitario().multiply(BigDecimal.valueOf(cantidadDecrementada*cg.getCantidad()))
@@ -641,17 +641,17 @@ public class Combo {
                                     .multiply(BigDecimal.valueOf(cantidadDecrementada*cg.getCantidad()))
                             );*/
                         //else{
-                            BigDecimal porcien = BigDecimal.valueOf(cg.getPorcentaje().doubleValue()/cg.getCantidad());
+                            BigDecimal porcien = cg.getPorcentaje().divide(cg.getCantidad());//BigDecimal porcien = BigDecimal.valueOf(cg.getPorcentaje().doubleValue()/cg.getCantidad());
                             /*PARA CASOS DE NO COMBINADOS USAR LA MARCA DE COMBINACION DEL COMBO PARA 
                                 DIVIDIR EL PORCENTAJE EN COMBOBRUPO POR LA CANTIDAD EN EL COMBOGRUPO
                             */
                             bonificacionFinal = bonificacionFinal.add(
                                     cdpp.getPaf().getPrecioUnitario().multiply(porcien)
                                     .divide(BigDecimal.valueOf(100))
-                                    .multiply(BigDecimal.valueOf(cantidadDecrementada*cg.getCantidad()))
+                                    .multiply(cantidadDecrementada).multiply(cg.getCantidad())//.multiply(BigDecimal.valueOf(cantidadDecrementada*cg.getCantidad()))
                             );
-                            if(cantidadDecrementada>0)
-                                addComboAbierto(cdpp,cantidadDecrementada*cg.getCantidad(),porcien);    
+                           if(cantidadDecrementada.compareTo(BigDecimal.ZERO)>0) //if(cantidadDecrementada>0)
+                                addComboAbierto(cdpp,cantidadDecrementada.multiply(cg.getCantidad()),porcien);//addComboAbierto(cdpp,cantidadDecrementada*cg.getCantidad(),porcien);    
                         //}
                                 
                     }
