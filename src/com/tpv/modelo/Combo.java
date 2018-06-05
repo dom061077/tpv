@@ -7,6 +7,7 @@ package com.tpv.modelo;
 
 import com.tpv.modelo.enums.ComboPrioridadEnum;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -601,7 +602,7 @@ public class Combo {
                                                     bonificacionFinal = bonificacionFinal.add(
                                                             cdpp.getPaf().getPrecioUnitario()
                                                             .multiply(cg.getPorcentaje())
-                                                            .divide(BigDecimal.valueOf(100))
+                                                            .divide(BigDecimal.valueOf(100),RoundingMode.HALF_EVEN)
                                                             .multiply(cantidadDecrementada)
                                                     );
                                                     if(cantidadDecrementada.compareTo(BigDecimal.ZERO)>0)//if(cantidadDecrementada>0)
@@ -627,7 +628,7 @@ public class Combo {
                 for(Iterator<ComboGrupoDetallePrecioProducto> itcdpp = cg.getDetallePreciosProductos().iterator()
                         ;itcdpp.hasNext();){
                     ComboGrupoDetallePrecioProducto cdpp = itcdpp.next();
-                    BigDecimal cantidadDecrementada = cdpp.getPaf().getCantidad().divide(cg.getCantidad()); //cdpp.getPaf().getCantidad()/cg.getCantidad();
+                    BigDecimal cantidadDecrementada = cdpp.getPaf().getCantidad().divide(cg.getCantidad(),RoundingMode.HALF_EVEN); //cdpp.getPaf().getCantidad()/cg.getCantidad();
                     cdpp.getPaf().decCantidad(cantidadDecrementada.multiply(cg.getCantidad()));//cdpp.getPaf().decCantidad(cantidadDecrementada*cg.getCantidad());
                     if(cg.getMonto().compareTo(BigDecimal.ZERO)>0){
                         //bonificacionFinal = bonificacionFinal.add(cdpp.getPaf()
@@ -641,7 +642,7 @@ public class Combo {
                                     .multiply(BigDecimal.valueOf(cantidadDecrementada*cg.getCantidad()))
                             );*/
                         //else{
-                            BigDecimal porcien = cg.getPorcentaje().divide(cg.getCantidad());//BigDecimal porcien = BigDecimal.valueOf(cg.getPorcentaje().doubleValue()/cg.getCantidad());
+                            BigDecimal porcien = cg.getPorcentaje().divide(cg.getCantidad(),RoundingMode.HALF_EVEN);//BigDecimal porcien = BigDecimal.valueOf(cg.getPorcentaje().doubleValue()/cg.getCantidad());
                             /*PARA CASOS DE NO COMBINADOS USAR LA MARCA DE COMBINACION DEL COMBO PARA 
                                 DIVIDIR EL PORCENTAJE EN COMBOBRUPO POR LA CANTIDAD EN EL COMBOGRUPO
                             */

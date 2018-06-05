@@ -22,14 +22,14 @@ import org.apache.log4j.Logger;
  */
 public class ClienteService {
     Logger log = Logger.getLogger(ClienteService.class);
-    public Cliente getClientePorCodYDni(int filtroCodigo) throws TpvException{
+    public Cliente getClientePorCodODniOCuit(int filtroCodigo) throws TpvException{
         log.info("Capa de servicios, recuperar cliente por parametro: "+filtroCodigo);
         Cliente cliente = null;
         EntityManager em = Connection.getEm();
         try{
             
-            Query q = em.createQuery("FROM Cliente c WHERE c.id = :id or c.dni = :dni").setParameter("id"
-                    ,filtroCodigo).setParameter("dni", filtroCodigo);
+            Query q = em.createQuery("FROM Cliente c WHERE c.id = :id or c.dni = :dni or c.cuit = :cuit").setParameter("id"
+                    ,filtroCodigo).setParameter("dni", filtroCodigo).setParameter("cuit", filtroCodigo);
             cliente = (Cliente)q.getSingleResult();
             log.info("Cliente recuperado "+cliente.getCuit()+" - "+cliente.getRazonSocial());
         }catch(NoResultException e){

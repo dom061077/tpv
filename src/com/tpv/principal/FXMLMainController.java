@@ -228,9 +228,7 @@ public class FXMLMainController implements Initializable {
             textFieldCodCliente.setText(""+Context.getInstance().currentDMTicket().getCodigoClienteSelecEnBuscarPorDesc());
             Context.getInstance().currentDMTicket().setCodigoClienteSelecEnBuscarPorDesc(0);
         }
-                
-        
-
+        labelCantidad.setVisible(false);
         
     }
     
@@ -308,6 +306,7 @@ public class FXMLMainController implements Initializable {
                     }
                     
                 }
+                keyEvent.consume();
             });
             
             
@@ -322,12 +321,12 @@ public class FXMLMainController implements Initializable {
                         labelCantidad.setVisible(false);
                         textFieldCodCliente.setVisible(true);
                         labelCliente.setVisible(true);
+                        labelSubTituloIngresos.setText("Ingreso de Cliente");
                         tabPaneController.repeatFocus(textFieldCodCliente);
                     }
                 }
                 if(keyEvent.getCode() == KeyCode.F3){
                     tabPaneController.gotoProducto();
-                    keyEvent.consume();
                 }
                 if(keyEvent.getCode() == KeyCode.ENTER){
                     labelCantidadIngresada.setVisible(false);
@@ -336,7 +335,6 @@ public class FXMLMainController implements Initializable {
                     }
                     if(textFieldProducto.getText().trim().length()>0){
                         enviarComandoLineaTicket();
-                        
                         scrollDown();
                     }else{
                         if(Context.getInstance().currentDMTicket().getDetalle().size()>0)
@@ -346,9 +344,7 @@ public class FXMLMainController implements Initializable {
                                     ,"No es posible ir al pago con un ticket sin Productos"
                                     ,ButtonType.OK);
                             alert.showAndWait();
-                            
                         }
-                            
                     }
                 }
                 int index=0;
@@ -414,7 +410,6 @@ public class FXMLMainController implements Initializable {
                         Context.getInstance().currentDMTicket().setTipoTituloSupervisor(TipoTituloSupervisorEnum.HABILITAR_NEGATIVO);
                         tabPaneController.gotoSupervisor();
                     }
-                    keyEvent.consume();
                 }
                 
                 if(keyEvent.getCode() == KeyCode.F6){
@@ -447,7 +442,8 @@ public class FXMLMainController implements Initializable {
                 if(keyEvent.getCode() == KeyCode.F3)
                     tabPaneController.gotoProducto();
                     
-                
+                keyEvent.consume();
+
             });
 
         });
@@ -622,7 +618,7 @@ public class FXMLMainController implements Initializable {
     public void traerCliente(){
         
         try{
-            Cliente cliente = clienteService.getClientePorCodYDni(Integer.parseInt(textFieldCodCliente.getText()));
+            Cliente cliente = clienteService.getClientePorCodODniOCuit(Integer.parseInt(textFieldCodCliente.getText()));
             if(cliente!=null){
                 nombreCliente.setText(cliente.getRazonSocial());
                 nombreCliente.setVisible(true);

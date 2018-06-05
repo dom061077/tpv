@@ -26,7 +26,7 @@ import javax.persistence.Table;
 public class FacturaDetalleComboAbierto {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="idFACTURASDETALLECOMOSABIERTO")
+    @Column(name="idFACTURASDETALLECOMBOSABIERTO")
     private Long id;
     
     @Column(name="cantidad")

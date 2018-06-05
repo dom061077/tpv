@@ -155,6 +155,29 @@ public class FacturacionService  {
         }
     }
     
+    public void cancelarFacturaSupervisor(Long id) throws TpvException{
+        log.info("Capa de servicios, cancelar factura por supervisor");
+        Factura factura;
+        EntityManager em = Connection.getEm();
+        EntityTransaction tx = null;
+        try{
+            tx = em.getTransaction();
+            tx.begin();
+            factura = em.find(Factura.class, id);
+            factura.setEstado(FacturaEstadoEnum.ANULADA_SUPERVISOR);
+            tx.commit();
+            log.info("Factura con id: "+factura.getId()+", Nro. factura: "
+                      +factura.getNumeroComprobante());   
+        }catch(RuntimeException e){
+            tx.rollback();
+            log.error("Error en la capa de servicios al cancelar la factura",e);
+            throw new TpvException("Error en la capa de servicios al cancelar la factura.");
+        }finally{
+            em.clear();
+        }
+        
+    }
+    
     public void cancelarFactura(Long id) throws TpvException{
         log.info("Capa de servicios, cancelar factura");
         Factura factura;

@@ -188,10 +188,10 @@ public class CombosController implements Initializable{
                         );
                 totalBonificado = totalBonificado.add(fdc.getBonificacion());
                 listCombos.add(fdcd);
-                totalBonificaciones.setText(df.format(totalBonificado));
                 
             }
                 totalTicket.setText(df.format(Context.getInstance().currentDMTicket().getTotalTicket()));
+                totalBonificaciones.setText(df.format(totalBonificado));
                 terminaPagando.setText(df.format(Context.getInstance().currentDMTicket().getTotalTicket().subtract(totalBonificado)));
             
         }catch(TpvException e){
