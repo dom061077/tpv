@@ -513,10 +513,10 @@ public class Factura {
             if(paf.getProducto().equals(fd.getProducto())){
                 if(fd.getSubTotal().compareTo(BigDecimal.ZERO)<0)
                     //TODO permitir cantidades con decimales
-                    paf.decCantidad(fd.getCantidad().intValue());
+                    paf.decCantidad(fd.getCantidad());//paf.decCantidad(fd.getCantidad().intValue());
                 else
                     //TODO permitir cantidades con decimales
-                    paf.incCantidad(fd.getCantidad().intValue());
+                    paf.incCantidad(fd.getCantidad());
                 return;
             }
         }
@@ -524,7 +524,7 @@ public class Factura {
         paf.setPrecioUnitario(fd.getPrecioUnitario());
         paf.setPrecioUnitarioBase(fd.getPrecioUnitarioBase());
         paf.setProducto(fd.getProducto());
-        paf.setCantidad(fd.getCantidad().intValue());
+        paf.setCantidad(fd.getCantidad());
         getProductosAgrupados().add(paf);
     }
     
