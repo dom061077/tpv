@@ -9,7 +9,10 @@ import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Checkout;
 import com.tpv.modelo.Usuario;
 import com.tpv.util.Connection;
+import java.math.BigInteger;
 import java.net.SocketException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
@@ -34,13 +37,14 @@ public class UsuarioService {
             /*para probar que el objeto se refresque directo desde la base de datos*/
         
         try{
-            query = em.createQuery("FROM Usuario u WHERE u.nombre = :nombre").setParameter("nombre", nombre);
+            query = em.createQuery("FROM Usuario u WHERE u.nombre = :nombre AND u.password = :clave")
+                    .setParameter("nombre", nombre).setParameter("clave", getMD5(password));
             //query.setHint("org.hibernate.cacheMode",org.hibernate.CacheMode.IGNORE);
             usuario = (Usuario) query.getSingleResult();
-            if(usuario.getPassword().compareTo(password)==0)
-                    flagReturn=true;
-            else
-                flagReturn=false;
+            //if(usuario.getPassword().compareTo(password)==0)
+            //        flagReturn=true;
+            //else
+            //    flagReturn=false;
         }catch(NoResultException e){
             log.info("No se encontró ningún usuario con nombre: "+nombre+" password: "+password);
         }catch(RuntimeException e){
@@ -49,10 +53,7 @@ public class UsuarioService {
         }finally{
             em.clear();
         }
-        if(flagReturn)
-            return usuario;
-        else
-            return null;
+        return usuario;
     }
     
     public Usuario authenticarSupervisor(String nombre, String password)throws TpvException{
@@ -114,4 +115,34 @@ public class UsuarioService {
         }
         return null;
     }
+    
+    private String getMD5(String clave){
+        String md5 = "";
+        try{
+            MessageDigest digest = MessageDigest.getInstance("MD5");
+            digest.update(clave.getBytes(),0,clave.length());
+            md5 = new BigInteger(1,digest.digest()).toString(16);
+        }catch(NoSuchAlgorithmException e){
+            
+        }
+        return md5;
+    }
+    
+    public static void main(String[] args){
+        String md5 = "";
+        String message = "luque123";
+
+         
+        message = message;//adding a salt to the string before it gets hashed.
+        try {
+            MessageDigest digest = MessageDigest.getInstance("MD5");//Create MessageDigest object for MD5
+            digest.update(message.getBytes(), 0, message.length());//Update input string in message digest
+            md5 = new BigInteger(1, digest.digest()).toString(16);//Converts message digest value in base 16 (hex)
+  
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        System.out.println("MD5 resultante: "+md5);
+    }
+    
 }

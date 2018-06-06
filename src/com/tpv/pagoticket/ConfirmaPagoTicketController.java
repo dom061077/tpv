@@ -125,6 +125,22 @@ public class ConfirmaPagoTicketController implements Initializable{
     private Label ingBrutosLabel;
 
     @FXML
+    private Label labelBaseImponible;
+    
+    @FXML
+    private Label labelIVA;
+    
+    @FXML
+    private Label labelImpuestoInterno;
+    
+    @FXML
+    private Label labelExentoIVA;
+    
+    @FXML
+    private Label labelRetIngBrutos;
+    
+    
+    @FXML
     private TabPanePrincipalController tabPaneController;
     
             
@@ -133,7 +149,20 @@ public class ConfirmaPagoTicketController implements Initializable{
             
             log.info("Ingresando a la confirmación de pago");
             DecimalFormat df = new DecimalFormat("##,##0.00");
-            
+            if(Context.getInstance().currentDMTicket().getCliente()==null){
+                labelBaseImponible.setVisible(false);
+                labelExentoIVA.setVisible(false);
+                labelIVA.setVisible(false);
+                labelImpuestoInterno.setVisible(false);
+                labelRetIngBrutos.setVisible(false);
+                totalNetoLabel.setVisible(false);
+                totalExentoIVALabel.setVisible(false);
+                totalIVALabel.setVisible(false);
+                totalInternoLabel.setVisible(false);
+                ingBrutosLabel.setVisible(false);
+            }
+                
+                
             totalPagosLabel.setText(df.format(Context.getInstance().currentDMTicket().getTotalPagos()));
             totalBonificacionesLabel.setText(df.format(Context.getInstance().currentDMTicket().getBonificaciones()));
             totalTicketLabel.setText(df.format(Context.getInstance().currentDMTicket().getTotalGral()));

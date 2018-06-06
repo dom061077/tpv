@@ -200,8 +200,10 @@ public class DataModelTicket {
     
     public String getFormatSaldo(){
         DecimalFormat df = new DecimalFormat("###,###,###,##0.00");
-        return df.format(getSaldo());
+        return df.format(getSaldo().abs());
     }
+    
+    
     
     /**
      * @return the cliente

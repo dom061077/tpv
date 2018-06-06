@@ -34,6 +34,9 @@ public class FormaPago {
     @Column(name="MAXIMOCUOTAS")
     private int maxiCuotas;
     
+    @Column(name="TIENECUPON")
+    private boolean tieneCupon;
+    
     @Formula("(SELECT current_date())")
     private java.sql.Date fechaHoy;
 
@@ -126,6 +129,20 @@ public class FormaPago {
         }
         intereses = intereses.setScale(2,BigDecimal.ROUND_HALF_EVEN);
         return intereses;
+    }
+
+    /**
+     * @return the tieneCupon
+     */
+    public boolean isTieneCupon() {
+        return tieneCupon;
+    }
+
+    /**
+     * @param tieneCupon the tieneCupon to set
+     */
+    public void setTieneCupon(boolean tieneCupon) {
+        this.tieneCupon = tieneCupon;
     }
     
     

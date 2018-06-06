@@ -71,7 +71,7 @@
                      <children>
                         <Label fx:id="bonificaciones" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="245.0" styleClass="label_total" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Label fx:id="totalGral" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="245.0" styleClass="label_total" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                        <Label styleClass="label_textfield" text="Saldo a Pagar:" GridPane.rowIndex="2" />
+                        <Label fx:id="labelSaldoAPagar" styleClass="label_textfield" text="Saldo a Pagar:" GridPane.rowIndex="2" />
                         <Label fx:id="totalVenta" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="242.0" styleClass="label_total" GridPane.columnIndex="1" />
                         <Label prefHeight="17.0" prefWidth="203.0" styleClass="label_textfield" text="Total Venta:" />
                         <Label prefHeight="17.0" prefWidth="203.0" styleClass="label_textfield" text="Bonificaciones:" GridPane.rowIndex="1" />

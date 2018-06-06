@@ -15,15 +15,18 @@ import javax.persistence.Table;
  * @author daniel
  */
 @Entity
-@Table(name="tablausuarios")
+@Table(name="usuarios")
 public class Usuario {
     @Id
-    @Column(name="idUSUARIO")
+    @Column(name="idUSUARIOS")
     private int idUsuario;
-    @Column(name="Login")
+    @Column(name="NOMBRE")
     private String nombre;
-    @Column(name="CampoPassword")
+    @Column(name="PASSWORD")
     private String password;
+    
+    @Column(name="CODIGOBARRA")
+    private String codigoBarra;
 
     /**
      * @return the idUsuario
@@ -58,5 +61,19 @@ public class Usuario {
      */
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    /**
+     * @return the codigoBarra
+     */
+    public String getCodigoBarra() {
+        return codigoBarra;
+    }
+
+    /**
+     * @param codigoBarra the codigoBarra to set
+     */
+    public void setCodigoBarra(String codigoBarra) {
+        this.codigoBarra = codigoBarra;
     }
 }
