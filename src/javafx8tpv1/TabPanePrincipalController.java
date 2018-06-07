@@ -149,6 +149,7 @@ public class TabPanePrincipalController implements Initializable {
         
          param = UtilidadesService.getParametroGral("FORMAT_NUMERO_DINERO");
         Context.getInstance().setFormatNumeroDinero(param.getParametroCadena());
+        
        
 
     }

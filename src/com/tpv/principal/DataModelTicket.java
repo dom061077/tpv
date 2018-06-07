@@ -425,6 +425,10 @@ public class DataModelTicket {
     public void setModeloImpresora(String modelo){
         this.modeloImpresora = modelo;
     }
+    
+    public String getModeloImpresora(){
+        return this.modeloImpresora;
+    }
 
     /**
      * @return the totalImpuestoInterno

@@ -17,6 +17,8 @@ import org.apache.log4j.Logger;
 import org.tpv.print.fiscal.FiscalPacket;
 import org.tpv.print.fiscal.exception.FiscalPrinterIOException;
 import org.tpv.print.fiscal.exception.FiscalPrinterStatusError;
+import org.tpv.print.fiscal.hasar.HasarFiscalPrinter;
+import org.tpv.print.fiscal.hasar.HasarPrinter250F;
 import org.tpv.print.fiscal.hasar.HasarPrinterP715F;
 import org.tpv.print.fiscal.msg.FiscalMessages;
 
@@ -26,9 +28,12 @@ import org.tpv.print.fiscal.msg.FiscalMessages;
  */
 public class ImpresoraService {
     Logger log = Logger.getLogger(ImpresoraService.class);
-    private HasarPrinterP715F hfp;
+    private HasarPrinterP715F hfpP715F ;
+    private HasarPrinter250F hfp250F;
+    private String modeloImpresora;
     
-    private static final String MODELOIMPRESORA_SMH_P_441F="SMH/P-441F";
+    public static final String MODELOIMPRESORA_SMH_P_441F="SMH/P-441F";
+    public static final String MODELOIMPRESORA_SMH_PT_1000F="SMH/PT-1000F";
     
     public static final String IVA_RESPONSABLE_INS = "I";
     public static final String IVA_RESPONSABLE_NO_INS = "N";
@@ -84,8 +89,10 @@ public class ImpresoraService {
     
     
     public ImpresoraService(){
-        hfp = new HasarPrinterP715F(Connection.getStcp());
+            hfpP715F = new HasarPrinterP715F(Connection.getStcp());
+            hfp250F = new HasarPrinter250F(Connection.getStcp());
     }
+    
             
     public String getNroPuntoVenta() throws TpvException{
         //HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
@@ -432,16 +439,21 @@ public class ImpresoraService {
     /**
      * @return the hfp
      */
-    public HasarPrinterP715F getHfp() {
-        return hfp;
+    public HasarFiscalPrinter getHfp() {
+        //if (Context.getInstance().getModeloImpresora()==MODELOIMPRESORA_SMH_P_441F)
+        //    return hfpP715F;
+        if (Context.getInstance().currentDMTicket().getModeloImpresora().compareTo(MODELOIMPRESORA_SMH_PT_1000F)==0)
+            return hfp250F;
+        return hfpP715F;
     }
+    
 
     /**
      * @param hfp the hfp to set
      */
-    public void setHfp(HasarPrinterP715F hfp) {
-        this.hfp = hfp;
-    }
+    //public void setHfp(HasarPrinterP715F hfp) {
+    //    this.hfp = hfp;
+    //}
     
     public void getPrinterVersion() throws TpvException{
         FiscalPacket request;
@@ -452,6 +464,9 @@ public class ImpresoraService {
           response = getHfp().execute(request);
           if (response.getString(3).contains(MODELOIMPRESORA_SMH_P_441F))
               Context.getInstance().currentDMTicket().setModeloImpresora(MODELOIMPRESORA_SMH_P_441F);
+          if (response.getString(3).contains(MODELOIMPRESORA_SMH_PT_1000F))
+              Context.getInstance().currentDMTicket().setModeloImpresora(MODELOIMPRESORA_SMH_PT_1000F);
+          log.info("Modelo de Impresora conectada: "+response.getString(3));
         }catch(FiscalPrinterStatusError e){
             fMsg = getHfp().getMessages();
             log.error(fMsg.getErrorsAsString());
