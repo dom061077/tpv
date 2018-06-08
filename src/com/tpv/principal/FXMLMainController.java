@@ -186,12 +186,18 @@ public class FXMLMainController implements Initializable {
         log.info("Ingresando a pantalla de facturación");
         stackPaneIngresos.requestFocus();
         textFieldCodCliente.requestFocus();
+        
+        if(impresoraService.getHfp().getEventListener()==null)
+            asignarEvento();
+        
+        
         traerInfoImpresora();        
         configurarAnimacionIngresoNegativo();
         initTableViewTickets();
         verificarDetalleTableView();
         
-        chequearInterfazNegativo();            
+        chequearInterfazNegativo();    
+        
 
         impresoraService.getPrinterVersion();
         

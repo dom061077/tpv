@@ -29,7 +29,9 @@ import org.tpv.print.fiscal.msg.MsgRepository;
 public class HasarPrinter250F extends HasarFiscalPrinter {
     
         
-        private static final String FACTURA_B = "6";
+        private static final int FACTURA_B = 6;
+        private static final int TIQUE_FACTURA_B = 82;
+    
     
 	/**
 	 * 
@@ -56,11 +58,12 @@ public class HasarPrinter250F extends HasarFiscalPrinter {
     
         @Override
 	public FiscalPacket cmdOpenFiscalReceipt(String docType) {
+                int codigoDoc=0;
                 if(docType.compareTo("B")==0)
-                    docType=FACTURA_B;
+                    codigoDoc = FACTURA_B;
 		FiscalPacket cmd = createFiscalPacket(CMD_OPEN_FISCAL_RECEIPT);
 		int i = 1;
-		cmd.setText(i++, docType, false);
+		cmd.setText(i++, "6", false);
 		//cmd.setText(i++, "T", true);
 		return cmd;
 	}
@@ -92,26 +95,28 @@ public class HasarPrinter250F extends HasarFiscalPrinter {
 		FiscalPacket cmd = createFiscalPacket(CMD_PRINT_LINE_ITEM);
 		int i = 1;
 		cmd.setText(i++, description, descMaxLength, false);
-		cmd.setNumber(i++, quantity,10,8, false,"");
+		cmd.setNumber(i++, quantity,10,2, false,"");
 		cmd.setNumber(i++,price,6,2,false,"");//cmd.setAmount(i++, price, false, true);
                 
-                //4 Condición de IVA (opcional)
-                cmd.setNumber(7, price, substract);
+                
+                cmd.setNumber(i++, 7, false);//Campo 4 Condición de IVA (opcional)
 		if(ivaPercent == null)
 			cmd.setText(i++, "**.**", false);
 		else
 			cmd.setNumber(i++, ivaPercent, 2, 2, false,"");		
 		cmd.setBoolean(i++, substract, "m", "M", false);
                 //TODO signo porcentaje en impuesto interno
-		cmd.setNumber(i++, internalTaxes, 10, 8, false,"%");//cmd.setNumber(i++, internalTaxes, 10, 8, false,"");
+                cmd.setText(i++, "0", false);//7. TipoImpuestoInterno
+		cmd.setNumber(i++, internalTaxes, 10, 2, false,"");//cmd.setNumber(i++, internalTaxes, 10, 8, false,"");
 		cmd.setNumber(i++, display, true);
 		cmd.setBoolean(i++, basePrice, "x", "T", false);
                 
-                //11 Unidad de referencia (opcional)
-                //12 Código Producto/Servicio (opcional)
-                //13 Código interno (opcional)
-                //14 Código unidad de medida (opcional)
+                cmd.setNumber(i++,1,false);//Campo 11 Unidad de referencia (opcional)
                         
+                cmd.setText(i++, "7790001001054", false);//campo 12 Código Producto/Servicio (opcional)
+                cmd.setText(i++, "123", false);//campo 13 Código interno (opcional)
+                cmd.setNumber(i++, 7, false);//campo 14 Código unidad de medida (opcional)
+                
                 
 		return cmd;                
 		
