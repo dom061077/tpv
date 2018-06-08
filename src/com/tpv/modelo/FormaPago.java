@@ -37,6 +37,9 @@ public class FormaPago {
     @Column(name="TIENECUPON")
     private boolean tieneCupon;
     
+    @Column(name="TIENEVUELTO")
+    private boolean tieneVuelto;
+    
     @Formula("(SELECT current_date())")
     private java.sql.Date fechaHoy;
 
@@ -143,6 +146,20 @@ public class FormaPago {
      */
     public void setTieneCupon(boolean tieneCupon) {
         this.tieneCupon = tieneCupon;
+    }
+
+    /**
+     * @return the tieneVuelto
+     */
+    public boolean isTieneVuelto() {
+        return tieneVuelto;
+    }
+
+    /**
+     * @param tieneVuelto the tieneVuelto to set
+     */
+    public void setTieneVuelto(boolean tieneVuelto) {
+        this.tieneVuelto = tieneVuelto;
     }
     
     

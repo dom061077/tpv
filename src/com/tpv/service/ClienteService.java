@@ -29,7 +29,7 @@ public class ClienteService {
         try{
             
             Query q = em.createQuery("FROM Cliente c WHERE c.id = :id or c.dni = :dni or c.cuit = :cuit").setParameter("id"
-                    ,filtroCodigo).setParameter("dni", filtroCodigo).setParameter("cuit", filtroCodigo);
+                    ,filtroCodigo).setParameter("dni", filtroCodigo).setParameter("cuit", String.valueOf(filtroCodigo));
             cliente = (Cliente)q.getSingleResult();
             log.info("Cliente recuperado "+cliente.getCuit()+" - "+cliente.getRazonSocial());
         }catch(NoResultException e){

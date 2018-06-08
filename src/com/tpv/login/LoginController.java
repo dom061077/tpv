@@ -139,6 +139,9 @@ public class LoginController implements Initializable{
                 if(keyEvent.getCode() == KeyCode.F11){
                     System.exit(0);
                 }
+                if(keyEvent.getCode() == KeyCode.BACK_SPACE
+                        || keyEvent.getCode() == KeyCode.DELETE)
+                    return;
                 keyEvent.consume();
             });
             

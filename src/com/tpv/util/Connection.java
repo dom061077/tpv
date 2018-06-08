@@ -65,7 +65,7 @@ public class Connection {
      */
     public static void initFiscalPrinter() throws TpvException{
         if(stcp==null)
-            stcp = new SpoolerTCPComm("134.14.13.13",1600);//stcp = new SpoolerTCPComm("134.14.13.13",1600);
+            stcp = new SpoolerTCPComm("127.0.0.1",1600);//stcp = new SpoolerTCPComm("134.14.13.13",1600);
         if(stcp.isConnected())
             return;
         try{

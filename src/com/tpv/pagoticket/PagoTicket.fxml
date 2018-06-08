@@ -44,9 +44,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button fx:id="goToError" mnemonicParsing="false" text="Button" visible="false" />
-            <Button fx:id="confirmarButton" mnemonicParsing="false" text="Button" visible="false" />
-            <Button fx:id="volverButton" mnemonicParsing="false" text="Button" visible="false" />
+            <Label text="F3-Buscar Formas" />
          </children>
       </GridPane>
    </bottom>
@@ -102,7 +100,7 @@
                   <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label alignment="TOP_CENTER" contentDisplay="TOP" prefHeight="17.0" prefWidth="1269.0" styleClass="label_titulo" text="Formas de Pagos" textAlignment="CENTER" GridPane.columnSpan="5" GridPane.valignment="TOP" />
+                  <Label alignment="TOP_CENTER" contentDisplay="TOP" prefHeight="17.0" prefWidth="1269.0" styleClass="label_titulo" text="Pagos" textAlignment="CENTER" GridPane.columnSpan="5" GridPane.valignment="TOP" />
                   <Label prefHeight="17.0" prefWidth="240.0" styleClass="label_textfield" text="Tipo Pago:" GridPane.rowIndex="1" />
                   <Label prefHeight="17.0" prefWidth="244.0" styleClass="label_textfield" text="Importe a Pagar:" GridPane.rowIndex="2" />
                   <Label fx:id="labelCantidadCuotas" prefHeight="17.0" prefWidth="244.0" styleClass="label_textfield" text="Cantidad Cuotas:" GridPane.rowIndex="3">
@@ -130,6 +128,23 @@
                      </center>
                      <top>
                         <Label fx:id="tituloFormaPagoLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="21.0" prefWidth="485.0" styleClass="label_titulo" text="Recargos/Bonificación" textAlignment="CENTER" BorderPane.alignment="CENTER" />
+                     </top>
+                  </BorderPane>
+               </children>
+            </StackPane>
+            <StackPane fx:id="stackPaneFormaPago" layoutX="420.0" layoutY="80.0" prefHeight="300.0" prefWidth="400.0" styleClass="rounded_corner">
+               <children>
+                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                     <center>
+                        <TableView fx:id="tableViewFormaPago" prefHeight="200.0" prefWidth="200.0" styleClass="tpv-table-view" BorderPane.alignment="CENTER">
+                          <columns>
+                            <TableColumn fx:id="formaPagoCodigoColumn" prefWidth="101.0" text="Código" />
+                            <TableColumn fx:id="formaPagoDescColumn" prefWidth="270.0" text="Descripción" />
+                          </columns>
+                        </TableView>
+                     </center>
+                     <top>
+                        <Label alignment="CENTER" prefHeight="21.0" prefWidth="402.0" styleClass="label_titulo" text="Formas de Pago" BorderPane.alignment="CENTER" />
                      </top>
                   </BorderPane>
                </children>

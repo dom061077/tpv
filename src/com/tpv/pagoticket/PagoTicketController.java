@@ -30,9 +30,9 @@ import javafx.scene.layout.GridPane;
 import javafx8tpv1.TabPanePrincipalController;
 import org.apache.log4j.Logger;
 import com.tpv.principal.Context;
-import com.tpv.principal.LineaTicketData;
 import java.math.RoundingMode;
 import java.util.Iterator;
+import java.util.List;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
@@ -56,6 +56,7 @@ public class PagoTicketController implements Initializable {
     private FormaPago formaPago;
     private TabPanePrincipalController tabPaneController;
     private ListProperty<LineaInteresTarjetaData> intBonifData;
+    private ListProperty<LineaFormaPagoData> formaPagoData;
     
     PagoService pagoService = new PagoService();
     FacturacionService factService = new FacturacionService();
@@ -96,6 +97,9 @@ public class PagoTicketController implements Initializable {
     
     @FXML
     private TableView tableViewIntTarjeta;
+    
+    @FXML
+    private TableView tableViewFormaPago;        
                       
     
     @FXML
@@ -147,13 +151,20 @@ public class PagoTicketController implements Initializable {
     @FXML
     private StackPane stackPaneIntereses;
     
+    @FXML
+    private StackPane stackPaneFormaPago;
+    
+    @FXML
+    private TableColumn formaPagoCodigoColumn;
+    
+    @FXML
+    private TableColumn formaPagoDescColumn;
     
     
     
     
-    public void configurarInicio(){
+    public void configurarInicio() throws TpvException{
         
-        try{
             //Factura factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdFactura());
             Factura factura = factService.getFacturaConTotalesSinPagos(Context.getInstance().currentDMTicket().getIdFactura());
             Context.getInstance().currentDMTicket().setBonificaciones(factura.getBonificacionCombosAux());
@@ -164,12 +175,6 @@ public class PagoTicketController implements Initializable {
             Context.getInstance().currentDMTicket()
                     .setTotalImpuestoInterno(factura.getImpuestoInterno());
             
-        }catch(TpvException e)    {
-            log.error("Error en capa controller "+e.getMessage());
-            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_PAGOTICKET);
-            Context.getInstance().currentDMTicket().setException(e);
-            tabPaneController.gotoError();
-        }
         
         iniciarIngresosVisibles();
         tableViewPagos.getItems().clear();
@@ -205,7 +210,9 @@ public class PagoTicketController implements Initializable {
     public  void initialize(URL url, ResourceBundle rb) {
         log.info("Ingresando al mètodo init");
         stackPaneIntereses.setVisible(false);
+        stackPaneFormaPago.setVisible(false);
         initTableViewInteresesBonif();
+        initTableViewFormasPago();
         
         codigoPagoColumn.setCellValueFactory(new PropertyValueFactory<LineaPagoData,Integer>("codigoPago"));
         codigoPagoColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
@@ -321,6 +328,36 @@ public class PagoTicketController implements Initializable {
             textFieldMonto.setText("0");
         
         Platform.runLater(() -> {
+            
+            tableViewFormaPago.setOnKeyPressed(keyEvent->{
+                int index;
+                if (keyEvent.getCode() == KeyCode.UP){
+                    tableViewFormaPago.getSelectionModel().selectPrevious();
+                    index = tableViewFormaPago.getSelectionModel().getSelectedIndex();
+                    tableViewFormaPago.scrollTo(index);
+                }
+                if (keyEvent.getCode() == KeyCode.DOWN){
+                    tableViewPagos.getSelectionModel().selectNext();
+                    index = tableViewFormaPago.getSelectionModel().getSelectedIndex();
+                    tableViewFormaPago.scrollTo(index);
+                }
+                
+                if (keyEvent.getCode() == KeyCode.ESCAPE){
+                    stackPaneFormaPago.setVisible(false);
+                    tabPaneController.repeatFocus(textFieldTipoPago);
+                }
+                
+                if (keyEvent.getCode() == KeyCode.ENTER){
+                    stackPaneFormaPago.setVisible(false);
+                    textFieldTipoPago.setText(""+((LineaFormaPagoData)tableViewFormaPago.getSelectionModel().getSelectedItem()).getCodigoForma());
+                    tabPaneController.repeatFocus(textFieldTipoPago);
+                }
+                if(keyEvent.getCode() == KeyCode.TAB){
+                    keyEvent.consume();
+                    return;
+                }
+                        
+            });
 
             tableViewIntTarjeta.setOnKeyPressed(keyEvent->{
                 if ( keyEvent.getCode() == KeyCode.UP ){
@@ -346,6 +383,7 @@ public class PagoTicketController implements Initializable {
                     tabPaneController.repeatFocus(textFieldNroTarjeta);
                     
                 }
+                
                 keyEvent.consume();
                 return;                
                 
@@ -355,6 +393,20 @@ public class PagoTicketController implements Initializable {
                 if(keyEvent.getCode() == KeyCode.SUBTRACT){
                     eliminarLineaPago();
                     refrescarTextFieldSaldo();
+                }
+                
+                if(keyEvent.getCode() == KeyCode.F3){
+                    try{
+                        cargarDatosTableViewFormaPago();
+                    }catch(TpvException e){
+                        log.error("Error: "+e.getMessage());
+                        Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_PAGOTICKET);
+                        Context.getInstance().currentDMTicket().setException(e);
+                        tabPaneController.gotoError();//goToError.fire();
+                    }
+                    stackPaneFormaPago.setVisible(true);
+                    tableViewFormaPago.getSelectionModel().select(0);
+                    tabPaneController.repeatFocus(tableViewFormaPago);
                 }
                     
                 if(keyEvent.getCode() == KeyCode.ENTER){
@@ -395,9 +447,6 @@ public class PagoTicketController implements Initializable {
                     tableViewPagos.scrollTo(index);
                 }
                     
-                keyEvent.consume();
-                    
-                    
             });
             textFieldMonto.setOnKeyPressed(keyEvent -> {
                 if(keyEvent.getCode() == KeyCode.ESCAPE){
@@ -407,11 +456,17 @@ public class PagoTicketController implements Initializable {
                     textFieldTipoPago.requestFocus();
                 }
                 
+                
                 if(textFieldMonto.getText().trim().equals("") || textFieldMonto.getText().equals("0")){
                     keyEvent.consume();
                     return;
                 }
                 if(keyEvent.getCode() == KeyCode.ENTER){
+                    if(Context.getInstance().currentDMTicket().getSaldo().compareTo(new BigDecimal(textFieldMonto.getText()))<0
+                         && !formaPago.isTieneVuelto()){
+                        keyEvent.consume();
+                        return;
+                    }
                     if (formaPago.getInteresesTarjeta().size()>0){
                         cargarDatosTableViewInteresesTarjeta();
                         stackPaneIntereses.setVisible(true);
@@ -454,7 +509,7 @@ public class PagoTicketController implements Initializable {
             textFieldNroTarjeta.setOnKeyPressed(keyEvent->{
                 if(keyEvent.getCode() == KeyCode.ESCAPE){
                     textFieldNroTarjeta.setDisable(true);
-                    textFieldCantidadCuotas.requestFocus();
+                    textFieldMonto.requestFocus();
                 }
                 
                 if(textFieldNroTarjeta.getText().trim().equals("") || textFieldNroTarjeta.getText().equals("0")){
@@ -647,16 +702,24 @@ public class PagoTicketController implements Initializable {
         ObservableList<LineaInteresTarjetaData> innerList = FXCollections.observableArrayList();
         intBonifData = new SimpleListProperty<>(innerList);
         tableViewIntTarjeta.setItems(intBonifData);
-        
-                
     }
     
+    private void initTableViewFormasPago(){
+        formaPagoCodigoColumn.setCellValueFactory(new PropertyValueFactory<LineaFormaPagoData,Integer>("codigoForma"));
+        formaPagoCodigoColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+        
+        formaPagoDescColumn.setCellValueFactory(new PropertyValueFactory<LineaFormaPagoData,Integer>("descripcionForma"));
+        formaPagoDescColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+        
+        ObservableList<LineaFormaPagoData> innerList = FXCollections.observableArrayList();
+        formaPagoData = new SimpleListProperty<>(innerList);
+        tableViewIntTarjeta.setItems(intBonifData);        
+                
+    }
+            
+    
     private void cargarDatosTableViewInteresesTarjeta(){
-    /*public LineaInteresTarjetaData(int cuotas
-                ,String Descripcion
-                ,BigDecimal porcentaje
-                ,BigDecimal totalPago)
-            */
+
         BigDecimal totalPago = new BigDecimal(textFieldMonto.getText());
         tableViewIntTarjeta.getItems().clear();
         for(Iterator<InteresTarjeta> it=formaPago.getInteresesTarjeta().iterator();it.hasNext();){
@@ -668,7 +731,20 @@ public class PagoTicketController implements Initializable {
         }
     }
             
+    private void cargarDatosTableViewFormaPago() throws TpvException{
 
+        tableViewFormaPago.getItems().clear();
+        List<FormaPago> list = pagoService.getFormasPago();
+        for(Iterator<FormaPago> it=list.iterator();it.hasNext();){
+            FormaPago formaPago = it.next();
+            tableViewFormaPago.getItems().add(new LineaFormaPagoData(
+                        formaPago.getId(),formaPago.getDetalle()
+                    )
+            );
+        }
+    }
+    
+    
     private void scrollDown(){
             if(tableViewPagos.getItems().size()>0){
                 tableViewPagos.getSelectionModel().select(tableViewPagos.getItems().size()-1);

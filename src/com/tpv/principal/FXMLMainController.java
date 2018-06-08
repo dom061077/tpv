@@ -264,14 +264,11 @@ public class FXMLMainController implements Initializable {
                     if(textFieldCodCliente.getText().trim().equals("")){
                         labelCliente.setVisible(false);
                         textFieldCodCliente.setVisible(false);
-                        
                         stackPaneIngresos.setVisible(false);                        
                         labelProducto.setVisible(true);
                         textFieldProducto.setVisible(true);
                         Context.getInstance().currentDMTicket().setCliente(null);
                         nombreCliente.setVisible(false);
-                        
-
                         Context.getInstance().currentDMTicket().setClienteSeleccionado(true);
                     }else{
                         traerCliente();
@@ -282,16 +279,16 @@ public class FXMLMainController implements Initializable {
                     if(Context.getInstance().currentDMTicket().getDetalle().size()==0)
                         this.tabPaneController.gotoMenuPrincipal();
                     else{
-                        /*Alert alert = new Alert(AlertType.WARNING,
-                            "No se puede volver al menú principal cuando hay un ticket abierto"
-                            , ButtonType.OK);
-                        alert.showAndWait();*/
                         Context.getInstance().currentDMTicket().setTipoTituloSupervisor(TipoTituloSupervisorEnum.HABILITAR_MENU);
                         tabPaneController.gotoSupervisor();
                         
                     }
-                        
                 }
+                
+                if(keyEvent.getCode() == KeyCode.BACK_SPACE
+                        || keyEvent.getCode() == KeyCode.DELETE)
+                    return;
+                keyEvent.consume();
             });
             
             textFieldCantidad.setOnKeyPressed(keyEvent ->{
@@ -312,6 +309,9 @@ public class FXMLMainController implements Initializable {
                     }
                     
                 }
+                if(keyEvent.getCode() == KeyCode.BACK_SPACE
+                        || keyEvent.getCode() == KeyCode.DELETE)
+                    return;
                 keyEvent.consume();
             });
             
@@ -448,6 +448,9 @@ public class FXMLMainController implements Initializable {
                 if(keyEvent.getCode() == KeyCode.F3)
                     tabPaneController.gotoProducto();
                     
+                if(keyEvent.getCode() == KeyCode.BACK_SPACE
+                        || keyEvent.getCode() == KeyCode.DELETE)
+                    return;
                 keyEvent.consume();
 
             });

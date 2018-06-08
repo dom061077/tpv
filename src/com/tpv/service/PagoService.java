@@ -7,8 +7,8 @@ package com.tpv.service;
 
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.FormaPago;
-import com.tpv.modelo.InteresTarjeta;
 import com.tpv.util.Connection;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -41,6 +41,24 @@ public class PagoService {
 
         }
         return formaPago;
+    }
+    
+    public List<FormaPago> getFormasPago()throws TpvException{
+        log.info("Capa de servicios listando formas de pago");
+        List<FormaPago> formas=null;
+        EntityManager em = Connection.getEm();
+        try{
+            Query q = em.createQuery("FROM FormaPago");
+            formas = q.getResultList();
+            log.info("cantidad de formas : "+formas.size());
+        }catch(RuntimeException e){
+            log.error("Error en capa de servicios al recuperar listado de formas de pago",e);
+            throw new TpvException("Error en la capa de servicios al recuperar las formas de pago");
+        }finally{
+            em.clear();
+        }
+        
+        return formas;
     }
     
 
