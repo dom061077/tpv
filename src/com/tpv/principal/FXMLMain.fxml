@@ -142,7 +142,7 @@
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                   </TableView>
-                  <StackPane fx:id="stackPaneIngresos" focusTraversable="true" layoutX="250.0" layoutY="50.0" prefHeight="246.0" prefWidth="510.0" styleClass="rounded_corner">
+                  <StackPane fx:id="stackPaneIngresos" focusTraversable="true" layoutX="250.0" layoutY="50.0" prefHeight="246.0" prefWidth="510.0" styleClass="rounded_corner_modal">
                      <children>
                         <GridPane fx:id="gridPaneIngresos" focusTraversable="true">
                           <columnConstraints>

@@ -33,7 +33,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx8tpv1.TabPanePrincipalController;
 import org.apache.log4j.Logger;
 import org.tpv.print.fiscal.FiscalPacket;
@@ -139,6 +139,9 @@ public class ConfirmaPagoTicketController implements Initializable{
     @FXML
     private Label labelRetIngBrutos;
     
+    @FXML
+    private StackPane stackPaneMensajeCancelar;
+    
     
     @FXML
     private TabPanePrincipalController tabPaneController;
@@ -149,7 +152,8 @@ public class ConfirmaPagoTicketController implements Initializable{
             
             log.info("Ingresando a la confirmación de pago");
             DecimalFormat df = new DecimalFormat("##,##0.00");
-            if(Context.getInstance().currentDMTicket().getCliente()==null){
+            if(Context.getInstance().currentDMTicket().getCliente()==null
+                    || Context.getInstance().currentDMTicket().getCliente().getCondicionIva().getId()==1){
                 labelBaseImponible.setVisible(false);
                 labelExentoIVA.setVisible(false);
                 labelIVA.setVisible(false);
@@ -173,7 +177,9 @@ public class ConfirmaPagoTicketController implements Initializable{
             totalInternoLabel.setText(df.format(Context.getInstance().currentDMTicket().getTotalInterno()));
             totalExentoIVALabel.setText(df.format(Context.getInstance().currentDMTicket().getTotalExento()));
             
-            repeatFocus(borderPane);
+            stackPaneMensajeCancelar.setVisible(false);
+            
+            tabPaneController.repeatFocus(borderPane);
                     
     }
     
@@ -257,13 +263,22 @@ public class ConfirmaPagoTicketController implements Initializable{
                 tableViewPagos.setItems(Context.getInstance().currentDMTicket().getPagos());
                 borderPane.setOnKeyPressed(keyEvent->{
                     if(keyEvent.getCode()==KeyCode.ESCAPE){
-                        
-                        tabPaneController.gotoPago();
-                        
+                        stackPaneMensajeCancelar.setVisible(true);
+                        tabPaneController.repeatFocus(stackPaneMensajeCancelar);
                     }
                     if(keyEvent.getCode() == KeyCode.ENTER){
                         confirmarFactura();
 
+                    }
+                    keyEvent.consume();
+                });
+                stackPaneMensajeCancelar.setOnKeyPressed(keyEvent->{
+                    if(keyEvent.getCode()==KeyCode.S){
+                        tabPaneController.gotoPago();
+                    }
+                    if(keyEvent.getCode()==KeyCode.ESCAPE){
+                        stackPaneMensajeCancelar.setVisible(false);
+                        tabPaneController.repeatFocus(borderPane);
                     }
                     keyEvent.consume();
                 });
@@ -569,13 +584,13 @@ public class ConfirmaPagoTicketController implements Initializable{
         
     }    */
     
-    private void repeatFocus(Node node){
+    /*private void repeatFocus(Node node){
         Platform.runLater(() -> {
             if (!node.isFocused()) {
                 node.requestFocus();
                 repeatFocus(node);
             }
         });        
-    }    
+    }*/    
     
 }

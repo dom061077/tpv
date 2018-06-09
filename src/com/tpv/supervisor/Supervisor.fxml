@@ -20,7 +20,7 @@
       <Label fx:id="labelTitulo" styleClass="label_titulo" text="Label" BorderPane.alignment="CENTER" />
    </top>
    <bottom>
-      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <HBox prefHeight="28.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
             <Label styleClass="label_shorcut" text="Esc-Cancela Operación" />
          </children>
@@ -29,7 +29,7 @@
    <center>
       <Pane prefHeight="200.0" prefWidth="592.0" BorderPane.alignment="CENTER">
          <children>
-            <StackPane fx:id="stackPaneError" prefHeight="200.0" prefWidth="700.0" styleClass="rounded_corner">
+            <StackPane fx:id="stackPaneError" prefHeight="200.0" prefWidth="700.0" styleClass="rounded_corner_modal">
                <children>
                   <BorderPane prefHeight="200.0" prefWidth="200.0">
                      <center>

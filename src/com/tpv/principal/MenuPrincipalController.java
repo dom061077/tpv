@@ -88,6 +88,18 @@ public class MenuPrincipalController implements Initializable {
     @FXML
     private ImageView imageViewLogoTop3;
     
+    @FXML
+    private ImageView imageFacturacion;
+    
+    @FXML
+    private ImageView imageControlador;
+    
+    @FXML
+    private ImageView imageRetiroDinero;
+    
+    @FXML
+    private ImageView imageFin;
+    
     
     public void configurarInicio(){
         repeatFocus(borderPane);
@@ -96,8 +108,9 @@ public class MenuPrincipalController implements Initializable {
     
     @FXML
     public  void initialize(URL url, ResourceBundle rb) {
-        //loadImage();
         log.info("Ingresando al mètodo init");
+        loadImage();
+        
         repeatFocus(borderPane);
         Platform.runLater(()->{
             
@@ -135,6 +148,10 @@ public class MenuPrincipalController implements Initializable {
         imageViewLogoBottom1.setImage(new Image(f));
         imageViewLogoBottom2.setImage(new Image(f));
         imageViewLogoBottom3.setImage(new Image(f));
+        imageFacturacion.setImage(new Image(this.getClass().getResource("/com/tpv/resources/facturacion.png").toExternalForm()));
+        imageControlador.setImage(new Image(this.getClass().getResource("/com/tpv/resources/controlador.png").toExternalForm()));
+        imageRetiroDinero.setImage(new Image(this.getClass().getResource("/com/tpv/resources/retiro_dinero.png").toExternalForm()));
+        imageFin.setImage(new Image(this.getClass().getResource("/com/tpv/resources/fin.png").toExternalForm()));
                 
     }    
     

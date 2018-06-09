@@ -4431,6 +4431,8 @@ to the top and bottom -fx-padding values of the parent toolbar. */
     -fx-text-box-border: transparent;
     -fx-border-color: transparent transparent -fx-base transparent;
     -fx-border-width: 3;
+    -fx-font-size: 25;
+    -fx-font-weight: bold;
  
 }
 
@@ -4439,14 +4441,24 @@ to the top and bottom -fx-padding values of the parent toolbar. */
     -fx-border-width:2;
     -fx-border-color:white;
     -fx-border-radius:30 0 30 0;    */
+    -fx-effect: dropshadow(three-pass-box, #5AA0D0, 5, 5, 0, 0);
     -fx-background-color: white;
     -fx-background-radius: 15.0;
     -fx-border-color: transparent;
     //-fx-background-insets: 15.0 15.0 15.0 15.0;
     //-fx-padding: 10;
-    -fx-effect: dropshadow(three-pass-box, #5AA0D0, 5, 5, 0, 0);
+    
     -fx-hgap: 10;
     -fx-vgap: 10;
+}
+
+.rounded_corner_modal{
+    -fx-effect: dropshadow(gaussian, #5AA0D0, 20, 0.5, 0.5, 0.0);
+    -fx-background-color: white;
+    -fx-background-radius: 15.0;
+    -fx-border-color: transparent;
+    -fx-hgap: 10;
+    -fx-vgap: 10;    
 }
 
 .tab-pane {

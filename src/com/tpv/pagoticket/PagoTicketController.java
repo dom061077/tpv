@@ -330,17 +330,7 @@ public class PagoTicketController implements Initializable {
         Platform.runLater(() -> {
             
             tableViewFormaPago.setOnKeyPressed(keyEvent->{
-                int index;
-                if (keyEvent.getCode() == KeyCode.UP){
-                    tableViewFormaPago.getSelectionModel().selectPrevious();
-                    index = tableViewFormaPago.getSelectionModel().getSelectedIndex();
-                    tableViewFormaPago.scrollTo(index);
-                }
-                if (keyEvent.getCode() == KeyCode.DOWN){
-                    tableViewPagos.getSelectionModel().selectNext();
-                    index = tableViewFormaPago.getSelectionModel().getSelectedIndex();
-                    tableViewFormaPago.scrollTo(index);
-                }
+                
                 
                 if (keyEvent.getCode() == KeyCode.ESCAPE){
                     stackPaneFormaPago.setVisible(false);
@@ -360,18 +350,6 @@ public class PagoTicketController implements Initializable {
             });
 
             tableViewIntTarjeta.setOnKeyPressed(keyEvent->{
-                if ( keyEvent.getCode() == KeyCode.UP ){
-                    int index;
-                    tableViewIntTarjeta.getSelectionModel().selectPrevious();
-                    index = tableViewIntTarjeta.getSelectionModel().getSelectedIndex();
-                    tableViewIntTarjeta.scrollTo(index);
-                }
-                if ( keyEvent.getCode() == KeyCode.DOWN ){
-                    int index;
-                    tableViewIntTarjeta.getSelectionModel().selectNext();
-                    index = tableViewIntTarjeta.getSelectionModel().getSelectedIndex();
-                    tableViewIntTarjeta.scrollTo(index);
-                }
                 if ( keyEvent.getCode() == KeyCode.ESCAPE){
                     stackPaneIntereses.setVisible(false);
                     tabPaneController.repeatFocus(textFieldMonto);
@@ -383,9 +361,9 @@ public class PagoTicketController implements Initializable {
                     tabPaneController.repeatFocus(textFieldNroTarjeta);
                     
                 }
-                
-                keyEvent.consume();
-                return;                
+                if(keyEvent.getCode() == KeyCode.TAB){
+                    keyEvent.consume();
+                }
                 
             });
             
@@ -446,6 +424,9 @@ public class PagoTicketController implements Initializable {
                     index = tableViewPagos.getSelectionModel().getSelectedIndex();
                     tableViewPagos.scrollTo(index);
                 }
+                if(keyEvent.getCode() == KeyCode.TAB){
+                    keyEvent.consume();
+                }
                     
             });
             textFieldMonto.setOnKeyPressed(keyEvent -> {
@@ -453,6 +434,7 @@ public class PagoTicketController implements Initializable {
                     textFieldMonto.setDisable(true);
                     if(textFieldCantidadCuotas.isVisible())
                         textFieldCantidadCuotas.setDisable(true);
+                    textFieldMonto.setText(Context.getInstance().currentDMTicket().getSaldo().toString());
                     textFieldTipoPago.requestFocus();
                 }
                 
@@ -483,7 +465,9 @@ public class PagoTicketController implements Initializable {
                         }
                     }
                 }
-                keyEvent.consume();                
+                if(keyEvent.getCode() == KeyCode.TAB){
+                    keyEvent.consume();
+                }
             });
             /*textFieldCantidadCuotas.setOnKeyPressed(keyEvent->{
                 if(keyEvent.getCode() == KeyCode.ESCAPE){
@@ -519,7 +503,9 @@ public class PagoTicketController implements Initializable {
                     textFieldNroCupon.setDisable(false);
                     textFieldNroCupon.requestFocus();
                 }
-                keyEvent.consume();
+                if(keyEvent.getCode() == KeyCode.TAB){
+                    keyEvent.consume();
+                }
             });
             
             textFieldNroCupon.setOnKeyPressed(keyEvent->{
@@ -538,8 +524,9 @@ public class PagoTicketController implements Initializable {
                         refrescarTextFieldSaldo();
                         scrollDown();
                 }
-                keyEvent.consume();
-                
+                if(keyEvent.getCode() == KeyCode.TAB){
+                    keyEvent.consume();
+                }
             });
                 
         });            

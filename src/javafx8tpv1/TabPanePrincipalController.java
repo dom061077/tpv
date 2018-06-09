@@ -215,8 +215,15 @@ public class TabPanePrincipalController implements Initializable {
     }
     
     public void gotoPago(){
-        this.pagoTicketController.configurarInicio();
-        this.tabPanePrincipal.getSelectionModel().select(tabPago);
+        try{
+            this.pagoTicketController.configurarInicio();
+            this.tabPanePrincipal.getSelectionModel().select(tabPago);
+        }catch(TpvException e)    {
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_PAGOTICKET);
+            Context.getInstance().currentDMTicket().setException(e);
+            gotoError();
+        }
+        
     }
     
     public void gotoCombos(){
