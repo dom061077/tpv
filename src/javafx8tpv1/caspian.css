@@ -4372,6 +4372,8 @@ to the top and bottom -fx-padding values of the parent toolbar. */
     -fx-font-weight: bold;
     -fx-font-size:30;
     -fx-alignment:CENTER;    
+    -fx-border-color: transparent transparent -fx-base transparent;
+    -fx-border-width: 3;
     
 }
 
