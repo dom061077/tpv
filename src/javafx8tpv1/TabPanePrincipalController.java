@@ -28,13 +28,14 @@ import com.tpv.pagoticket.ConfirmaPagoTicketController;
 import com.tpv.pagoticket.PagoTicketController;
 import com.tpv.print.fiscal.ConfiguracionImpresoraController;
 import com.tpv.producto.BuscarPorDescProductoController;
+import com.tpv.retirodinero.RetiroDineroController;
 import com.tpv.service.UsuarioService;
 import com.tpv.service.UtilidadesService;
 import com.tpv.supervisor.SupervisorController;
 import com.tpv.util.Connection;
-import java.util.List;
 import javafx.application.Platform;
 import javafx.scene.Node;
+import javafx.scene.layout.StackPane;
 
 /**
  *
@@ -56,6 +57,7 @@ public class TabPanePrincipalController implements Initializable {
     @FXML private ConfirmaPagoTicketController confirmaPagoController;
     @FXML private PagoTicketController pagoTicketController;
     @FXML private ConfiguracionImpresoraController configImpresoraController;
+    @FXML private RetiroDineroController retiroDineroController;
     
     @FXML private CombosController combosController; 
     
@@ -72,8 +74,10 @@ public class TabPanePrincipalController implements Initializable {
     @FXML private Tab tabPago;
     @FXML private Tab tabCombos;
     @FXML private Tab tabControlador;
+    @FXML private Tab tabRetiroDinero;
     
     @FXML private TabPane tabPanePrincipal;
+    @FXML private StackPane stackPaneModal;
     
     
     
@@ -88,7 +92,7 @@ public class TabPanePrincipalController implements Initializable {
     public  void initialize(URL url, ResourceBundle rb) {
         // TODO
         this.loginController.getPassword().requestFocus();
-        
+        this.stackPaneModal.setVisible(false);
         
         this.loginController.setTabController(this);
         this.menuPrincipalController.setTabController(this);
@@ -102,6 +106,8 @@ public class TabPanePrincipalController implements Initializable {
         this.buscarPorNombreClienteController.setTabController(this);
         this.configImpresoraController.setTabController(this);
         this.combosController.setTabController(this);
+        this.retiroDineroController.setTabController(this);
+        
         try{
             initParametrosGenerales();
             initImpresora();
@@ -235,6 +241,11 @@ public class TabPanePrincipalController implements Initializable {
         this.configImpresoraController.configurarInicio();
         this.tabPanePrincipal.getSelectionModel().select(tabControlador);
     }
+    
+    public void gotoRetiroDinero(){
+        this.retiroDineroController.configurarInicio();
+        this.tabPanePrincipal.getSelectionModel().select(tabRetiroDinero);
+    }
             
 
     public void repeatFocus(Node node){
@@ -245,6 +256,10 @@ public class TabPanePrincipalController implements Initializable {
             }
         });        
     }    
+    
+    public void mostrarMensaje(){
+        this.stackPaneModal.setVisible(true);
+    }
     
     
 }

@@ -17,75 +17,86 @@
    <children>
       <BorderPane focusTraversable="true" prefHeight="740.0" prefWidth="1024.0">
          <center>
-            <TabPane fx:id="tabPanePrincipal" focusTraversable="false" prefHeight="740.0" prefWidth="1024.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
-              <tabs>
-                  <Tab fx:id="tabMenuPrincipal" closable="false" text="Menu Prinipal">
-                      <content>
-                           <fx:include fx:id="menuPrincipal" source="../com/tpv/principal/MenuPrincipal.fxml" />
-                      </content>    
-                  </Tab>    
-                <Tab fx:id="tabLogin" closable="false" text="Login">
-                     <content>
-                        <fx:include fx:id="login" source="../com/tpv/login/Login.fxml" />
-                     </content>
-                     <graphic>
-                        <StackPane prefHeight="150.0" prefWidth="200.0" />
-                     </graphic>
-                  </Tab>
-                  <Tab fx:id="tabError" text="Error">
-                     <content>
-                        <fx:include fx:id="error" source="../com/tpv/errorui/Error.fxml" />
-                     </content>
-                  </Tab>
-                  <Tab fx:id="tabSupervisor" text="Supervisor">
-                    <content>
-                      <fx:include fx:id="supervisor" source="../com/tpv/supervisor/Supervisor.fxml" />
-                    </content>
-                  </Tab>
-                  <Tab fx:id="tabProducto" text="Búsqueda de Producto">
-                    <content>
-                      <fx:include fx:id="producto" source="../com/tpv/producto/BuscarPorDescProducto.fxml" />
-                    </content>
-                  </Tab>
-                  <Tab fx:id="tabCliente" text="Búsqueda de Cliente">
-                    <content>
-                      <fx:include fx:id="buscarPorNombreCliente" source="../com/tpv/cliente/BuscarPorNombreCliente.fxml" />
-                    </content>
-                  </Tab>
-                  <Tab fx:id="tabPago" text="Pago Ticket">
-                    <content>
-                      <fx:include fx:id="pagoTicket" source="../com/tpv/pagoticket/PagoTicket.fxml" />
-                    </content>
-                  </Tab>
-                  
-                  <Tab fx:id="tabConfirmarPago" text="Confirmar Pago Ticket">
-                    <content>
-                      <fx:include fx:id="confirmaPago" source="../com/tpv/pagoticket/ConfirmaPagoTicket.fxml" />
-                    </content>
-                  </Tab>
-                  
-                  <Tab fx:id="tabCombos" text="Combos">
-                    <content>
-                      <fx:include fx:id="combos" source="../com/tpv/combos/Combos.fxml" />
-                    </content>
-                  </Tab>
-                  <Tab fx:id="tabControlador" text="Controlador">
-                    <content>
-                      <fx:include fx:id="configImpresora" source="../com/tpv/print/fiscal/ConfiguracionImpresora.fxml" />
-                    </content>
-                  </Tab>
-                  
-
-                  <Tab fx:id="tabFacturacion" text="Facturación">
-                     <content>
-                        <fx:include fx:id="facturacion" source="../com/tpv/principal/FXMLMain.fxml" />
-                     </content>
-                  </Tab>
-              </tabs>
-               <BorderPane.margin>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-               </BorderPane.margin>
-            </TabPane>
+            <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <TabPane fx:id="tabPanePrincipal" focusTraversable="false" prefHeight="740.0" prefWidth="1024.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE">
+                    <tabs>
+                        <Tab fx:id="tabRetiroDinero" closable="false" text="Retiro Dinero">
+                          <content>
+                                <fx:include fx:id="retiroDinero" source="../com/tpv/retirodinero/RetiroDinero.fxml" />
+                          </content>
+                        </Tab>
+                        <Tab fx:id="tabMenuPrincipal" closable="false" text="Menu Prinipal">
+                            <content>
+                                 <fx:include fx:id="menuPrincipal" source="../com/tpv/principal/MenuPrincipal.fxml" />
+                            </content>    
+                        </Tab>    
+                      <Tab fx:id="tabLogin" closable="false" text="Login">
+                           <content>
+                              <fx:include fx:id="login" source="../com/tpv/login/Login.fxml" />
+                           </content>
+                           <graphic>
+                              <StackPane prefHeight="150.0" prefWidth="200.0" />
+                           </graphic>
+                        </Tab>
+                        <Tab fx:id="tabError" text="Error">
+                           <content>
+                              <fx:include fx:id="error" source="../com/tpv/errorui/Error.fxml" />
+                           </content>
+                        </Tab>
+                        <Tab fx:id="tabSupervisor" text="Supervisor">
+                          <content>
+                            <fx:include fx:id="supervisor" source="../com/tpv/supervisor/Supervisor.fxml" />
+                          </content>
+                        </Tab>
+                        <Tab fx:id="tabProducto" text="Búsqueda de Producto">
+                          <content>
+                            <fx:include fx:id="producto" source="../com/tpv/producto/BuscarPorDescProducto.fxml" />
+                          </content>
+                        </Tab>
+                        <Tab fx:id="tabCliente" text="Búsqueda de Cliente">
+                          <content>
+                            <fx:include fx:id="buscarPorNombreCliente" source="../com/tpv/cliente/BuscarPorNombreCliente.fxml" />
+                          </content>
+                        </Tab>
+                        <Tab fx:id="tabPago" text="Pago Ticket">
+                          <content>
+                            <fx:include fx:id="pagoTicket" source="../com/tpv/pagoticket/PagoTicket.fxml" />
+                          </content>
+                        </Tab>
+                        
+                        <Tab fx:id="tabConfirmarPago" text="Confirmar Pago Ticket">
+                          <content>
+                            <fx:include fx:id="confirmaPago" source="../com/tpv/pagoticket/ConfirmaPagoTicket.fxml" />
+                          </content>
+                        </Tab>
+                        
+                        <Tab fx:id="tabCombos" text="Combos">
+                          <content>
+                            <fx:include fx:id="combos" source="../com/tpv/combos/Combos.fxml" />
+                          </content>
+                        </Tab>
+                        <Tab fx:id="tabControlador" text="Controlador">
+                          <content>
+                            <fx:include fx:id="configImpresora" source="../com/tpv/print/fiscal/ConfiguracionImpresora.fxml" />
+                          </content>
+                        </Tab>
+                        
+      
+                        <Tab fx:id="tabFacturacion" text="Facturación">
+                           <content>
+                              <fx:include fx:id="facturacion" source="../com/tpv/principal/FXMLMain.fxml" />
+                           </content>
+                        </Tab>
+                    </tabs>
+                  </TabPane>
+                  <StackPane fx:id="stackPaneModal" prefHeight="150.0" prefWidth="200.0" styleClass="rounded_corner">
+                     <children>
+                        <Label text="Label" />
+                     </children>
+                  </StackPane>
+               </children>
+            </Pane>
          </center>
       </BorderPane>
    </children>

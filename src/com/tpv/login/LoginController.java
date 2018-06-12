@@ -11,6 +11,7 @@ import com.tpv.modelo.Checkout;
 import com.tpv.modelo.Usuario;
 import com.tpv.principal.Context;
 import com.tpv.service.UsuarioService;
+import com.tpv.util.ui.TabPaneModalCommand;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -34,7 +35,7 @@ import org.apache.log4j.Logger;
 
 //@FXMLController(value="Login.fxml", title = "Ingreso al Sistema")
 
-public class LoginController implements Initializable{
+public class LoginController implements Initializable, TabPaneModalCommand{
     private TabPanePrincipalController tabController;
     Logger log = Logger.getLogger(LoginController.class);
     UsuarioService usuarioService = new UsuarioService();    
@@ -172,6 +173,12 @@ public class LoginController implements Initializable{
             }
         });        
     }
+
+    public void aceptarMensajeModal(){
+        
+    }
     
-    
+    public void cancelarMensajeModal(){
+        
+    }
 }

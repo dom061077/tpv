@@ -128,6 +128,9 @@ public class MenuPrincipalController implements Initializable {
                 if(keyEvent.getCode()==KeyCode.NUMPAD2){
                     tabController.gotoControlador();
                 }
+                if(keyEvent.getCode()==KeyCode.NUMPAD3){
+                    tabController.gotoRetiroDinero();
+                }
                 
                 keyEvent.consume();
             });
