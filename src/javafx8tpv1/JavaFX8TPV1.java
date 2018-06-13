@@ -18,12 +18,13 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Cursor;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCombination;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 //import org.datafx.samples.app.MasterViewController;
@@ -156,7 +157,7 @@ public class JavaFX8TPV1 extends Application {
         String css = this.getClass().getResource("caspian.css").toExternalForm(); 
         scene.getStylesheets().add(css);        
         
-        //stage.setFullScreen(true); //full screen without borders (no program menu bars)
+        stage.setFullScreen(true); //full screen without borders (no program menu bars)
         
         stage.setFullScreenExitHint(""); //Don't show "Press ESC to exit full screen"
         stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
@@ -167,9 +168,12 @@ public class JavaFX8TPV1 extends Application {
         notifyPreloader(new StateChangeNotification(
                  StateChangeNotification.Type.BEFORE_START));
         
-        //flow.startInStage(stage);//
         
         stage.show();
+
+        Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+        stage.setX((primScreenBounds.getWidth() - stage.getWidth()) / 2);
+        stage.setY((primScreenBounds.getHeight() - stage.getHeight()) / 4);
         
     }
 

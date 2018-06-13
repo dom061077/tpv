@@ -21,27 +21,15 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1000.0" styleClass="rounded_corner" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.login.LoginController">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.login.LoginController">
    <top>
       <BorderPane prefHeight="80.0" prefWidth="80.0" BorderPane.alignment="CENTER">
          <top>
-            <HBox prefHeight="100.0" prefWidth="200.0" styleClass="label_sub_titulo" BorderPane.alignment="CENTER">
-               <children>
-                  <ImageView fx:id="imageViewLogoLeft" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                     <HBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </HBox.margin></ImageView>
-                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="74.0" prefWidth="758.0" styleClass="label_sub_titulo" text="Ingreso" textAlignment="CENTER" textFill="#3062e1">
-                     <font>
-                        <Font name="Arial" size="64.0" />
-                     </font>
-                  </Label>
-                  <ImageView fx:id="imageViewLogoRight" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                     <HBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </HBox.margin></ImageView>
-               </children>
-            </HBox>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="74.0" prefWidth="983.0" styleClass="label_barra_titulo" text="Ingreso" textAlignment="CENTER" textFill="#3062e1" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="Arial" size="64.0" />
+               </font>
+            </Label>
          </top>
       </BorderPane>
    </top>

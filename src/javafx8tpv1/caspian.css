@@ -4359,22 +4359,41 @@ to the top and bottom -fx-padding values of the parent toolbar. */
     -fx-font-size:56;
 }
 
-.label_titulo{
-    -fx-text-fill: #3757a7;
+.label_barra_titulo{
+    -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-font-size:45;
-    -fx-alignment:CENTER;
+    -fx-alignment:CENTER;    
+    -fx-border-color: transparent transparent -fx-base transparent;
+    -fx-effect: dropshadow(three-pass-box, #5AA0D0, 5, 5, 0, 0);
+    -fx-border-width: 3;
+    -fx-background-color:#5AA0D0;
+    -fx-background-radius: 15.0;
+    -fx-hgap: 10;
+    -fx-vgap: 10;
+    
+
     
 }
 
-.label_sub_titulo{
-    -fx-text-fill: #3757a7;
+.label_sub_titulo_modal{
+    -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-font-size:30;
     -fx-alignment:CENTER;    
     -fx-border-color: transparent transparent -fx-base transparent;
+    -fx-effect: dropshadow(three-pass-box, #5AA0D0, 5, 5, 0, 0);
     -fx-border-width: 3;
-    
+    -fx-background-color:#5AA0D0;
+}
+
+.label_aceptar_cancelar{
+    -fx-text-fill: #5AA0D0;
+    -fx-font-weight: bold;
+    -fx-font-size:30;
+    -fx-alignment:CENTER;    
+    //-fx-border-color: transparent transparent -fx-base transparent;
+    -fx-border-width: 3;
 }
 
 

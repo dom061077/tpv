@@ -33,8 +33,10 @@ import com.tpv.service.UsuarioService;
 import com.tpv.service.UtilidadesService;
 import com.tpv.supervisor.SupervisorController;
 import com.tpv.util.Connection;
+import com.tpv.util.ui.TabPaneModalCommand;
 import javafx.application.Platform;
 import javafx.scene.Node;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 
 /**
@@ -45,6 +47,7 @@ import javafx.scene.layout.StackPane;
 public class TabPanePrincipalController implements Initializable {
     Logger log = Logger.getLogger(TabPanePrincipalController.class);
     UsuarioService usuarioService = new UsuarioService();        
+    private TabPaneModalCommand tabPaneModalCommand;
     
     @FXML private LoginController loginController;
     @FXML private MenuPrincipalController menuPrincipalController;
@@ -108,6 +111,7 @@ public class TabPanePrincipalController implements Initializable {
         this.combosController.setTabController(this);
         this.retiroDineroController.setTabController(this);
         
+        
         try{
             initParametrosGenerales();
             initImpresora();
@@ -125,6 +129,14 @@ public class TabPanePrincipalController implements Initializable {
                        //menuPrincipalController.setMenuFocus();
                    }
                 });
+        stackPaneModal.setOnKeyPressed(keyEvent->{
+            if(keyEvent.getCode() == KeyCode.ENTER){
+                getTabPaneModalCommand().aceptarMensajeModal();
+            }
+            if(keyEvent.getCode() == KeyCode.ESCAPE){
+                getTabPaneModalCommand().cancelarMensajeModal();
+            }
+        });
         
     }      
     
@@ -257,9 +269,26 @@ public class TabPanePrincipalController implements Initializable {
         });        
     }    
     
-    public void mostrarMensaje(){
+    public void setTabPaneModalCommand(TabPaneModalCommand tabPaneModalCommand){
+        this.tabPaneModalCommand = tabPaneModalCommand;
+    }
+    
+    public TabPaneModalCommand getTabPaneModalCommand(){
+        return this.tabPaneModalCommand;
+    }
+
+    public void mostrarMensajeModal(){
         this.stackPaneModal.setVisible(true);
     }
+    
+    public void ocultarMensajeModal(){
+        this.stackPaneModal.setVisible(false);
+    }
+    
+    public StackPane getStackPane(){
+        return stackPaneModal;
+    }
+    
     
     
 }

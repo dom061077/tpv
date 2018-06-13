@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.paint.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -15,9 +16,9 @@
 
 <AnchorPane focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="740.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafx8tpv1.TabPanePrincipalController">
    <children>
-      <BorderPane focusTraversable="true" prefHeight="740.0" prefWidth="1024.0">
+      <BorderPane focusTraversable="true" prefHeight="740.0" prefWidth="1024.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
-            <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <Pane prefHeight="200.0" prefWidth="200.0" styleClass="rounded_corner" BorderPane.alignment="CENTER">
                <children>
                   <TabPane fx:id="tabPanePrincipal" focusTraversable="false" prefHeight="740.0" prefWidth="1024.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE">
                     <tabs>
@@ -90,14 +91,41 @@
                         </Tab>
                     </tabs>
                   </TabPane>
-                  <StackPane fx:id="stackPaneModal" prefHeight="150.0" prefWidth="200.0" styleClass="rounded_corner">
+                  <StackPane fx:id="stackPaneModal" layoutX="300.0" layoutY="200.0" prefHeight="350.0" prefWidth="450.0" styleClass="rounded_corner_modal">
                      <children>
-                        <Label text="Label" />
+                        <BorderPane prefHeight="200.0" prefWidth="200.0">
+                           <top>
+                              <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="450.0" prefHeight="21.0" prefWidth="450.0" styleClass="label_sub_titulo_modal" text="Mensaje" textFill="#d31818fa" BorderPane.alignment="CENTER" />
+                           </top>
+                           <bottom>
+                              <HBox alignment="CENTER" prefHeight="58.0" prefWidth="450.0" BorderPane.alignment="CENTER">
+                                 <children>
+                                    <Label alignment="CENTER" prefHeight="21.0" prefWidth="225.0" styleClass="label_shorcut" text="Enter - Aceptar" />
+                                    <Label alignment="CENTER" prefWidth="225.0" styleClass="label_shorcut" text="Esc - Cancelar" />
+                                 </children>
+                              </HBox>
+                           </bottom>
+                        </BorderPane>
                      </children>
                   </StackPane>
                </children>
             </Pane>
          </center>
+         <left>
+            <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
+         </left>
+         <right>
+            <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
+         </right>
+         <top>
+            <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+         </top>
+         <bottom>
+            <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+         </bottom>
       </BorderPane>
    </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
 </AnchorPane>

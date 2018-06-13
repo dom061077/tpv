@@ -6,6 +6,7 @@
 package com.tpv.retirodinero;
 
 import com.tpv.util.ui.MaskTextField;
+import com.tpv.util.ui.TabPaneModalCommand;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -20,7 +21,7 @@ import org.apache.log4j.Logger;
      *
  * @author COMPUTOS
  */
-public class RetiroDineroController implements Initializable {
+public class RetiroDineroController implements Initializable,TabPaneModalCommand {
     Logger log = Logger.getLogger(RetiroDineroController.class);
     private TabPanePrincipalController tabController;
     private MaskTextField textField1000 ;
@@ -104,8 +105,10 @@ public class RetiroDineroController implements Initializable {
                 keyEvent.consume();
             if(keyEvent.getCode() == KeyCode.ESCAPE)
                 this.tabController.repeatFocus(textField100);
-            if(keyEvent.getCode() == KeyCode.ENTER)
-                this.tabController.mostrarMensaje();
+            if(keyEvent.getCode() == KeyCode.ENTER){
+                this.tabController.mostrarMensajeModal();
+                this.tabController.repeatFocus(this.tabController.getStackPane());
+            }
             
         });
         
@@ -113,6 +116,7 @@ public class RetiroDineroController implements Initializable {
 
     public void configurarInicio(){
         this.tabController.repeatFocus(textField1000);
+        this.tabController.setTabPaneModalCommand(this);
     }
     
     public void setTabController(TabPanePrincipalController tabController){
@@ -162,6 +166,18 @@ public class RetiroDineroController implements Initializable {
         textField50.setStyle("-fx-alignment: CENTER-RIGHT;");
         gridPane.add(textField50,1, 4);
     }
+    
+    public void aceptarMensajeModal(){
+        this.tabController.ocultarMensajeModal();
+        this.tabController.repeatFocus(this.textField1000);
+    }
+    
+    public void cancelarMensajeModal(){
+        this.tabController.ocultarMensajeModal();
+        this.tabController.repeatFocus(this.textField1000);
+    }
+    
+    
     
     
 }

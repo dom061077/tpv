@@ -51,11 +51,7 @@ public class LoginController implements Initializable, TabPaneModalCommand{
     @FXML
     private TextField password;
     
-    @FXML
-    private ImageView imageViewLogoRight;
     
-    @FXML
-    private ImageView imageViewLogoLeft;
     
     @FXML
     private BorderPane borderPane;
@@ -153,8 +149,6 @@ public class LoginController implements Initializable, TabPaneModalCommand{
     
     private void loadImage(){
         String f = this.getClass().getResource("/com/tpv/resources/logologin.jpg").toExternalForm();
-        imageViewLogoRight.setImage(new Image(f));
-        imageViewLogoLeft.setImage(new Image(f));
     }
     
     public void setTabController(TabPanePrincipalController tabPane){

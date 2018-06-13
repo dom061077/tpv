@@ -22,6 +22,7 @@ import com.tpv.service.FacturacionService;
 import com.tpv.service.ImpresoraService;
 import com.tpv.service.ProductoService;
 import com.tpv.util.ui.MaskTextField;
+import com.tpv.util.ui.TabPaneModalCommand;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URL;
@@ -45,7 +46,6 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -66,7 +66,7 @@ import org.tpv.print.fiscal.hasar.HasarCommands;
  * @author daniel
  */
 //@FXMLController(value="FXMLMain.fxml", title = "Edit user")
-public class FXMLMainController implements Initializable {
+public class FXMLMainController implements Initializable, TabPaneModalCommand {
     TabPanePrincipalController tabPaneController;
     private final static String LABEL_CANTIDAD="Cantidad:";
     private final static String LABEL_CANTIDAD_INGRESADA="(Cantidad->";
@@ -1148,7 +1148,13 @@ public class FXMLMainController implements Initializable {
         this.tabPaneController=tabPane;
     }
     
-
+    public void aceptarMensajeModal(){
+        
+    }
+    
+    public void cancelarMensajeModal(){
+        
+    }
     
     
 }
