@@ -6,6 +6,7 @@
 package com.tpv.util;
 
 import com.tpv.principal.FXMLMainController;
+import java.math.BigInteger;
 import org.apache.log4j.Logger;
 import org.tpv.print.fiscal.FiscalPacket;
 
@@ -42,10 +43,17 @@ public class BinaryFiscalPacketParser {
     private void translateFiscalStatus(){
         String fiscalStatus = fiscalPacket.getString(2);
         log.debug("Fiscal status en string: "+fiscalStatus);
-        int num = Integer.parseInt(fiscalStatus,16);
-        String binaryStr = Integer.toBinaryString(num);
+        //int num = Integer.parseInt(fiscalStatus,16);
+        //String binaryStr = Integer.toBinaryString(num);
+        String binaryStr = new BigInteger(fiscalStatus,16).toString(2);
         StringBuffer sb = new StringBuffer(16);
         sb.append(binaryStr);
+        for(int i = binaryStr.length();i>0;i--){
+            sb.append(binaryStr.substring(i-1,i));
+        }
+        
+        
+        
         for(int i=1;i<=16-binaryStr.length();i++){
             sb.append("0");
         }
@@ -200,5 +208,12 @@ public class BinaryFiscalPacketParser {
      */
     public boolean isDocumentoFiscalAbiertoODocNoFiscalAbierto() {
         return documentoFiscalAbiertoODocNoFiscalAbierto;
+    }
+    
+    public static void main(String[] args){
+        String str="1234567890123456";
+        for(int i=str.length(); i>0;i--){
+            System.out.println("Caracter: "+str.substring(i-1,i));
+        }
     }
 }

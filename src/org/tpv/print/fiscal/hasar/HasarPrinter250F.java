@@ -106,7 +106,7 @@ public class HasarPrinter250F extends HasarFiscalPrinter {
 			cmd.setNumber(i++, ivaPercent, 2, 2, false,"");		
 		cmd.setBoolean(i++, substract, "m", "M", false);
                 //TODO signo porcentaje en impuesto interno
-                cmd.setText(i++, "0", false);//7. TipoImpuestoInterno
+                cmd.setText(i++, "%", false);//7. TipoImpuestoInterno
 		cmd.setNumber(i++, internalTaxes, 10, 2, false,"");//cmd.setNumber(i++, internalTaxes, 10, 8, false,"");
 		cmd.setNumber(i++, display, true);
 		cmd.setBoolean(i++, basePrice, "x", "T", false);

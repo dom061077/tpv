@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.retirodinero.RetiroDineroController">
+<BorderPane fx:id="borderPane" maxHeight="600.0" maxWidth="2014.0" minHeight="1204.0" minWidth="600.0" prefHeight="600.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.retirodinero.RetiroDineroController">
    <top>
       <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="21.0" prefWidth="1024.0" styleClass="label_barra_titulo" text="Retiro de Dinero" BorderPane.alignment="CENTER" />
    </top>

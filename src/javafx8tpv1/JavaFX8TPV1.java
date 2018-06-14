@@ -171,9 +171,6 @@ public class JavaFX8TPV1 extends Application {
         
         stage.show();
 
-        Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
-        stage.setX((primScreenBounds.getWidth() - stage.getWidth()) / 2);
-        stage.setY((primScreenBounds.getHeight() - stage.getHeight()) / 4);
         
     }
 
