@@ -21,7 +21,7 @@
                     <tabs>
                         <Tab fx:id="tabRetiroDinero" closable="false" text="Retiro Dinero">
                           <content>
-                                <fx:include fx:id="retiroDinero" source="../com/tpv/retirodinero/RetiroDinero.fxml" />
+                                <fx:include fx:id="retiroDinero" maxHeight="740.0" minWidth="740.0" prefHeight="740.0" source="../com/tpv/retirodinero/RetiroDinero.fxml" />
                           </content>
                         </Tab>
                         <Tab fx:id="tabMenuPrincipal" closable="false" text="Menu Prinipal">

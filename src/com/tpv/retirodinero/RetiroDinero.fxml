@@ -8,12 +8,12 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane fx:id="borderPane" maxHeight="600.0" maxWidth="2014.0" minHeight="1204.0" minWidth="600.0" prefHeight="600.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.retirodinero.RetiroDineroController">
+<BorderPane fx:id="borderPane" maxHeight="740.0" maxWidth="1024.0" minHeight="740.0" minWidth="1024.0" prefHeight="740.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.retirodinero.RetiroDineroController">
    <top>
-      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="21.0" prefWidth="1024.0" styleClass="label_barra_titulo" text="Retiro de Dinero" BorderPane.alignment="CENTER" />
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="75.0" prefWidth="1024.0" styleClass="label_barra_titulo" text="Retiro de Dinero" BorderPane.alignment="CENTER" />
    </top>
    <center>
-      <GridPane fx:id="gridPane" prefHeight="295.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
+      <GridPane fx:id="gridPane" minHeight="500.0" minWidth="1024.0" prefHeight="500.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="495.0" minWidth="10.0" prefWidth="391.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="638.0" minWidth="10.0" prefWidth="459.0" />
@@ -57,15 +57,18 @@
             </Label>
          </children>
          <BorderPane.margin>
-            <Insets right="150.0" />
+            <Insets left="25.0" right="150.0" />
          </BorderPane.margin>
       </GridPane>
    </center>
    <bottom>
-      <HBox prefHeight="38.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
+      <HBox prefHeight="171.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
          <children>
             <Label styleClass="label_shorcut" text="F11 - Ir a Menu Principal" />
          </children>
+         <BorderPane.margin>
+            <Insets left="25.0" />
+         </BorderPane.margin>
       </HBox>
    </bottom>
 </BorderPane>
