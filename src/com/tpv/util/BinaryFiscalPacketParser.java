@@ -47,16 +47,10 @@ public class BinaryFiscalPacketParser {
         //String binaryStr = Integer.toBinaryString(num);
         String binaryStr = new BigInteger(fiscalStatus,16).toString(2);
         StringBuffer sb = new StringBuffer(16);
-        sb.append(binaryStr);
-        for(int i = binaryStr.length();i>0;i--){
-            sb.append(binaryStr.substring(i-1,i));
-        }
-        
-        
-        
         for(int i=1;i<=16-binaryStr.length();i++){
             sb.append("0");
         }
+        sb.append(binaryStr);
         binaryStr = sb.toString();
         //tomo el string en modo invertido
         if(binaryStr.substring(2,3).compareTo("1")==0){
