@@ -149,8 +149,11 @@ public class ConfirmaPagoTicketController implements Initializable{
             
             
     public void configurarInicio(){
-            
             log.info("Ingresando a la confirmación de pago");
+            
+            if(impresoraService.getHfp().getEventListener()==null)
+                asignarEvento();            
+            
             DecimalFormat df = new DecimalFormat("##,##0.00");
             if(Context.getInstance().currentDMTicket().getCliente()==null
                     || Context.getInstance().currentDMTicket().getCliente().getCondicionIva().getId()==1){
@@ -186,7 +189,6 @@ public class ConfirmaPagoTicketController implements Initializable{
     @FXML
     public  void initialize(URL url, ResourceBundle rb) {
             log.info("Ingresando al mètodo init");
-            asignarEvento();
             //labelError.setText(model.getTpvException().getMessage());
             //modelTicket = context.getRegisteredObject(DataModelTicket.class);
             

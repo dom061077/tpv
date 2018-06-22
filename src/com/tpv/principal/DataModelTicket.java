@@ -67,7 +67,7 @@ public class DataModelTicket {
     private BigDecimal totalIva;
     private BigDecimal totalImpuestoInterno;
     private BigDecimal totalExento;
-    private BigDecimal retencion;
+    private BigDecimal retencion = BigDecimal.ZERO;
     
     
     public DataModelTicket(){

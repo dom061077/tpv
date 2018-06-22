@@ -196,7 +196,12 @@ public class PagoTicketController implements Initializable {
         textFieldNroTarjeta.setText("");
         textFieldTipoPago.setText("");
         labelFormaPagoDescripcion.setText("");
-        
+
+        if (Context.getInstance().currentDMTicket().getSaldo().compareTo(BigDecimal.valueOf(0))>0)
+            textFieldMonto.setText(Context.getInstance().currentDMTicket().getSaldo().toString());
+        else
+            textFieldMonto.setText("0");
+
         
         bonificaciones.setText(df.format(Context.getInstance().currentDMTicket().getBonificaciones()));
         saldoPagar.setText(Context.getInstance().currentDMTicket().getFormatSaldo());        
@@ -323,10 +328,6 @@ public class PagoTicketController implements Initializable {
         textFieldCantidadCuotas.setStyle("-fx-alignment: CENTER-RIGHT;");
         textFieldCantidadCuotas.setDisable(true);
         
-        if (Context.getInstance().currentDMTicket().getSaldo().compareTo(BigDecimal.valueOf(0))>0)
-            textFieldMonto.setText(Context.getInstance().currentDMTicket().getSaldo().toString());
-        else
-            textFieldMonto.setText("0");
         
         Platform.runLater(() -> {
             

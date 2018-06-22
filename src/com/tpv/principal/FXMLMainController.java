@@ -184,7 +184,7 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
     
     public void configurarInicio() throws TpvException{
         log.info("Ingresando a pantalla de facturación");
-        impresoraService.getPrinterVersion();        
+        //impresoraService.getPrinterVersion();        
         stackPaneIngresos.requestFocus();
         textFieldCodCliente.requestFocus();
         

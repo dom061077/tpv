@@ -29,6 +29,7 @@ import com.tpv.pagoticket.PagoTicketController;
 import com.tpv.print.fiscal.ConfiguracionImpresoraController;
 import com.tpv.producto.BuscarPorDescProductoController;
 import com.tpv.retirodinero.RetiroDineroController;
+import com.tpv.service.ImpresoraService;
 import com.tpv.service.UsuarioService;
 import com.tpv.service.UtilidadesService;
 import com.tpv.supervisor.SupervisorController;
@@ -47,6 +48,7 @@ import javafx.scene.layout.StackPane;
 public class TabPanePrincipalController implements Initializable {
     Logger log = Logger.getLogger(TabPanePrincipalController.class);
     UsuarioService usuarioService = new UsuarioService();        
+    ImpresoraService impresoraService = new ImpresoraService();
     private TabPaneModalCommand tabPaneModalCommand;
     
     @FXML private LoginController loginController;
@@ -94,6 +96,19 @@ public class TabPanePrincipalController implements Initializable {
     @FXML
     public  void initialize(URL url, ResourceBundle rb) {
         // TODO
+        
+        try{
+            initParametrosGenerales();
+            initImpresora();
+            
+            gotoLogin();            
+        }catch(TpvException e){
+            log.error(e.getMessage());
+            Context.getInstance().currentDMTicket().setException(e);
+            //Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_LOGIN);
+            this.gotoError();
+        }
+        
         this.loginController.getPassword().requestFocus();
         this.stackPaneModal.setVisible(false);
         
@@ -112,16 +127,6 @@ public class TabPanePrincipalController implements Initializable {
         this.retiroDineroController.setTabController(this);
         
         
-        try{
-            initParametrosGenerales();
-            initImpresora();
-            gotoLogin();            
-        }catch(TpvException e){
-            log.error(e.getMessage());
-            Context.getInstance().currentDMTicket().setException(e);
-            //Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_LOGIN);
-            this.gotoError();
-        }
 
         tabPanePrincipal.getSelectionModel().selectedItemProperty()
                 .addListener((observable,oldTab,newTab)->{
@@ -147,6 +152,7 @@ public class TabPanePrincipalController implements Initializable {
     
     private void initImpresora() throws TpvException{
             Connection.initFiscalPrinter();
+            impresoraService.getPrinterVersion();        
         
     }
     

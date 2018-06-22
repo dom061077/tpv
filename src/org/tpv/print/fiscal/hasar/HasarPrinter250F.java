@@ -30,8 +30,9 @@ public class HasarPrinter250F extends HasarFiscalPrinter {
     
         
         private static final int FACTURA_B = 6;
+        private static final int FACTURA_A = 1;
         private static final int TIQUE_FACTURA_B = 82;
-    
+        private static final int PERCEPCIONIIBB = 7;
     
 	/**
 	 * 
@@ -61,9 +62,12 @@ public class HasarPrinter250F extends HasarFiscalPrinter {
                 int codigoDoc=0;
                 if(docType.compareTo("B")==0)
                     codigoDoc = FACTURA_B;
+                if(docType.compareTo("A")==0)
+                    codigoDoc = FACTURA_A;
 		FiscalPacket cmd = createFiscalPacket(CMD_OPEN_FISCAL_RECEIPT);
 		int i = 1;
-		cmd.setText(i++, "6", false);
+                
+		cmd.setText(i++, String.valueOf(codigoDoc), false);
 		//cmd.setText(i++, "T", true);
 		return cmd;
 	}
@@ -85,6 +89,16 @@ public class HasarPrinter250F extends HasarFiscalPrinter {
 		
 		return super.loadCustomerData(customer);
 	}
+        
+        @Override
+	public FiscalPacket cmdPerceptions(String description, BigDecimal baseImponible, BigDecimal alicuotaIVA) {
+		FiscalPacket cmd = createFiscalPacket(CMD_PERCEPTIONS_250F_UP);
+		/*int i = 1;
+		cmd.setNumber(i++, BigDecimal.valueOf(PERCEPCIONIIBB), 1, 0, false,"");
+		cmd.setText(i++, description, 20,false);
+		cmd.setAmount(i++, amount, false, false);*/
+		return cmd;
+	}        
 
 	@Override
 	public FiscalPacket cmdPrintLineItem(String description, BigDecimal quantity, BigDecimal price, BigDecimal ivaPercent, boolean substract, BigDecimal internalTaxes, boolean basePrice, Integer display, int descMaxLength) {

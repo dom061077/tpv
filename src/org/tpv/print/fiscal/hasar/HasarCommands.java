@@ -118,6 +118,11 @@ public interface HasarCommands {
 	public int CMD_CHARGE_NON_REGISTERED_TAX  = 0x61;
 	/** DF: Percepciones sobre el IVA. (0x60) */
 	public int CMD_PERCEPTIONS                = 0x60;
+	/** DF: Percepciones sobre el IVA Para modelo 250F o superior. (0x61) */
+	public int CMD_PERCEPTIONS_250F_UP        = 0x60;
+        
+        
+        
 	/** DF: Consultar subtotal. (0x43) */
 	public int CMD_SUBTOTAL                   = 0x43;
 	/** DF: Definir líneas de texto en recibos. (0x97) */
