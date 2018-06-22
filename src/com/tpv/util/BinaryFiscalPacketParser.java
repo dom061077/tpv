@@ -205,9 +205,8 @@ public class BinaryFiscalPacketParser {
     }
     
     public static void main(String[] args){
-        String str="1234567890123456";
-        for(int i=str.length(); i>0;i--){
-            System.out.println("Caracter: "+str.substring(i-1,i));
-        }
+        String str="23261382369";
+        
+        System.out.println(new BigInteger(str));
     }
 }

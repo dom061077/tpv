@@ -172,6 +172,7 @@ public class PagoTicketController implements Initializable {
             Context.getInstance().currentDMTicket().setTotalNeto(factura.getNeto().add(
                     factura.getNetoReducido()
             ));
+            Context.getInstance().currentDMTicket().setRetencion(factura.getRetencion());
             Context.getInstance().currentDMTicket()
                     .setTotalImpuestoInterno(factura.getImpuestoInterno());
             
@@ -632,7 +633,7 @@ public class PagoTicketController implements Initializable {
                     .divide(auxTarjeta,RoundingMode.HALF_EVEN);
         ivaInteresTarjeta = formaPago
                     .getInteresEnFormaPago(cantidadCuotas, monto)
-                    .subtract(auxTarjeta);
+                    .subtract(netoInteresTarjeta);
         
                 
         Context.getInstance().currentDMTicket().getPagos().add(new LineaPagoData(

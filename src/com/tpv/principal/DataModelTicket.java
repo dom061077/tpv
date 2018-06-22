@@ -67,6 +67,7 @@ public class DataModelTicket {
     private BigDecimal totalIva;
     private BigDecimal totalImpuestoInterno;
     private BigDecimal totalExento;
+    private BigDecimal retencion;
     
     
     public DataModelTicket(){
@@ -97,6 +98,7 @@ public class DataModelTicket {
             //total = total + ticket.getSubTotal().doubleValue();
             total = total.add(ticket.getSubTotal());
         }
+        total = total.add(getRetencion());
         
         return total;
     }
@@ -449,6 +451,7 @@ public class DataModelTicket {
      */
     public BigDecimal getTotalGral() {
         BigDecimal totalGral = getTotalTicket();
+        
         totalGral = totalGral.subtract(getBonificaciones());
         totalGral = totalGral.subtract(getBonificacionPorPagoTotal());
         totalGral = totalGral.add(getInteresPorPagoTotal());
@@ -460,6 +463,20 @@ public class DataModelTicket {
         DecimalFormat df = new DecimalFormat("###,###,###,##0.00");
         BigDecimal totalGralAFormatear = getTotalGral();
         return df.format(totalGralAFormatear.doubleValue());
+    }
+
+    /**
+     * @return the retencion
+     */
+    public BigDecimal getRetencion() {
+        return retencion;
+    }
+
+    /**
+     * @param retencion the retencion to set
+     */
+    public void setRetencion(BigDecimal retencion) {
+        this.retencion = retencion;
     }
     
     

@@ -9,7 +9,9 @@ import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.ParametroGeneral;
 import com.tpv.util.Connection;
 import java.util.List;
+import javafx8tpv1.TabPanePrincipalController;
 import javax.persistence.EntityManager;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -31,12 +33,14 @@ public class UtilidadesService {
     } 
     
     public static ParametroGeneral getParametroGral(String id) throws TpvException{
+        Logger log = Logger.getLogger(TabPanePrincipalController.class);
         ParametroGeneral param = null;
         EntityManager em = Connection.getEm();
         try{
             param = em.find(ParametroGeneral.class, id);
         }catch(RuntimeException e){
-           throw new TpvException("Error en tiempo de ejecución"); 
+           log.error("Error al obtener parámetro general",e);
+           throw new TpvException("Error en tiempo de ejecución: "+e.getMessage()); 
         }finally{
             em.clear();
         }
