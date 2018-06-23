@@ -15,28 +15,10 @@
 <?import javafx.scene.layout.RowConstraints?>
 
 <BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.pagoticket.ConfirmaPagoTicketController">
-   <bottom>
-      <GridPane BorderPane.alignment="CENTER">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <Button fx:id="goToErrorButton" mnemonicParsing="false" text="Button" visible="false" />
-            <Button mnemonicParsing="false" text="Button" visible="false" />
-            <Button fx:id="volverButton" mnemonicParsing="false" text="Button" visible="false" GridPane.columnIndex="1" />
-            <Button fx:id="confirmarButton" mnemonicParsing="false" text="Button" visible="false" GridPane.columnIndex="2" />
-         </children>
-      </GridPane>
-   </bottom>
    <center>
       <BorderPane prefHeight="200.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
          <bottom>
-            <GridPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="316.0" prefWidth="800.0" styleClass="rounded_corner" BorderPane.alignment="CENTER">
+            <GridPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="340.0" prefWidth="800.0" styleClass="rounded_corner" BorderPane.alignment="CENTER">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="656.0" minWidth="10.0" prefWidth="516.0" />
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="580.0" minWidth="10.0" prefWidth="508.0" />
@@ -86,7 +68,7 @@
          <center>
             <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <TableView fx:id="tableViewPagos" prefHeight="200.0" prefWidth="1024.0" styleClass="tpv-table-view">
+                  <TableView fx:id="tableViewPagos" layoutY="17.0" prefHeight="223.0" prefWidth="1024.0" styleClass="tpv-table-view">
                     <columns>
                         <TableColumn fx:id="codigoPagoColumn" text="Cod." visible="false" />
                       <TableColumn fx:id="descripcionPagoColumn" prefWidth="200.0" text="Descripción" />
@@ -123,20 +105,16 @@
          </center></BorderPane>
    </center>
    <top>
-      <Pane prefHeight="59.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
+      <GridPane prefHeight="54.0" prefWidth="1024.0" BorderPane.alignment="TOP_LEFT">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
          <children>
-            <GridPane prefHeight="82.0" prefWidth="1024.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Label alignment="TOP_CENTER" prefHeight="42.0" prefWidth="1163.0" styleClass="label_titulo" text="Cierre de Ticket" />
-               </children>
-            </GridPane>
+            <Label alignment="TOP_CENTER" prefHeight="54.0" prefWidth="1024.0" styleClass="label_barra_titulo" text="Cierre de Ticket" />
          </children>
-      </Pane>
+      </GridPane>
    </top>
 </BorderPane>

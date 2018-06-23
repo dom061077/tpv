@@ -138,19 +138,7 @@ public class MenuPrincipalController implements Initializable {
     }
     
     private void loadImage(){
-        String f = this.getClass().getResource("/com/tpv/resources/logologin.jpg").toExternalForm();
-        imageViewLogoRight1.setImage(new Image(f));
-        imageViewLogoRight2.setImage(new Image(f));
-        imageViewLogoRight3.setImage(new Image(f));
-        imageViewLogoLeft1.setImage(new Image(f));
-        imageViewLogoLeft2.setImage(new Image(f));
-        imageViewLogoLeft3.setImage(new Image(f));
-        imageViewLogoTop1.setImage(new Image(f));
-        imageViewLogoTop2.setImage(new Image(f));
-        imageViewLogoTop3.setImage(new Image(f));
-        imageViewLogoBottom1.setImage(new Image(f));
-        imageViewLogoBottom2.setImage(new Image(f));
-        imageViewLogoBottom3.setImage(new Image(f));
+        //String f = this.getClass().getResource("/com/tpv/resources/logologin.jpg").toExternalForm();
         imageFacturacion.setImage(new Image(this.getClass().getResource("/com/tpv/resources/facturacion.png").toExternalForm()));
         imageControlador.setImage(new Image(this.getClass().getResource("/com/tpv/resources/controlador.png").toExternalForm()));
         imageRetiroDinero.setImage(new Image(this.getClass().getResource("/com/tpv/resources/retiro_dinero.png").toExternalForm()));

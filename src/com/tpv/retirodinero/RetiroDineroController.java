@@ -107,7 +107,6 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
                 this.tabController.repeatFocus(textField100);
             if(keyEvent.getCode() == KeyCode.ENTER){
                 this.tabController.mostrarMensajeModal();
-                this.tabController.repeatFocus(this.tabController.getStackPane());
             }
             
         });

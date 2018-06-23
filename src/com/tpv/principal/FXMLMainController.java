@@ -597,7 +597,7 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
     
     public void iniciaIngresosVisibles(){
         
-        textFieldProducto = textFieldProducto = new MaskTextField();
+        textFieldProducto =  new MaskTextField();
         textFieldProducto.setMask("N!");
         textFieldProducto.setVisible(false);
         textFieldProducto.getStyleClass().add("textfield_sin_border");
@@ -1062,7 +1062,7 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
             factura = factService.getFacturaAbiertaPorCheckout(Context.getInstance().currentDMTicket().getCheckout().getId()
                     ,Context.getInstance().currentDMTicket().getUsuario().getIdUsuario());
             if(factura!=null){
-                factService.cancelarFactura(factura.getId());
+                factService.anularFacturaPorReinicio(factura.getId());
                 if(Context.getInstance().currentDMTicket().isTicketAbierto()){
                     log.warn("Factura abierta en base de datos y cerrada en impresora. Se procede a cancelar en BD");
                    impresoraService.cancelarTicket();

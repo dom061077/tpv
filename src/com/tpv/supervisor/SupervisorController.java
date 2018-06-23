@@ -14,6 +14,8 @@ import com.tpv.print.event.FiscalPrinterEvent;
 import com.tpv.service.FacturacionService;
 import com.tpv.service.ImpresoraService;
 import com.tpv.service.UsuarioService;
+import com.tpv.util.ui.MaskTextField;
+import com.tpv.util.ui.TabPaneModalCommand;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -22,13 +24,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx8tpv1.TabPanePrincipalController;
 import org.apache.log4j.Logger;
 import org.tpv.print.fiscal.FiscalPacket;
 import org.tpv.print.fiscal.FiscalPrinter;
 import org.tpv.print.fiscal.hasar.HasarCommands;
-import static org.tpv.print.fiscal.hasar.HasarCommands.CMD_CANCEL_DOCUMENT;
 
 /**
  *
@@ -37,7 +39,7 @@ import static org.tpv.print.fiscal.hasar.HasarCommands.CMD_CANCEL_DOCUMENT;
 
         
 
-public class SupervisorController implements Initializable{
+public class SupervisorController implements Initializable, TabPaneModalCommand{
     Logger log = Logger.getLogger(SupervisorController.class);
 
     private ImpresoraService impresoraService = new ImpresoraService();
@@ -56,6 +58,9 @@ public class SupervisorController implements Initializable{
     @FXML
     private TextField textFieldPassword;
     
+    
+    private MaskTextField textFieldCodigoBarra;
+    
     @FXML
     private StackPane stackPaneError;
     
@@ -65,16 +70,20 @@ public class SupervisorController implements Initializable{
     @FXML
     private BorderPane borderPaneIngreso;
     
+    @FXML
+    private GridPane gridPane;
+    
 
 
     public void configurarInicio(){
         stackPaneError.setVisible(false);
         labelTitulo.setText(Context.getInstance().currentDMTicket().getTipoTituloSupervisor().getTitulo());
-        textFieldPassword.setDisable(true);
         
         textFieldCodigoSupervisor.setText("");
         textFieldPassword.setText("");
+        textFieldCodigoBarra.setText("");
         tabController.repeatFocus(textFieldCodigoSupervisor);
+        this.tabController.setTabPaneModalCommand(this);
     }
     
     
@@ -84,7 +93,7 @@ public class SupervisorController implements Initializable{
     public  void initialize(URL url, ResourceBundle rb) {
             log.info("Ingresando al método init");
             asignarEvento();
-            labelError.setOnKeyPressed(keyEvent -> {
+            /*labelError.setOnKeyPressed(keyEvent -> {
                 if(keyEvent.getCode() == KeyCode.ESCAPE){
                     stackPaneError.setVisible(false);
                     borderPaneIngreso.setDisable(false);
@@ -92,30 +101,65 @@ public class SupervisorController implements Initializable{
                     keyEvent.consume();
                     
                 }
+                if(keyEvent.getCode() == KeyCode.TAB){
+                    keyEvent.consume();
+                }
             });
-            
+            */
             textFieldCodigoSupervisor.setOnKeyPressed(keyEvent->{
                 if(keyEvent.getCode() == KeyCode.ESCAPE){
                     tabController.gotoFacturacion();
                     keyEvent.consume();
                 }
                 if(keyEvent.getCode() == KeyCode.ENTER){
-                    textFieldPassword.setDisable(false);
                     textFieldPassword.requestFocus();
+                    tabController.repeatFocus(textFieldPassword);
                     keyEvent.consume();
                 }
+                if(keyEvent.getCode() == KeyCode.TAB){
+                    keyEvent.consume();
+                    return;
+                }
+                    
             });
+            
             textFieldPassword.setOnKeyPressed(keyEvent->{
+                if(keyEvent.getCode() == KeyCode.ESCAPE){
+                    tabController.gotoFacturacion();
+                    keyEvent.consume();
+                    return;
+                }
+                if(keyEvent.getCode()==KeyCode.ENTER){
+                    textFieldCodigoBarra.setDisable(false);
+                    tabController.repeatFocus(textFieldCodigoBarra);
+                    keyEvent.consume();
+                }
+                if(keyEvent.getCode() == KeyCode.TAB){
+                    keyEvent.consume();
+                    return;
+                }
+            });
+            
+            textFieldCodigoBarra = new MaskTextField();
+            textFieldCodigoBarra.setMask("N!");
+            textFieldCodigoBarra.getStyleClass().add("textfield_sin_border");
+            
+            gridPane.add(textFieldCodigoBarra, 1, 2);
+            
+            textFieldCodigoBarra.setOnKeyPressed(keyEvent->{
                 if(keyEvent.getCode() == KeyCode.ENTER){
                     Usuario usuario = null;
                     try{        
                             usuario = usuarioService.authenticarSupervisor(textFieldCodigoSupervisor.getText()
-                            ,textFieldPassword.getText() );
+                            ,textFieldPassword.getText(), textFieldCodigoBarra.getText());
                             if(usuario==null){
-                                labelError.setText("Credenciales de Supervisor incorrectas");
+                                /*labelError.setText("Credenciales de Supervisor incorrectas");
                                 borderPaneIngreso.setDisable(true);
                                 stackPaneError.setVisible(true);
-                                labelError.requestFocus();
+                                labelError.requestFocus();*/
+                                this.tabController.getLabelMensaje().setText("Credenciales de Supervisor Incorrectas");
+                                this.tabController.getLabelCancelarModal().setVisible(false);
+                                this.tabController.mostrarMensajeModal();
                             }else{
                                 if(Context.getInstance().currentDMTicket().getTipoTituloSupervisor()==TipoTituloSupervisorEnum.HABILITAR_MENU){
                                     tabController.gotoMenuPrincipal();
@@ -138,12 +182,17 @@ public class SupervisorController implements Initializable{
                     }
                 }
                 if(keyEvent.getCode() == KeyCode.ESCAPE){
-                    textFieldPassword.setDisable(true);
-                    textFieldCodigoSupervisor.requestFocus();
+                    textFieldCodigoBarra.setDisable(true);
                     keyEvent.consume();
                     tabController.gotoFacturacion();
                 }
+                
+                if(keyEvent.getCode() == KeyCode.TAB){
+                    keyEvent.consume();
+                    return;
+                }
             });
+
             
             
     }
@@ -170,7 +219,7 @@ public class SupervisorController implements Initializable{
                 log.debug("Evento despues de cerrar cancelar ticket");
                 if(command.getCommandCode()==HasarCommands.CMD_CANCEL_DOCUMENT){
                     try{
-                        facturaService.cancelarFactura(Context.getInstance().currentDMTicket().getIdFactura());
+                        facturaService.anularFacturaPorSupervisor(Context.getInstance().currentDMTicket().getIdFactura());
                         Context.getInstance().currentDMTicket().setCliente(null);
                         Context.getInstance().currentDMTicket().setClienteSeleccionado(false);
                         Context.getInstance().currentDMTicket().getDetalle().clear();
@@ -187,5 +236,15 @@ public class SupervisorController implements Initializable{
         impresoraService.getHfp().setEventListener(this.fiscalPrinterEvent);
         
     }
+    
+    public void aceptarMensajeModal(){
+        this.tabController.getLabelCancelarModal().setVisible(true);
+        this.tabController.ocultarMensajeModal();
+        this.tabController.repeatFocus(textFieldCodigoSupervisor);
+    }
+    
+    public void cancelarMensajeModal(){
+    }
+        
     
 }

@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
@@ -8,7 +14,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="borderPane" focusTraversable="true" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.principal.MenuPrincipalController">
+<BorderPane fx:id="borderPane" focusTraversable="true" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.principal.MenuPrincipalController">
    <center>
       <GridPane alignment="TOP_CENTER" focusTraversable="true" BorderPane.alignment="CENTER">
          <columnConstraints>
@@ -48,6 +54,9 @@
                </font>
             </Label>
          </children>
+         <BorderPane.margin>
+            <Insets top="50.0" />
+         </BorderPane.margin>
       </GridPane>
    </center>
    <left>
@@ -84,23 +93,6 @@
          </children>
       </GridPane>
    </right>
-   <top>
-      <GridPane prefHeight="120.0" BorderPane.alignment="CENTER">
-         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-         </columnConstraints>
-         <rowConstraints>
-            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-         </rowConstraints>
-         <children>
-            <ImageView fx:id="imageViewLogoTop1" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-            <ImageView fx:id="imageViewLogoTop2" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-            <ImageView fx:id="imageViewLogoTop3" fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-         </children>
-      </GridPane>
-   </top>
    <bottom>
       <GridPane prefHeight="120.0" BorderPane.alignment="CENTER">
          <columnConstraints>
@@ -118,4 +110,17 @@
          </children>
       </GridPane>
    </bottom>
+   <top>
+      <GridPane prefHeight="64.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="54.0" prefWidth="1023.0" styleClass="label_barra_titulo" text="Menu Principal" />
+         </children>
+      </GridPane>
+   </top>
 </BorderPane>

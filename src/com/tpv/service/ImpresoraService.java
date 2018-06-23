@@ -319,7 +319,7 @@ public class ImpresoraService {
         
 
         if(factura.getBonificaTarjeta().compareTo(BigDecimal.ZERO)>0){
-            request = getHfp().cmdReturnRecharge(Context.getInstance().getLeyendaBonifTarjeta(),
+            request = getHfp().cmdReturnRecharge(Context.getInstance().currentDMParametroGral().getLeyendaBonifTarjeta(),
                             factura.getBonificaTarjeta(),
                             BigDecimal.valueOf(21), true,
                             BigDecimal.ZERO, false, 0, "B");
@@ -334,7 +334,7 @@ public class ImpresoraService {
             }
         }
         if(factura.getInteresTarjeta().compareTo(BigDecimal.ZERO)>0){
-            request = getHfp().cmdReturnRecharge(Context.getInstance().getLeyendaIntTarjeta(),
+            request = getHfp().cmdReturnRecharge(Context.getInstance().currentDMParametroGral().getLeyendaIntTarjeta(),
                             factura.getInteresTarjeta(),
                             BigDecimal.valueOf(21), false,
                             BigDecimal.ZERO, false, 0, "B");
@@ -351,7 +351,7 @@ public class ImpresoraService {
         }
         
         if(factura.getRetencion().compareTo(BigDecimal.ZERO)>0 ){
-            request = getHfp().cmdPerceptions(Context.getInstance().getLeyendaRetIngBrutosCliente(), factura.getRetencion(), null);
+            request = getHfp().cmdPerceptions(Context.getInstance().currentDMParametroGral().getLeyendaRetIngBrutosCliente(), factura.getRetencion(), null);
             try{
                 response = getHfp().execute(requestStatus);
                 response = getHfp().execute(request);

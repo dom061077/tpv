@@ -8,6 +8,8 @@ package com.tpv.service;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Checkout;
 import com.tpv.modelo.Usuario;
+import com.tpv.modelo.UsuarioPerfil;
+import com.tpv.principal.Context;
 import com.tpv.util.Connection;
 import java.math.BigInteger;
 import java.net.SocketException;
@@ -56,17 +58,41 @@ public class UsuarioService {
         return usuario;
     }
     
-    public Usuario authenticarSupervisor(String nombre, String password)throws TpvException{
+    public Usuario authenticarSupervisor(String nombre, String password, String codigoBarra)throws TpvException{
         log.info("Autenticando usuario supervisor: "+nombre);
+        
+        if(codigoBarra.length()!=13)
+            return null;        
+        StringBuffer sb = new StringBuffer(codigoBarra);
+        StringBuffer sb2 = new StringBuffer(codigoBarra);
+        for(int i = 7;i<sb.length();i++){
+            String str = String.valueOf(Integer.parseInt(String.valueOf(sb.charAt(i)))+7);
+            if(str.length()>1)
+                sb2.replace(i, i+1,str.substring(1));
+            else
+                sb2.replace(i, i+1, str);
+        }
+        
+        codigoBarra = sb2.toString();
         boolean flagReturn=false;
         Usuario usuario = null;
+        UsuarioPerfil usuPerfil = null;
         EntityManager em = Connection.getEm();
-        try{
-            usuario = (Usuario)em.createQuery("FROM Usuario u WHERE u.nombre = :nombre").setParameter("nombre", nombre).getSingleResult();
-            if(usuario.getPassword().compareTo(password)==0)
+        try{            
+            usuario = (Usuario)em.createQuery("FROM Usuario u WHERE u.nombre = :nombre AND u.password = :clave AND u.codigoBarra = :codigoBarra")
+                    .setParameter("nombre", nombre)
+                    .setParameter("clave" , getMD5(password))
+                    .setParameter("codigoBarra", codigoBarra)
+                    .getSingleResult();
+            if(usuario!=null){
+                usuPerfil = (UsuarioPerfil)em.createQuery("FROM UsuarioPerfil up WHERE up.id.usuarioId = :usuarioId AND up.id.perfilId = :perfilId")
+                        .setParameter("usuarioId", usuario.getIdUsuario())
+                        .setParameter("perfilId", Context.getInstance().currentDMParametroGral().getPerfilSupervisor())
+                        .getSingleResult();
+                if(usuPerfil!=null)
                     flagReturn=true;
-            else
-                flagReturn=false;
+            }
+                    
         }catch(NoResultException e){
             log.info("No se encontró ningún usuario con nombre: "+nombre+" password: "+password);
         }catch(RuntimeException e){

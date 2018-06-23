@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
@@ -11,9 +16,9 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane focusTraversable="true" maxHeight="740.0" maxWidth="1024.0" minHeight="740.0" minWidth="1024.0" prefHeight="740.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafx8tpv1.TabPanePrincipalController">
+<AnchorPane focusTraversable="true" maxHeight="740.0" maxWidth="1300.0" minHeight="740.0" minWidth="1300.0" prefHeight="740.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafx8tpv1.TabPanePrincipalController">
    <children>
-      <BorderPane focusTraversable="true" maxHeight="740.0" maxWidth="1024.0" minHeight="740.0" minWidth="1024.0" prefHeight="740.0" prefWidth="1024.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <BorderPane focusTraversable="true" maxHeight="740.0" maxWidth="1300.0" minHeight="740.0" minWidth="1300.0" prefHeight="740.0" prefWidth="1300.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
             <Pane prefHeight="740.0" prefWidth="1024.0" styleClass="rounded_corner" BorderPane.alignment="CENTER">
                <children>
@@ -97,29 +102,38 @@
                            <bottom>
                               <HBox alignment="CENTER" prefHeight="58.0" prefWidth="450.0" BorderPane.alignment="CENTER">
                                  <children>
-                                    <Label alignment="CENTER" prefHeight="21.0" prefWidth="225.0" styleClass="label_shorcut" text="Enter - Aceptar" />
-                                    <Label alignment="CENTER" prefWidth="225.0" styleClass="label_shorcut" text="Esc - Cancelar" />
+                                    <Label fx:id="labelAceptarModal" alignment="CENTER" prefHeight="21.0" prefWidth="225.0" styleClass="label_shorcut" text="Enter - Aceptar" />
+                                    <Label fx:id="labelCancelarModal" alignment="CENTER" prefWidth="225.0" styleClass="label_shorcut" text="Esc - Cancelar" />
                                  </children>
                               </HBox>
                            </bottom>
+                           <center>
+                              <Label fx:id="labelMensaje" alignment="CENTER" prefHeight="256.0" prefWidth="493.0" styleClass="label_textfield" text="Label" textAlignment="CENTER" BorderPane.alignment="CENTER" />
+                           </center>
                         </BorderPane>
                      </children>
                   </StackPane>
                </children>
             </Pane>
          </center>
-         <left>
-            <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
-         </left>
-         <right>
-            <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
-         </right>
-         <top>
-            <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-         </top>
          <bottom>
             <HBox prefHeight="49.0" prefWidth="1024.0" BorderPane.alignment="CENTER" />
          </bottom>
+         <left>
+            <VBox prefHeight="591.0" prefWidth="24.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ImageView fx:id="imageIzquierda" fitHeight="499.0" fitWidth="119.0" pickOnBounds="true" preserveRatio="true" />
+               </children></VBox>
+         </left>
+         <right>
+            <VBox prefHeight="200.0" prefWidth="24.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ImageView fx:id="imageDerecha" fitHeight="534.0" fitWidth="144.0" pickOnBounds="true" preserveRatio="true" />
+               </children></VBox>
+         </right>
+         <top>
+            <ImageView fx:id="imageSuperior" fitHeight="98.0" fitWidth="1300.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
+         </top>
       </BorderPane>
    </children>
    <opaqueInsets>

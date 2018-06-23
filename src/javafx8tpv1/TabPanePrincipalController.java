@@ -37,6 +37,9 @@ import com.tpv.util.Connection;
 import com.tpv.util.ui.TabPaneModalCommand;
 import javafx.application.Platform;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 
@@ -83,8 +86,13 @@ public class TabPanePrincipalController implements Initializable {
     
     @FXML private TabPane tabPanePrincipal;
     @FXML private StackPane stackPaneModal;
+    @FXML private Label labelMensaje;
+    @FXML private Label labelAceptarModal;
+    @FXML private Label labelCancelarModal;
     
-    
+    @FXML private ImageView imageSuperior;
+    @FXML private ImageView imageIzquierda;
+    @FXML private ImageView imageDerecha;
     
     
     public Button getButtonMenuPrincipal(){
@@ -96,7 +104,8 @@ public class TabPanePrincipalController implements Initializable {
     @FXML
     public  void initialize(URL url, ResourceBundle rb) {
         // TODO
-        
+        labelMensaje.wrapTextProperty().set(true);
+        loadImage();
         try{
             initParametrosGenerales();
             initImpresora();
@@ -159,21 +168,23 @@ public class TabPanePrincipalController implements Initializable {
     private void initParametrosGenerales() throws TpvException{
 
         ParametroGeneral param = UtilidadesService.getParametroGral("RETENCION_ING_BRUTO_LEYENDA");
-        Context.getInstance().setLeyendaRetIngBrutosCliente(param.getParametroCadena());
+        Context.getInstance().currentDMParametroGral().setLeyendaRetIngBrutosCliente(param.getParametroCadena());
         param = UtilidadesService.getParametroGral("RETENCION_ING_BRUTO_MONTO_MINIMO");
-        Context.getInstance().setMontoMinRetIngBrutos(param.getParametroNumerico());
+        Context.getInstance().currentDMParametroGral().setMontoMinRetIngBrutos(param.getParametroNumerico());
         
         param = UtilidadesService.getParametroGral("INTERES_IVA_TARJETA");
-        Context.getInstance().setPorcentajeIvaIntTarjeta(param.getParametroNumerico());
-        Context.getInstance().setLeyendaIntTarjeta(param.getParametroCadena());
+        Context.getInstance().currentDMParametroGral().setPorcentajeIvaIntTarjeta(param.getParametroNumerico());
+        Context.getInstance().currentDMParametroGral().setLeyendaIntTarjeta(param.getParametroCadena());
         
         param = UtilidadesService.getParametroGral("BONIFICACION_IVA_TARJETA");
-        Context.getInstance().setPorcentajeIvaBonifTarjeta(param.getParametroNumerico());
-        Context.getInstance().setLeyendaBonifTarjeta(param.getParametroCadena());
+        Context.getInstance().currentDMParametroGral().setPorcentajeIvaBonifTarjeta(param.getParametroNumerico());
+        Context.getInstance().currentDMParametroGral().setLeyendaBonifTarjeta(param.getParametroCadena());
         
          param = UtilidadesService.getParametroGral("FORMAT_NUMERO_DINERO");
-        Context.getInstance().setFormatNumeroDinero(param.getParametroCadena());
+        Context.getInstance().currentDMParametroGral().setFormatNumeroDinero(param.getParametroCadena());
         
+        param = UtilidadesService.getParametroGral("PERFIL_SUPERVISOR");
+        Context.getInstance().currentDMParametroGral().setPerfilSupervisor(param.getParametroCadena());
        
 
     }
@@ -285,16 +296,36 @@ public class TabPanePrincipalController implements Initializable {
 
     public void mostrarMensajeModal(){
         this.stackPaneModal.setVisible(true);
+        this.repeatFocus(this.getStackPaneModal());
     }
+    
     
     public void ocultarMensajeModal(){
         this.stackPaneModal.setVisible(false);
     }
     
-    public StackPane getStackPane(){
+    public StackPane getStackPaneModal(){
         return stackPaneModal;
     }
     
+    //    @FXML private Label labelMensaje;
+    //@FXML private Label labelAceptarModal;
+    //@FXML private Label labelCancelarModal;
+    public Label getLabelMensaje(){
+        return labelMensaje;
+    }
     
+    public Label getLabelAceptarModal(){
+        return labelAceptarModal;
+    }
     
+    public Label getLabelCancelarModal(){
+        return labelCancelarModal;
+    }
+    
+    private void loadImage(){
+        imageDerecha.setImage(new Image(this.getClass().getResource("/com/tpv/resources/LogoLuque.jpg").toExternalForm()));
+        imageIzquierda.setImage(new Image(this.getClass().getResource("/com/tpv/resources/LogoLuque.jpg").toExternalForm()));
+        imageSuperior.setImage(new Image(this.getClass().getResource("/com/tpv/resources/LogoLuque.jpg").toExternalForm()));
+    } 
 }

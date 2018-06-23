@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -15,35 +16,35 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.supervisor.SupervisorController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.supervisor.SupervisorController">
    <top>
-      <Label fx:id="labelTitulo" styleClass="label_titulo" text="Label" BorderPane.alignment="CENTER" />
+      <Label fx:id="labelTitulo" alignment="CENTER" prefHeight="21.0" prefWidth="1025.0" styleClass="label_barra_titulo" text="Label" BorderPane.alignment="CENTER" />
    </top>
    <bottom>
-      <HBox prefHeight="28.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+      <HBox prefHeight="120.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
          <children>
             <Label styleClass="label_shorcut" text="Esc-Cancela Operación" />
          </children>
       </HBox>
    </bottom>
    <center>
-      <Pane prefHeight="200.0" prefWidth="592.0" BorderPane.alignment="CENTER">
-         <children>
-            <StackPane fx:id="stackPaneError" prefHeight="200.0" prefWidth="700.0" styleClass="rounded_corner_modal">
+      <BorderPane fx:id="borderPaneIngreso" prefHeight="574.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
+         <center>
+            <Pane prefHeight="200.0" prefWidth="400.0" BorderPane.alignment="CENTER">
                <children>
-                  <BorderPane prefHeight="200.0" prefWidth="200.0">
-                     <center>
-                        <Label fx:id="labelError" styleClass="label_error" BorderPane.alignment="CENTER" />
-                     </center>
-                  </BorderPane>
-               </children>
-            </StackPane>
-            <BorderPane fx:id="borderPaneIngreso" prefHeight="280.0" prefWidth="600.0">
-               <center>
-                  <GridPane BorderPane.alignment="CENTER">
+                  <StackPane fx:id="stackPaneError" prefHeight="200.0" prefWidth="700.0" styleClass="rounded_corner_modal">
+                     <children>
+                        <BorderPane prefHeight="200.0" prefWidth="200.0">
+                           <center>
+                              <Label fx:id="labelError" styleClass="label_error" BorderPane.alignment="CENTER" />
+                           </center>
+                        </BorderPane>
+                     </children>
+                  </StackPane>
+                  <GridPane fx:id="gridPane" alignment="CENTER" layoutY="-7.0" prefHeight="366.0" prefWidth="644.0">
                     <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="501.0" minWidth="10.0" prefWidth="183.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="613.0" minWidth="10.0" prefWidth="217.0" />
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -52,14 +53,21 @@
                     </rowConstraints>
                      <children>
                         <PasswordField fx:id="textFieldPassword" styleClass="textfield_sin_border" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <TextField fx:id="textFieldCodigoSupervisor" prefHeight="25.0" prefWidth="92.0" styleClass="textfield_sin_border" GridPane.columnIndex="1" />
+                        <TextField fx:id="textFieldCodigoSupervisor" prefHeight="31.0" prefWidth="100.0" styleClass="textfield_sin_border" GridPane.columnIndex="1" />
                         <Label styleClass="label_textfield" text="Contraseña:" GridPane.rowIndex="1" />
-                        <Label styleClass="label_textfield" text="Código de Supervisor:" />
+                        <Label styleClass="label_textfield" text="Nombre de Usuario:" />
+                        <Label styleClass="label_textfield" text="Código de Supervisor:" GridPane.rowIndex="2" />
                      </children>
                   </GridPane>
-               </center>
-            </BorderPane>
-         </children>
-      </Pane>
+               </children>
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
+            </Pane>
+         </center>
+         <padding>
+            <Insets left="20.0" right="20.0" />
+         </padding>
+      </BorderPane>
    </center>
 </BorderPane>

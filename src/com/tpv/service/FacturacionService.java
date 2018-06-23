@@ -178,7 +178,15 @@ public class FacturacionService  {
         
     }
     
-    public void cancelarFactura(Long id) throws TpvException{
+    public void anularFacturaPorSupervisor(Long id) throws TpvException{
+        anularFactura(id,FacturaEstadoEnum.ANULADA_SUPERVISOR);
+    }
+    
+    public void anularFacturaPorReinicio(Long id) throws TpvException{
+        anularFactura(id,FacturaEstadoEnum.ANULADA);
+    }
+    
+    private void anularFactura(Long id, FacturaEstadoEnum estadoCancelacion) throws TpvException{
         log.info("Capa de servicios, cancelar factura");
         Factura factura;
         EntityManager em = Connection.getEm();
@@ -187,7 +195,7 @@ public class FacturacionService  {
             tx = em.getTransaction();
             tx.begin();
             factura = em.find(Factura.class, id);
-            factura.setEstado(FacturaEstadoEnum.ANULADA);
+            factura.setEstado(estadoCancelacion);
             tx.commit();
             log.info("Factura con id: "+factura.getId()+", Nro. factura: "
                       +factura.getNumeroComprobante());   
@@ -490,7 +498,7 @@ public class FacturacionService  {
                 BigDecimal netoGral = factura.getNeto().add(factura.getNetoReducido());
                 BigDecimal montoRet = netoGral.multiply(porcentajeRet).divide(BigDecimal.valueOf(100));
                 montoRet = montoRet.setScale(2,BigDecimal.ROUND_HALF_EVEN);
-                if(montoRet.compareTo(Context.getInstance().getMontoMinRetIngBrutos())>0){
+                if(montoRet.compareTo(Context.getInstance().currentDMParametroGral().getMontoMinRetIngBrutos())>0){
                     factura.setRetencion(montoRet);
                 }
             }

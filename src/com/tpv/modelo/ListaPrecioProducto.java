@@ -195,7 +195,7 @@ public class ListaPrecioProducto {
         public boolean equals(Object o){
             if (o != null && o instanceof Id){
                 Id that = (Id)o;
-                return this.productoId == productoId &&
+                return this.productoId == that.productoId &&
                         this.listaId == that.listaId;
             }else{
                 return false;

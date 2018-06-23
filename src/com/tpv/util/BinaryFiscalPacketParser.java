@@ -205,8 +205,17 @@ public class BinaryFiscalPacketParser {
     }
     
     public static void main(String[] args){
-        String str="23261382369";
-        
-        System.out.println(new BigInteger(str));
+        String cadena="1234567890123";
+        StringBuffer sb = new StringBuffer(cadena);
+        StringBuffer sb2 = new StringBuffer(cadena);
+        for(int i = 7;i<sb.length();i++){
+            String str = String.valueOf(Integer.parseInt(String.valueOf(sb.charAt(i)))+7);
+            if(str.length()>1)
+                sb2.replace(i, i+1,str.substring(1));
+            else
+                sb2.replace(i, i+1, str);
+            
+        }
+        System.out.println(sb2.substring(0, 13) .toString());
     }
 }

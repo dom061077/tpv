@@ -16,6 +16,7 @@ import com.tpv.service.FacturacionService;
 import com.tpv.service.ImpresoraService;
 import com.tpv.service.PagoService;
 import com.tpv.service.ProductoService;
+import com.tpv.util.ui.TabPaneModalCommand;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -24,7 +25,6 @@ import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -47,7 +47,7 @@ import org.tpv.print.fiscal.msg.FiscalMessages;
  */
 
 //@FXMLController(value="ConfirmarPagoTicket.fxml", title = "Confirmar Ticket")
-public class ConfirmaPagoTicketController implements Initializable{
+public class ConfirmaPagoTicketController implements Initializable, TabPaneModalCommand{
     Logger log = Logger.getLogger(ConfirmaPagoTicketController.class);
     
     private FacturacionService factService = new FacturacionService();
@@ -146,11 +146,11 @@ public class ConfirmaPagoTicketController implements Initializable{
     @FXML
     private TabPanePrincipalController tabPaneController;
     
-            
+    private boolean ticketConfirmado;        
             
     public void configurarInicio(){
             log.info("Ingresando a la confirmación de pago");
-            
+            ticketConfirmado=false;
             if(impresoraService.getHfp().getEventListener()==null)
                 asignarEvento();            
             
@@ -183,6 +183,7 @@ public class ConfirmaPagoTicketController implements Initializable{
             stackPaneMensajeCancelar.setVisible(false);
             
             tabPaneController.repeatFocus(borderPane);
+            tabPaneController.setTabPaneModalCommand(this);
                     
     }
     
@@ -265,16 +266,20 @@ public class ConfirmaPagoTicketController implements Initializable{
                 tableViewPagos.setItems(Context.getInstance().currentDMTicket().getPagos());
                 borderPane.setOnKeyPressed(keyEvent->{
                     if(keyEvent.getCode()==KeyCode.ESCAPE){
-                        stackPaneMensajeCancelar.setVisible(true);
-                        tabPaneController.repeatFocus(stackPaneMensajeCancelar);
+                        //stackPaneMensajeCancelar.setVisible(true);
+                        //tabPaneController.repeatFocus(stackPaneMensajeCancelar);
+                        this.tabPaneController.getLabelMensaje().setText("¿Desea abandonar la confirmación del ticket?");
+                        this.tabPaneController.mostrarMensajeModal();
                     }
                     if(keyEvent.getCode() == KeyCode.ENTER){
-                        confirmarFactura();
-
+                        this.tabPaneController.getLabelMensaje().setText("¿Confirma el cierre del ticket?");
+                        this.ticketConfirmado = true;
+                        this.tabPaneController.mostrarMensajeModal();
                     }
                     keyEvent.consume();
                 });
-                stackPaneMensajeCancelar.setOnKeyPressed(keyEvent->{
+                
+                /*stackPaneMensajeCancelar.setOnKeyPressed(keyEvent->{
                     if(keyEvent.getCode()==KeyCode.S){
                         tabPaneController.gotoPago();
                     }
@@ -283,7 +288,7 @@ public class ConfirmaPagoTicketController implements Initializable{
                         tabPaneController.repeatFocus(borderPane);
                     }
                     keyEvent.consume();
-                });
+                });*/
             });
             
             
@@ -376,7 +381,7 @@ public class ConfirmaPagoTicketController implements Initializable{
                 BigDecimal netoGral = factura.getNeto().add(factura.getNetoReducido());
                 BigDecimal montoRet = netoGral.multiply(porcentajeRet).divide(BigDecimal.valueOf(100));
                 montoRet = montoRet.setScale(2,BigDecimal.ROUND_HALF_EVEN);
-                if(montoRet.compareTo(Context.getInstance().getMontoMinRetIngBrutos())>0){
+                if(montoRet.compareTo(Context.getInstance().currentDMParametroGral().getMontoMinRetIngBrutos())>0){
                     factura.setRetencion(montoRet);
                 }
             }
@@ -594,5 +599,21 @@ public class ConfirmaPagoTicketController implements Initializable{
             }
         });        
     }*/    
+    
+    public void aceptarMensajeModal(){
+        this.tabPaneController.ocultarMensajeModal();
+        if (this.ticketConfirmado)
+            confirmarFactura();            
+        else    
+            this.tabPaneController.gotoPago();
+    }
+    
+    public void cancelarMensajeModal(){
+        this.tabPaneController.ocultarMensajeModal();
+        this.tabPaneController.repeatFocus(borderPane);
+    }
+
+
+    
     
 }
