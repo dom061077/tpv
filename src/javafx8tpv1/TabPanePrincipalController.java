@@ -89,8 +89,11 @@ public class TabPanePrincipalController implements Initializable {
     @FXML private Label labelMensaje;
     @FXML private Label labelAceptarModal;
     @FXML private Label labelCancelarModal;
+    @FXML private Label labelTituloVentana;
+    @FXML private Label labelShortCut;
     
-    @FXML private ImageView imageSuperior;
+    @FXML private ImageView imageSuperiorDerecha;
+    @FXML private ImageView imageSuperiorIzquierda;
     @FXML private ImageView imageIzquierda;
     @FXML private ImageView imageDerecha;
     
@@ -193,6 +196,8 @@ public class TabPanePrincipalController implements Initializable {
     
     public void gotoLogin(){
         try{
+            this.labelTituloVentana.setText("INGRESO");
+            this.labelShortCut.setText("F11-Sale del Sistema");
             this.loginController.configurarInicio();
             this.tabPanePrincipal.getSelectionModel().select(tabLogin);
         }catch(TpvException e){
@@ -206,6 +211,8 @@ public class TabPanePrincipalController implements Initializable {
     }
     
     public void gotoMenuPrincipal(){
+        this.labelTituloVentana.setText("MENU PRINCIPAL");
+        this.labelShortCut.setText("1-Facturacion   |   2-Controlador   |   3-Retiro de Dinero  |   4-Salir del Sistema");
         this.tabPanePrincipal.getSelectionModel().select(tabMenuPrincipal);
         
         this.menuPrincipalController.configurarInicio();
@@ -213,6 +220,8 @@ public class TabPanePrincipalController implements Initializable {
     
     public void gotoFacturacion(){
         try{
+            this.labelTituloVentana.setText("FACTURACIÓN");
+            this.labelShortCut.setText("F2-Cliente     |   F3-Producto |   F4-Ing.Cantidad     |   F5-Negativo     |   F6-Deshabilita Negativo     |   F7-Cancela Ticket   |   F8-Ofertas   |  F11-Menú Principal");            
             this.facturacionController.configurarInicio();
             this.tabPanePrincipal.getSelectionModel().select(tabFacturacion);
         }catch(TpvException e){
@@ -224,33 +233,45 @@ public class TabPanePrincipalController implements Initializable {
     }
     
     public void gotoError(){
+        this.labelTituloVentana.setText("ERROR");
+        this.labelShortCut.setText("Esc-Recuperar Sistema | F11-Salir de Sistema");
         this.errorController.configurarInicio();
         this.tabPanePrincipal.getSelectionModel().select(tabError);
     }
     
     public void gotoSupervisor(){
+        this.labelTituloVentana.setText("AUTORIZACIÓN DE SUPERVISOR");
+        this.labelShortCut.setText("Esc-Cancela Operación");
         this.supervisorController.configurarInicio();
         this.tabPanePrincipal.getSelectionModel().select(tabSupervisor);
         
     }
     
     public void gotoCliente(){
+        this.labelTituloVentana.setText("BÚSQUEDA DE CLIENTE");
+        this.labelShortCut.setText("Esc-Volver");
         this.buscarPorNombreClienteController.configurarInicio();
         this.tabPanePrincipal.getSelectionModel().select(tabCliente);
     }
     
     public void gotoProducto(){
+        this.labelTituloVentana.setText("BÚSQUEDA DE PRODUCTO");
+        this.labelShortCut.setText("Esc-Volver");
         this.productoController.configurarInicio();
         this.tabPanePrincipal.getSelectionModel().select(tabProducto);
     }
     
     public void gotoConfirmarPago(){
+        this.labelTituloVentana.setText("CONFIRMACIÓN DE PAGO Y CIERRE DE TICKET");
+        this.labelShortCut.setText("Esc-Volver");
         this.confirmaPagoController.configurarInicio();
         this.tabPanePrincipal.getSelectionModel().select(tabConfirmarPago);
     }
     
     public void gotoPago(){
         try{
+            this.labelTituloVentana.setText("INGRESO DE PAGOS");
+            this.labelShortCut.setText("Esc-Volver  |   F3-Formas de Pago ");
             this.pagoTicketController.configurarInicio();
             this.tabPanePrincipal.getSelectionModel().select(tabPago);
         }catch(TpvException e)    {
@@ -262,16 +283,22 @@ public class TabPanePrincipalController implements Initializable {
     }
     
     public void gotoCombos(){
+        this.labelTituloVentana.setText("BONIFICACIONES DE LA COMPRA");
+        this.labelShortCut.setText("Esc-Volver");        
         this.combosController.configurarInicio();
         this.tabPanePrincipal.getSelectionModel().select(tabCombos);
     }
     
     public void gotoControlador(){
+        this.labelTituloVentana.setText("OPERACIONES DE CONTROLADOR");
+        this.labelShortCut.setText("1-Cancelar Ticket   |   2-Cierre Z  |   3-Cierre X  |   F11-Retornar a Menú Principal");        
         this.configImpresoraController.configurarInicio();
         this.tabPanePrincipal.getSelectionModel().select(tabControlador);
     }
     
     public void gotoRetiroDinero(){
+        this.labelTituloVentana.setText("RETIRO DE DINERO");
+        this.labelShortCut.setText("F11-Retornar a Menú Principal");        
         this.retiroDineroController.configurarInicio();
         this.tabPanePrincipal.getSelectionModel().select(tabRetiroDinero);
     }
@@ -324,8 +351,16 @@ public class TabPanePrincipalController implements Initializable {
     }
     
     private void loadImage(){
-        imageDerecha.setImage(new Image(this.getClass().getResource("/com/tpv/resources/LogoLuque.jpg").toExternalForm()));
-        imageIzquierda.setImage(new Image(this.getClass().getResource("/com/tpv/resources/LogoLuque.jpg").toExternalForm()));
-        imageSuperior.setImage(new Image(this.getClass().getResource("/com/tpv/resources/LogoLuque.jpg").toExternalForm()));
+        //imageDerecha.setImage(new Image(this.getClass().getResource("/com/tpv/resources/logosplash.jpg").toExternalForm()));
+        //imageIzquierda.setImage(new Image(this.getClass().getResource("/com/tpv/resources/logosplash.jpg").toExternalForm()));
+        imageSuperiorDerecha.setImage(
+                new Image(this.getClass().getResource("/com/tpv/resources/LogoLuque.jpg").toExternalForm())
+        );
+        imageSuperiorIzquierda.setImage(
+                new Image(this.getClass().getResource("/com/tpv/resources/LogoLuque.jpg").toExternalForm())
+        );
+        
+        //imageSuperior.fitWidthProperty().bind(this.widthProperty());
+        
     } 
 }

@@ -19,120 +19,142 @@
 <AnchorPane focusTraversable="true" maxHeight="740.0" maxWidth="1300.0" minHeight="740.0" minWidth="1300.0" prefHeight="740.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafx8tpv1.TabPanePrincipalController">
    <children>
       <BorderPane focusTraversable="true" maxHeight="740.0" maxWidth="1300.0" minHeight="740.0" minWidth="1300.0" prefHeight="740.0" prefWidth="1300.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <center>
-            <Pane prefHeight="740.0" prefWidth="1024.0" styleClass="rounded_corner" BorderPane.alignment="CENTER">
-               <children>
-                  <TabPane fx:id="tabPanePrincipal" focusTraversable="false" maxHeight="740.0" maxWidth="1024.0" minHeight="629.0" minWidth="1024.0" prefHeight="629.0" prefWidth="1024.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE">
-                    <tabs>
-                        <Tab fx:id="tabRetiroDinero" closable="false" text="Retiro Dinero">
-                          <content>
-                                <fx:include fx:id="retiroDinero" maxHeight="740.0" minWidth="740.0" prefHeight="740.0" source="../com/tpv/retirodinero/RetiroDinero.fxml" />
-                          </content>
-                        </Tab>
-                        <Tab fx:id="tabMenuPrincipal" closable="false" text="Menu Prinipal">
-                            <content>
-                                 <fx:include fx:id="menuPrincipal" source="../com/tpv/principal/MenuPrincipal.fxml" />
-                            </content>    
-                        </Tab>    
-                      <Tab fx:id="tabLogin" closable="false" text="Login">
-                           <content>
-                              <fx:include fx:id="login" source="../com/tpv/login/Login.fxml" />
-                           </content>
-                           <graphic>
-                              <StackPane prefHeight="150.0" prefWidth="200.0" />
-                           </graphic>
-                        </Tab>
-                        <Tab fx:id="tabError" text="Error">
-                           <content>
-                              <fx:include fx:id="error" source="../com/tpv/errorui/Error.fxml" />
-                           </content>
-                        </Tab>
-                        <Tab fx:id="tabSupervisor" text="Supervisor">
-                          <content>
-                            <fx:include fx:id="supervisor" source="../com/tpv/supervisor/Supervisor.fxml" />
-                          </content>
-                        </Tab>
-                        <Tab fx:id="tabProducto" text="Búsqueda de Producto">
-                          <content>
-                            <fx:include fx:id="producto" source="../com/tpv/producto/BuscarPorDescProducto.fxml" />
-                          </content>
-                        </Tab>
-                        <Tab fx:id="tabCliente" text="Búsqueda de Cliente">
-                          <content>
-                            <fx:include fx:id="buscarPorNombreCliente" source="../com/tpv/cliente/BuscarPorNombreCliente.fxml" />
-                          </content>
-                        </Tab>
-                        <Tab fx:id="tabPago" text="Pago Ticket">
-                          <content>
-                            <fx:include fx:id="pagoTicket" source="../com/tpv/pagoticket/PagoTicket.fxml" />
-                          </content>
-                        </Tab>
-                        
-                        <Tab fx:id="tabConfirmarPago" text="Confirmar Pago Ticket">
-                          <content>
-                            <fx:include fx:id="confirmaPago" source="../com/tpv/pagoticket/ConfirmaPagoTicket.fxml" />
-                          </content>
-                        </Tab>
-                        
-                        <Tab fx:id="tabCombos" text="Combos">
-                          <content>
-                            <fx:include fx:id="combos" source="../com/tpv/combos/Combos.fxml" />
-                          </content>
-                        </Tab>
-                        <Tab fx:id="tabControlador" text="Controlador">
-                          <content>
-                            <fx:include fx:id="configImpresora" source="../com/tpv/print/fiscal/ConfiguracionImpresora.fxml" />
-                          </content>
-                        </Tab>
-                        
-      
-                        <Tab fx:id="tabFacturacion" text="Facturación">
-                           <content>
-                              <fx:include fx:id="facturacion" source="../com/tpv/principal/FXMLMain.fxml" />
-                           </content>
-                        </Tab>
-                    </tabs>
-                  </TabPane>
-                  <StackPane fx:id="stackPaneModal" layoutX="300.0" layoutY="200.0" prefHeight="350.0" prefWidth="450.0" styleClass="rounded_corner_modal">
-                     <children>
-                        <BorderPane prefHeight="200.0" prefWidth="200.0">
-                           <top>
-                              <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="450.0" prefHeight="21.0" prefWidth="450.0" styleClass="label_sub_titulo_modal" text="Mensaje" textFill="#d31818fa" BorderPane.alignment="CENTER" />
-                           </top>
-                           <bottom>
-                              <HBox alignment="CENTER" prefHeight="58.0" prefWidth="450.0" BorderPane.alignment="CENTER">
-                                 <children>
-                                    <Label fx:id="labelAceptarModal" alignment="CENTER" prefHeight="21.0" prefWidth="225.0" styleClass="label_shorcut" text="Enter - Aceptar" />
-                                    <Label fx:id="labelCancelarModal" alignment="CENTER" prefWidth="225.0" styleClass="label_shorcut" text="Esc - Cancelar" />
-                                 </children>
-                              </HBox>
-                           </bottom>
-                           <center>
-                              <Label fx:id="labelMensaje" alignment="CENTER" prefHeight="256.0" prefWidth="493.0" styleClass="label_textfield" text="Label" textAlignment="CENTER" BorderPane.alignment="CENTER" />
-                           </center>
-                        </BorderPane>
-                     </children>
-                  </StackPane>
-               </children>
-            </Pane>
-         </center>
-         <bottom>
-            <HBox prefHeight="49.0" prefWidth="1024.0" BorderPane.alignment="CENTER" />
-         </bottom>
          <left>
-            <VBox prefHeight="591.0" prefWidth="24.0" BorderPane.alignment="CENTER">
+            <VBox maxWidth="138.0" minWidth="138.0" prefWidth="138.0" BorderPane.alignment="CENTER">
                <children>
                   <ImageView fx:id="imageIzquierda" fitHeight="499.0" fitWidth="119.0" pickOnBounds="true" preserveRatio="true" />
                </children></VBox>
          </left>
          <right>
-            <VBox prefHeight="200.0" prefWidth="24.0" BorderPane.alignment="CENTER">
+            <VBox maxWidth="138.0" minWidth="138.0" prefWidth="138.0" BorderPane.alignment="CENTER">
                <children>
                   <ImageView fx:id="imageDerecha" fitHeight="534.0" fitWidth="144.0" pickOnBounds="true" preserveRatio="true" />
                </children></VBox>
          </right>
+         <center>
+            <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <center>
+                  <Pane maxHeight="640.0" maxWidth="1024.0" minHeight="640.0" minWidth="1024.0" prefHeight="640.0" prefWidth="1024.0" styleClass="rounded_corner" BorderPane.alignment="CENTER">
+                     <children>
+                        <TabPane fx:id="tabPanePrincipal" focusTraversable="false" maxHeight="640.0" maxWidth="1024.0" minHeight="640.0" minWidth="1024.0" prefHeight="640.0" prefWidth="1024.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE">
+                          <tabs>
+                              <Tab fx:id="tabRetiroDinero" closable="false" text="Retiro Dinero">
+                                <content>
+                                      <fx:include fx:id="retiroDinero" maxHeight="740.0" minWidth="740.0" prefHeight="740.0" source="../com/tpv/retirodinero/RetiroDinero.fxml" />
+                                </content>
+                              </Tab>
+                              <Tab fx:id="tabMenuPrincipal" closable="false" text="Menu Prinipal">
+                                  <content>
+                                       <fx:include fx:id="menuPrincipal" source="../com/tpv/principal/MenuPrincipal.fxml" />
+                                  </content>    
+                              </Tab>    
+                            <Tab fx:id="tabLogin" closable="false" text="Login">
+                                 <content>
+                                    <fx:include fx:id="login" source="../com/tpv/login/Login.fxml" />
+                                 </content>
+                                 <graphic>
+                                    <StackPane prefHeight="150.0" prefWidth="200.0" />
+                                 </graphic>
+                              </Tab>
+                              <Tab fx:id="tabError" text="Error">
+                                 <content>
+                                    <fx:include fx:id="error" source="../com/tpv/errorui/Error.fxml" />
+                                 </content>
+                              </Tab>
+                              <Tab fx:id="tabSupervisor" text="Supervisor">
+                                <content>
+                                  <fx:include fx:id="supervisor" source="../com/tpv/supervisor/Supervisor.fxml" />
+                                </content>
+                              </Tab>
+                              <Tab fx:id="tabProducto" text="Búsqueda de Producto">
+                                <content>
+                                  <fx:include fx:id="producto" source="../com/tpv/producto/BuscarPorDescProducto.fxml" />
+                                </content>
+                              </Tab>
+                              <Tab fx:id="tabCliente" text="Búsqueda de Cliente">
+                                <content>
+                                  <fx:include fx:id="buscarPorNombreCliente" source="../com/tpv/cliente/BuscarPorNombreCliente.fxml" />
+                                </content>
+                              </Tab>
+                              <Tab fx:id="tabPago" text="Pago Ticket">
+                                <content>
+                                  <fx:include fx:id="pagoTicket" source="../com/tpv/pagoticket/PagoTicket.fxml" />
+                                </content>
+                              </Tab>
+                              
+                              <Tab fx:id="tabConfirmarPago" text="Confirmar Pago Ticket">
+                                <content>
+                                  <fx:include fx:id="confirmaPago" source="../com/tpv/pagoticket/ConfirmaPagoTicket.fxml" />
+                                </content>
+                              </Tab>
+                              
+                              <Tab fx:id="tabCombos" text="Combos">
+                                <content>
+                                  <fx:include fx:id="combos" source="../com/tpv/combos/Combos.fxml" />
+                                </content>
+                              </Tab>
+                              <Tab fx:id="tabControlador" text="Controlador">
+                                <content>
+                                  <fx:include fx:id="configImpresora" source="../com/tpv/print/fiscal/ConfiguracionImpresora.fxml" />
+                                </content>
+                              </Tab>
+                              
+            
+                              <Tab fx:id="tabFacturacion" text="Facturación">
+                                 <content>
+                                    <fx:include fx:id="facturacion" source="../com/tpv/principal/FXMLMain.fxml" />
+                                 </content>
+                              </Tab>
+                          </tabs>
+                        </TabPane>
+                        <StackPane fx:id="stackPaneModal" layoutX="300.0" layoutY="200.0" prefHeight="350.0" prefWidth="450.0" styleClass="rounded_corner_modal">
+                           <children>
+                              <BorderPane prefHeight="200.0" prefWidth="200.0">
+                                 <top>
+                                    <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="450.0" prefHeight="21.0" prefWidth="450.0" styleClass="label_sub_titulo_modal" text="Mensaje" textFill="#d31818fa" BorderPane.alignment="CENTER" />
+                                 </top>
+                                 <bottom>
+                                    <HBox alignment="CENTER" prefHeight="58.0" prefWidth="450.0" BorderPane.alignment="CENTER">
+                                       <children>
+                                          <Label fx:id="labelAceptarModal" alignment="CENTER" prefHeight="21.0" prefWidth="225.0" styleClass="label_shorcut" text="Enter - Aceptar" />
+                                          <Label fx:id="labelCancelarModal" alignment="CENTER" prefWidth="225.0" styleClass="label_shorcut" text="Esc - Cancelar" />
+                                       </children>
+                                    </HBox>
+                                 </bottom>
+                                 <center>
+                                    <Label fx:id="labelMensaje" alignment="CENTER" prefHeight="256.0" prefWidth="493.0" styleClass="label_textfield" text="Label" textAlignment="CENTER" BorderPane.alignment="CENTER" />
+                                 </center>
+                              </BorderPane>
+                           </children>
+                        </StackPane>
+                     </children>
+                     <padding>
+                        <Insets top="10.0" />
+                     </padding>
+                  </Pane>
+               </center>
+               <top>
+                  <Label fx:id="labelTituloVentana" alignment="TOP_CENTER" contentDisplay="CENTER" maxHeight="30.0" maxWidth="1024.0" minHeight="30.0" minWidth="1024.0" prefHeight="30.0" prefWidth="1024.0" styleClass="label_barra_titulo" text="TITULO" BorderPane.alignment="CENTER" />
+               </top>
+               <bottom>
+                  <Label fx:id="labelShortCut" maxWidth="1024.0" minWidth="1024.0" prefHeight="32.0" prefWidth="35.0" styleClass="label_shorcut" text="Label" BorderPane.alignment="CENTER" />
+               </bottom>
+            </BorderPane>
+         </center>
          <top>
-            <ImageView fx:id="imageSuperior" fitHeight="98.0" fitWidth="1300.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
+            <GridPane maxHeight="108.0" minHeight="108.0" prefHeight="108.0" BorderPane.alignment="CENTER">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <ImageView fx:id="imageSuperiorIzquierda" fitHeight="75.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" x="1000.0" GridPane.halignment="LEFT" />
+                  <ImageView fx:id="imageSuperiorDerecha" fitHeight="75.0" fitWidth="200.0" layoutX="500.0" pickOnBounds="true" preserveRatio="true" x="500.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" />
+               </children>
+            </GridPane>
          </top>
       </BorderPane>
    </children>

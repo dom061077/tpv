@@ -5,7 +5,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="617.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.combos.CombosController">
+<BorderPane maxHeight="640.0" maxWidth="1024.0" minHeight="640.0" minWidth="1024.0" prefHeight="640.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.combos.CombosController">
    <center>
       <TableView fx:id="tableViewCombos" prefHeight="200.0" prefWidth="200.0" styleClass="tpv-table-view" BorderPane.alignment="CENTER">
         <columns>
@@ -17,9 +17,6 @@
         </columns>
       </TableView>
    </center>
-   <top>
-      <Label styleClass="label_titulo" text="Ud. se lleva las siguientes Bonificaciones" BorderPane.alignment="CENTER" />
-   </top>
    <bottom>
       <GridPane prefHeight="168.0" prefWidth="1156.0" BorderPane.alignment="CENTER">
         <columnConstraints>

@@ -34,20 +34,6 @@
          </BorderPane.margin>
       </TableView>
    </center>
-   <bottom>
-      <GridPane prefHeight="35.0" prefWidth="1024.0" styleClass="label_shorcut" BorderPane.alignment="CENTER">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <Label styleClass="label_shorcut" text="F3-Buscar Formas" />
-         </children>
-      </GridPane>
-   </bottom>
    <top>
       <Pane prefHeight="398.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
          <children>
@@ -100,7 +86,6 @@
                   <RowConstraints maxHeight="54.0" minHeight="10.0" prefHeight="54.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label alignment="TOP_CENTER" contentDisplay="TOP" prefHeight="54.0" prefWidth="1269.0" styleClass="label_barra_titulo" text="Pagos" textAlignment="CENTER" GridPane.columnSpan="5" GridPane.valignment="TOP" />
                   <Label prefHeight="17.0" prefWidth="240.0" styleClass="label_textfield" text="Tipo Pago:" GridPane.rowIndex="1" />
                   <Label prefHeight="17.0" prefWidth="244.0" styleClass="label_textfield" text="Importe a Pagar:" GridPane.rowIndex="2" />
                   <Label fx:id="labelCantidadCuotas" prefHeight="17.0" prefWidth="244.0" styleClass="label_textfield" text="Cantidad Cuotas:" GridPane.rowIndex="3">
@@ -115,7 +100,7 @@
             </GridPane>
             <StackPane fx:id="stackPaneIntereses" layoutX="269.0" layoutY="150.0" prefHeight="400.0" prefWidth="603.0" styleClass="rounded_corner_modal">
                <children>
-                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                  <BorderPane prefHeight="200.0" prefWidth="200.0" styleClass="rounded_corner">
                      <center>
                         <TableView fx:id="tableViewIntTarjeta" prefHeight="200.0" prefWidth="200.0" styleClass="tpv-table-view" BorderPane.alignment="CENTER">
                           <columns>
@@ -137,7 +122,7 @@
             </StackPane>
             <StackPane fx:id="stackPaneFormaPago" layoutX="420.0" layoutY="80.0" prefHeight="300.0" prefWidth="400.0" styleClass="rounded_corner_modal">
                <children>
-                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                  <BorderPane prefHeight="200.0" prefWidth="200.0" styleClass="rounded_corner">
                      <center>
                         <TableView fx:id="tableViewFormaPago" prefHeight="200.0" prefWidth="200.0" styleClass="tpv-table-view" BorderPane.alignment="CENTER">
                           <columns>

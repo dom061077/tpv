@@ -23,9 +23,9 @@
 
 <BorderPane focusTraversable="true" maxHeight="700.0" maxWidth="1024.0" minHeight="700.0" minWidth="1024.0" prefHeight="700.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.principal.FXMLMainController">
    <top>
-      <BorderPane focusTraversable="true" prefHeight="250.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
+      <BorderPane focusTraversable="true" prefHeight="225.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
          <right>
-            <StackPane fx:id="stackPaneMediaViewDer" alignment="TOP_CENTER" prefHeight="100.0" prefWidth="400.0" styleClass="rounded_corner" BorderPane.alignment="CENTER">
+            <StackPane fx:id="stackPaneMediaViewDer" alignment="TOP_CENTER" prefHeight="150.0" prefWidth="400.0" styleClass="rounded_corner" BorderPane.alignment="CENTER">
                <children>
                   <ImageView fx:id="imageViewDer" fitHeight="102.0" fitWidth="390.0" pickOnBounds="true" smooth="false" StackPane.alignment="TOP_CENTER" />
                </children>
@@ -35,7 +35,7 @@
             </StackPane>
          </right>
          <center>
-            <GridPane fx:id="gridPaneCodigoProducto" prefHeight="170.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+            <GridPane fx:id="gridPaneCodigoProducto" prefHeight="190.0" prefWidth="624.0" BorderPane.alignment="CENTER">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="270.0" minWidth="10.0" prefWidth="258.0" />
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="431.0" minWidth="0.0" prefWidth="306.0" />
@@ -66,33 +66,31 @@
             </GridPane>
          </center>
          <top>
-            <GridPane prefHeight="70.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
+            <GridPane prefHeight="28.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label fx:id="nroticket" alignment="BOTTOM_LEFT" prefHeight="32.0" prefWidth="374.0" styleClass="label_nroticket" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <Label fx:id="checkout" alignment="BOTTOM_LEFT" prefHeight="35.0" prefWidth="631.0" styleClass="label_nroticket" GridPane.rowIndex="1" />
-                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="40.0" prefWidth="1024.0" styleClass="label_barra_titulo" text="Facturación" GridPane.columnSpan="2" />
+                  <Label fx:id="nroticket" alignment="BOTTOM_LEFT" prefHeight="32.0" prefWidth="374.0" styleClass="label_nroticket" GridPane.columnIndex="1" />
+                  <Label fx:id="checkout" alignment="BOTTOM_LEFT" prefHeight="35.0" prefWidth="631.0" styleClass="label_nroticket" />
                </children>
             </GridPane>
          </top>
       </BorderPane>
    </top>
    <center>
-      <BorderPane focusTraversable="true" maxHeight="407.0" minHeight="330.0" prefHeight="407.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
+      <BorderPane focusTraversable="true" maxHeight="461.0" minHeight="276.0" prefHeight="461.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets />
          </BorderPane.margin>
          <center>
-            <Pane focusTraversable="true" maxHeight="303.0" minHeight="300.0" prefHeight="303.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
+            <Pane focusTraversable="true" maxHeight="303.0" minHeight="259.0" prefHeight="259.0" prefWidth="1024.0">
                <children>
-                  <TableView fx:id="tableViewTickets" editable="true" focusTraversable="false" layoutY="4.0" maxHeight="355.0" minHeight="282.0" prefHeight="283.0" prefWidth="1024.0" styleClass="tpv-table-view">
+                  <TableView fx:id="tableViewTickets" editable="true" focusTraversable="false" layoutY="-10.0" maxHeight="348.0" minHeight="240.0" prefHeight="290.0" prefWidth="1024.0" styleClass="tpv-table-view">
                     <columns>
                         <TableColumn fx:id="codigoColumn" minWidth="108.0" prefWidth="100.0" resizable="false" text="CODIGO" />
                       <TableColumn fx:id="descripcionColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="421.0" resizable="false" sortable="false" text="DESCRIPCION" />
@@ -127,43 +125,8 @@
                </children>
             </Pane>
          </center>
-      </BorderPane>
-   </center>
-   <bottom>
-      <BorderPane prefHeight="160.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
          <bottom>
-            <GridPane maxHeight="300.0" minHeight="25.0" prefHeight="116.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
-              <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="119.0" minWidth="10.0" prefWidth="63.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="202.0" minWidth="10.0" prefWidth="104.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="215.0" minWidth="10.0" prefWidth="125.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="218.0" minWidth="10.0" prefWidth="139.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.0" minWidth="10.0" prefWidth="157.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="212.0" minWidth="10.0" prefWidth="119.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="10.0" prefWidth="99.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="159.0" minWidth="10.0" prefWidth="156.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints maxHeight="51.0" minHeight="10.0" prefHeight="15.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Label styleClass="label_shorcut" text="F2-Cliente" />
-                  <Label prefHeight="35.0" prefWidth="185.0" styleClass="label_shorcut" text="F3-Busca por Desc." textAlignment="RIGHT" textFill="#3062e1" GridPane.columnIndex="1">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <Label styleClass="label_shorcut" text="F4-Ingreso Cantidad" GridPane.columnIndex="2" />
-                  <Label styleClass="label_shorcut" text="F11- Menu Principal" GridPane.columnIndex="7" />
-                  <Label styleClass="label_shorcut" text="F5- Habilitar Negativo" GridPane.columnIndex="3" />
-                  <Label styleClass="label_shorcut" text="F6- Deshabilita Negativo" GridPane.columnIndex="4" />
-                  <Label styleClass="label_shorcut" text="F8- Ver Ofertas" GridPane.columnIndex="6" />
-                  <Label styleClass="label_shorcut" text="F7- Cancelar Ticket Completo" GridPane.columnIndex="5" />
-               </children>
-            </GridPane>
-         </bottom>
-         <center>
-            <GridPane prefHeight="31.0" prefWidth="624.0" styleClass="rounded_corner" BorderPane.alignment="CENTER">
+            <GridPane prefHeight="79.0" prefWidth="624.0" styleClass="rounded_corner" BorderPane.alignment="CENTER">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -179,7 +142,7 @@
                   <Insets left="200.0" right="200.0" />
                </BorderPane.margin>
             </GridPane>
-         </center>
+         </bottom>
       </BorderPane>
-   </bottom>
+   </center>
 </BorderPane>

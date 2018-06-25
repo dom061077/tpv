@@ -18,91 +18,70 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.login.LoginController">
-   <top>
-      <BorderPane prefHeight="80.0" prefWidth="80.0" BorderPane.alignment="CENTER">
-         <top>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="54.0" prefWidth="1024.0" styleClass="label_barra_titulo" text="Ingreso" textAlignment="CENTER" textFill="#3062e1" BorderPane.alignment="CENTER">
-               <font>
-                  <Font name="Arial" size="64.0" />
-               </font>
-            </Label>
-         </top>
-      </BorderPane>
-   </top>
-   <right>
-      <Button fx:id="buttonLogin" focusTraversable="false" mnemonicParsing="false" visible="false" BorderPane.alignment="CENTER" />
-   </right>
-   <bottom>
-      <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <children>
-            <Button fx:id="goToErrorButton" mnemonicParsing="false" visible="false" />
-            <Label styleClass="label_shorcut" text="F11- Salir del Sistema" />
-         </children>
-      </HBox>
-   </bottom>
+<BorderPane fx:id="borderPane" maxHeight="640.0" maxWidth="1024.0" minHeight="640.0" minWidth="1024.0" prefHeight="640.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.login.LoginController">
    <center>
-      <GridPane alignment="CENTER" prefHeight="400.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-        <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="206.0" minWidth="10.0" prefWidth="80.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="256.0" minWidth="10.0" prefWidth="172.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="345.0" minWidth="10.0" prefWidth="343.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="115.0" minWidth="10.0" prefWidth="84.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="115.0" minWidth="10.0" prefWidth="76.0" />
-        </columnConstraints>
-        <rowConstraints>
-            <RowConstraints maxHeight="129.0" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="129.0" minHeight="7.0" prefHeight="69.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="132.0" minHeight="0.0" prefHeight="69.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="129.0" minHeight="10.0" prefHeight="41.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="229.0" minHeight="10.0" prefHeight="59.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <Label styleClass="label_textfield" text="Contraseña:" textFill="#3757a7" GridPane.columnIndex="1" GridPane.rowIndex="2">
-               <font>
-                  <Font name="Arial" size="14.0" />
-               </font>
-            </Label>
-            <Label prefHeight="17.0" prefWidth="228.0" styleClass="label_textfield" text="Usuario:" textAlignment="RIGHT" textFill="#3062e1" GridPane.columnIndex="1" GridPane.rowIndex="1">
-               <font>
-                  <Font name="Arial" size="14.0" />
-               </font>
-            </Label>
-            <TextField fx:id="userName" styleClass="textfield_sin_border" GridPane.columnIndex="2" GridPane.rowIndex="1">
-               <font>
-                  <Font name="Arial" size="14.0" />
-               </font>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </TextField>
-            <PasswordField fx:id="password" styleClass="textfield_sin_border" GridPane.columnIndex="2" GridPane.rowIndex="2">
-               <font>
-                  <Font name="Arial" size="14.0" />
-               </font>
-            </PasswordField>
-            <Button fx:id="buttonGoToError" focusTraversable="false" mnemonicParsing="false" text="Button" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-            <StackPane fx:id="stackPaneError" prefHeight="229.0" prefWidth="550.0" styleClass="rounded_corner_modal" visible="false" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="1" GridPane.rowSpan="3">
+      <BorderPane maxHeight="640.0" maxWidth="1024.0" minHeight="640.0" minWidth="1024.0" prefHeight="640.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
+         <center>
+            <GridPane alignment="CENTER" prefHeight="400.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+              <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="206.0" minWidth="10.0" prefWidth="80.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="256.0" minWidth="10.0" prefWidth="172.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="345.0" minWidth="10.0" prefWidth="343.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="115.0" minWidth="10.0" prefWidth="84.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="115.0" minWidth="10.0" prefWidth="76.0" />
+              </columnConstraints>
+              <rowConstraints>
+                  <RowConstraints maxHeight="129.0" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="180.0" minHeight="7.0" prefHeight="74.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="273.0" minHeight="0.0" prefHeight="131.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="131.0" minHeight="10.0" prefHeight="131.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="229.0" minHeight="10.0" prefHeight="59.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
                <children>
-                  <BorderPane focusTraversable="true" prefHeight="200.0" prefWidth="200.0">
-                     <center>
-                        <Label fx:id="labelError" styleClass="label_error" BorderPane.alignment="CENTER" />
-                     </center>
-                     <bottom>
-                        <HBox prefHeight="32.0" prefWidth="590.0" BorderPane.alignment="CENTER">
-                           <children>
-                              <Label alignment="CENTER" prefHeight="21.0" prefWidth="614.0" styleClass="label_sub_titulo" text="Esc - Volver" />
-                           </children>
-                        </HBox>
-                     </bottom>
-                  </BorderPane>
+                  <Label styleClass="label_textfield" text="Contraseña:" textFill="#3757a7" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                     <font>
+                        <Font name="Arial" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label prefHeight="17.0" prefWidth="228.0" styleClass="label_textfield" text="Usuario:" textAlignment="RIGHT" textFill="#3062e1" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <font>
+                        <Font name="Arial" size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="userName" styleClass="textfield_sin_border" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                     <font>
+                        <Font name="Arial" size="14.0" />
+                     </font>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </TextField>
+                  <PasswordField fx:id="password" styleClass="textfield_sin_border" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                     <font>
+                        <Font name="Arial" size="14.0" />
+                     </font>
+                  </PasswordField>
+                  <Button fx:id="buttonGoToError" focusTraversable="false" mnemonicParsing="false" text="Button" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                  <StackPane fx:id="stackPaneError" prefHeight="229.0" prefWidth="550.0" styleClass="rounded_corner_modal" visible="false" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="1" GridPane.rowSpan="3">
+                     <children>
+                        <BorderPane focusTraversable="true" prefHeight="200.0" prefWidth="200.0">
+                           <center>
+                              <Label fx:id="labelError" styleClass="label_error" BorderPane.alignment="CENTER" />
+                           </center>
+                           <bottom>
+                              <HBox prefHeight="32.0" prefWidth="590.0" BorderPane.alignment="CENTER">
+                                 <children>
+                                    <Label alignment="CENTER" prefHeight="21.0" prefWidth="614.0" styleClass="label_sub_titulo" text="Esc - Volver" />
+                                 </children>
+                              </HBox>
+                           </bottom>
+                        </BorderPane>
+                     </children>
+                  </StackPane>
                </children>
-            </StackPane>
-         </children>
-      </GridPane>
+            </GridPane>
+         </center>
+      </BorderPane>
    </center>
-   <left>
-      <Button mnemonicParsing="false" visible="false" BorderPane.alignment="CENTER" />
-   </left>
 </BorderPane>

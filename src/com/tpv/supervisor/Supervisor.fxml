@@ -18,15 +18,8 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.supervisor.SupervisorController">
    <top>
-      <Label fx:id="labelTitulo" alignment="CENTER" prefHeight="21.0" prefWidth="1025.0" styleClass="label_barra_titulo" text="Label" BorderPane.alignment="CENTER" />
+      <Label fx:id="labelTitulo" alignment="CENTER" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" prefWidth="1025.0" styleClass="label_barra_titulo" text="Label" BorderPane.alignment="CENTER" />
    </top>
-   <bottom>
-      <HBox prefHeight="120.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
-         <children>
-            <Label styleClass="label_shorcut" text="Esc-Cancela Operación" />
-         </children>
-      </HBox>
-   </bottom>
    <center>
       <BorderPane fx:id="borderPaneIngreso" prefHeight="574.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
          <center>

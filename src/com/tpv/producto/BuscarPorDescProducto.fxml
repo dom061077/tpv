@@ -20,7 +20,7 @@
    <top>
       <BorderPane prefHeight="120.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <top>
-            <Label styleClass="label_titulo" text="Buscar Producto por Descripción" textFill="#3062e1" BorderPane.alignment="CENTER">
+            <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="30.0" maxWidth="1024.0" minHeight="30.0" minWidth="1024.0" prefHeight="30.0" prefWidth="2014.0" styleClass="label_barra_titulo" text="Buscar Producto por Descripción" textAlignment="CENTER" textFill="#3062e1" BorderPane.alignment="CENTER">
                <font>
                   <Font name="Arial" size="24.0" />
                </font>
