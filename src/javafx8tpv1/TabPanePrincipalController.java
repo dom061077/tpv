@@ -108,7 +108,7 @@ public class TabPanePrincipalController implements Initializable {
     public  void initialize(URL url, ResourceBundle rb) {
         // TODO
         labelMensaje.wrapTextProperty().set(true);
-        loadImage();
+        //loadImage();
         try{
             initParametrosGenerales();
             initImpresora();

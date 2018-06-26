@@ -4344,8 +4344,7 @@ to the top and bottom -fx-padding values of the parent toolbar. */
     -fx-font-family: "Arial";
    -fx-font-size: 36;
     /*-fx-background-color: 
-        #643DFF,
-        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),
+        #643DFFdanie        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),
         linear-gradient(#20262b, #643DFF),
         radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
    */
@@ -4363,7 +4362,7 @@ to the top and bottom -fx-padding values of the parent toolbar. */
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-font-size:24;
-    -fx-alignment:CENTER;    
+    -fx-alignment:TOP;    
     -fx-border-color: transparent transparent -fx-base transparent;
     -fx-effect: dropshadow(three-pass-box, #5AA0D0, 5, 5, 0, 0);
     -fx-border-width: 3;
