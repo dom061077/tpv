@@ -18,13 +18,13 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCombination;
-import javafx.stage.Screen;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 //import org.datafx.samples.app.MasterViewController;
@@ -43,6 +43,8 @@ public class JavaFX8TPV1 extends Application {
     public void start(Stage stage) throws Exception {
         Thread.currentThread().setUncaughtExceptionHandler((thread, throwable) -> {
             Alert alert = new Alert(AlertType.ERROR,"Error no controlado: "+throwable.getMessage());
+            alert.initModality(Modality.WINDOW_MODAL);
+            alert.initOwner(stage);
             alert.showAndWait();
             alert.getDialogPane().getStylesheets().add(Connection.getCss());
             log.error("Excepción no controlada",throwable);
@@ -153,7 +155,7 @@ public class JavaFX8TPV1 extends Application {
         
         Scene scene = new Scene(root);
         stage.setScene(scene);
-        //scene.setCursor(Cursor.NONE);
+        scene.setCursor(Cursor.NONE);
         String css = this.getClass().getResource("caspian.css").toExternalForm(); 
         scene.getStylesheets().add(css);        
         

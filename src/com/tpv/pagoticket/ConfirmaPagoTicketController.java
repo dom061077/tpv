@@ -609,6 +609,7 @@ public class ConfirmaPagoTicketController implements Initializable, TabPaneModal
     }
     
     public void cancelarMensajeModal(){
+        this.ticketConfirmado = false;
         this.tabPaneController.ocultarMensajeModal();
         this.tabPaneController.repeatFocus(borderPane);
     }

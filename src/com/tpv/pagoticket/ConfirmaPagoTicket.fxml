@@ -14,11 +14,11 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.pagoticket.ConfirmaPagoTicketController">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="1124.0" minHeight="-Infinity" minWidth="1124.0" prefHeight="650.0" prefWidth="1124.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.pagoticket.ConfirmaPagoTicketController">
    <center>
       <BorderPane prefHeight="200.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
          <bottom>
-            <GridPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="374.0" prefWidth="800.0" styleClass="rounded_corner" BorderPane.alignment="CENTER">
+            <GridPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="375.0" prefWidth="1000.0" styleClass="rounded_corner" BorderPane.alignment="CENTER">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="656.0" minWidth="10.0" prefWidth="516.0" />
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="580.0" minWidth="10.0" prefWidth="508.0" />
@@ -43,7 +43,7 @@
                   <Label fx:id="totalTicketLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="400.0" styleClass="label_total" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                   <Label fx:id="totalPagosLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="400.0" styleClass="label_total" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                   <Label fx:id="cambioLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="400.0" styleClass="label_total" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-                  <Label styleClass="label_total" text="Total Bonificaciones:" GridPane.rowIndex="6" />
+                  <Label prefHeight="17.0" prefWidth="366.0" styleClass="label_total" text="Total Bonificaciones:" GridPane.rowIndex="6" />
                   <Label fx:id="totalBonificacionesLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="400.0" styleClass="label_total" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                   <Label fx:id="labelBaseImponible" styleClass="label_total" text="Base Imponible:" />
                   <Label fx:id="labelIVA" styleClass="label_total" text="IVA:" GridPane.rowIndex="1" />
@@ -61,23 +61,23 @@
                   <Blend />
                </effect>
                <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  <Insets bottom="10.0" top="10.0" />
                </padding>
             </GridPane>
          </bottom>
          <center>
-            <Pane prefHeight="263.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
+            <Pane maxHeight="250.0" minHeight="250.0" prefHeight="250.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
                <children>
-                  <TableView fx:id="tableViewPagos" layoutY="17.0" prefHeight="228.0" prefWidth="1024.0" styleClass="tpv-table-view">
+                  <TableView fx:id="tableViewPagos" layoutY="17.0" prefHeight="228.0" prefWidth="1124.0" styleClass="tpv-table-view">
                     <columns>
                         <TableColumn fx:id="codigoPagoColumn" text="Cod." visible="false" />
-                      <TableColumn fx:id="descripcionPagoColumn" prefWidth="200.0" text="Descripción" />
-                      <TableColumn fx:id="montoPagoColumn" prefWidth="100.0" text="Monto" />
-                        <TableColumn fx:id="cantidadCuotaColumn" prefWidth="100.0" text="Cuotas" />
-                        <TableColumn fx:id="nroTarjetaColumn" prefWidth="168.0" text="Nº Tarjeta" />
-                        <TableColumn fx:id="codigoCuponColumn" prefWidth="168.0" text="Nº Cupón" />
-                        <TableColumn fx:id="interesTarjetaColumn" prefWidth="100.0" text="Int. Tarj." />
-                        <TableColumn fx:id="bonificacionTarjetaColumn" prefWidth="130.0" text="Bonif. Tarjeta" />
+                      <TableColumn fx:id="descripcionPagoColumn" prefWidth="188.0" text="Descripción" />
+                      <TableColumn fx:id="montoPagoColumn" prefWidth="138.0" text="Monto" />
+                        <TableColumn fx:id="cantidadCuotaColumn" prefWidth="105.0" text="Cuotas" />
+                        <TableColumn fx:id="nroTarjetaColumn" prefWidth="218.0" text="Nº Tarjeta" />
+                        <TableColumn fx:id="codigoCuponColumn" prefWidth="196.0" text="Nº Cupón" />
+                        <TableColumn fx:id="interesTarjetaColumn" prefWidth="130.0" text="Int. Tarj." />
+                        <TableColumn fx:id="bonificacionTarjetaColumn" prefWidth="134.0" text="Bonif. Tarjeta" />
                     </columns>
                   </TableView>
                   <StackPane fx:id="stackPaneMensajeCancelar" layoutX="300.0" layoutY="150.0" prefHeight="250.0" prefWidth="500.0" styleClass="rounded_corner_modal">

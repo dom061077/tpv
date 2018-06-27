@@ -9,12 +9,15 @@
    <center>
       <TableView fx:id="tableViewCombos" prefHeight="200.0" prefWidth="200.0" styleClass="tpv-table-view" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn fx:id="codigoColumn" prefWidth="100.0" text="Cod.Combo" />
-          <TableColumn fx:id="descripcionColumn" prefWidth="400.0" text="Descripción" />
-            <TableColumn fx:id="cantidadColumn" minWidth="3.0" prefWidth="120.0" text="Cantidad" />
-            <TableColumn fx:id="subTotalColumn" prefWidth="120.0" text="SubTotal" />
-            <TableColumn fx:id="observacionColumn" prefWidth="200.0" />
+          <TableColumn fx:id="codigoColumn" prefWidth="185.0" text="Cod.Combo" />
+          <TableColumn fx:id="descripcionColumn" prefWidth="390.0" text="Descripción" />
+            <TableColumn fx:id="cantidadColumn" minWidth="3.0" prefWidth="118.0" text="Cantidad" />
+            <TableColumn fx:id="subTotalColumn" prefWidth="128.0" text="SubTotal" />
+            <TableColumn fx:id="observacionColumn" prefWidth="119.0" />
         </columns>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
       </TableView>
    </center>
    <bottom>

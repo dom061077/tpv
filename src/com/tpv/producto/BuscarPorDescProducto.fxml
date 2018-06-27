@@ -19,13 +19,6 @@
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="740.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.producto.BuscarPorDescProductoController">
    <top>
       <BorderPane prefHeight="120.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-         <top>
-            <Label alignment="CENTER" contentDisplay="CENTER" maxHeight="30.0" maxWidth="1024.0" minHeight="30.0" minWidth="1024.0" prefHeight="30.0" prefWidth="2014.0" styleClass="label_barra_titulo" text="Buscar Producto por Descripción" textAlignment="CENTER" textFill="#3062e1" BorderPane.alignment="CENTER">
-               <font>
-                  <Font name="Arial" size="24.0" />
-               </font>
-            </Label>
-         </top>
          <center>
             <GridPane BorderPane.alignment="CENTER">
               <columnConstraints>
@@ -38,7 +31,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="430.0" styleClass="label_textfield" text="Buscar Producto Por:   " GridPane.rowIndex="1" />
+                  <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="430.0" styleClass="label_textfield" text="Texto de búsqueda:" GridPane.rowIndex="1" />
                   <TextField fx:id="textFieldFiltroProducto" maxWidth="350.0" styleClass="textfield_sin_border" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                </children>
             </GridPane>

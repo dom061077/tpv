@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
@@ -13,24 +19,14 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane focusTraversable="true" maxHeight="700.0" maxWidth="1024.0" minHeight="700.0" minWidth="1024.0" prefHeight="700.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.principal.FXMLMainController">
+<BorderPane focusTraversable="true" maxHeight="680.0" maxWidth="1124.0" minHeight="680.0" minWidth="1124.0" prefHeight="680.0" prefWidth="1124.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.principal.FXMLMainController">
    <top>
-      <BorderPane focusTraversable="true" maxHeight="250.0" minHeight="250.0" prefHeight="250.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
-         <right>
-            <StackPane fx:id="stackPaneMediaViewDer" alignment="TOP_CENTER" prefHeight="150.0" prefWidth="400.0" styleClass="rounded_corner" BorderPane.alignment="CENTER">
-               <children>
-                  <ImageView fx:id="imageViewDer" fitHeight="102.0" fitWidth="390.0" pickOnBounds="true" smooth="false" StackPane.alignment="TOP_CENTER" />
-               </children>
-               <BorderPane.margin>
-                  <Insets />
-               </BorderPane.margin>
-            </StackPane>
-         </right>
+      <BorderPane focusTraversable="true" maxHeight="230.0" maxWidth="1124.0" minHeight="200.0" minWidth="1124.0" prefHeight="230.0" prefWidth="1124.0" BorderPane.alignment="CENTER">
          <center>
-            <GridPane fx:id="gridPaneCodigoProducto" prefHeight="190.0" prefWidth="624.0" BorderPane.alignment="CENTER">
+            <GridPane fx:id="gridPaneCodigoProducto" maxWidth="500.0" minWidth="500.0" prefHeight="177.0" prefWidth="500.0" BorderPane.alignment="CENTER_LEFT">
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="270.0" minWidth="10.0" prefWidth="258.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="431.0" minWidth="0.0" prefWidth="306.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="270.0" minWidth="10.0" prefWidth="172.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="431.0" minWidth="0.0" prefWidth="308.0" />
               </columnConstraints>
               <rowConstraints>
                   <RowConstraints />
@@ -46,19 +42,19 @@
                      </font>
                   </Label>
                   <Label fx:id="nombreCliente" prefHeight="17.0" prefWidth="396.0" styleClass="label_cliente" GridPane.columnSpan="2" />
-                  <Pane fx:id="ingresoNegativoPane" prefHeight="29.0" prefWidth="677.0" visible="false" GridPane.columnSpan="2" GridPane.rowIndex="3">
+                  <Pane fx:id="ingresoNegativoPane" prefHeight="18.0" prefWidth="480.0" visible="false" GridPane.columnSpan="2" GridPane.rowIndex="3">
                      <children>
                         <Label fx:id="ingresoNegativoHabilitado" alignment="CENTER" prefHeight="17.0" prefWidth="529.0" styleClass="label_textfield_negativo" text="Ingreso Negativo Habilitado" />
                      </children>
                   </Pane>
                </children>
                <padding>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                  <Insets bottom="20.0" right="20.0" top="20.0" />
                </padding>
             </GridPane>
          </center>
          <top>
-            <GridPane prefHeight="28.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
+            <GridPane prefHeight="66.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -72,29 +68,43 @@
                </children>
             </GridPane>
          </top>
+         <right>
+            <Pane prefHeight="222.0" prefWidth="496.0" BorderPane.alignment="CENTER">
+               <children>
+                  <StackPane fx:id="stackPaneMediaViewDer" alignment="TOP_CENTER" prefHeight="150.0" prefWidth="400.0" styleClass="rounded_corner">
+                     <children>
+                        <ImageView fx:id="imageViewDer" fitHeight="102.0" fitWidth="390.0" pickOnBounds="true" smooth="false" StackPane.alignment="TOP_CENTER" />
+                     </children>
+                     <padding>
+                        <Insets left="20.0" />
+                     </padding>
+                  </StackPane>
+               </children>
+            </Pane>
+         </right>
       </BorderPane>
    </top>
    <center>
-      <BorderPane focusTraversable="true" maxHeight="300.0" minHeight="300.0" prefHeight="300.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
+      <BorderPane focusTraversable="true" maxHeight="350.0" maxWidth="1124.0" minHeight="350.0" minWidth="1124.0" prefHeight="364.0" prefWidth="1124.0" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets />
          </BorderPane.margin>
          <center>
-            <Pane focusTraversable="true" maxHeight="250.0" minHeight="250.0" prefHeight="250.0" prefWidth="1024.0" BorderPane.alignment="TOP_CENTER">
+            <Pane focusTraversable="true" maxHeight="350.0" maxWidth="1124.0" minHeight="350.0" minWidth="1124.0" prefHeight="350.0" prefWidth="1124.0" BorderPane.alignment="CENTER">
                <children>
-                  <TableView fx:id="tableViewTickets" editable="true" focusTraversable="false" layoutY="-10.0" maxHeight="250.0" minHeight="250.0" prefHeight="250.0" prefWidth="1024.0" styleClass="tpv-table-view">
+                  <TableView fx:id="tableViewTickets" editable="true" focusTraversable="false" layoutY="-10.0" maxHeight="349.0" minHeight="280.0" prefHeight="349.0" prefWidth="1124.0" styleClass="tpv-table-view">
                     <columns>
                         <TableColumn fx:id="codigoColumn" minWidth="108.0" prefWidth="100.0" resizable="false" text="CODIGO" />
-                      <TableColumn fx:id="descripcionColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="421.0" resizable="false" sortable="false" text="DESCRIPCION" />
-                      <TableColumn fx:id="cantidadColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="91.0" prefWidth="149.0" resizable="false" sortable="false" text="CANTIDAD" />
-                        <TableColumn fx:id="precioUnitarioColumn" minWidth="100.0" prefWidth="148.0" resizable="false" text="\$/UNIDAD" />
-                        <TableColumn fx:id="subTotalColumn" minWidth="97.0" prefWidth="143.0" resizable="false" text="SUBTOTAL" />
+                      <TableColumn fx:id="descripcionColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="503.0" resizable="false" sortable="false" text="DESCRIPCION" />
+                      <TableColumn fx:id="cantidadColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="91.0" prefWidth="147.0" resizable="false" sortable="false" text="CANTIDAD" />
+                        <TableColumn fx:id="precioUnitarioColumn" minWidth="100.0" prefWidth="165.0" resizable="false" text="\$/UNIDAD" />
+                        <TableColumn fx:id="subTotalColumn" minWidth="97.0" prefWidth="165.0" resizable="false" text="SUBTOTAL" />
                     </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                   </TableView>
-                  <StackPane fx:id="stackPaneIngresos" focusTraversable="true" layoutX="250.0" prefHeight="246.0" prefWidth="510.0" styleClass="rounded_corner_modal">
+                  <StackPane fx:id="stackPaneIngresos" focusTraversable="true" layoutX="250.0" layoutY="40.0" prefHeight="246.0" prefWidth="510.0" styleClass="rounded_corner_modal">
                      <children>
                         <GridPane fx:id="gridPaneIngresos" focusTraversable="true">
                           <columnConstraints>
@@ -120,7 +130,7 @@
       </BorderPane>
    </center>
    <bottom>
-      <GridPane prefHeight="79.0" prefWidth="624.0" styleClass="rounded_corner" BorderPane.alignment="CENTER">
+      <GridPane alignment="BOTTOM_CENTER" maxHeight="50.0" maxWidth="500.0" minHeight="50.0" minWidth="500.0" prefHeight="50.0" prefWidth="500.0" styleClass="rounded_corner" BorderPane.alignment="BOTTOM_CENTER">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -133,7 +143,7 @@
             <Label fx:id="totalGeneral" alignment="CENTER_RIGHT" prefHeight="56.0" prefWidth="243.0" styleClass="label_total" textAlignment="RIGHT" GridPane.columnIndex="1" />
          </children>
          <BorderPane.margin>
-            <Insets left="200.0" right="200.0" />
+            <Insets left="250.0" right="250.0" />
          </BorderPane.margin>
       </GridPane>
    </bottom>

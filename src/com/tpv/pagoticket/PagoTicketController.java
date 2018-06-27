@@ -305,12 +305,14 @@ public class PagoTicketController implements Initializable {
         textFieldCantidadCuotas.setMask("N!");
         textFieldCantidadCuotas.setMaxDigitos(2);
         textFieldNroCupon = new MaskTextField();
-        textFieldNroCupon.getStyleClass().add("textfield_sin_border");
         textFieldNroCupon.setMask("N!");
-        textFieldNroCupon.setMaxDigitos(15);
+        textFieldNroCupon.setMaxDigitos(16);
+        textFieldNroCupon.getStyleClass().add("textfield_sin_border");
+        
+        
         textFieldNroTarjeta = new MaskTextField();
         textFieldNroTarjeta.setMask("N!");
-        textFieldNroTarjeta.setMaxDigitos(15);
+        textFieldNroTarjeta.setMaxDigitos(16);
         textFieldNroTarjeta.getStyleClass().add("textfield_sin_border");
         
         gridPanePagos.add(textFieldTipoPago,1,1);

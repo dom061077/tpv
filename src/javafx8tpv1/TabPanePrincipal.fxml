@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
@@ -15,9 +20,9 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane focusTraversable="true" maxHeight="740.0" maxWidth="1300.0" minHeight="740.0" minWidth="1300.0" prefHeight="740.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafx8tpv1.TabPanePrincipalController">
+<AnchorPane focusTraversable="true" maxHeight="768.0" maxWidth="1366.0" minHeight="768.0" minWidth="1366.0" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafx8tpv1.TabPanePrincipalController">
    <children>
-      <BorderPane focusTraversable="true" maxHeight="740.0" maxWidth="1300.0" minHeight="740.0" minWidth="1300.0" prefHeight="740.0" prefWidth="1300.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <BorderPane focusTraversable="true" maxHeight="700.0" maxWidth="1366.0" minHeight="700.0" minWidth="1366.0" prefHeight="700.0" prefWidth="1366.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
             <VBox maxWidth="138.0" minWidth="138.0" prefWidth="138.0" BorderPane.alignment="CENTER">
                <children>
@@ -31,11 +36,11 @@
                </children></VBox>
          </right>
          <center>
-            <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <BorderPane maxHeight="720.0" minHeight="720.0" prefHeight="720.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <center>
-                  <Pane maxHeight="640.0" maxWidth="1024.0" minHeight="640.0" minWidth="1024.0" prefHeight="640.0" prefWidth="1024.0" styleClass="rounded_corner" BorderPane.alignment="CENTER">
+                  <Pane maxHeight="700.0" maxWidth="1124.0" minHeight="700.0" minWidth="1124.0" prefHeight="700.0" prefWidth="1124.0" styleClass="rounded_corner" BorderPane.alignment="CENTER">
                      <children>
-                        <TabPane fx:id="tabPanePrincipal" focusTraversable="false" maxHeight="640.0" maxWidth="1024.0" minHeight="640.0" minWidth="1024.0" prefHeight="640.0" prefWidth="1024.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE">
+                        <TabPane fx:id="tabPanePrincipal" focusTraversable="false" maxHeight="700.0" maxWidth="1124.0" minHeight="700.0" minWidth="1124.0" prefHeight="700.0" prefWidth="1124.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE">
                           <tabs>
                               <Tab fx:id="tabRetiroDinero" closable="false" text="Retiro Dinero">
                                 <content>
@@ -133,10 +138,10 @@
                   </Pane>
                </center>
                <top>
-                  <Label fx:id="labelTituloVentana" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="35.0" maxWidth="1024.0" minHeight="35.0" minWidth="1024.0" prefHeight="35.0" prefWidth="1024.0" styleClass="label_barra_titulo" text="TITULO" BorderPane.alignment="TOP_CENTER" />
+                  <Label fx:id="labelTituloVentana" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="35.0" maxWidth="1124.0" minHeight="35.0" minWidth="1124.0" prefHeight="35.0" prefWidth="1124.0" styleClass="label_barra_titulo" text="TITULO" BorderPane.alignment="TOP_CENTER" />
                </top>
                <bottom>
-                  <Label fx:id="labelShortCut" maxWidth="1024.0" minWidth="1024.0" prefHeight="32.0" prefWidth="35.0" styleClass="label_shorcut" text="Label" BorderPane.alignment="CENTER" />
+                  <Label fx:id="labelShortCut" maxWidth="1024.0" minWidth="1024.0" prefHeight="31.0" prefWidth="1024.0" styleClass="label_shorcut" text="Label" BorderPane.alignment="CENTER" />
                </bottom>
             </BorderPane>
          </center>

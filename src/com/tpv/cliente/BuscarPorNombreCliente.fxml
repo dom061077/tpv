@@ -48,10 +48,10 @@
    <center>
       <TableView fx:id="tableView" focusTraversable="false" prefHeight="334.0" prefWidth="1296.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn fx:id="codigoColumn" prefWidth="178.0" text="Código" />
-            <TableColumn fx:id="dniColumn" prefWidth="163.0" text="D.N.I" />
-            <TableColumn fx:id="cuitColumn" prefWidth="158.0" text="C.U.I.T" />
-          <TableColumn fx:id="nombreColumn" prefWidth="474.0" text="Nombre" />
+          <TableColumn fx:id="codigoColumn" prefWidth="169.0" text="Código" />
+            <TableColumn fx:id="dniColumn" prefWidth="197.0" text="D.N.I" />
+            <TableColumn fx:id="cuitColumn" prefWidth="207.0" text="C.U.I.T" />
+          <TableColumn fx:id="nombreColumn" prefWidth="422.0" text="Nombre" />
         </columns>
       </TableView>
    </center>

@@ -4378,19 +4378,27 @@ to the top and bottom -fx-padding values of the parent toolbar. */
 .label_sub_titulo_modal{
     -fx-text-fill: white;
     -fx-font-weight: bold;
-    -fx-font-size:30;
+    -fx-font-size:24;
     -fx-alignment:CENTER;    
     -fx-border-color: transparent transparent -fx-base transparent;
     -fx-effect: dropshadow(three-pass-box, #5AA0D0, 5, 5, 0, 0);
     -fx-border-width: 3;
     -fx-background-color:#5AA0D0;
+    -fx-background-radius: 15.0;
+    -fx-hgap: 10;
+    -fx-vgap: 10;
+    
 }
 
 .label_mensaje_modal{
     -fx-text-fill: #3757a7;
     -fx-font-weight: bold;
     -fx-font-family: "Arial";
-   -fx-font-size: 36;    
+   -fx-font-size: 24;    
+    -fx-background-radius: 15.0;
+    -fx-hgap: 10;
+    -fx-vgap: 10;
+   
 }
 
 .label_aceptar_cancelar{
