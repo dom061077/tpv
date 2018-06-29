@@ -4,6 +4,20 @@
   <appender name='APP_LOG' class='org.apache.log4j.DailyRollingFileAppender'>
     <errorHandler class='org.apache.log4j.helpers.OnlyOnceErrorHandler' />
     <param name='File' value='logs/app.log' />
+    
+<!-- Schedule	DatePattern	Example of Log File’s Name
+Minutely	'.'yyyy-MM-dd-HH-mm	sample.log.2017-11-09-21-54
+Hourly	'.'yyyy-MM-dd-HH	sample.log.2017-11-09-22
+Half-daily	'.'yyyy-MM-dd-a	sample.log.2017-11-09-AM
+sample.log.2017-11-09-PM
+Daily	'.'yyyy-MM-dd	sample.log.2017-11-09
+Weekly	'.'yyyy-ww	sample.log.2017-45
+sample.log.2017-46
+Monthly	'.'yyyy-MM	sample.log.2017-10
+sample.log.2017-11     -->
+    
+    
+    <param name="DatePattern" value="'.'yyyy-MM-dd-HH" />
     <param name='Append' value='false' />
     <layout class='org.apache.log4j.PatternLayout'>
       <param name='ConversionPattern' value='%L %d %-5p [%-30.40c{1}] %2X{tid} %X{sid} %X{uid} %m%n' />

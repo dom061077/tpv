@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -16,7 +11,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 
-<BorderPane maxWidth="1124.0" minWidth="1124.0" prefHeight="700.0" prefWidth="1124.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.pagoticket.PagoTicketController">
+<BorderPane maxWidth="1124.0" minWidth="1124.0" prefHeight="700.0" prefWidth="1124.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.pagoticket.PagoTicketController">
    <top>
       <Pane maxWidth="1124.0" minWidth="1124.0" prefHeight="457.0" prefWidth="1124.0" BorderPane.alignment="CENTER">
          <children>
@@ -52,7 +47,7 @@
                   </GridPane>
                </children>
             </StackPane>
-            <GridPane fx:id="gridPanePagos" maxWidth="1124.0" minWidth="1124.0" prefHeight="381.0" prefWidth="1124.0">
+            <GridPane fx:id="gridPanePagos" maxWidth="1124.0" minWidth="1124.0" prefHeight="376.0" prefWidth="1124.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="809.0" minWidth="10.0" prefWidth="244.0" />
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="809.0" minWidth="10.0" prefWidth="287.0" />

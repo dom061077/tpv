@@ -125,7 +125,7 @@ public class SupervisorController implements Initializable, TabPaneModalCommand{
             
             textFieldPassword.setOnKeyPressed(keyEvent->{
                 if(keyEvent.getCode() == KeyCode.ESCAPE){
-                    tabController.gotoFacturacion();
+                    tabController.repeatFocus(textFieldCodigoSupervisor);
                     keyEvent.consume();
                     return;
                 }
@@ -183,8 +183,9 @@ public class SupervisorController implements Initializable, TabPaneModalCommand{
                 }
                 if(keyEvent.getCode() == KeyCode.ESCAPE){
                     textFieldCodigoBarra.setDisable(true);
+                    tabController.repeatFocus(textFieldPassword);
                     keyEvent.consume();
-                    tabController.gotoFacturacion();
+                    
                 }
                 
                 if(keyEvent.getCode() == KeyCode.TAB){

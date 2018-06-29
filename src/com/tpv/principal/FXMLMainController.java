@@ -59,6 +59,7 @@ import org.apache.log4j.Logger;
 import org.tpv.print.fiscal.FiscalPacket;
 import org.tpv.print.fiscal.FiscalPrinter;
 import org.tpv.print.fiscal.hasar.HasarCommands;
+import org.tpv.print.fiscal.msg.FiscalMessages;
 
 /**
  *
@@ -78,7 +79,7 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
     
     ProductoService productoService = new ProductoService();
     ClienteService clienteService = new ClienteService();
-    ImpresoraService impresoraService = new ImpresoraService();
+    final ImpresoraService impresoraService = new ImpresoraService();
     
     private FiscalPrinterEvent fiscalPrinterEvent;
     
@@ -181,6 +182,8 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
     
     @FXML
     private Label labelTotalGral;
+    
+    private boolean imprimiendo;
     
     public void configurarInicio() throws TpvException{
         log.info("Ingresando a pantalla de facturación");
@@ -341,7 +344,12 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
                         textFieldCantidad.setVisible(false);
                     }
                     if(textFieldProducto.getText().trim().length()>0){
-                        enviarComandoLineaTicket();
+                        
+                        //enviarComandoLineaTicket();
+                        labelProducto.setText("Imprimiendo ...");
+                        efectoImpresion();
+                        
+                        
                         scrollDown();
                     }else{
                         if(Context.getInstance().currentDMTicket().getDetalle().size()>0)
@@ -474,6 +482,7 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
     }
     
     private void enviarComandoLineaTicket(){
+        labelProducto.setText("Imprimiendo...");        
         int codigoIngresado=0;
         String codBarra="";
         BigDecimal cantidad = new BigDecimal(1);
@@ -530,6 +539,7 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
                     }
                     if(precio.compareTo(BigDecimal.valueOf(0))>0){
                         if(Context.getInstance().currentDMTicket().getDetalle().size()==0){
+                                
                                 impresoraService.abrirTicket();
                         }
                         /*descripcion = producto.getCodigoProducto()+" "+ producto.getDescripcion();
@@ -569,10 +579,11 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
                             cantidad = cantidad.multiply(new BigDecimal(-1));
                         }    
                         precio = precio.setScale(2,BigDecimal.ROUND_HALF_EVEN);
-                        impresoraService.imprimirLineaTicket(producto.getDescripcionConCodigo(), cantidad
-                                    ,precio ,producto.getValorImpositivo().getValor() ,Context.getInstance().currentDMTicket().isImprimeComoNegativo(), producto.getImpuestoInterno());
                         
-                  
+
+                        
+                        impresoraService.imprimirLineaTicket(producto.getDescripcionConCodigo(), cantidad
+                                ,precio ,producto.getValorImpositivo().getValor() ,Context.getInstance().currentDMTicket().isImprimeComoNegativo(), producto.getImpuestoInterno());
 
 
         //                    Context.getInstance().currentDMTicket().getDetalle().add(lineaTicketData);                    
@@ -992,9 +1003,10 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
         this.fiscalPrinterEvent = new FiscalPrinterEvent(){
             @Override
             public void commandExecuted(FiscalPrinter source, FiscalPacket command, FiscalPacket response){
-                log.debug("Se ejecutó correctamente el siguiente comando:");
+                log.info("Se ejecutó correctamente el siguiente comando:");
                 if(command.getCommandCode()==HasarCommands.CMD_OPEN_FISCAL_RECEIPT){
                     log.debug("     CMD_OPEN_FISCAL_RECEIPT: ");
+                    imprimiendo=false;
                     guardarFacturaPrimeraVez();
                 }
                 
@@ -1004,6 +1016,9 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
                 }
                 
                 if(command.getCommandCode()==HasarCommands.CMD_PRINT_LINE_ITEM){
+
+                    
+                    
                     agregarDetalleFactura();
                 }
 //                log.debug("Mensajes de error: ");
@@ -1020,6 +1035,11 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
 //                    
 //                });
                 
+            }
+            
+            @Override
+            public void printEnded(FiscalPrinter source, FiscalMessages msgs){
+                tabPaneController.ocultarMensajeModal();
             }
         };
         impresoraService.getHfp().setEventListener(this.fiscalPrinterEvent);
@@ -1157,5 +1177,30 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
         
     }
     
+    public void efectoImpresion(){
+        
+        Platform.runLater(new Runnable(){
+            @Override
+            public void run(){
+                //try{
+                    
+                
+                    enviarComandoLineaTicket();
+                        
+                //}catch(TpvException e){
+                //    Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+                //    Context.getInstance().currentDMTicket().setException(e);
+                //    tabPaneController.gotoError();
+                //}
+                //finally { 
+                //    labelProducto.setText("Producto:");
+                //} 
+                 labelProducto.setText("ProductoX:");
+            }
+        });
+    }
+    
     
 }
+
+
