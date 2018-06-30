@@ -531,6 +531,12 @@ public class FacturacionService  {
             formaPagoDetalle.setBonificacion(item.getBonificacion());
             formaPagoDetalle.setIvaInteres(item.getIvaInteres());
             formaPagoDetalle.setIvaBonificacion(item.getIvaBonficacion());
+            formaPagoDetalle.setNumeroCupon(item.getCodigoCupon());
+            formaPagoDetalle.setNumeroTarejta(item.getNroTarjeta());
+            formaPagoDetalle.setTerminal(item.getTerminal());
+            formaPagoDetalle.setNumeroLote(item.getNroLote());
+            formaPagoDetalle.setPorcentaje(item.getPorcentaje());
+            formaPagoDetalle.setDniCliente(item.getDniCliente());
             factura.addFormaPago(formaPagoDetalle);
             
             totalIvaInteresPago = totalIvaInteresPago.add(item.getIvaInteres());

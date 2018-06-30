@@ -42,6 +42,25 @@ public class FacturaFormaPagoDetalle {
     @Column(name="IVABONIFICACION")
     private BigDecimal ivaBonificacion;
     
+    @Column(name="NUMERO_TARJETA")
+    private String numeroTarejta;
+    
+    @Column(name="NUMERO_CUPON")
+    private String numeroCupon;
+    
+    @Column(name="TERMINAL")
+    private String terminal;
+    
+    @Column(name="NUMERO_LOTE")
+    private String numeroLote;
+    
+    @Column(name="DNI_CLIENTE")
+    private String dniCliente;
+    
+    @Column(name="PORCENTAJE")
+    private BigDecimal porcentaje;
+    
+    
     
     
     @Column(name="CUOTA")
@@ -180,6 +199,90 @@ public class FacturaFormaPagoDetalle {
      */
     public void setIvaBonificacion(BigDecimal ivaBonificacion) {
         this.ivaBonificacion = ivaBonificacion;
+    }
+
+    /**
+     * @return the numeroTarejta
+     */
+    public String getNumeroTarejta() {
+        return numeroTarejta;
+    }
+
+    /**
+     * @param numeroTarejta the numeroTarejta to set
+     */
+    public void setNumeroTarejta(String numeroTarejta) {
+        this.numeroTarejta = numeroTarejta;
+    }
+
+    /**
+     * @return the numeroCupon
+     */
+    public String getNumeroCupon() {
+        return numeroCupon;
+    }
+
+    /**
+     * @param numeroCupon the numeroCupon to set
+     */
+    public void setNumeroCupon(String numeroCupon) {
+        this.numeroCupon = numeroCupon;
+    }
+
+    /**
+     * @return the terminal
+     */
+    public String getTerminal() {
+        return terminal;
+    }
+
+    /**
+     * @param terminal the terminal to set
+     */
+    public void setTerminal(String terminal) {
+        this.terminal = terminal;
+    }
+
+    /**
+     * @return the dniCliente
+     */
+    public String getDniCliente() {
+        return dniCliente;
+    }
+
+    /**
+     * @param dniCliente the dniCliente to set
+     */
+    public void setDniCliente(String dniCliente) {
+        this.dniCliente = dniCliente;
+    }
+
+    /**
+     * @return the numeroLote
+     */
+    public String getNumeroLote() {
+        return numeroLote;
+    }
+
+    /**
+     * @param numeroLote the numeroLote to set
+     */
+    public void setNumeroLote(String numeroLote) {
+        this.numeroLote = numeroLote;
+    }
+
+    /**
+     * @return the porcentaje
+     */
+    public BigDecimal getPorcentaje() {
+        return porcentaje;
+    }
+
+    /**
+     * @param porcentaje the porcentaje to set
+     */
+    public void setPorcentaje(BigDecimal porcentaje) {
+        this.porcentaje = porcentaje;
     }
     
     

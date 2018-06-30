@@ -345,9 +345,9 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
                     }
                     if(textFieldProducto.getText().trim().length()>0){
                         
-                        //enviarComandoLineaTicket();
-                        labelProducto.setText("Imprimiendo ...");
-                        efectoImpresion();
+                        enviarComandoLineaTicket();
+                        
+                        //efectoImpresion();
                         
                         
                         scrollDown();
