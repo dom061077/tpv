@@ -5,12 +5,22 @@
  */
 package com.tpv.retirodinero;
 
-import com.tpv.util.ui.MaskTextField;
+import com.tpv.util.ui.EditableBigDecimalTableCell;
 import com.tpv.util.ui.TabPaneModalCommand;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TablePosition;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -24,98 +34,69 @@ import org.apache.log4j.Logger;
 public class RetiroDineroController implements Initializable,TabPaneModalCommand {
     Logger log = Logger.getLogger(RetiroDineroController.class);
     private TabPanePrincipalController tabController;
-    private MaskTextField textField1000 ;
-    private MaskTextField textField500;
-    private MaskTextField textField200;
-    private MaskTextField textField100;
-    private MaskTextField textField50;
     
     @FXML BorderPane borderPane;
     @FXML GridPane gridPane;
+    
+    @FXML TableColumn billeteColumn;
+    @FXML TableColumn cantidadRetiradaColumn;
+    @FXML TableView tableViewRetiro;
     
     @FXML
     public  void initialize(URL url, ResourceBundle rb) {    
         log.info("Ingreso la metodo initialize ");
         
         initIngresos();
+        tableViewRetiro.setEditable(true);
+        tableViewRetiro.getSelectionModel().setCellSelectionEnabled(true);
         
-        textField1000.setOnKeyPressed(keyEvent->{
-            if(keyEvent.getCode()==KeyCode.F11){
-                this.tabController.gotoMenuPrincipal();
-            }
-            if(keyEvent.getCode() == KeyCode.ENTER){
-                this.tabController.repeatFocus(textField500);
-            }
-            if(keyEvent.getCode() == KeyCode.TAB)
-                keyEvent.consume();
-            
-        });
-        textField500.setOnKeyPressed(keyEvent->{
-            if(keyEvent.getCode()==KeyCode.F11){
-                this.tabController.gotoMenuPrincipal();
-            }
-            if(keyEvent.getCode() == KeyCode.ENTER){
-                this.tabController.repeatFocus(textField200);
-            }
-            
-            if(keyEvent.getCode() == KeyCode.TAB)
-                keyEvent.consume();
-            
-            if(keyEvent.getCode() == KeyCode.ESCAPE)
-                this.tabController.repeatFocus(textField1000);
-            
-        });
+        ObservableList<RetiroDineroData> list = FXCollections.observableArrayList();
+        tableViewRetiro.setItems(new SimpleListProperty<>(list));
+        billeteColumn.setCellValueFactory(new PropertyValueFactory("descripcionForma"));
+        billeteColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
         
-        textField200.setOnKeyPressed(keyEvent->{
-            if(keyEvent.getCode()==KeyCode.F11){
-                this.tabController.gotoMenuPrincipal();
-            }
-            if(keyEvent.getCode() == KeyCode.ENTER){
-                this.tabController.repeatFocus(textField100);
-            }
-            if(keyEvent.getCode() == KeyCode.TAB)
-                keyEvent.consume();
-            
-            if(keyEvent.getCode() == KeyCode.ESCAPE)
-                this.tabController.repeatFocus(textField500);
-            
-            
-        });
+        cantidadRetiradaColumn.setCellValueFactory(new PropertyValueFactory("Monto"));
+        cantidadRetiradaColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+        cantidadRetiradaColumn.setCellFactory(col -> new EditableBigDecimalTableCell<RetiroDineroData>());
         
-        textField100.setOnKeyPressed(keyEvent->{
-            if(keyEvent.getCode()==KeyCode.F11){
-                this.tabController.gotoMenuPrincipal();
-            }
-            if(keyEvent.getCode() == KeyCode.ENTER){
-                this.tabController.repeatFocus(textField50);
-            }
-            if(keyEvent.getCode() == KeyCode.TAB)
-                keyEvent.consume();
-            
-            if(keyEvent.getCode() == KeyCode.ESCAPE)
-                this.tabController.repeatFocus(textField200);
-            
-        });
-        
-        textField50.setOnKeyPressed(keyEvent->{
-            if(keyEvent.getCode()==KeyCode.F11){
-                this.tabController.gotoMenuPrincipal();
-            }
-            if(keyEvent.getCode() == KeyCode.TAB)
-                keyEvent.consume();
-            if(keyEvent.getCode() == KeyCode.ESCAPE)
-                this.tabController.repeatFocus(textField100);
-            if(keyEvent.getCode() == KeyCode.ENTER){
-                this.tabController.mostrarMensajeModal();
-            }
-            
+        Platform.runLater(()->{
+            tableViewRetiro.setOnKeyPressed(keyEvent ->{
+                if(keyEvent.getCode() == KeyCode.TAB){
+                    keyEvent.consume();
+                    return;
+                }
+                if(keyEvent.getCode() == KeyCode.F11)
+                    tabController.gotoMenuPrincipal();
+                TablePosition tp;
+                tp = tableViewRetiro.getFocusModel().getFocusedCell();
+                tableViewRetiro.edit(tp.getRow(), tp.getTableColumn());
+            });
         });
         
     }
 
     public void configurarInicio(){
-        this.tabController.repeatFocus(textField1000);
+        tableViewRetiro.getItems().clear();
         this.tabController.setTabPaneModalCommand(this);
+        tabController.repeatFocus(tableViewRetiro);
+        tableViewRetiro.getItems().add(new RetiroDineroData(5,"$ 1.000"
+        ,new BigDecimal(1000), 0));
+        tableViewRetiro.getItems().add(new RetiroDineroData(5,"$ 500"
+        ,new BigDecimal(500), 0));
+        tableViewRetiro.getItems().add(new RetiroDineroData(5,"$ 100"
+        ,new BigDecimal(100), 0));
+        tableViewRetiro.getItems().add(new RetiroDineroData(5,"$ 50"
+        ,new BigDecimal(100), 0));
+        tableViewRetiro.getSelectionModel().select(0, cantidadRetiradaColumn);
+        cantidadRetiradaColumn.setOnEditCommit(
+            new EventHandler<TableColumn.CellEditEvent<RetiroDineroData,String>>() {
+                @Override
+                public void handle(TableColumn.CellEditEvent<RetiroDineroData, String> t) {
+                    tabController.repeatFocus(tableViewRetiro);
+                }
+            }                
+        );
+        
     }
     
     public void setTabController(TabPanePrincipalController tabController){
@@ -124,56 +105,16 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
     
     
     private void initIngresos(){
-        textField1000 = new MaskTextField();
-        textField1000.setMask("N!");
-        textField1000.getStyleClass().add("textfield_sin_border");
-        textField1000.setPrefWidth(150);
-        textField1000.setMaxWidth(150);
-        textField1000.setStyle("-fx-alignment: CENTER-RIGHT;");
-        gridPane.add(textField1000,1,0);
         
         
-        textField500 = new MaskTextField();
-        textField500.setMask("N!");
-        textField500.getStyleClass().add("textfield_sin_border");
-        textField500.setPrefWidth(150);
-        textField500.setMaxWidth(150);
-        textField500.setStyle("-fx-alignment: CENTER-RIGHT;");
-        gridPane.add(textField500,1,1);
-        
-        textField200 = new MaskTextField();
-        textField200.setMask("N!");
-        textField200.getStyleClass().add("textfield_sin_border");
-        textField200.setPrefWidth(150);
-        textField200.setMaxWidth(150);
-        textField200.setStyle("-fx-alignment: CENTER-RIGHT;");
-        gridPane.add(textField200,1, 2);
-        
-        textField100 = new MaskTextField();
-        textField100.setMask("N!");
-        textField100.getStyleClass().add("textfield_sin_border");
-        textField100.setPrefWidth(150);
-        textField100.setMaxWidth(150);
-        textField100.setStyle("-fx-alignment: CENTER-RIGHT;");
-        gridPane.add(textField100,1, 3);
-        
-        textField50 = new MaskTextField();
-        textField50.setMask("N!");
-        textField50.getStyleClass().add("textfield_sin_border");
-        textField50.setPrefWidth(150);
-        textField50.setMaxWidth(150);
-        textField50.setStyle("-fx-alignment: CENTER-RIGHT;");
-        gridPane.add(textField50,1, 4);
     }
     
     public void aceptarMensajeModal(){
         this.tabController.ocultarMensajeModal();
-        this.tabController.repeatFocus(this.textField1000);
     }
     
     public void cancelarMensajeModal(){
         this.tabController.ocultarMensajeModal();
-        this.tabController.repeatFocus(this.textField1000);
     }
     
     

@@ -21,9 +21,9 @@ import com.tpv.service.ClienteService;
 import com.tpv.service.FacturacionService;
 import com.tpv.service.ImpresoraService;
 import com.tpv.service.ProductoService;
+import com.tpv.util.ui.EditableBigDecimalTableCell;
 import com.tpv.util.ui.MaskTextField;
 import com.tpv.util.ui.TabPaneModalCommand;
-import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URL;
@@ -252,7 +252,7 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
         
         labelCantidad.setText(LABEL_CANTIDAD);
         
-
+       
                 
         
         
@@ -979,6 +979,7 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
             };
             return cell;
         });
+        
         subTotalColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
         
 //        subTotalColumn.setCellFactory(col -> {
@@ -1021,9 +1022,8 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
                 
                 if(command.getCommandCode()==HasarCommands.CMD_PRINT_LINE_ITEM){
 
-                    
-                    
                     agregarDetalleFactura();
+                    calcularTotalGeneral();
                 }
 //                log.debug("Mensajes de error: ");
 //                source.getMessages().getErrorMsgs().forEach(item->{
