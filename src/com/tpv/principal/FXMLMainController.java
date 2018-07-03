@@ -23,6 +23,7 @@ import com.tpv.service.ImpresoraService;
 import com.tpv.service.ProductoService;
 import com.tpv.util.ui.MaskTextField;
 import com.tpv.util.ui.TabPaneModalCommand;
+import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URL;
@@ -47,6 +48,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
@@ -170,7 +172,8 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
 //    @FXML
 //    private ImageView imageViewIzq;
 //    
-    
+    @FXML
+    private ImageView imageViewLoading;
     
     
     
@@ -202,7 +205,7 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
         
         chequearInterfazNegativo();    
         
-
+        initLoadingIcon();
 
         
         tableViewTickets.setItems(Context.getInstance().currentDMTicket().getDetalle());
@@ -482,7 +485,6 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
     }
     
     private void enviarComandoLineaTicket(){
-        labelProducto.setText("Imprimiendo...");        
         int codigoIngresado=0;
         String codBarra="";
         BigDecimal cantidad = new BigDecimal(1);
@@ -539,8 +541,8 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
                     }
                     if(precio.compareTo(BigDecimal.valueOf(0))>0){
                         if(Context.getInstance().currentDMTicket().getDetalle().size()==0){
-                                
-                                impresoraService.abrirTicket();
+                                imageViewLoading.setVisible(true);
+                                efectoAbrirTicket();
                         }
                         /*descripcion = producto.getCodigoProducto()+" "+ producto.getDescripcion();
                         if(producto.isProductoVilleco()){
@@ -582,8 +584,10 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
                         
 
                         
-                        impresoraService.imprimirLineaTicket(producto.getDescripcionConCodigo(), cantidad
-                                ,precio ,producto.getValorImpositivo().getValor() ,Context.getInstance().currentDMTicket().isImprimeComoNegativo(), producto.getImpuestoInterno());
+                        //impresoraService.imprimirLineaTicket(producto.getDescripcionConCodigo(), cantidad
+                        //        ,precio ,producto.getValorImpositivo().getValor() ,Context.getInstance().currentDMTicket().isImprimeComoNegativo(), producto.getImpuestoInterno());
+                        imageViewLoading.setVisible(true);
+                        efectoImprimirLinea(producto, cantidad, precio);
 
 
         //                    Context.getInstance().currentDMTicket().getDetalle().add(lineaTicketData);                    
@@ -1046,6 +1050,12 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
         
     }
     
+    private void initLoadingIcon(){
+        String f = this.getClass().getResource("/com/tpv/resources/loading31.gif").toExternalForm();
+                
+        imageViewLoading.setImage(new Image(f));
+    }
+    
     private void setBanner(){
 //        File f = new File("E:\\JAVA TPV\\luque\\sucursales.mp4");//(this.getClass().getResource("Banner.flv").toExternalForm());
 //        Media m = new Media(f.toURI().toString());
@@ -1174,28 +1184,50 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
     }
     
     public void cancelarMensajeModal(){
-        
+
     }
     
-    public void efectoImpresion(){
+    public void efectoAbrirTicket(){
+        Platform.runLater(new Runnable(){
+            @Override
+            public void run(){
+                try{
+                    impresoraService.abrirTicket();                
+                }catch(TpvException e){
+                    Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+                    Context.getInstance().currentDMTicket().setException(e);
+                    tabPaneController.gotoError();
+                }
+                finally { 
+                    imageViewLoading.setVisible(false);
+                }     
+            }
+        });        
+    }
+    
+    
+    public void efectoImprimirLinea(Producto producto,BigDecimal cantidad
+            ,BigDecimal precio){
         
         Platform.runLater(new Runnable(){
             @Override
             public void run(){
-                //try{
-                    
-                
-                    enviarComandoLineaTicket();
+                try{
                         
-                //}catch(TpvException e){
-                //    Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
-                //    Context.getInstance().currentDMTicket().setException(e);
-                //    tabPaneController.gotoError();
-                //}
-                //finally { 
-                //    labelProducto.setText("Producto:");
-                //} 
-                 labelProducto.setText("ProductoX:");
+                
+                        impresoraService.imprimirLineaTicket(producto.getDescripcionConCodigo(), cantidad
+                                ,precio ,producto.getValorImpositivo().getValor() ,Context.getInstance().currentDMTicket().isImprimeComoNegativo(), producto.getImpuestoInterno());
+
+                        
+                }catch(TpvException e){
+                    Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+                    Context.getInstance().currentDMTicket().setException(e);
+                    tabPaneController.gotoError();
+                }
+                finally { 
+                    imageViewLoading.setVisible(false);
+                } 
+                
             }
         });
     }

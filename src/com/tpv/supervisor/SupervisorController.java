@@ -84,6 +84,8 @@ public class SupervisorController implements Initializable, TabPaneModalCommand{
         textFieldCodigoBarra.setText("");
         tabController.repeatFocus(textFieldCodigoSupervisor);
         this.tabController.setTabPaneModalCommand(this);
+        if(impresoraService.getHfp().getEventListener()==null)
+            asignarEvento();        
     }
     
     
@@ -92,7 +94,7 @@ public class SupervisorController implements Initializable, TabPaneModalCommand{
     @FXML
     public  void initialize(URL url, ResourceBundle rb) {
             log.info("Ingresando al método init");
-            asignarEvento();
+            
             /*labelError.setOnKeyPressed(keyEvent -> {
                 if(keyEvent.getCode() == KeyCode.ESCAPE){
                     stackPaneError.setVisible(false);
@@ -161,7 +163,7 @@ public class SupervisorController implements Initializable, TabPaneModalCommand{
                                 this.tabController.getLabelCancelarModal().setVisible(false);
                                 this.tabController.mostrarMensajeModal();
                             }else{
-                                if(Context.getInstance().currentDMTicket().getTipoTituloSupervisor()==TipoTituloSupervisorEnum.HABILITAR_MENU){
+                                /*if(Context.getInstance().currentDMTicket().getTipoTituloSupervisor()==TipoTituloSupervisorEnum.HABILITAR_MENU){
                                     tabController.gotoMenuPrincipal();
                                 }else{
                                     if(Context.getInstance().currentDMTicket().getTipoTituloSupervisor()==TipoTituloSupervisorEnum.HABILITAR_NEGATIVO)
@@ -170,7 +172,24 @@ public class SupervisorController implements Initializable, TabPaneModalCommand{
                                         cancelarTicketCompleto();
                                     keyEvent.consume();
                                     tabController.gotoFacturacion();
+                                }*/
+                                switch(Context.getInstance().currentDMTicket().getTipoTituloSupervisor()){
+                                    case HABILITAR_MENU:
+                                        tabController.gotoMenuPrincipal();
+                                        break;
+                                    case HABILITAR_NEGATIVO:
+                                        habilitarNegativos(true);
+                                        tabController.gotoFacturacion();
+                                        break;
+                                    case CANCELAR_TICKET:
+                                        cancelarTicketCompleto();
+                                        tabController.gotoFacturacion();
+                                        break;
+                                    case HABILITAR_CONTROLADOR:
+                                        tabController.gotoControlador();
+                                        break;
                                 }
+                                keyEvent.consume();
                             }
                             
                     }catch(TpvException e){

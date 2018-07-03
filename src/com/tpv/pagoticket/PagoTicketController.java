@@ -542,15 +542,14 @@ public class PagoTicketController implements Initializable {
             textFieldNroTarjeta.setOnKeyPressed(keyEvent->{
                 if(keyEvent.getCode() == KeyCode.ESCAPE){
                     textFieldNroTarjeta.setDisable(true);
-                    textFieldMonto.requestFocus();
+                    tabPaneController.repeatFocus(textFieldMonto);
+                    
                 }
                 
-                if(textFieldNroTarjeta.getText().trim().equals("") || textFieldNroTarjeta.getText().equals("0")){
-                }
                 
                 if(keyEvent.getCode() == KeyCode.ENTER){
                     textFieldNroCupon.setDisable(false);
-                    textFieldNroCupon.requestFocus();
+                    tabPaneController.repeatFocus(textFieldNroCupon);
                 }
                 if(keyEvent.getCode() == KeyCode.TAB){
                     keyEvent.consume();
@@ -562,31 +561,33 @@ public class PagoTicketController implements Initializable {
                     textFieldNroCupon.setDisable(true);
                     textFieldNroTarjeta.requestFocus();
                 }
-                if(textFieldNroCupon.getText().trim().equals("") || textFieldNroCupon.getText().equals("0")){
-                    keyEvent.consume();
-                    return;
-                }
                 if(keyEvent.getCode() == KeyCode.ENTER){
-                    textFieldNroLote.setDisable(false);
-                    tabPaneController.repeatFocus(textFieldNroLote);
+                    if(textFieldNroCupon.getText().trim().equals("") || textFieldNroCupon.getText().equals("0")){
+                        keyEvent.consume();
+                        return;
+                    }else{
+                        textFieldNroLote.setDisable(false);
+                        tabPaneController.repeatFocus(textFieldNroLote);
+                    }
                 }
                 if(keyEvent.getCode() == KeyCode.TAB){
                     keyEvent.consume();
                 }
             });
             textFieldNroLote.setOnKeyPressed(keyEvent->{
-                if(textFieldNroLote.getText().trim().equals("") || textFieldNroLote.getText().equals("0")){
-                    keyEvent.consume();
-                    return;
-                }                
                 if(keyEvent.getCode() == KeyCode.ESCAPE){
                     textFieldNroLote.setDisable(true);
                     tabPaneController.repeatFocus(textFieldNroCupon);
                 }
                 
                 if(keyEvent.getCode() == KeyCode.ENTER){
-                    textFieldTerminal.setDisable(false);
-                    tabPaneController.repeatFocus(textFieldTerminal);
+                    if(textFieldNroLote.getText().trim().equals("") || textFieldNroLote.getText().equals("0")){
+                        keyEvent.consume();
+                        return;
+                    }else{                
+                        textFieldTerminal.setDisable(false);
+                        tabPaneController.repeatFocus(textFieldTerminal);
+                    }
                 }
                 
                 if(keyEvent.getCode() == KeyCode.TAB ){
@@ -605,8 +606,13 @@ public class PagoTicketController implements Initializable {
                 }
                 
                 if(keyEvent.getCode() == KeyCode.ENTER){
-                    textFieldDniCliente.setDisable(false);
-                    tabPaneController.repeatFocus(textFieldDniCliente);
+                    if(textFieldTerminal.getText().equals("") || textFieldTerminal.getText().equals("0")){
+                        keyEvent.consume();
+                        return;
+                    }else{
+                        textFieldDniCliente.setDisable(false);
+                        tabPaneController.repeatFocus(textFieldDniCliente);
+                    }
                 }
                 
                 if(keyEvent.getCode() == KeyCode.TAB ){
@@ -614,19 +620,20 @@ public class PagoTicketController implements Initializable {
                 }
             });
             textFieldDniCliente.setOnKeyPressed(keyEvent->{
-                if(textFieldDniCliente.getText().trim().equals("") || textFieldDniCliente.getText().equals("0")){
-                    keyEvent.consume();
-                    return;
-                }                
                 if(keyEvent.getCode() == KeyCode.ESCAPE){
                     textFieldDniCliente.setDisable(true);
                     tabPaneController.repeatFocus(textFieldTerminal);
                 }
                 
                 if(keyEvent.getCode() == KeyCode.ENTER){
-                        agregarLineaPago();
-                        refrescarTextFieldSaldo();
-                        scrollDown();      
+                        if(textFieldDniCliente.getText().trim().equals("") || textFieldDniCliente.getText().equals("0")){
+                            keyEvent.consume();
+                            return;
+                        }else{                
+                            agregarLineaPago();
+                            refrescarTextFieldSaldo();
+                            scrollDown();      
+                        }
                 }
                 
                 if(keyEvent.getCode() == KeyCode.TAB ){

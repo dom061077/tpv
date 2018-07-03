@@ -167,6 +167,17 @@ public class ConfirmaPagoTicketController implements Initializable, TabPaneModal
                 totalIVALabel.setVisible(false);
                 totalInternoLabel.setVisible(false);
                 ingBrutosLabel.setVisible(false);
+            }else{
+                labelBaseImponible.setVisible(true);
+                labelExentoIVA.setVisible(true);
+                labelIVA.setVisible(true);
+                labelImpuestoInterno.setVisible(true);
+                labelRetIngBrutos.setVisible(true);
+                totalNetoLabel.setVisible(true);
+                totalExentoIVALabel.setVisible(true);
+                totalIVALabel.setVisible(true);
+                totalInternoLabel.setVisible(true);
+                ingBrutosLabel.setVisible(true);
             }
                 
                 
@@ -424,9 +435,6 @@ public class ConfirmaPagoTicketController implements Initializable, TabPaneModal
             Context.getInstance().currentDMTicket().setException(e);
             Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CONFIRMARTICKET);
             tabPaneController.gotoError();
-        }catch(NullPointerException e){
-            e.printStackTrace();
-                    
         }
     }
     

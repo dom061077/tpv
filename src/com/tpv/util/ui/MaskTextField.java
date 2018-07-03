@@ -38,7 +38,7 @@ public class MaskTextField extends TextField {
        
         String tempText = this.getText() + text;
         if(this.getText().length()==maxDigitos && maxDigitos>0){
-            if(text=="")
+            if(text=="" || text.length() == this.getSelection().getLength())
                 super.replaceText(start, end, text);
             return;
         }

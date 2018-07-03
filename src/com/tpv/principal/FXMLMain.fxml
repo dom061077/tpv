@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
@@ -19,7 +13,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane focusTraversable="true" maxHeight="680.0" maxWidth="1124.0" minHeight="680.0" minWidth="1124.0" prefHeight="680.0" prefWidth="1124.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.principal.FXMLMainController">
+<BorderPane focusTraversable="true" maxHeight="680.0" maxWidth="1124.0" minHeight="680.0" minWidth="1124.0" prefHeight="680.0" prefWidth="1124.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.principal.FXMLMainController">
    <top>
       <BorderPane focusTraversable="true" maxHeight="230.0" maxWidth="1124.0" minHeight="200.0" minWidth="1124.0" prefHeight="230.0" prefWidth="1124.0" BorderPane.alignment="CENTER">
          <center>
@@ -47,6 +41,7 @@
                         <Label fx:id="ingresoNegativoHabilitado" alignment="CENTER" prefHeight="17.0" prefWidth="529.0" styleClass="label_textfield_negativo" text="Ingreso Negativo Habilitado" />
                      </children>
                   </Pane>
+                  <ImageView fx:id="imageViewLoading" fitHeight="41.0" fitWidth="168.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.rowIndex="2" />
                </children>
                <padding>
                   <Insets bottom="20.0" right="20.0" top="20.0" />
