@@ -29,8 +29,8 @@ private int minDecimals, maxDecimals;
  * This is the default - we will use this as 2 decimal places
  */
 public EditableBigDecimalTableCell () {
-    minDecimals = 2;
-    maxDecimals = 2;
+    minDecimals = 0;
+    maxDecimals = 0;
 }
 
 /**
@@ -47,7 +47,6 @@ public void startEdit() {
         if (!isEmpty()) {
             super.startEdit();
             createTextField();
-            setText(null);
             setGraphic(textField);
             textField.requestFocus();
         }
@@ -87,6 +86,7 @@ private void createTextField() {
     textField.setTextFormatter(new DecimalTextFormatter(minDecimals, maxDecimals));
     textField.setText(getString());
 
+    
     textField.setOnAction(evt -> {
         if(textField.getText() != null && !textField.getText().isEmpty()){
             NumberStringConverter nsc = new NumberStringConverter();
@@ -100,6 +100,10 @@ private void createTextField() {
         if (ke.getCode().equals(KeyCode.ESCAPE)) {
             cancelEdit();
         }
+        if(ke.getCode() == KeyCode.COMMA || ke.getCode() == KeyCode.DECIMAL){
+            ke.consume();
+        }
+        
     });
 
     textField.setAlignment(Pos.CENTER_RIGHT);
@@ -115,8 +119,9 @@ private String getString() {
 
 @Override
 public void commitEdit(BigDecimal item) {
-    if (isEditing()) {
-        super.commitEdit(item);
+
+    if (!isEditing()) {
+        super.commitEdit(item);        
     } else {
         final TableView<T> table = getTableView();
         if (table != null) {
@@ -129,6 +134,7 @@ public void commitEdit(BigDecimal item) {
         updateItem(item, false);
         if (table != null) {
             table.edit(-1, null);
+            
         }
 
     }

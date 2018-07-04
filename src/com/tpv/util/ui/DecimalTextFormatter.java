@@ -17,7 +17,7 @@ import javafx.util.StringConverter;
  * @author COMPUTOS
  */
 public class DecimalTextFormatter extends TextFormatter<Number> {
-    private static DecimalFormat format = new DecimalFormat( "#.0;-#.0" );
+    private static DecimalFormat format = new DecimalFormat( "########0" );
     public DecimalTextFormatter(int minDecimals, int maxDecimals) {
         super(
             new StringConverter<Number>() {
