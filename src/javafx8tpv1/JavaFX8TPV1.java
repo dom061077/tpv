@@ -41,14 +41,14 @@ public class JavaFX8TPV1 extends Application {
     BooleanProperty ready = new SimpleBooleanProperty(false);
     @Override
     public void start(Stage stage) throws Exception {
-        Thread.currentThread().setUncaughtExceptionHandler((thread, throwable) -> {
+        /*Thread.currentThread().setUncaughtExceptionHandler((thread, throwable) -> {
             Alert alert = new Alert(AlertType.ERROR,"Error no controlado: "+throwable.getMessage());
             alert.initModality(Modality.WINDOW_MODAL);
             alert.initOwner(stage);
             alert.showAndWait();
             alert.getDialogPane().getStylesheets().add(Connection.getCss());
             log.error("Excepción no controlada",throwable);
-        });   
+        });   */
         
         DOMConfigurator.configure(getClass().getResource("log4j.xml"));
         

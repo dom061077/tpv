@@ -5,7 +5,7 @@
  */
 package com.tpv.util.ui;
 
-import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import javafx.event.Event;
 import javafx.geometry.Pos;
@@ -22,7 +22,7 @@ import javafx.util.converter.NumberStringConverter;
  *
  * @author COMPUTOS
  */
-public class EditableBigDecimalTableCell<T> extends TableCell<T, BigDecimal> {
+public class EditableBigDecimalTableCell<T> extends TableCell<T, Integer> {
 private TextField textField;
 private int minDecimals, maxDecimals;
 /**
@@ -48,6 +48,7 @@ public void startEdit() {
             super.startEdit();
             createTextField();
             setGraphic(textField);
+            textField.setText(getItem().toString());
             textField.requestFocus();
         }
     }
@@ -56,12 +57,12 @@ public void startEdit() {
 @Override
 public void cancelEdit() {
     super.cancelEdit();
-    setText(getItem() != null ? getItem().toPlainString() : null);
+    setText(getItem() != null ? getItem().toString() : null);
     setGraphic(null);
 }
 
 @Override
-public void updateItem(BigDecimal item, boolean empty) {
+public void updateItem(Integer item, boolean empty) {
     super.updateItem(item, empty);
     if (empty) {
         setText(null);
@@ -75,6 +76,8 @@ public void updateItem(BigDecimal item, boolean empty) {
             setText(null);
             setGraphic(textField);
         } else {
+            //DecimalFormat df = new DecimalFormat("##,##0");
+            //setText(df.format(Integer.valueOf(getString().replace(".", ""))));
             setText(getString());
             setGraphic(null);
         }
@@ -82,16 +85,22 @@ public void updateItem(BigDecimal item, boolean empty) {
 }
 
 private void createTextField() {
-    textField = new TextField();
-    textField.setTextFormatter(new DecimalTextFormatter(minDecimals, maxDecimals));
-    textField.setText(getString());
+    //textField = new TextField();
+    textField = new MaskTextField();
+    ((MaskTextField)textField).setMask("N!");
+    ((MaskTextField)textField).setMaxDigitos(5);
+    //textField.setTextFormatter(new DecimalTextFormatter(minDecimals, maxDecimals));
+    
+    
+    
+    
 
     
     textField.setOnAction(evt -> {
         if(textField.getText() != null && !textField.getText().isEmpty()){
             NumberStringConverter nsc = new NumberStringConverter();
             Number n = nsc.fromString(textField.getText());
-            commitEdit(BigDecimal.valueOf(n.doubleValue()));
+            commitEdit(Integer.valueOf(n.intValue()));
         }
     });
     textField.setMinWidth(this.getWidth() - this.getGraphicTextGap() * 2);
@@ -99,9 +108,6 @@ private void createTextField() {
     textField.setOnKeyPressed((ke) -> {
         if (ke.getCode().equals(KeyCode.ESCAPE)) {
             cancelEdit();
-        }
-        if(ke.getCode() == KeyCode.COMMA || ke.getCode() == KeyCode.DECIMAL){
-            ke.consume();
         }
         
     });
@@ -118,16 +124,16 @@ private String getString() {
 }
 
 @Override
-public void commitEdit(BigDecimal item) {
+public void commitEdit(Integer item) {
 
     if (!isEditing()) {
         super.commitEdit(item);        
     } else {
         final TableView<T> table = getTableView();
         if (table != null) {
-            TablePosition<T, BigDecimal> position = new TablePosition<T, BigDecimal>(getTableView(),
+            TablePosition<T, Integer> position = new TablePosition<T, Integer>(getTableView(),
                     getTableRow().getIndex(), getTableColumn());
-            CellEditEvent<T, BigDecimal> editEvent = new CellEditEvent<T, BigDecimal>(table, position,
+            CellEditEvent<T, Integer> editEvent = new CellEditEvent<T, Integer>(table, position,
                     TableColumn.editCommitEvent(), item);
             Event.fireEvent(getTableColumn(), editEvent);
         }

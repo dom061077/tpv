@@ -21,18 +21,18 @@ public class RetiroDineroData {
     private IntegerProperty CodigoForma;
     private StringProperty DescripcionForma;
     private ObjectProperty<BigDecimal> ValorRetiro;
-    private ObjectProperty<BigDecimal> CantidadBilletes;
+    private IntegerProperty CantidadBilletes;
     
     public RetiroDineroData(){
         
     }
     
     public RetiroDineroData(int codigoForma,String descripcionForma
-        ,BigDecimal valorRetiro, BigDecimal cantidadBilletes){
+        ,BigDecimal valorRetiro, int cantidadBilletes){
         this.CodigoForma = new SimpleIntegerProperty(codigoForma);
         this.DescripcionForma = new SimpleStringProperty(descripcionForma);
         this.ValorRetiro = new SimpleObjectProperty(valorRetiro);
-        this.CantidadBilletes = new SimpleObjectProperty<BigDecimal>(cantidadBilletes);
+        this.CantidadBilletes = new SimpleIntegerProperty(cantidadBilletes);
                 
     }
     
@@ -54,9 +54,9 @@ public class RetiroDineroData {
         return ValorRetiro;    
     }
     
-    public ObjectProperty<BigDecimal> cantidadBilletesProperty(){
+    public IntegerProperty cantidadBilletesProperty(){
         if(CantidadBilletes == null)
-            CantidadBilletes = new SimpleObjectProperty<BigDecimal>();
+            CantidadBilletes = new SimpleIntegerProperty();
         return CantidadBilletes;
     }
     
@@ -72,11 +72,11 @@ public class RetiroDineroData {
         return ValorRetiro.get();
     }
     
-    public BigDecimal getCantidadBilletes(){
+    public int getCantidadBilletes(){
         return CantidadBilletes.get();
     }
     
-    public void setCantidadBilletes(BigDecimal cantidad){
+    public void setCantidadBilletes(int cantidad){
         this.cantidadBilletesProperty().set(cantidad);
     }
 }

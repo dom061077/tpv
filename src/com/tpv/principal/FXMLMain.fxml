@@ -66,9 +66,9 @@
          <right>
             <Pane prefHeight="222.0" prefWidth="496.0" BorderPane.alignment="CENTER">
                <children>
-                  <StackPane fx:id="stackPaneMediaViewDer" alignment="TOP_CENTER" prefHeight="150.0" prefWidth="400.0" styleClass="rounded_corner">
+                  <StackPane fx:id="stackPaneMediaViewDer" alignment="TOP_CENTER" prefHeight="150.0" prefWidth="400.0">
                      <children>
-                        <ImageView fx:id="imageViewDer" fitHeight="102.0" fitWidth="390.0" pickOnBounds="true" smooth="false" StackPane.alignment="TOP_CENTER" />
+                        <ImageView fx:id="imageViewDer" fitHeight="150.0" fitWidth="400.0" pickOnBounds="true" smooth="false" styleClass="rounded_corner" StackPane.alignment="TOP_CENTER" />
                      </children>
                      <padding>
                         <Insets left="20.0" />

@@ -74,8 +74,8 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
                 tableViewRetiro.edit(tp.getRow(), tp.getTableColumn());
             });
             cantidadRetiradaColumn.setOnEditCommit(
-                new EventHandler<CellEditEvent<RetiroDineroData, BigDecimal>>() {
-                    public void handle(CellEditEvent<RetiroDineroData, BigDecimal> t) {
+                new EventHandler<CellEditEvent<RetiroDineroData, Integer>>() {
+                    public void handle(CellEditEvent<RetiroDineroData, Integer> t) {
                         ((RetiroDineroData) t.getTableView().getItems().get(
                             t.getTablePosition().getRow())
                             ).setCantidadBilletes(t.getNewValue());
@@ -94,13 +94,13 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
         this.tabController.setTabPaneModalCommand(this);
         tabController.repeatFocus(tableViewRetiro);
         tableViewRetiro.getItems().add(new RetiroDineroData(5,"$ 1.000"
-        ,new BigDecimal(1000), new BigDecimal(1000)));
+        ,new BigDecimal(1000), 1000));
         tableViewRetiro.getItems().add(new RetiroDineroData(5,"$ 500"
-        ,new BigDecimal(500), new BigDecimal(500)));
+        ,new BigDecimal(500), 500));
         tableViewRetiro.getItems().add(new RetiroDineroData(5,"$ 100"
-        ,new BigDecimal(100), new BigDecimal(100)));
+        ,new BigDecimal(100), 100));
         tableViewRetiro.getItems().add(new RetiroDineroData(5,"$ 50"
-        ,new BigDecimal(50), new BigDecimal(50)));
+        ,new BigDecimal(50), 50));
         tableViewRetiro.getSelectionModel().select(0, cantidadRetiradaColumn);
         /*cantidadRetiradaColumn.setOnEditCommit(
             new EventHandler<TableColumn.CellEditEvent<RetiroDineroData,String>>() {

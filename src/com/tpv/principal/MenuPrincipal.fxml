@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="borderPane" focusTraversable="true" maxHeight="640.0" maxWidth="1024.0" minHeight="640.0" minWidth="1024.0" prefHeight="640.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.principal.MenuPrincipalController">
+<BorderPane fx:id="borderPane" focusTraversable="true" maxHeight="640.0" maxWidth="1024.0" minHeight="640.0" minWidth="1024.0" prefHeight="640.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.principal.MenuPrincipalController">
    <center>
       <GridPane alignment="TOP_CENTER" focusTraversable="true" BorderPane.alignment="CENTER">
          <columnConstraints>
@@ -22,13 +18,14 @@
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="866.0" minWidth="10.0" prefWidth="864.0" />
          </columnConstraints>
          <rowConstraints>
-            <RowConstraints maxHeight="83.0" minHeight="10.0" prefHeight="83.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="95.0" minHeight="0.0" prefHeight="83.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="134.0" minHeight="0.0" prefHeight="83.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="117.0" minHeight="0.0" prefHeight="83.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="159.0" minHeight="10.0" prefHeight="94.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="100.0" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="95.0" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="100.0" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="100.0" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="100.0" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
+            <Label styleClass="label_menu" text="4- RETIRO DE DINERO" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <ImageView fx:id="imageFacturacion" fitHeight="77.0" fitWidth="112.0" pickOnBounds="true" preserveRatio="true" />
             <Label alignment="CENTER_RIGHT" styleClass="label_menu" text="1- FACTURACION" textFill="#3062e1" GridPane.columnIndex="1">
                <font>
@@ -42,13 +39,13 @@
                </font>
             </Label>
             <ImageView fx:id="imageRetiroDinero" fitHeight="77.0" fitWidth="112.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2" />
-            <Label styleClass="label_menu" text="3- RETIRO DE DINERO" textFill="#3062e1" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <Label styleClass="label_menu" text="3- CARGA RETIRO DE DINERO" textFill="#3062e1" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <font>
                   <Font name="Arial" size="64.0" />
                </font>
             </Label>
-            <ImageView fx:id="imageFin" fitHeight="77.0" fitWidth="112.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="3" />
-            <Label styleClass="label_menu" text="4- FIN" textFill="#3062e1" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <ImageView fx:id="imageFin" fitHeight="77.0" fitWidth="112.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="4" />
+            <Label styleClass="label_menu" text="5- CERRAR SISTEMA" textFill="#3062e1" GridPane.columnIndex="1" GridPane.rowIndex="4">
                <font>
                   <Font size="64.0" />
                </font>
@@ -59,4 +56,7 @@
          </BorderPane.margin>
       </GridPane>
    </center>
+   <left>
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
+   </left>
 </BorderPane>

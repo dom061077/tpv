@@ -6,6 +6,7 @@
 package com.tpv.principal;
 
 import com.tpv.enums.OrigenPantallaErrorEnum;
+import com.tpv.enums.TipoTituloSupervisorEnum;
 import com.tpv.errorui.ErrorController;
 import com.tpv.exceptions.TpvException;
 import com.tpv.print.fiscal.ConfiguracionImpresoraController;
@@ -123,13 +124,14 @@ public class MenuPrincipalController implements Initializable {
                     Context.getInstance().currentDMTicket().getDetalle().clear();
                     tabController.gotoFacturacion();
                 }
-                if(keyEvent.getCode()==KeyCode.NUMPAD4)
+                if(keyEvent.getCode()==KeyCode.NUMPAD5)
                     System.exit(0);
                 if(keyEvent.getCode()==KeyCode.NUMPAD2){
-                    tabController.gotoControlador();
+                    Context.getInstance().currentDMTicket().setTipoTituloSupervisor(TipoTituloSupervisorEnum.HABILITAR_CONTROLADOR);
+                    tabController.gotoSupervisor();
                 }
                 if(keyEvent.getCode()==KeyCode.NUMPAD3){
-                    tabController.gotoRetiroDinero();
+                        tabController.gotoRetiroDinero();
                 }
                 
                 keyEvent.consume();

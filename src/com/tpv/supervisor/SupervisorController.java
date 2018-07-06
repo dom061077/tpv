@@ -49,8 +49,8 @@ public class SupervisorController implements Initializable, TabPaneModalCommand{
     private FiscalPrinterEvent fiscalPrinterEvent;
 
     
-    @FXML
-    private Label labelTitulo;
+    //@FXML
+    //private Label labelTitulo;
     
     @FXML
     private TextField textFieldCodigoSupervisor;
@@ -76,8 +76,8 @@ public class SupervisorController implements Initializable, TabPaneModalCommand{
 
 
     public void configurarInicio(){
-        stackPaneError.setVisible(false);
-        labelTitulo.setText(Context.getInstance().currentDMTicket().getTipoTituloSupervisor().getTitulo());
+        //stackPaneError.setVisible(false);
+        //labelTitulo.setText(Context.getInstance().currentDMTicket().getTipoTituloSupervisor().getTitulo());
         
         textFieldCodigoSupervisor.setText("");
         textFieldPassword.setText("");
@@ -110,7 +110,21 @@ public class SupervisorController implements Initializable, TabPaneModalCommand{
             */
             textFieldCodigoSupervisor.setOnKeyPressed(keyEvent->{
                 if(keyEvent.getCode() == KeyCode.ESCAPE){
-                    tabController.gotoFacturacion();
+                    switch(Context.getInstance().currentDMTicket().getTipoTituloSupervisor()){
+                        case HABILITAR_MENU:
+                            tabController.gotoFacturacion();
+                            break;
+                        case HABILITAR_NEGATIVO:
+                            tabController.gotoFacturacion();
+                            break;
+                        case CANCELAR_TICKET:
+                            tabController.gotoFacturacion();
+                            break;
+                        case HABILITAR_CONTROLADOR:
+                            tabController.gotoMenuPrincipal();
+                            break;
+                    }                    
+                    
                     keyEvent.consume();
                 }
                 if(keyEvent.getCode() == KeyCode.ENTER){

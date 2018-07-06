@@ -37,11 +37,13 @@ import com.tpv.util.Connection;
 import com.tpv.util.ui.TabPaneModalCommand;
 import javafx.application.Platform;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
 
 /**
  *
@@ -106,7 +108,15 @@ public class TabPanePrincipalController implements Initializable {
     //@Override
     @FXML
     public  void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        Thread.currentThread().setUncaughtExceptionHandler((thread, throwable) -> {
+            
+            log.error("Error:",throwable);
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+            Context.getInstance().currentDMTicket().setException(new TpvException("Error no controlado: "+throwable.getMessage()));
+            gotoError();
+            
+        });           
+
         labelMensaje.wrapTextProperty().set(true);
         //loadImage();
         try{
@@ -291,7 +301,7 @@ public class TabPanePrincipalController implements Initializable {
     
     public void gotoControlador(){
         this.labelTituloVentana.setText("OPERACIONES DE CONTROLADOR");
-        this.labelShortCut.setText("1-Cancelar Ticket   |   2-Cierre Z  |   3-Cierre X  |   F11-Retornar a Menú Principal");        
+        this.labelShortCut.setText("1-Cancelar Ticket   |   2-Cierre Z  |   3-Cierre X  |   F12-Retornar a Menú Principal");        
         this.configImpresoraController.configurarInicio();
         this.tabPanePrincipal.getSelectionModel().select(tabControlador);
     }
@@ -363,4 +373,7 @@ public class TabPanePrincipalController implements Initializable {
         //imageSuperior.fitWidthProperty().bind(this.widthProperty());
         
     } 
+    
+    
+    
 }

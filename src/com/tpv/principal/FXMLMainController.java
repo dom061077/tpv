@@ -528,6 +528,10 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
                 if(producto!=null){
                     log.debug("Producto encontrado: "+producto.getDescripcion());
                     lpp = productoService.getListaPrecioProducto(producto.getCodigoProducto(),Context.getInstance().currentDMTicket().getCliente());
+                    if(lpp == null){
+                        throw new TpvException("El producto "+producto.getDescripcion()+", con código "+producto.getCodigoProducto()+" no tiene precio");
+                         
+                    }
                     precio = lpp.getPrecioFinal();
                    
                     if(producto.isProductoVilleco()){
@@ -940,6 +944,24 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
         descripcionColumn.setCellValueFactory(new PropertyValueFactory("descripcion"));
         cantidadColumn.setCellValueFactory(new PropertyValueFactory("cantidad"));
         cantidadColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+        cantidadColumn.setCellFactory(col ->{
+            TableCell<LineaTicketData,BigDecimal> cell = new TableCell<LineaTicketData,BigDecimal>(){
+                @Override
+                public void updateItem(BigDecimal item,boolean empty){
+                    super.updateItem(item, empty);
+                    this.setText(null);
+                    this.setGraphic(null);
+                    if (!empty) {
+                            //String formattedDob = De
+                            DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
+                            this.setText(df.format(item));
+                    }
+                }
+            };
+            return cell;
+            
+        });
+        
         precioUnitarioColumn.setCellValueFactory(new PropertyValueFactory("precioUnitario"));
         precioUnitarioColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
         precioUnitarioColumn.setCellFactory(col -> {
@@ -1068,8 +1090,8 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
 //        mp.setCycleCount(MediaPlayer.INDEFINITE);
 //        
 //        mp.setRate(0.5);
-       // String f = this.getClass().getResource("/com/tpv/resources/sucursales.gif").toExternalForm();
-       // imageViewDer.setImage(new Image(f));
+        String f = this.getClass().getResource("/com/tpv/resources/gif-emilio luque.gif").toExternalForm();
+        //imageViewDer.setImage(new Image(f));
 //        imageViewIzq.setImage(new Image(f));
         //mp.play();
     }

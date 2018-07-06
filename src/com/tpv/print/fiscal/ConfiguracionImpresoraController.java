@@ -19,6 +19,7 @@ import javafx.scene.layout.VBox;
 import javafx8tpv1.TabPanePrincipalController;
 import com.tpv.service.ImpresoraService;
 import com.tpv.util.Connection;
+import com.tpv.util.ui.TabPaneModalCommand;
 import javafx.scene.control.Alert;
 
 
@@ -27,7 +28,7 @@ import javafx.scene.control.Alert;
  * @author daniel
  */
 
-public class ConfiguracionImpresoraController implements Initializable {
+public class ConfiguracionImpresoraController implements Initializable,TabPaneModalCommand {
     private ImpresoraService impresoraService = new ImpresoraService();
     Logger log = Logger.getLogger(ConfiguracionImpresoraController.class);
     private TabPanePrincipalController tabController;
@@ -48,9 +49,12 @@ public class ConfiguracionImpresoraController implements Initializable {
                 if(keyEvent.getCode()==KeyCode.NUMPAD1){
                     try{
                         impresoraService.cancelarTicket();
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION,"El ticket fue cancelado");
+                        /*Alert alert = new Alert(Alert.AlertType.INFORMATION,"El ticket fue cancelado");
                         alert.getDialogPane().getStylesheets().add(Connection.getCss());                        
-                        alert.showAndWait();
+                        alert.showAndWait();*/
+                        tabController.getLabelCancelarModal().setVisible(false);
+                        tabController.getLabelMensaje().setText("El ticket fue cancelado con éxito");
+                        tabController.mostrarMensajeModal();
                     }catch(TpvException e){
                         log.error("Error al tratar de cancelar el ticket",e);
                         Context.getInstance().currentDMTicket().setException(e);
@@ -62,8 +66,13 @@ public class ConfiguracionImpresoraController implements Initializable {
                 if(keyEvent.getCode()==KeyCode.NUMPAD2){
                     try{
                         impresoraService.cierreZ();
-                        Alert alert=new Alert(Alert.AlertType.INFORMATION,"El cierre diario fue correcto");
+                        /*Alert alert=new Alert(Alert.AlertType.INFORMATION,"El cierre diario fue correcto");
                         alert.showAndWait();
+                        */
+                        tabController.getLabelCancelarModal().setVisible(false);
+                        tabController.getLabelMensaje().setText("El cierre diario Z fue correcto");
+                        tabController.mostrarMensajeModal();
+                        
                     }catch(TpvException e){
                         log.error("Error al tratar de hacer el cierre diario Z",e);
                         Context.getInstance().currentDMTicket().setException(e);
@@ -76,6 +85,10 @@ public class ConfiguracionImpresoraController implements Initializable {
                 if(keyEvent.getCode()==KeyCode.NUMPAD3){
                     try{
                       impresoraService.cierreX();
+                    tabController.getLabelCancelarModal().setVisible(false);
+                    tabController.getLabelMensaje().setText("El cierre diario X fue correcto");
+                    tabController.mostrarMensajeModal();
+                      
                     }catch(TpvException e){
                         log.error("Error al tratar de hacer el cierre diario X");
                     }
@@ -95,5 +108,17 @@ public class ConfiguracionImpresoraController implements Initializable {
     public void configurarInicio(){
         this.tabController.repeatFocus(vboxMenuImpresora);
     }        
+    
+    @Override
+    public void aceptarMensajeModal(){
+        this.tabController.ocultarMensajeModal();
+        this.tabController.getLabelCancelarModal().setVisible(true);
+        this.tabController.repeatFocus(vboxMenuImpresora);
+    }
+    
+    @Override
+    public void cancelarMensajeModal(){
+    }    
+    
 
 }
