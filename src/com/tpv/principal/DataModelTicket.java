@@ -46,6 +46,7 @@ public class DataModelTicket {
     private ListProperty<LineaTicketData> detalle;
     private ListProperty<LineaPagoData> pagos;
     private Usuario usuario = null;
+    private Usuario usuarioSupervisor = null;
     private Cliente cliente = null;
     private FormaPago formaPago = null;
     private TpvException exception;

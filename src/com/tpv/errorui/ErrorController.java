@@ -109,6 +109,8 @@ public class ErrorController implements Initializable {
                         if(Context.getInstance().currentDMTicket().getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_CONTROLADOR)
                             tabController.gotoControlador();
                         
+                        if(Context.getInstance().currentDMTicket().getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_CARGARETIRODINERO)
+                            tabController.gotoRetiroDinero();
                     }
                     if(keyEvent.getCode()==KeyCode.F12)
                         System.exit(0);

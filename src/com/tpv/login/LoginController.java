@@ -93,7 +93,7 @@ public class LoginController implements Initializable, TabPaneModalCommand{
                     password.requestFocus();
                     
                 }
-                if(keyEvent.getCode() == KeyCode.F11){
+                if(keyEvent.getCode() == KeyCode.F12){
                     System.exit(0);
                 }
                 

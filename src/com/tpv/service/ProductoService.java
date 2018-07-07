@@ -44,7 +44,7 @@ public class ProductoService {
      * 
      * 
     */
-    public List getProductos(String filtro) throws TpvException{
+    public List<Producto> getProductos(String filtro) throws TpvException{
         log.info("Capa de servicios, Filtro de búsqueda: "+filtro);
         List<Producto> productos = null;
         int codigoProducto=0;

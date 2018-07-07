@@ -7,21 +7,30 @@ package com.tpv.modelo;
 
 import java.math.BigDecimal;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  *
  * @author COMPUTOS
  */
+@Entity
+@Table(name="suctes_billete")
 public class Billete {
     @Id
     @Column(name = "idsuctes_BILLETE")
     private int id;
+    
+    @Column(name = "VALOR")
     private BigDecimal valor;
+    @Column(name = "DETALLE_FORMULARIO")
     private String detalleFormulario;
+    @Column(name = "ESTADO")
     private boolean estado;
+    @Column(name = "RETIRO_HABILITADO")
     private boolean retiroHabilitado;
     
     @ManyToOne

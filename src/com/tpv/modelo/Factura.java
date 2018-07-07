@@ -24,6 +24,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import org.hibernate.annotations.Formula;
 
 /**
  *
@@ -33,6 +34,13 @@ import javax.persistence.Transient;
 @Entity
 @Table(name="facturas")
 public class Factura {
+
+    /**
+     * @return the fechaHoy
+     */
+    public java.util.Date getFechaHoy() {
+        return fechaHoy;
+    }
 
     /**
      * @return the ivaTarjeta
@@ -54,6 +62,9 @@ public class Factura {
     
     @Column(name = "FECHAALTA")
     private java.util.Date fechaAlta;
+    
+    @Formula("(SELECT NOW())")
+    private java.util.Date fechaHoy;    
     
     @Column(name = "TIPOCOMPROBANTE")
     private String tipoComprobante;
@@ -172,6 +183,8 @@ public class Factura {
     @ManyToOne
     @JoinColumn(name = "idCONDICIONESIVA", referencedColumnName = "idCONDICIONESIVA", nullable=true)
     private CondicionIva condicionIva;
+    
+
     
     
     /**

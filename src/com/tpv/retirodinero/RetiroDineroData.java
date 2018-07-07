@@ -18,8 +18,8 @@ import javafx.beans.property.StringProperty;
  * @author COMPUTOS
  */
 public class RetiroDineroData {
-    private IntegerProperty CodigoForma;
-    private StringProperty DescripcionForma;
+    private IntegerProperty IdBillete;
+    private StringProperty DescripcionBillete;
     private ObjectProperty<BigDecimal> ValorRetiro;
     private IntegerProperty CantidadBilletes;
     
@@ -27,25 +27,25 @@ public class RetiroDineroData {
         
     }
     
-    public RetiroDineroData(int codigoForma,String descripcionForma
+    public RetiroDineroData(int idBillete,String descripcionBillete
         ,BigDecimal valorRetiro, int cantidadBilletes){
-        this.CodigoForma = new SimpleIntegerProperty(codigoForma);
-        this.DescripcionForma = new SimpleStringProperty(descripcionForma);
+        this.IdBillete = new SimpleIntegerProperty(idBillete);
+        this.DescripcionBillete = new SimpleStringProperty(descripcionBillete);
         this.ValorRetiro = new SimpleObjectProperty(valorRetiro);
         this.CantidadBilletes = new SimpleIntegerProperty(cantidadBilletes);
                 
     }
     
-    public IntegerProperty codigoFormaProperty(){
-        if(CodigoForma == null)
-            CodigoForma = new SimpleIntegerProperty();
-        return CodigoForma;    
+    public IntegerProperty idBilleteProperty(){
+        if(IdBillete == null)
+            IdBillete = new SimpleIntegerProperty();
+        return IdBillete;    
     }
     
     public StringProperty descripcionFormaProperty(){
-        if(DescripcionForma == null)
-            DescripcionForma = new SimpleStringProperty();
-        return DescripcionForma;
+        if(DescripcionBillete == null)
+            DescripcionBillete = new SimpleStringProperty();
+        return DescripcionBillete;
     }
     
     public ObjectProperty<BigDecimal> valorRetiroProperty(){
@@ -60,12 +60,12 @@ public class RetiroDineroData {
         return CantidadBilletes;
     }
     
-    public int getCodigoForma(){
-        return CodigoForma.get();
+    public int getIdBillete(){
+        return IdBillete.get();
     }
     
-    public String getDescripcionForma(){
-        return DescripcionForma.get();
+    public String getDescripcionBillete(){
+        return DescripcionBillete.get();
     }
     
     public BigDecimal getValorRetiro(){

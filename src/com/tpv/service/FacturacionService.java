@@ -142,6 +142,7 @@ public class FacturacionService  {
             factura.setDescuento(BigDecimal.ZERO);
             factura.getBonificacionCombos();
             factura.setEstado(FacturaEstadoEnum.CERRADA);
+            factura.setFechaAlta(factura.getFechaHoy());
             factura=em.merge(factura);
             tx.commit();
             log.info("Factura guardada, id: "+factura.getId());

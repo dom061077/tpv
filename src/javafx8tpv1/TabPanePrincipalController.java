@@ -207,7 +207,7 @@ public class TabPanePrincipalController implements Initializable {
     public void gotoLogin(){
         try{
             this.labelTituloVentana.setText("INGRESO");
-            this.labelShortCut.setText("F11-Sale del Sistema");
+            this.labelShortCut.setText("F12 - Sale del Sistema");
             this.loginController.configurarInicio();
             this.tabPanePrincipal.getSelectionModel().select(tabLogin);
         }catch(TpvException e){
@@ -222,7 +222,7 @@ public class TabPanePrincipalController implements Initializable {
     
     public void gotoMenuPrincipal(){
         this.labelTituloVentana.setText("MENU PRINCIPAL");
-        this.labelShortCut.setText("1-Facturacion   |   2-Controlador   |   3-Retiro de Dinero  |   4-Salir del Sistema");
+        this.labelShortCut.setText("1-Facturacion   |   2-Controlador   |   3-Carga Retiro de Dinero  |   4-Retiro de Dinero  |   5-Salir del Sistema");
         this.tabPanePrincipal.getSelectionModel().select(tabMenuPrincipal);
         
         this.menuPrincipalController.configurarInicio();
@@ -307,10 +307,16 @@ public class TabPanePrincipalController implements Initializable {
     }
     
     public void gotoRetiroDinero(){
-        this.labelTituloVentana.setText("RETIRO DE DINERO");
-        this.labelShortCut.setText("F11-Retornar a Menú Principal");        
-        this.retiroDineroController.configurarInicio();
-        this.tabPanePrincipal.getSelectionModel().select(tabRetiroDinero);
+        try{
+            this.labelTituloVentana.setText("RETIRO DE DINERO");
+            this.labelShortCut.setText("F11 - Retornar a Menú Principal");        
+            this.retiroDineroController.configurarInicio();
+            this.tabPanePrincipal.getSelectionModel().select(tabRetiroDinero);
+        }catch(TpvException e)    {
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CARGARETIRODINERO);
+            Context.getInstance().currentDMTicket().setException(e);
+            gotoError();
+        }        
     }
             
 
