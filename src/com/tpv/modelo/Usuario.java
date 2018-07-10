@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import org.hibernate.annotations.Formula;
 
 /**
  *
@@ -30,6 +31,10 @@ public class Usuario {
     
     @Column(name="CODIGOBARRA")
     private String codigoBarra;
+    
+    @Formula("(SELECT NOW())")
+    private java.util.Date fechaHoy;
+
 
     /**
      * @return the idUsuario
@@ -78,6 +83,13 @@ public class Usuario {
      */
     public void setCodigoBarra(String codigoBarra) {
         this.codigoBarra = codigoBarra;
+    }
+
+    /**
+     * @return the fechaHoy
+     */
+    public java.util.Date getFechaHoy() {
+        return fechaHoy;
     }
 
 

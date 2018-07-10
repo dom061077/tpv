@@ -888,7 +888,8 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
                         producto.getImpuestoInterno().multiply(facturaDetalle.getSubTotal())
                                 .divide(new BigDecimal(100))
             );*/
-            
+            if(Context.getInstance().currentDMTicket().isImprimeComoNegativo())
+                facturaDetalle.setUsuarioSupervisor(Context.getInstance().currentDMTicket().getUsuarioSupervisor());
             facturaDetalle.setProducto(producto);
             factService.agregarDetalleFactura(Context.getInstance().currentDMTicket().getIdFactura(), facturaDetalle);
         }catch(TpvException e){
@@ -1091,7 +1092,7 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
 //        
 //        mp.setRate(0.5);
         String f = this.getClass().getResource("/com/tpv/resources/gif-emilio luque.gif").toExternalForm();
-        //imageViewDer.setImage(new Image(f));
+        imageViewDer.setImage(new Image(f));
 //        imageViewIzq.setImage(new Image(f));
         //mp.play();
     }

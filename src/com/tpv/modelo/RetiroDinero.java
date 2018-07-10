@@ -12,6 +12,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -56,7 +58,8 @@ public class RetiroDinero {
     @Column(name = "FECHAHORARETIRO")
     private java.util.Date fechaRetiro;
     
-    @Column(name = "ESTADO")
+    @Column(name = "ESTADO",nullable = false)
+    @Enumerated(EnumType.STRING)
     private RetiroDineroEnum estado;
     
     @Column(name = "MONTOTOTAL")
@@ -66,7 +69,7 @@ public class RetiroDinero {
     private String observacion;
     
     @Formula("(SELECT NOW())")
-    private java.util.Date fechaHoy;
+    private java.sql.Date fechaHoy;    
     
     @ManyToOne
     @JoinColumn(name = "idUSUARIOS",referencedColumnName="idUSUARIOS", nullable=false)
@@ -192,12 +195,7 @@ public class RetiroDinero {
         this.detalle = detalle;
     }
 
-    /**
-     * @return the fechaHoy
-     */
-    public java.util.Date getFechaHoy() {
-        return fechaHoy;
-    }
+
     
     
 }

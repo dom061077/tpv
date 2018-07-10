@@ -36,6 +36,20 @@ import org.hibernate.annotations.Formula;
 public class Factura {
 
     /**
+     * @return the usuarioModificacion
+     */
+    public Usuario getUsuarioModificacion() {
+        return usuarioModificacion;
+    }
+
+    /**
+     * @param usuarioModificacion the usuarioModificacion to set
+     */
+    public void setUsuarioModificacion(Usuario usuarioModificacion) {
+        this.usuarioModificacion = usuarioModificacion;
+    }
+
+    /**
      * @return the fechaHoy
      */
     public java.util.Date getFechaHoy() {

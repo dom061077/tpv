@@ -119,6 +119,7 @@ public class FacturacionService  {
             factura = em.find(Factura.class,id);
             facturaDetalle.setFactura(factura);
             factura.getDetalle().add(facturaDetalle);
+            
             tx.commit();
         }catch(RuntimeException e){
             if(tx.isActive())
@@ -195,6 +196,7 @@ public class FacturacionService  {
             tx = em.getTransaction();
             tx.begin();
             factura = em.find(Factura.class, id);
+            factura.setUsuarioModificacion(usuarioSupervisor);
             factura.setEstado(estadoCancelacion);
             tx.commit();
             log.info("Factura con id: "+factura.getId()+", Nro. factura: "

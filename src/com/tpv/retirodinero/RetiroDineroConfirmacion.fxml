@@ -21,8 +21,9 @@
          <center>
             <TableView fx:id="tableViewRetiro" prefHeight="364.0" prefWidth="742.0" BorderPane.alignment="CENTER">
               <columns>
-                <TableColumn fx:id="billeteColumn" prefWidth="364.0" text="Billete" />
-                <TableColumn fx:id="cantidadRetiradaColumn" prefWidth="303.0" text="Cantidad Retirada" />
+                <TableColumn fx:id="billeteColumn" prefWidth="206.0" text="Billete" />
+                <TableColumn fx:id="cantidadRetiradaColumn" prefWidth="200.0" text="Cantidad Retirada" />
+                  <TableColumn fx:id="valorRetiradoColumn" prefWidth="160.0" text="\$ Valor" />
               </columns>
             </TableView>
          </center>

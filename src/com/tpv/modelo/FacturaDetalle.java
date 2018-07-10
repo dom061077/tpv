@@ -86,6 +86,9 @@ public class FacturaDetalle {
     @JoinColumn(name = "idPRODUCTOS", referencedColumnName = "idPRODUCTOS", nullable=false)
     private Producto producto;
     
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "idUSUARIOSUPERVISOR",referencedColumnName = "idUSUARIOS", nullable=true)
+    private Usuario usuarioSupervisor;
 
 
     @PostLoad
@@ -343,6 +346,20 @@ public class FacturaDetalle {
      */
     public void setCosto(BigDecimal costo) {
         this.costo = costo;
+    }
+
+    /**
+     * @return the usuarioSupervisor
+     */
+    public Usuario getUsuarioSupervisor() {
+        return usuarioSupervisor;
+    }
+
+    /**
+     * @param usuarioSupervisor the usuarioSupervisor to set
+     */
+    public void setUsuarioSupervisor(Usuario usuarioSupervisor) {
+        this.usuarioSupervisor = usuarioSupervisor;
     }
     
     

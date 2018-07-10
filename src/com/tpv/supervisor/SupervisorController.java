@@ -187,6 +187,7 @@ public class SupervisorController implements Initializable, TabPaneModalCommand{
                                     keyEvent.consume();
                                     tabController.gotoFacturacion();
                                 }*/
+                                Context.getInstance().getDataModelTicket().setUsuarioSupervisor(usuario);
                                 switch(Context.getInstance().currentDMTicket().getTipoTituloSupervisor()){
                                     case HABILITAR_MENU:
                                         tabController.gotoMenuPrincipal();

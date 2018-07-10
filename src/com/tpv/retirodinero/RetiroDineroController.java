@@ -17,6 +17,7 @@ import com.tpv.util.ui.EditableBigDecimalTableCell;
 import com.tpv.util.ui.TabPaneModalCommand;
 import java.math.BigDecimal;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -27,6 +28,7 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TablePosition;
@@ -54,6 +56,7 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
     @FXML TableColumn billeteColumn;
     @FXML TableColumn cantidadRetiradaColumn;
     @FXML TableView tableViewRetiro;
+    @FXML Label totalRetiroLabel;
     
     @FXML
     public  void initialize(URL url, ResourceBundle rb) {    
@@ -98,6 +101,7 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
                             tabController.mostrarMensajeModal();
                         }else    
                             t.getTableView().getSelectionModel().select(nextRow+1, cantidadRetiradaColumn);
+                        totalizar();
                     }
                 }                  
             );
@@ -109,6 +113,7 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
         tableViewRetiro.getItems().clear();
         this.tabController.setTabPaneModalCommand(this);
         tabController.repeatFocus(tableViewRetiro);
+        totalizar();
         /*cantidadRetiradaColumn.setOnEditCommit(
             new EventHandler<TableColumn.CellEditEvent<RetiroDineroData,String>>() {
                 @Override
@@ -152,6 +157,16 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
         tabController.repeatFocus(tableViewRetiro);
     }
     
+    private void totalizar(){
+            BigDecimal totalRetiro = BigDecimal.ZERO;
+            for(Iterator<RetiroDineroData> it = retiroDineroDataList.iterator();it.hasNext();){
+                RetiroDineroData item = it.next();
+                totalRetiro = totalRetiro.add(item.getValorRetiro()
+                        .multiply(BigDecimal.valueOf(item.getCantidadBilletes())));
+            }   
+            DecimalFormat df = new DecimalFormat("###,###,##0.00");
+            totalRetiroLabel.setText(df.format(totalRetiro));
+    }
     
     public void guardarRetiro(){
         log.info("Guardando retiro de dinero");
@@ -160,15 +175,24 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
             retiroDinero.setEstado(RetiroDineroEnum.PENDIENTE);
             retiroDinero.setCheckout(Context.getInstance().currentDMTicket().getCheckout());
             retiroDinero.setUsuario(Context.getInstance().currentDMTicket().getUsuario());
+            BigDecimal total = BigDecimal.ZERO;
             for(Iterator<RetiroDineroData> it = retiroDineroDataList.iterator();it.hasNext();){
                 RetiroDineroData item = it.next();
                 RetiroDineroDetalle retDetalle = new RetiroDineroDetalle();
                 retDetalle.setBillete(retiroDineroService.getBillete(item.getIdBillete()));
                 retDetalle.setCantidadBilletes(item.getCantidadBilletes());
-                retDetalle.setMonto(BigDecimal.ONE);
-                retiroDinero.getDetalle().add(retDetalle);
+                retDetalle.setMonto(item.getValorRetiro()
+                        .multiply(BigDecimal.valueOf(item.getCantidadBilletes())));
+                retDetalle.setCantidadBilletes(item.getCantidadBilletes());
+                total = total.add(retDetalle.getMonto());
+                if(retDetalle.getMonto().compareTo(BigDecimal.ZERO)>0){
+                    retDetalle.setRetiro(retiroDinero);
+                    retiroDinero.getDetalle().add(retDetalle);
+                }
             }
+            retiroDinero.setMonto(total);
             retiroDineroService.registrarRetiro(retiroDinero);
+            this.tabController.ocultarMensajeModal();
             this.tabController.gotoMenuPrincipal();
         }catch(TpvException e){
             log.error("Error en controlador llamando al método registrarRetiro de RetiroDineroService",e);
