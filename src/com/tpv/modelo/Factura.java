@@ -177,6 +177,10 @@ public class Factura {
     private Usuario usuario;
     
     @ManyToOne
+    @JoinColumn(name="idUSUARIOMODI",referencedColumnName = "idUSUARIOS", nullable=true)
+    private Usuario usuarioModificacion;
+    
+    @ManyToOne
     @JoinColumn(name = "idCHECKOUT", referencedColumnName = "idCHECKOUT",nullable=false)
     private Checkout checkout;
     

@@ -20,6 +20,9 @@ public class Usuario {
     @Id
     @Column(name="idUSUARIOS")
     private int idUsuario;
+    
+
+    
     @Column(name="NOMBRE")
     private String nombre;
     @Column(name="PASSWORD")
@@ -76,4 +79,6 @@ public class Usuario {
     public void setCodigoBarra(String codigoBarra) {
         this.codigoBarra = codigoBarra;
     }
+
+
 }

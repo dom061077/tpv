@@ -253,7 +253,9 @@ public class SupervisorController implements Initializable, TabPaneModalCommand{
                 log.debug("Evento despues de cerrar cancelar ticket");
                 if(command.getCommandCode()==HasarCommands.CMD_CANCEL_DOCUMENT){
                     try{
-                        facturaService.anularFacturaPorSupervisor(Context.getInstance().currentDMTicket().getIdFactura());
+                        facturaService.anularFacturaPorSupervisor(Context.getInstance().currentDMTicket().getIdFactura()
+                                ,Context.getInstance().currentDMTicket().getUsuarioSupervisor()
+                        );
                         Context.getInstance().currentDMTicket().setCliente(null);
                         Context.getInstance().currentDMTicket().setClienteSeleccionado(false);
                         Context.getInstance().currentDMTicket().getDetalle().clear();

@@ -5,7 +5,6 @@
  */
 package com.tpv.service;
 
-import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.AlicuotaIngresosBrutos;
 import com.tpv.modelo.Combo;
@@ -18,6 +17,7 @@ import com.tpv.modelo.FacturaDetalleCombo;
 import com.tpv.modelo.FacturaDetalleComboAbierto;
 import com.tpv.modelo.FacturaFormaPagoDetalle;
 import com.tpv.modelo.ProductoAgrupadoEnFactura;
+import com.tpv.modelo.Usuario;
 import com.tpv.modelo.enums.FacturaEstadoEnum;
 import com.tpv.pagoticket.LineaPagoData;
 import com.tpv.principal.Context;
@@ -31,7 +31,6 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 import org.apache.log4j.Logger;
 import java.math.BigDecimal;
-import java.math.MathContext;
 
 /**
  *
@@ -179,15 +178,15 @@ public class FacturacionService  {
         
     }
     
-    public void anularFacturaPorSupervisor(Long id) throws TpvException{
-        anularFactura(id,FacturaEstadoEnum.ANULADA_SUPERVISOR);
+    public void anularFacturaPorSupervisor(Long id,Usuario usuarioSupervisor) throws TpvException{
+        anularFactura(id,usuarioSupervisor,FacturaEstadoEnum.ANULADA_SUPERVISOR);
     }
     
     public void anularFacturaPorReinicio(Long id) throws TpvException{
-        anularFactura(id,FacturaEstadoEnum.ANULADA);
+        anularFactura(id,null,FacturaEstadoEnum.ANULADA);
     }
     
-    private void anularFactura(Long id, FacturaEstadoEnum estadoCancelacion) throws TpvException{
+    private void anularFactura(Long id,Usuario usuarioSupervisor, FacturaEstadoEnum estadoCancelacion) throws TpvException{
         log.info("Capa de servicios, cancelar factura");
         Factura factura;
         EntityManager em = Connection.getEm();

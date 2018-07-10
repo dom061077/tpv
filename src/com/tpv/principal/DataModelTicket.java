@@ -479,6 +479,20 @@ public class DataModelTicket {
     public void setRetencion(BigDecimal retencion) {
         this.retencion = retencion;
     }
+
+    /**
+     * @return the usuarioSupervisor
+     */
+    public Usuario getUsuarioSupervisor() {
+        return usuarioSupervisor;
+    }
+
+    /**
+     * @param usuarioSupervisor the usuarioSupervisor to set
+     */
+    public void setUsuarioSupervisor(Usuario usuarioSupervisor) {
+        this.usuarioSupervisor = usuarioSupervisor;
+    }
     
     
     
