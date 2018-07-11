@@ -134,6 +134,10 @@ public class MenuPrincipalController implements Initializable {
                         tabController.gotoRetiroDinero();
                 }
                 
+                if(keyEvent.getCode() == KeyCode.NUMPAD4){
+                        
+                }
+                
                 keyEvent.consume();
             });
         });

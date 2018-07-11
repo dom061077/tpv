@@ -66,6 +66,7 @@ public class RetiroDineroConfirmacionController implements Initializable, TabPan
     
     public void configurarInicio() throws TpvException{
         tableViewRetiro.getItems().clear();
+        cargarRetiro();
         
     }
     
@@ -74,7 +75,9 @@ public class RetiroDineroConfirmacionController implements Initializable, TabPan
         for(Iterator<RetiroDinero> it = retiros.iterator();it.hasNext();){
             RetiroDinero item = it.next();
             RetiroDineroConfirmacionData ret = new RetiroDineroConfirmacionData();
-            ret.set
+            ret.setIdRetiro(item.getId());
+            ret.setEstado(item.getEstado());
+            ret.setMontoTotal(item.getMonto());
         }
     }
     

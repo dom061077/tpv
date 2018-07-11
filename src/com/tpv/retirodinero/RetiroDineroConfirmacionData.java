@@ -7,6 +7,7 @@ package com.tpv.retirodinero;
 
 import com.tpv.modelo.enums.RetiroDineroEnum;
 import java.math.BigDecimal;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleLongProperty;
@@ -21,7 +22,6 @@ import javafx.beans.property.StringProperty;
 public class RetiroDineroConfirmacionData {
     private LongProperty IdRetiro;
     private ObjectProperty<java.util.Date> FechaAlta;
-    private StringProperty DescripcionBillete;
     private ObjectProperty<RetiroDineroEnum> Estado;
     private ObjectProperty<BigDecimal>  MontoTotal;
     
@@ -31,7 +31,6 @@ public class RetiroDineroConfirmacionData {
     public RetiroDineroConfirmacionData(Long idRetiro,java.sql.Date fechaAlta
         ,String descripcionBillete,RetiroDineroEnum estado,BigDecimal montoTotal){
         this.IdRetiro = new SimpleLongProperty(idRetiro);
-        this.DescripcionBillete = new SimpleStringProperty(descripcionBillete);
         this.Estado = new SimpleObjectProperty(estado);
         this.MontoTotal = new SimpleObjectProperty(montoTotal);
     }
@@ -42,11 +41,6 @@ public class RetiroDineroConfirmacionData {
         return IdRetiro;
     }
     
-    public StringProperty descripcionBilleteProperty(){
-        if(DescripcionBillete == null)
-            DescripcionBillete = new SimpleStringProperty();
-        return DescripcionBillete;    
-    }
     
     public ObjectProperty<RetiroDineroEnum> estadoProperty(){
         if(Estado == null)
@@ -62,13 +56,7 @@ public class RetiroDineroConfirmacionData {
         this.IdRetiro.set(idRetiro);
     }
     
-    public String getDescripcionBillete(){
-        return DescripcionBillete.get();
-    }
     
-    public void setDescripcionBillete(String descripcionBillete){
-        this.DescripcionBillete.set(descripcionBillete);
-    }
     
     public RetiroDineroEnum getEstado(){
         return Estado.get();
@@ -78,4 +66,11 @@ public class RetiroDineroConfirmacionData {
         this.Estado.set(estado);
     }
     
+    public BigDecimal getMontoTotal(){
+        return MontoTotal.get();
+    }
+    
+    public void setMontoTotal(BigDecimal montoTotal){
+        MontoTotal.set(montoTotal);
+    }
 }

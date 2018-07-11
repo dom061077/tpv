@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
@@ -20,7 +15,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane focusTraversable="true" maxHeight="768.0" maxWidth="1366.0" minHeight="768.0" minWidth="1366.0" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafx8tpv1.TabPanePrincipalController">
+<AnchorPane focusTraversable="true" maxHeight="768.0" maxWidth="1366.0" minHeight="768.0" minWidth="1366.0" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafx8tpv1.TabPanePrincipalController">
    <children>
       <BorderPane focusTraversable="true" maxHeight="700.0" maxWidth="1366.0" minHeight="700.0" minWidth="1366.0" prefHeight="700.0" prefWidth="1366.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
@@ -42,6 +37,11 @@
                      <children>
                         <TabPane fx:id="tabPanePrincipal" focusTraversable="false" maxHeight="700.0" maxWidth="1124.0" minHeight="700.0" minWidth="1124.0" prefHeight="700.0" prefWidth="1124.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE">
                           <tabs>
+                              <Tab fx:id="tabRetiroDineroConfirmacion" text="Retiro Dinero Confirmación">
+                                <content>
+                                      <fx:include fx:id="retiroDineroConfirmacion" maxHeight="740.0" minWidth="740.0" prefHeight="740.0" source="../com/tpv/retirodinero/RetiroDineroConfirmacion.fxml" />
+                                </content>
+                              </Tab>
                               <Tab fx:id="tabRetiroDinero" closable="false" text="Retiro Dinero">
                                 <content>
                                       <fx:include fx:id="retiroDinero" maxHeight="740.0" minWidth="740.0" prefHeight="740.0" source="../com/tpv/retirodinero/RetiroDinero.fxml" />

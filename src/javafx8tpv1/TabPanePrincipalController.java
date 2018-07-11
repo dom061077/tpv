@@ -28,6 +28,7 @@ import com.tpv.pagoticket.ConfirmaPagoTicketController;
 import com.tpv.pagoticket.PagoTicketController;
 import com.tpv.print.fiscal.ConfiguracionImpresoraController;
 import com.tpv.producto.BuscarPorDescProductoController;
+import com.tpv.retirodinero.RetiroDineroConfirmacionController;
 import com.tpv.retirodinero.RetiroDineroController;
 import com.tpv.service.ImpresoraService;
 import com.tpv.service.UsuarioService;
@@ -37,13 +38,11 @@ import com.tpv.util.Connection;
 import com.tpv.util.ui.TabPaneModalCommand;
 import javafx.application.Platform;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Modality;
 
 /**
  *
@@ -68,6 +67,7 @@ public class TabPanePrincipalController implements Initializable {
     @FXML private PagoTicketController pagoTicketController;
     @FXML private ConfiguracionImpresoraController configImpresoraController;
     @FXML private RetiroDineroController retiroDineroController;
+    @FXML private RetiroDineroConfirmacionController retiroDineroConfirmacionController;
     
     @FXML private CombosController combosController; 
     
@@ -85,6 +85,7 @@ public class TabPanePrincipalController implements Initializable {
     @FXML private Tab tabCombos;
     @FXML private Tab tabControlador;
     @FXML private Tab tabRetiroDinero;
+    @FXML private Tab tabRetiroDineroConfirmacion;
     
     @FXML private TabPane tabPanePrincipal;
     @FXML private StackPane stackPaneModal;
@@ -147,6 +148,7 @@ public class TabPanePrincipalController implements Initializable {
         this.configImpresoraController.setTabController(this);
         this.combosController.setTabController(this);
         this.retiroDineroController.setTabController(this);
+        this.retiroDineroConfirmacionController.setTabController(this);
         
         
 
@@ -317,6 +319,19 @@ public class TabPanePrincipalController implements Initializable {
             Context.getInstance().currentDMTicket().setException(e);
             gotoError();
         }        
+    }
+    
+    public void gotoRetiroDineroConfirmacion(){
+        try{
+            this.labelTituloVentana.setText("CONFIRMACION DE RETIRO DE DINERO");
+            this.labelShortCut.setText("Enter - Confirma Retiro | F11 - Retorna a Menú Principal");
+            this.retiroDineroConfirmacionController.configurarInicio();
+            this.tabPanePrincipal.getSelectionModel().select(tabRetiroDineroConfirmacion);
+        }catch(TpvException e){
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_LOGIN);
+            Context.getInstance().currentDMTicket().setException(e);
+            gotoError();
+        }
     }
             
 
