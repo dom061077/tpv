@@ -5,12 +5,16 @@
  */
 package com.tpv.retirodinero;
 
+import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.RetiroDinero;
+import com.tpv.principal.Context;
 import com.tpv.service.RetiroDineroService;
-import com.tpv.util.ui.EditableBigDecimalTableCell;
 import com.tpv.util.ui.TabPaneModalCommand;
+import java.math.BigDecimal;
 import java.net.URL;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -21,9 +25,11 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
 import javafx8tpv1.TabPanePrincipalController;
 import org.apache.log4j.Logger;
 
@@ -36,11 +42,11 @@ public class RetiroDineroConfirmacionController implements Initializable, TabPan
     private TabPanePrincipalController tabController;
     private RetiroDineroService retiroDineroService = new RetiroDineroService();
     private ObservableList<RetiroDineroConfirmacionData> retiroDineroDataList;
+    private RetiroDineroConfirmacionData selectedItem;
     
-    
-    @FXML TableColumn billeteColumn;
-    @FXML TableColumn cantidadRetiradaColumn;
-    @FXML TableColumn valorRetiradoColumn;
+    @FXML TableColumn idRetiroDineroColumn;
+    @FXML TableColumn fechaHoraCargaColumn;
+    @FXML TableColumn montoColumn;
     @FXML TableView tableViewRetiro;
     @FXML Label totalRetiroLabel;    
     
@@ -50,23 +56,76 @@ public class RetiroDineroConfirmacionController implements Initializable, TabPan
         
         retiroDineroDataList = FXCollections.observableArrayList();
         tableViewRetiro.setItems(new SimpleListProperty<>(retiroDineroDataList));
-        billeteColumn.setCellValueFactory(new PropertyValueFactory("descripcionBillete"));
-        billeteColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+        idRetiroDineroColumn.setCellValueFactory(new PropertyValueFactory("IdRetiro"));
+        idRetiroDineroColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
         
-        cantidadRetiradaColumn.setCellValueFactory(new PropertyValueFactory("CantidadBilletes"));
-        cantidadRetiradaColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+        fechaHoraCargaColumn.setCellValueFactory(new PropertyValueFactory("FechaAlta"));
+        fechaHoraCargaColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
         
-        valorRetiradoColumn.setCellValueFactory(new PropertyValueFactory("montoTotal"));
-        valorRetiradoColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+        montoColumn.setCellValueFactory(new PropertyValueFactory("MontoTotal"));
+        montoColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+        montoColumn.setCellFactory(col ->{
+            TableCell<RetiroDineroConfirmacionData,BigDecimal> cell = new TableCell<RetiroDineroConfirmacionData,BigDecimal>(){
+                @Override
+                public void updateItem(BigDecimal item,boolean empty){
+                    super.updateItem(item, empty);
+                    this.setText(null);
+                    this.setGraphic(null);
+                    if (!empty) {
+                            //String formattedDob = De
+                            DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
+                            this.setText(df.format(item));
+                    }
+                }
+            };
+            return cell;
+            
+        });
+        fechaHoraCargaColumn.setCellFactory(col ->{
+            TableCell<RetiroDineroConfirmacionData,java.util.Date> cell = new TableCell<RetiroDineroConfirmacionData,java.util.Date>(){
+                @Override
+                public void updateItem(java.util.Date item,boolean empty){
+                    super.updateItem(item,empty);
+                    this.setText(null);
+                    this.setGraphic(null);
+                    if(!empty){
+                        SimpleDateFormat df = new SimpleDateFormat("dd/mm/yyyy hh:mm:ss");
+                        this.setText(df.format(item));
+                    }
+                }
+            };
+            return cell;
+        });
+        
         
         Platform.runLater(()->{
-            
+            tableViewRetiro.setOnKeyPressed(keyEvent->{
+                if(keyEvent.getCode() == KeyCode.F11){
+                    this.tabController.gotoMenuPrincipal();
+                    keyEvent.consume();
+                }
+                if(keyEvent.getCode() == KeyCode.TAB){
+                    keyEvent.consume();
+                }
+                if(keyEvent.getCode() == KeyCode.ENTER){
+                    keyEvent.consume();
+                    //int index = tableViewRetiro.getSelectionModel().getSelectedIndex();
+                    selectedItem = (RetiroDineroConfirmacionData)tableViewRetiro.getSelectionModel().getSelectedItem();
+                    tabController.getLabelMensaje().setText("¿Confirma el retiro de dinero Nº: "+
+                            +selectedItem.getIdRetiro()
+                            +"?");
+                    tabController.mostrarMensajeModal();
+                }
+            });    
         });
     }
     
     public void configurarInicio() throws TpvException{
         tableViewRetiro.getItems().clear();
         cargarRetiro();
+        this.tabController.repeatFocus(tableViewRetiro);
+        this.tabController.setTabPaneModalCommand(this);
+        tableViewRetiro.getSelectionModel().select(0);        
         
     }
     
@@ -74,10 +133,29 @@ public class RetiroDineroConfirmacionController implements Initializable, TabPan
         List<RetiroDinero> retiros = retiroDineroService.getRetiros();
         for(Iterator<RetiroDinero> it = retiros.iterator();it.hasNext();){
             RetiroDinero item = it.next();
-            RetiroDineroConfirmacionData ret = new RetiroDineroConfirmacionData();
-            ret.setIdRetiro(item.getId());
-            ret.setEstado(item.getEstado());
-            ret.setMontoTotal(item.getMonto());
+            
+            
+            RetiroDineroConfirmacionData ret = 
+                    new RetiroDineroConfirmacionData(
+                            item.getId(),
+                            item.getFechaAlta(),
+                            item.getEstado(),
+                            item.getMonto()
+                    );
+            
+            this.retiroDineroDataList.add(ret);
+        }
+    }
+    
+    private void confirmarRetiro(Long idRetiro){
+        try{
+            retiroDineroService.confirmarRetiro(idRetiro,Context.getInstance()
+                    .currentDMTicket().getUsuarioSupervisor());
+        }catch(TpvException e){
+            log.error("Error en controlador llamando al método confirmarRetiro de RetiroDineroService",e);
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CONFIRMARETIRODINERO);
+            Context.getInstance().currentDMTicket().setException(e);
+            tabController.gotoError();            
         }
     }
     
@@ -86,9 +164,17 @@ public class RetiroDineroConfirmacionController implements Initializable, TabPan
     }
     
     public void aceptarMensajeModal(){
+        confirmarRetiro(this.selectedItem.getIdRetiro());
+        tabController.ocultarMensajeModal();
+        tabController.gotoMenuPrincipal();
     }
     
     public void cancelarMensajeModal(){
+        tabController.ocultarMensajeModal();
+        this.tabController.repeatFocus(tableViewRetiro);
     }
+    
+    
+    
     
 }

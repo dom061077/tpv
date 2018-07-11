@@ -204,7 +204,7 @@ public class FacturacionService  {
         }catch(RuntimeException e){
             tx.rollback();
             log.error("Error en la capa de servicios al cancelar la factura",e);
-            throw new TpvException("Error en la capa de servicios al cancelar la factura.");
+            throw new TpvException("Error en la capa de servicios al cancelar la factura. "+e.getMessage());
         }finally{
             em.clear();
         }

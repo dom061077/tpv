@@ -8,6 +8,8 @@ package com.tpv.service;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Billete;
 import com.tpv.modelo.RetiroDinero;
+import com.tpv.modelo.Usuario;
+import com.tpv.modelo.enums.RetiroDineroEnum;
 import com.tpv.util.Connection;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -42,7 +44,9 @@ public class RetiroDineroService {
         List<RetiroDinero> list = null;
         EntityManager em = Connection.getEm();
         try{
-            Query q = em.createQuery("FROM RetiroDinero r WHERE fechaAlta>=fechaHoy");
+            Query q = em.createQuery("FROM RetiroDinero r WHERE r.estado = :estado AND r.fechaAlta>=fechaHoy "
+                            +" AND r.usuario.id = :idUsuario AND ")
+                        .setParameter("estado", RetiroDineroEnum.PENDIENTE);
             list = q.getResultList();
         }catch(RuntimeException e){
             log.error("Error en la capa de servicios al recuperar los retiros",e);
@@ -83,6 +87,27 @@ public class RetiroDineroService {
             tx.rollback();
             log.error("Error en la capa de servicios al registrar el retiro de dinero.",e);
             throw new TpvException("Error en la capa de servicios al registrar el retiro de dinero. "+e.getMessage());
+        }finally{
+            em.clear();
+        }
+    }
+    
+    public void confirmarRetiro(Long idRetiro,Usuario usuarioSupervisor) throws TpvException{
+        log.info("Capa de servicios RetiroDineroService, confirmación de retiro");
+        EntityManager em = Connection.getEm();
+        EntityTransaction tx = null;
+        try{
+            tx = em.getTransaction();
+            tx.begin();
+            RetiroDinero retiro = em.find(RetiroDinero.class, idRetiro);
+            retiro.setEstado(RetiroDineroEnum.RETIRADO);
+            retiro.setFechaRetiro(retiro.getFechaHoy());
+            retiro.setUsuarioSupervisor(usuarioSupervisor);
+            tx.commit();
+            log.info("RetiroDinero confirmado, id: "+idRetiro);
+        }catch(RuntimeException e){
+            tx.rollback();
+            throw new TpvException("Error en la capa de servicios al confirmar el retiro de dinero. "+e.getMessage());
         }finally{
             em.clear();
         }

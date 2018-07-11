@@ -68,12 +68,16 @@ public class RetiroDinero {
     @Column(name = "OBSERVACION")
     private String observacion;
     
-    @Formula("(SELECT NOW())")
+    @Formula("(SELECT CURRENT_DATE)")
     private java.sql.Date fechaHoy;    
     
     @ManyToOne
     @JoinColumn(name = "idUSUARIOS",referencedColumnName="idUSUARIOS", nullable=false)
     private Usuario usuario;
+    
+    @ManyToOne
+    @JoinColumn(name = "idUSUARIO_SUPERVISOR" ,referencedColumnName="idUSUARIOS" )
+    private Usuario usuarioSupervisor;
     
     @ManyToOne
     @JoinColumn(name = "idCHECKOUT",referencedColumnName="idCHECKOUT", nullable=false)
@@ -193,6 +197,27 @@ public class RetiroDinero {
      */
     public void setDetalle(List<RetiroDineroDetalle> detalle) {
         this.detalle = detalle;
+    }
+
+    /**
+     * @return the usuarioSupervisor
+     */
+    public Usuario getUsuarioSupervisor() {
+        return usuarioSupervisor;
+    }
+
+    /**
+     * @param usuarioSupervisor the usuarioSupervisor to set
+     */
+    public void setUsuarioSupervisor(Usuario usuarioSupervisor) {
+        this.usuarioSupervisor = usuarioSupervisor;
+    }
+
+    /**
+     * @return the fechaHoy
+     */
+    public java.sql.Date getFechaHoy() {
+        return fechaHoy;
     }
 
 

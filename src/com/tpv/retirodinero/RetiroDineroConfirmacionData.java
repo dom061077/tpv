@@ -28,9 +28,10 @@ public class RetiroDineroConfirmacionData {
     public RetiroDineroConfirmacionData(){
     }
     
-    public RetiroDineroConfirmacionData(Long idRetiro,java.sql.Date fechaAlta
-        ,String descripcionBillete,RetiroDineroEnum estado,BigDecimal montoTotal){
+    public RetiroDineroConfirmacionData(Long idRetiro,java.util.Date fechaAlta
+        ,RetiroDineroEnum estado,BigDecimal montoTotal){
         this.IdRetiro = new SimpleLongProperty(idRetiro);
+        this.FechaAlta = new SimpleObjectProperty(fechaAlta);
         this.Estado = new SimpleObjectProperty(estado);
         this.MontoTotal = new SimpleObjectProperty(montoTotal);
     }
@@ -46,6 +47,18 @@ public class RetiroDineroConfirmacionData {
         if(Estado == null)
             Estado = new SimpleObjectProperty();
         return Estado;
+    }
+    
+    public ObjectProperty<BigDecimal> MontoTotalProperty(){
+        if(MontoTotal == null)
+            MontoTotal = new SimpleObjectProperty();
+        return MontoTotal;
+    }
+    
+    public ObjectProperty<java.util.Date> FechaAltaProperty(){
+        if(FechaAlta == null)
+            FechaAlta = new SimpleObjectProperty();
+        return FechaAlta;
     }
     
     public Long getIdRetiro(){
@@ -73,4 +86,13 @@ public class RetiroDineroConfirmacionData {
     public void setMontoTotal(BigDecimal montoTotal){
         MontoTotal.set(montoTotal);
     }
+    
+    public java.util.Date getFechaAlta(){
+        return FechaAlta.get();
+    }
+    
+    public void setFechaAlta(java.util.Date fecha){
+        FechaAlta.set(fecha);
+    }
 }
+

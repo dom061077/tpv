@@ -135,7 +135,8 @@ public class MenuPrincipalController implements Initializable {
                 }
                 
                 if(keyEvent.getCode() == KeyCode.NUMPAD4){
-                        
+                    Context.getInstance().currentDMTicket().setTipoTituloSupervisor(TipoTituloSupervisorEnum.HABILITAR_CONFIRMARETIRODINERO);
+                    tabController.gotoSupervisor();
                 }
                 
                 keyEvent.consume();

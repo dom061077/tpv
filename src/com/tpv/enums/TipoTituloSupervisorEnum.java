@@ -13,7 +13,8 @@ public enum TipoTituloSupervisorEnum {
     HABILITAR_NEGATIVO("Habilitar Negativos",1),
     CANCELAR_TICKET("Cancelar Ticket",2),
     HABILITAR_MENU("Ir a Menu",3),
-    HABILITAR_CONTROLADOR("Habilitar Controlador",4);
+    HABILITAR_CONTROLADOR("Habilitar Controlador",4),
+    HABILITAR_CONFIRMARETIRODINERO("Confirmar Retiro de Dinero",5);
     
     
     private String titulo;

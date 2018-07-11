@@ -123,6 +123,9 @@ public class SupervisorController implements Initializable, TabPaneModalCommand{
                         case HABILITAR_CONTROLADOR:
                             tabController.gotoMenuPrincipal();
                             break;
+                        case HABILITAR_CONFIRMARETIRODINERO:
+                            tabController.gotoMenuPrincipal();
+                            break;
                     }                    
                     
                     keyEvent.consume();
@@ -202,6 +205,9 @@ public class SupervisorController implements Initializable, TabPaneModalCommand{
                                         break;
                                     case HABILITAR_CONTROLADOR:
                                         tabController.gotoControlador();
+                                        break;
+                                    case HABILITAR_CONFIRMARETIRODINERO:
+                                        tabController.gotoRetiroDineroConfirmacion();
                                         break;
                                 }
                                 keyEvent.consume();
