@@ -39,14 +39,16 @@ public class RetiroDineroService {
         return list;
     }
     
-    public List<RetiroDinero> getRetiros() throws TpvException{
+    public List<RetiroDinero> getRetiros(int idCheckout,int idUsuario) throws TpvException{
         log.info("Capa de servicios recuperar retiros");
         List<RetiroDinero> list = null;
         EntityManager em = Connection.getEm();
         try{
             Query q = em.createQuery("FROM RetiroDinero r WHERE r.estado = :estado AND r.fechaAlta>=fechaHoy "
-                            +" AND r.usuario.id = :idUsuario AND ")
-                        .setParameter("estado", RetiroDineroEnum.PENDIENTE);
+                            +" AND r.usuario.id = :idUsuario AND r.checkout.id = :idCheckout")
+                        .setParameter("estado", RetiroDineroEnum.PENDIENTE)
+                        .setParameter("idCheckout",idCheckout)
+                        .setParameter("idUsuario",idUsuario);
             list = q.getResultList();
         }catch(RuntimeException e){
             log.error("Error en la capa de servicios al recuperar los retiros",e);

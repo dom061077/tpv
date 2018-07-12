@@ -103,6 +103,7 @@ public class MenuPrincipalController implements Initializable {
     
     
     public void configurarInicio(){
+        
         repeatFocus(borderPane);
     }    
         

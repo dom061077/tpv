@@ -130,7 +130,8 @@ public class RetiroDineroConfirmacionController implements Initializable, TabPan
     }
     
     private void cargarRetiro() throws TpvException{
-        List<RetiroDinero> retiros = retiroDineroService.getRetiros();
+        List<RetiroDinero> retiros = retiroDineroService.getRetiros(Context.getInstance().currentDMTicket().getCheckout().getId()
+                ,Context.getInstance().currentDMTicket().getUsuario().getIdUsuario());
         for(Iterator<RetiroDinero> it = retiros.iterator();it.hasNext();){
             RetiroDinero item = it.next();
             

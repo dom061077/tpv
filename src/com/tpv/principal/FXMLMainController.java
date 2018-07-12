@@ -1091,8 +1091,13 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
 //        mp.setCycleCount(MediaPlayer.INDEFINITE);
 //        
 //        mp.setRate(0.5);
-        String f = this.getClass().getResource("/com/tpv/resources/gif-emilio luque.gif").toExternalForm();
-        imageViewDer.setImage(new Image(f));
+
+
+
+        //String f = this.getClass().getResource("/com/tpv/resources/gif-emilio luque.gif").toExternalForm();
+        //imageViewDer.setImage(new Image(f));
+        
+        
 //        imageViewIzq.setImage(new Image(f));
         //mp.play();
     }

@@ -132,6 +132,7 @@ public class TabPanePrincipalController implements Initializable {
             this.gotoError();
         }
         
+        
         this.loginController.getPassword().requestFocus();
         this.stackPaneModal.setVisible(false);
         
@@ -246,7 +247,7 @@ public class TabPanePrincipalController implements Initializable {
     
     public void gotoError(){
         this.labelTituloVentana.setText("ERROR");
-        this.labelShortCut.setText("Esc-Recuperar Sistema | F11-Salir de Sistema");
+        this.labelShortCut.setText("Esc-Recuperar Sistema | F12-Salir de Sistema");
         this.errorController.configurarInicio();
         this.tabPanePrincipal.getSelectionModel().select(tabError);
     }
@@ -303,7 +304,7 @@ public class TabPanePrincipalController implements Initializable {
     
     public void gotoControlador(){
         this.labelTituloVentana.setText("OPERACIONES DE CONTROLADOR");
-        this.labelShortCut.setText("1-Cancelar Ticket   |   2-Cierre Z  |   3-Cierre X  |   F12-Retornar a Menú Principal");        
+        this.labelShortCut.setText("1-Cancelar Ticket   |   2-Cierre Z  |   3-Cierre X  |   F11-Retornar a Menú Principal");        
         this.configImpresoraController.configurarInicio();
         this.tabPanePrincipal.getSelectionModel().select(tabControlador);
     }

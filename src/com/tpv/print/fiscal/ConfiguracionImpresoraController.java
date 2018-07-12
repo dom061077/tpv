@@ -35,13 +35,13 @@ public class ConfiguracionImpresoraController implements Initializable,TabPaneMo
 
     
     @FXML
-    private VBox vboxMenuImpresora;
+    private VBox boxMenu;
     
     @FXML
     public  void initialize(URL url, ResourceBundle rb) {
         log.debug("Init del controlador");
         Platform.runLater(()->{
-            vboxMenuImpresora.setOnKeyPressed(keyEvent->{
+            boxMenu.setOnKeyPressed(keyEvent->{
                 if(keyEvent.getCode()==KeyCode.F11){
                     log.debug("Button volver de la pantalla de configuracion");
                     this.tabController.gotoMenuPrincipal();
@@ -93,6 +93,7 @@ public class ConfiguracionImpresoraController implements Initializable,TabPaneMo
                         log.error("Error al tratar de hacer el cierre diario X");
                     }
                 }
+                keyEvent.consume();
             });
 
         });        
@@ -106,14 +107,15 @@ public class ConfiguracionImpresoraController implements Initializable,TabPaneMo
 
 
     public void configurarInicio(){
-        this.tabController.repeatFocus(vboxMenuImpresora);
+        this.tabController.repeatFocus(boxMenu);
     }        
     
     @Override
     public void aceptarMensajeModal(){
+        this.tabController.repeatFocus(boxMenu);
         this.tabController.ocultarMensajeModal();
         this.tabController.getLabelCancelarModal().setVisible(true);
-        this.tabController.repeatFocus(vboxMenuImpresora);
+        
     }
     
     @Override
