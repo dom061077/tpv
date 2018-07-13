@@ -23,16 +23,17 @@
             <TableView fx:id="tableViewRetiro" prefHeight="364.0" prefWidth="742.0" BorderPane.alignment="CENTER">
               <columns>
                 <TableColumn fx:id="idRetiroDineroColumn" prefWidth="206.0" text="Nº de Retiro" />
-                <TableColumn fx:id="fechaHoraCargaColumn" prefWidth="262.0" text="Carga" />
-                  <TableColumn fx:id="montoColumn" prefWidth="153.0" text="\$ Monto" />
+                <TableColumn fx:id="fechaHoraCargaColumn" prefWidth="278.0" text="Carga" />
+                  <TableColumn fx:id="montoColumn" prefWidth="195.0" text="\$ Monto" />
+                  <TableColumn fx:id="estadoColumn" prefWidth="152.0" text="Estado" />
               </columns>
             </TableView>
          </center>
          <left>
-            <VBox prefHeight="540.0" prefWidth="141.0" BorderPane.alignment="CENTER" />
+            <VBox prefHeight="440.0" prefWidth="72.0" BorderPane.alignment="CENTER" />
          </left>
          <right>
-            <VBox prefHeight="200.0" prefWidth="141.0" BorderPane.alignment="CENTER" />
+            <VBox prefHeight="440.0" prefWidth="56.0" BorderPane.alignment="CENTER" />
          </right>
          <bottom>
             <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" />

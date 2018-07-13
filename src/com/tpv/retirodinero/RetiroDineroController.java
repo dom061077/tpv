@@ -29,10 +29,12 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
@@ -55,7 +57,9 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
     
     @FXML TableColumn billeteColumn;
     @FXML TableColumn cantidadRetiradaColumn;
+    @FXML TableColumn subTotalColumn;
     @FXML TableView tableViewRetiro;
+    @FXML TextField textFieldObservacion;
     @FXML Label totalRetiroLabel;
     
     @FXML
@@ -75,14 +79,58 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
         cantidadRetiradaColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
         cantidadRetiradaColumn.setCellFactory(col -> new EditableBigDecimalTableCell<RetiroDineroData>());
         
+        subTotalColumn.setCellValueFactory(new PropertyValueFactory("SubTotal"));
+        subTotalColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+        subTotalColumn.setCellFactory(col->{
+            TableCell<RetiroDineroData,BigDecimal> cell = 
+                    new TableCell<RetiroDineroData,BigDecimal>(){
+                        @Override
+                        public void updateItem(BigDecimal item,boolean empty){
+                            super.updateItem(item, empty);
+                            this.setText(null);
+                            this.setGraphic(null);
+                            if (!empty) {
+                                    //String formattedDob = De
+                                    DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
+                                    this.setText(df.format(item));
+                            }
+                        }
+                    };
+            return cell;        
+        });        
+        
         Platform.runLater(()->{
+            
+            textFieldObservacion.setOnKeyPressed(keyEvent->{
+                if(keyEvent.getCode() == KeyCode.F11){
+                    tabController.gotoMenuRetiroDinero();
+                    return;
+                }
+                
+                if(keyEvent.getCode() == KeyCode.ENTER){
+                    tabController.getLabelMensaje().setText("¿Confirma la carga de retiro de dinero?");
+                    tabController.mostrarMensajeModal();
+                    return;
+                }
+                
+                if(keyEvent.getCode() == KeyCode.TAB){
+                    keyEvent.consume();
+                    return;
+                }
+                if(textFieldObservacion.getText().length()==10
+                        && keyEvent.getCode() != KeyCode.BACK_SPACE){
+                    keyEvent.consume();
+                    return;
+                }
+            });
+                    
             tableViewRetiro.setOnKeyPressed(keyEvent ->{
                 if(keyEvent.getCode() == KeyCode.TAB){
                     keyEvent.consume();
                     return;
                 }
                 if(keyEvent.getCode() == KeyCode.F11)
-                    tabController.gotoMenuPrincipal();
+                    tabController.gotoMenuRetiroDinero();
                 TablePosition tp;
                 tp = tableViewRetiro.getFocusModel().getFocusedCell();
                 tableViewRetiro.edit(tp.getRow(), tp.getTableColumn());
@@ -96,15 +144,22 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
                         
                         TablePosition tp = t.getTableView().getFocusModel().getFocusedCell();
                         int nextRow = tp.getRow();
+                        RetiroDineroData retiro = t.getTableView().getSelectionModel().getSelectedItem();
+                        retiro.setSubTotal(retiro.getValorRetiro()
+                                .multiply(BigDecimal.valueOf(retiro.getCantidadBilletes())));
+                        t.getTableView().refresh();                            
+                        
                         if(tp.getRow()==(retiroDineroDataList.size()-1)){
-                            tabController.getLabelMensaje().setText("¿Confirma la carga de retiro de dinero?");
-                            tabController.mostrarMensajeModal();
-                        }else    
+                            tabController.repeatFocus(textFieldObservacion);
+                        }else{    
                             t.getTableView().getSelectionModel().select(nextRow+1, cantidadRetiradaColumn);
+                            
+                        }
                         totalizar();
                     }
                 }                  
             );
+
         });
         
     }
@@ -113,6 +168,7 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
         tableViewRetiro.getItems().clear();
         this.tabController.setTabPaneModalCommand(this);
         tabController.repeatFocus(tableViewRetiro);
+        textFieldObservacion.setText("");
         totalizar();
         /*cantidadRetiradaColumn.setOnEditCommit(
             new EventHandler<TableColumn.CellEditEvent<RetiroDineroData,String>>() {
@@ -154,7 +210,7 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
     
     public void cancelarMensajeModal(){
         this.tabController.ocultarMensajeModal();
-        tabController.repeatFocus(tableViewRetiro);
+        tabController.repeatFocus(textFieldObservacion);
     }
     
     private void totalizar(){
@@ -175,6 +231,7 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
             retiroDinero.setEstado(RetiroDineroEnum.PENDIENTE);
             retiroDinero.setCheckout(Context.getInstance().currentDMTicket().getCheckout());
             retiroDinero.setUsuario(Context.getInstance().currentDMTicket().getUsuario());
+            retiroDinero.setObservacion(textFieldObservacion.getText());
             BigDecimal total = BigDecimal.ZERO;
             for(Iterator<RetiroDineroData> it = retiroDineroDataList.iterator();it.hasNext();){
                 RetiroDineroData item = it.next();

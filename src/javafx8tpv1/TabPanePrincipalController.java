@@ -30,6 +30,7 @@ import com.tpv.print.fiscal.ConfiguracionImpresoraController;
 import com.tpv.producto.BuscarPorDescProductoController;
 import com.tpv.retirodinero.RetiroDineroConfirmacionController;
 import com.tpv.retirodinero.RetiroDineroController;
+import com.tpv.retirodinero.RetiroDineroMenuController;
 import com.tpv.service.ImpresoraService;
 import com.tpv.service.UsuarioService;
 import com.tpv.service.UtilidadesService;
@@ -68,8 +69,8 @@ public class TabPanePrincipalController implements Initializable {
     @FXML private ConfiguracionImpresoraController configImpresoraController;
     @FXML private RetiroDineroController retiroDineroController;
     @FXML private RetiroDineroConfirmacionController retiroDineroConfirmacionController;
-    
     @FXML private CombosController combosController; 
+    @FXML private RetiroDineroMenuController retiroDineroMenuController;
     
     @FXML private Button buttonMenuPrincipal;
     
@@ -86,6 +87,7 @@ public class TabPanePrincipalController implements Initializable {
     @FXML private Tab tabControlador;
     @FXML private Tab tabRetiroDinero;
     @FXML private Tab tabRetiroDineroConfirmacion;
+    @FXML private Tab tabRetiroDineroMenu;
     
     @FXML private TabPane tabPanePrincipal;
     @FXML private StackPane stackPaneModal;
@@ -150,7 +152,7 @@ public class TabPanePrincipalController implements Initializable {
         this.combosController.setTabController(this);
         this.retiroDineroController.setTabController(this);
         this.retiroDineroConfirmacionController.setTabController(this);
-        
+        this.retiroDineroMenuController.setTabController(this);
         
 
         tabPanePrincipal.getSelectionModel().selectedItemProperty()
@@ -209,8 +211,8 @@ public class TabPanePrincipalController implements Initializable {
     
     public void gotoLogin(){
         try{
-            this.labelTituloVentana.setText("INGRESO");
-            this.labelShortCut.setText("F12 - Sale del Sistema");
+            this.getLabelTituloVentana().setText("INGRESO");
+            this.getLabelShortCut().setText("F12 - Sale del Sistema");
             this.loginController.configurarInicio();
             this.tabPanePrincipal.getSelectionModel().select(tabLogin);
         }catch(TpvException e){
@@ -224,8 +226,8 @@ public class TabPanePrincipalController implements Initializable {
     }
     
     public void gotoMenuPrincipal(){
-        this.labelTituloVentana.setText("MENU PRINCIPAL");
-        this.labelShortCut.setText("1-Facturacion   |   2-Controlador   |   3-Carga Retiro de Dinero  |   4-Retiro de Dinero  |   5-Salir del Sistema");
+        this.getLabelTituloVentana().setText("MENU PRINCIPAL");
+        this.getLabelShortCut().setText("1-Facturacion   |   2-Controlador   |   3-Carga Retiro de Dinero  |   4-Retiro de Dinero  |   5-Salir del Sistema");
         this.tabPanePrincipal.getSelectionModel().select(tabMenuPrincipal);
         
         this.menuPrincipalController.configurarInicio();
@@ -233,8 +235,8 @@ public class TabPanePrincipalController implements Initializable {
     
     public void gotoFacturacion(){
         try{
-            this.labelTituloVentana.setText("FACTURACIÓN");
-            this.labelShortCut.setText("F2-Cliente     |   F3-Producto |   F4-Ing.Cantidad     |   F5-Negativo     |   F6-Deshabilita Negativo     |   F7-Cancela Ticket   |   F8-Ofertas   |  F11-Menú Principal");            
+            this.getLabelTituloVentana().setText("FACTURACIÓN");
+            this.getLabelShortCut().setText("F2-Cliente     |   F3-Producto |   F4-Ing.Cantidad     |   F5-Negativo     |   F6-Deshabilita Negativo     |   F7-Cancela Ticket   |   F8-Ofertas   |  F11-Menú Principal");            
             this.facturacionController.configurarInicio();
             this.tabPanePrincipal.getSelectionModel().select(tabFacturacion);
         }catch(TpvException e){
@@ -246,45 +248,45 @@ public class TabPanePrincipalController implements Initializable {
     }
     
     public void gotoError(){
-        this.labelTituloVentana.setText("ERROR");
-        this.labelShortCut.setText("Esc-Recuperar Sistema | F12-Salir de Sistema");
+        this.getLabelTituloVentana().setText("ERROR");
+        this.getLabelShortCut().setText("Esc-Recuperar Sistema | F12-Salir de Sistema");
         this.errorController.configurarInicio();
         this.tabPanePrincipal.getSelectionModel().select(tabError);
     }
     
     public void gotoSupervisor(){
-        this.labelTituloVentana.setText("AUTORIZACIÓN DE SUPERVISOR");
-        this.labelShortCut.setText("Esc-Cancela Operación");
+        this.getLabelTituloVentana().setText("AUTORIZACIÓN DE SUPERVISOR");
+        this.getLabelShortCut().setText("Esc-Cancela Operación");
         this.supervisorController.configurarInicio();
         this.tabPanePrincipal.getSelectionModel().select(tabSupervisor);
         
     }
     
     public void gotoCliente(){
-        this.labelTituloVentana.setText("BÚSQUEDA DE CLIENTE");
-        this.labelShortCut.setText("Esc-Volver");
+        this.getLabelTituloVentana().setText("BÚSQUEDA DE CLIENTE");
+        this.getLabelShortCut().setText("Esc-Volver");
         this.buscarPorNombreClienteController.configurarInicio();
         this.tabPanePrincipal.getSelectionModel().select(tabCliente);
     }
     
     public void gotoProducto(){
-        this.labelTituloVentana.setText("BÚSQUEDA DE PRODUCTO");
-        this.labelShortCut.setText("Esc-Volver");
+        this.getLabelTituloVentana().setText("BÚSQUEDA DE PRODUCTO");
+        this.getLabelShortCut().setText("Esc-Volver");
         this.productoController.configurarInicio();
         this.tabPanePrincipal.getSelectionModel().select(tabProducto);
     }
     
     public void gotoConfirmarPago(){
-        this.labelTituloVentana.setText("CONFIRMACIÓN DE PAGO Y CIERRE DE TICKET");
-        this.labelShortCut.setText("Esc-Volver");
+        this.getLabelTituloVentana().setText("CONFIRMACIÓN DE PAGO Y CIERRE DE TICKET");
+        this.getLabelShortCut().setText("Esc-Volver");
         this.confirmaPagoController.configurarInicio();
         this.tabPanePrincipal.getSelectionModel().select(tabConfirmarPago);
     }
     
     public void gotoPago(){
         try{
-            this.labelTituloVentana.setText("INGRESO DE PAGOS");
-            this.labelShortCut.setText("Esc-Volver  |   F3-Formas de Pago ");
+            this.getLabelTituloVentana().setText("INGRESO DE PAGOS");
+            this.getLabelShortCut().setText("Esc-Volver  |   F3-Formas de Pago ");
             this.pagoTicketController.configurarInicio();
             this.tabPanePrincipal.getSelectionModel().select(tabPago);
         }catch(TpvException e)    {
@@ -296,23 +298,30 @@ public class TabPanePrincipalController implements Initializable {
     }
     
     public void gotoCombos(){
-        this.labelTituloVentana.setText("BONIFICACIONES DE LA COMPRA");
-        this.labelShortCut.setText("Esc-Volver");        
+        this.getLabelTituloVentana().setText("BONIFICACIONES DE LA COMPRA");
+        this.getLabelShortCut().setText("Esc-Volver");        
         this.combosController.configurarInicio();
         this.tabPanePrincipal.getSelectionModel().select(tabCombos);
     }
     
+    public void gotoMenuRetiroDinero(){
+        this.getLabelTituloVentana().setText("MENU RETIRO DE DINERO");
+        this.getLabelShortCut().setText("1-Carga de Retiro de Dinero	|	2-Listado de Retiro de Dinero	|	F11-Retornar a Menú Principal");
+        this.tabPanePrincipal.getSelectionModel().select(tabRetiroDineroMenu);
+        this.retiroDineroMenuController.configurarInicio();
+    }
+    
     public void gotoControlador(){
-        this.labelTituloVentana.setText("OPERACIONES DE CONTROLADOR");
-        this.labelShortCut.setText("1-Cancelar Ticket   |   2-Cierre Z  |   3-Cierre X  |   F11-Retornar a Menú Principal");        
+        this.getLabelTituloVentana().setText("OPERACIONES DE CONTROLADOR");
+        this.getLabelShortCut().setText("1-Cancelar Ticket   |   2-Cierre Z  |   3-Cierre X  |   F11-Retornar a Menú Principal");        
         this.configImpresoraController.configurarInicio();
         this.tabPanePrincipal.getSelectionModel().select(tabControlador);
     }
     
     public void gotoRetiroDinero(){
         try{
-            this.labelTituloVentana.setText("RETIRO DE DINERO");
-            this.labelShortCut.setText("F11 - Retornar a Menú Principal");        
+            this.getLabelTituloVentana().setText("RETIRO DE DINERO");
+            this.getLabelShortCut().setText("F11 - Retornar a Menú Principal");        
             this.retiroDineroController.configurarInicio();
             this.tabPanePrincipal.getSelectionModel().select(tabRetiroDinero);
         }catch(TpvException e)    {
@@ -322,11 +331,9 @@ public class TabPanePrincipalController implements Initializable {
         }        
     }
     
-    public void gotoRetiroDineroConfirmacion(){
+    public void gotoRetiroDineroConfirmacion(boolean readOnly){
         try{
-            this.labelTituloVentana.setText("CONFIRMACION DE RETIRO DE DINERO");
-            this.labelShortCut.setText("Enter - Confirma Retiro | F11 - Retorna a Menú Principal");
-            this.retiroDineroConfirmacionController.configurarInicio();
+            this.retiroDineroConfirmacionController.configurarInicio(readOnly);
             this.tabPanePrincipal.getSelectionModel().select(tabRetiroDineroConfirmacion);
         }catch(TpvException e){
             Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_LOGIN);
@@ -395,6 +402,20 @@ public class TabPanePrincipalController implements Initializable {
         //imageSuperior.fitWidthProperty().bind(this.widthProperty());
         
     } 
+
+    /**
+     * @return the labelTituloVentana
+     */
+    public Label getLabelTituloVentana() {
+        return labelTituloVentana;
+    }
+
+    /**
+     * @return the labelShortCut
+     */
+    public Label getLabelShortCut() {
+        return labelShortCut;
+    }
     
     
     

@@ -132,7 +132,7 @@ public class MenuPrincipalController implements Initializable {
                     tabController.gotoSupervisor();
                 }
                 if(keyEvent.getCode()==KeyCode.NUMPAD3){
-                        tabController.gotoRetiroDinero();
+                        tabController.gotoMenuRetiroDinero();
                 }
                 
                 if(keyEvent.getCode() == KeyCode.NUMPAD4){

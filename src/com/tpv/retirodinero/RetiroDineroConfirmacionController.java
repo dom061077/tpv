@@ -43,10 +43,12 @@ public class RetiroDineroConfirmacionController implements Initializable, TabPan
     private RetiroDineroService retiroDineroService = new RetiroDineroService();
     private ObservableList<RetiroDineroConfirmacionData> retiroDineroDataList;
     private RetiroDineroConfirmacionData selectedItem;
+    private boolean readOnly;
     
     @FXML TableColumn idRetiroDineroColumn;
     @FXML TableColumn fechaHoraCargaColumn;
     @FXML TableColumn montoColumn;
+    @FXML TableColumn estadoColumn;
     @FXML TableView tableViewRetiro;
     @FXML Label totalRetiroLabel;    
     
@@ -61,6 +63,25 @@ public class RetiroDineroConfirmacionController implements Initializable, TabPan
         
         fechaHoraCargaColumn.setCellValueFactory(new PropertyValueFactory("FechaAlta"));
         fechaHoraCargaColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+        fechaHoraCargaColumn.setCellFactory(col ->{
+            TableCell<RetiroDineroConfirmacionData,java.util.Date> cell = new TableCell<RetiroDineroConfirmacionData,java.util.Date>(){
+                @Override
+                public void updateItem(java.util.Date item,boolean empty){
+                    super.updateItem(item,empty);
+                    this.setText(null);
+                    this.setGraphic(null);
+                    if(!empty){
+                        SimpleDateFormat df = new SimpleDateFormat("dd/mm/yyyy hh:mm:ss");
+                        this.setText(df.format(item));
+                    }
+                }
+            };
+            return cell;
+        });
+
+        estadoColumn.setCellValueFactory(new PropertyValueFactory("Estado"));
+        estadoColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
+
         
         montoColumn.setCellValueFactory(new PropertyValueFactory("MontoTotal"));
         montoColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
@@ -81,33 +102,24 @@ public class RetiroDineroConfirmacionController implements Initializable, TabPan
             return cell;
             
         });
-        fechaHoraCargaColumn.setCellFactory(col ->{
-            TableCell<RetiroDineroConfirmacionData,java.util.Date> cell = new TableCell<RetiroDineroConfirmacionData,java.util.Date>(){
-                @Override
-                public void updateItem(java.util.Date item,boolean empty){
-                    super.updateItem(item,empty);
-                    this.setText(null);
-                    this.setGraphic(null);
-                    if(!empty){
-                        SimpleDateFormat df = new SimpleDateFormat("dd/mm/yyyy hh:mm:ss");
-                        this.setText(df.format(item));
-                    }
-                }
-            };
-            return cell;
-        });
+        
+        
+        
         
         
         Platform.runLater(()->{
             tableViewRetiro.setOnKeyPressed(keyEvent->{
                 if(keyEvent.getCode() == KeyCode.F11){
-                    this.tabController.gotoMenuPrincipal();
+                    if(this.readOnly)
+                        this.tabController.gotoMenuRetiroDinero();
+                    else
+                        this.tabController.gotoMenuPrincipal();
                     keyEvent.consume();
                 }
                 if(keyEvent.getCode() == KeyCode.TAB){
                     keyEvent.consume();
                 }
-                if(keyEvent.getCode() == KeyCode.ENTER){
+                if(keyEvent.getCode() == KeyCode.ENTER && !this.readOnly){
                     keyEvent.consume();
                     //int index = tableViewRetiro.getSelectionModel().getSelectedIndex();
                     selectedItem = (RetiroDineroConfirmacionData)tableViewRetiro.getSelectionModel().getSelectedItem();
@@ -120,7 +132,15 @@ public class RetiroDineroConfirmacionController implements Initializable, TabPan
         });
     }
     
-    public void configurarInicio() throws TpvException{
+    public void configurarInicio(boolean readOnly) throws TpvException{
+        this.readOnly = readOnly;
+        if(this.readOnly){
+            this.tabController.getLabelTituloVentana().setText("LISTADO DE CARGAS DE RETIRO DE DINERO");
+            this.tabController.getLabelShortCut().setText("F11 - Retorna a Menú Principal");
+        }else{
+            this.tabController.getLabelTituloVentana().setText("CONFIRMACION DE RETIRO DE DINERO");
+            this.tabController.getLabelShortCut().setText("Enter - Confirma Retiro | F11 - Retorna a Menú Principal");
+        }
         tableViewRetiro.getItems().clear();
         cargarRetiro();
         this.tabController.repeatFocus(tableViewRetiro);

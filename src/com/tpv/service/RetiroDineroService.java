@@ -44,9 +44,8 @@ public class RetiroDineroService {
         List<RetiroDinero> list = null;
         EntityManager em = Connection.getEm();
         try{
-            Query q = em.createQuery("FROM RetiroDinero r WHERE r.estado = :estado AND r.fechaAlta>=fechaHoy "
+            Query q = em.createQuery("FROM RetiroDinero r WHERE  r.fechaAlta>=fechaHoy "
                             +" AND r.usuario.id = :idUsuario AND r.checkout.id = :idCheckout")
-                        .setParameter("estado", RetiroDineroEnum.PENDIENTE)
                         .setParameter("idCheckout",idCheckout)
                         .setParameter("idUsuario",idUsuario);
             list = q.getResultList();

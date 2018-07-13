@@ -207,7 +207,7 @@ public class SupervisorController implements Initializable, TabPaneModalCommand{
                                         tabController.gotoControlador();
                                         break;
                                     case HABILITAR_CONFIRMARETIRODINERO:
-                                        tabController.gotoRetiroDineroConfirmacion();
+                                        tabController.gotoRetiroDineroConfirmacion(false);
                                         break;
                                 }
                                 keyEvent.consume();

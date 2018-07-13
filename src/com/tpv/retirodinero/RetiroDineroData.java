@@ -22,6 +22,7 @@ public class RetiroDineroData {
     private StringProperty DescripcionBillete;
     private ObjectProperty<BigDecimal> ValorRetiro;
     private IntegerProperty CantidadBilletes;
+    private ObjectProperty<BigDecimal> SubTotal;
     
     public RetiroDineroData(){
         
@@ -33,6 +34,7 @@ public class RetiroDineroData {
         this.DescripcionBillete = new SimpleStringProperty(descripcionBillete);
         this.ValorRetiro = new SimpleObjectProperty(valorRetiro);
         this.CantidadBilletes = new SimpleIntegerProperty(cantidadBilletes);
+        this.SubTotal = new SimpleObjectProperty(BigDecimal.ZERO);
                 
     }
     
@@ -60,6 +62,12 @@ public class RetiroDineroData {
         return CantidadBilletes;
     }
     
+    public ObjectProperty<BigDecimal> subTotalProperty(){
+        if(SubTotal == null)
+            SubTotal = new SimpleObjectProperty<BigDecimal>();
+        return SubTotal;
+    }
+    
     public int getIdBillete(){
         return IdBillete.get();
     }
@@ -78,5 +86,13 @@ public class RetiroDineroData {
     
     public void setCantidadBilletes(int cantidad){
         this.cantidadBilletesProperty().set(cantidad);
+    }
+    
+    public BigDecimal getSubTotal(){
+        return SubTotal.get();
+    }
+    
+    public void setSubTotal(BigDecimal subTotal){
+        this.subTotalProperty().set(subTotal);
     }
 }
