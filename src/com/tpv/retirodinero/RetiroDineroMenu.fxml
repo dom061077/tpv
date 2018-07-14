@@ -24,8 +24,8 @@
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="866.0" minWidth="10.0" prefWidth="864.0" />
          </columnConstraints>
          <rowConstraints>
-            <RowConstraints maxHeight="100.0" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="95.0" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="296.0" minHeight="1.0" prefHeight="296.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="199.0" minHeight="100.0" prefHeight="128.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
             <ImageView fx:id="imageFacturacion" fitHeight="77.0" fitWidth="112.0" pickOnBounds="true" preserveRatio="true" />
@@ -47,6 +47,6 @@
       </GridPane>
    </center>
    <left>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
+      <VBox prefHeight="200.0" prefWidth="218.0" BorderPane.alignment="CENTER" />
    </left>
 </BorderPane>

@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane focusTraversable="true" maxHeight="640.0" maxWidth="1024.0" minHeight="640.0" minWidth="1024.0" prefHeight="640.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.print.fiscal.ConfiguracionImpresoraController">
+<BorderPane fx:id="borderPane" focusTraversable="true" maxHeight="640.0" maxWidth="1024.0" minHeight="640.0" minWidth="1024.0" prefHeight="640.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.print.fiscal.ConfiguracionImpresoraController">
    <left>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
+      <VBox prefHeight="640.0" prefWidth="218.0" BorderPane.alignment="CENTER" />
    </left>
    <right>
       <VBox fx:id="vboxMenuImpresora" alignment="CENTER_LEFT" focusTraversable="true" maxHeight="600.0" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" BorderPane.alignment="CENTER">
@@ -17,12 +21,21 @@
       </VBox>
    </right>
    <center>
-      <VBox fx:id="boxMenu" focusTraversable="true" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+      <GridPane fx:id="gridPaneMenu" focusTraversable="true" BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
          <children>
             <Label styleClass="label_menu" text="1 - Cancelar Ticket" />
-            <Label styleClass="label_menu" text="2 - Cierre Z" />
-            <Label styleClass="label_menu" text="3 - Cierre X" />
+            <Label styleClass="label_menu" text="2 - Cierre Z" GridPane.rowIndex="1" />
+            <Label styleClass="label_menu" text="3 - Cierre X" GridPane.rowIndex="2" />
          </children>
-      </VBox>
+      </GridPane>
    </center>
 </BorderPane>

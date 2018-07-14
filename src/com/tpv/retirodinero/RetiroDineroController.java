@@ -12,6 +12,7 @@ import com.tpv.modelo.RetiroDinero;
 import com.tpv.modelo.RetiroDineroDetalle;
 import com.tpv.modelo.enums.RetiroDineroEnum;
 import com.tpv.principal.Context;
+import com.tpv.service.ImpresoraService;
 import com.tpv.service.RetiroDineroService;
 import com.tpv.util.ui.EditableBigDecimalTableCell;
 import com.tpv.util.ui.TabPaneModalCommand;
@@ -51,6 +52,7 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
     private TabPanePrincipalController tabController;
     private RetiroDineroService retiroDineroService = new RetiroDineroService();
     private ObservableList<RetiroDineroData> retiroDineroDataList;
+    private ImpresoraService impresoraService = new ImpresoraService();
     
     @FXML BorderPane borderPane;
     @FXML GridPane gridPane;
@@ -105,6 +107,16 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
                 if(keyEvent.getCode() == KeyCode.F11){
                     tabController.gotoMenuRetiroDinero();
                     return;
+                }
+                
+                if(keyEvent.getCode() == KeyCode.F10){
+                    try{
+                        impresoraService.imprimirRetiroDinero();
+                    }catch(TpvException e){
+                        Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_LOGIN);
+                        Context.getInstance().currentDMTicket().setException(e);
+                        this.tabController.gotoError();
+                    }
                 }
                 
                 if(keyEvent.getCode() == KeyCode.ENTER){

@@ -15,12 +15,11 @@ import javafx.fxml.FXML;
 import javafx.application.Platform;
 import javafx.fxml.Initializable;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.VBox;
 import javafx8tpv1.TabPanePrincipalController;
 import com.tpv.service.ImpresoraService;
-import com.tpv.util.Connection;
 import com.tpv.util.ui.TabPaneModalCommand;
-import javafx.scene.control.Alert;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 
 
 /**
@@ -34,14 +33,15 @@ public class ConfiguracionImpresoraController implements Initializable,TabPaneMo
     private TabPanePrincipalController tabController;
 
     
+    
     @FXML
-    private VBox boxMenu;
+    private BorderPane borderPane;
     
     @FXML
     public  void initialize(URL url, ResourceBundle rb) {
         log.debug("Init del controlador");
         Platform.runLater(()->{
-            boxMenu.setOnKeyPressed(keyEvent->{
+            borderPane.setOnKeyPressed(keyEvent->{
                 if(keyEvent.getCode()==KeyCode.F11){
                     log.debug("Button volver de la pantalla de configuracion");
                     this.tabController.gotoMenuPrincipal();
@@ -49,11 +49,8 @@ public class ConfiguracionImpresoraController implements Initializable,TabPaneMo
                 if(keyEvent.getCode()==KeyCode.NUMPAD1){
                     try{
                         impresoraService.cancelarTicket();
-                        /*Alert alert = new Alert(Alert.AlertType.INFORMATION,"El ticket fue cancelado");
-                        alert.getDialogPane().getStylesheets().add(Connection.getCss());                        
-                        alert.showAndWait();*/
                         tabController.getLabelCancelarModal().setVisible(false);
-                        tabController.getLabelMensaje().setText("El ticket fue cancelado con éxito");
+                        //tabController.getLabelMensaje().setText("El ticket fue cancelado con éxito");
                         tabController.mostrarMensajeModal();
                     }catch(TpvException e){
                         log.error("Error al tratar de cancelar el ticket",e);
@@ -103,18 +100,20 @@ public class ConfiguracionImpresoraController implements Initializable,TabPaneMo
     
     public void setTabController(TabPanePrincipalController tabPane){
         this.tabController=tabPane;
+        
     }
 
 
     public void configurarInicio(){
-        this.tabController.repeatFocus(boxMenu);
+        this.tabController.repeatFocus(borderPane);
+        this.tabController.setTabPaneModalCommand(this);
     }        
     
     @Override
     public void aceptarMensajeModal(){
-        this.tabController.repeatFocus(boxMenu);
         this.tabController.ocultarMensajeModal();
         this.tabController.getLabelCancelarModal().setVisible(true);
+        this.tabController.repeatFocus(borderPane);
         
     }
     

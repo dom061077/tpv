@@ -435,6 +435,32 @@ public class ImpresoraService {
             throw new TpvException(e.getMessage());
         }
     }
+    
+    
+    public void imprimirRetiroDinero() throws TpvException{
+        FiscalPacket requestOpen;
+        FiscalPacket requestCerrar;
+        FiscalPacket requestFiscalText;
+        FiscalPacket response;
+        FiscalMessages fMsg;
+        requestOpen = getHfp().cmdOpenDNFH("1", "12345");
+        requestCerrar = getHfp().cmdCloseDNFH(Integer.parseInt("1"));
+        requestFiscalText = getHfp().cmdPrintNonFiscalText("$1000   3   20.000,00",Integer.valueOf("0"));
+        
+        try{
+            response = getHfp().execute(requestOpen);
+            //response = getHfp().execute(requestFiscalText);
+            response = getHfp().execute(requestCerrar);
+        }catch(FiscalPrinterStatusError e){
+            fMsg = getHfp().getMessages();
+            log.warn("Error de estado en la impresora al imprimir retiro de dinero",e);
+            throw new TpvException(e.getMessage());
+        }catch(FiscalPrinterIOException e){
+            log.warn("Error mécanico de impresora al imprimir retiro de dinero",e);
+            throw new TpvException(e.getMessage());
+        }
+    }
+    
 
     /**
      * @return the hfp

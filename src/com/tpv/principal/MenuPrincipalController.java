@@ -99,6 +99,9 @@ public class MenuPrincipalController implements Initializable {
     private ImageView imageRetiroDinero;
     
     @FXML
+    private ImageView imageCargaRetiroDinero;
+    
+    @FXML
     private ImageView imageFin;
     
     
@@ -147,9 +150,12 @@ public class MenuPrincipalController implements Initializable {
     
     private void loadImage(){
         //String f = this.getClass().getResource("/com/tpv/resources/logologin.jpg").toExternalForm();
-        imageFacturacion.setImage(new Image(this.getClass().getResource("/com/tpv/resources/facturacion.png").toExternalForm()));
+        imageFacturacion.setImage(new Image(this.getClass().getResource("/com/tpv/resources/facturacion3.png").toExternalForm()));
         imageControlador.setImage(new Image(this.getClass().getResource("/com/tpv/resources/controlador.png").toExternalForm()));
         imageRetiroDinero.setImage(new Image(this.getClass().getResource("/com/tpv/resources/retiro_dinero.png").toExternalForm()));
+        
+        imageCargaRetiroDinero.setImage(new Image(this.getClass().getResource("/com/tpv/resources/carga_retirodinero.png").toExternalForm()));
+        
         imageFin.setImage(new Image(this.getClass().getResource("/com/tpv/resources/fin.png").toExternalForm()));
                 
     }    

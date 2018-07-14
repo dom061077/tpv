@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
@@ -10,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="borderPane" focusTraversable="true" maxHeight="640.0" maxWidth="1024.0" minHeight="640.0" minWidth="1024.0" prefHeight="640.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.principal.MenuPrincipalController">
+<BorderPane fx:id="borderPane" focusTraversable="true" maxHeight="640.0" maxWidth="1024.0" minHeight="640.0" minWidth="1024.0" prefHeight="640.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.principal.MenuPrincipalController">
    <center>
       <GridPane alignment="TOP_CENTER" focusTraversable="true" BorderPane.alignment="CENTER">
          <columnConstraints>
@@ -38,7 +44,7 @@
                   <Font name="Arial" size="64.0" />
                </font>
             </Label>
-            <ImageView fx:id="imageRetiroDinero" fitHeight="77.0" fitWidth="112.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2" />
+            <ImageView fx:id="imageRetiroDinero" fitHeight="77.0" fitWidth="112.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="3" />
             <Label styleClass="label_menu" text="3- CARGA RETIRO DE DINERO" textFill="#3062e1" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <font>
                   <Font name="Arial" size="64.0" />
@@ -50,6 +56,7 @@
                   <Font size="64.0" />
                </font>
             </Label>
+            <ImageView fx:id="imageCargaRetiroDinero" fitHeight="77.0" fitWidth="112.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2" />
          </children>
          <BorderPane.margin>
             <Insets top="50.0" />

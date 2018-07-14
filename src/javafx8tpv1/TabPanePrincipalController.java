@@ -155,7 +155,7 @@ public class TabPanePrincipalController implements Initializable {
         this.retiroDineroMenuController.setTabController(this);
         
 
-        tabPanePrincipal.getSelectionModel().selectedItemProperty()
+        getTabPanePrincipal().getSelectionModel().selectedItemProperty()
                 .addListener((observable,oldTab,newTab)->{
                    if(newTab.getId().compareTo("tabMenuPrincipal")==0){
                        //menuPrincipalController.setMenuFocus();
@@ -214,7 +214,7 @@ public class TabPanePrincipalController implements Initializable {
             this.getLabelTituloVentana().setText("INGRESO");
             this.getLabelShortCut().setText("F12 - Sale del Sistema");
             this.loginController.configurarInicio();
-            this.tabPanePrincipal.getSelectionModel().select(tabLogin);
+            this.getTabPanePrincipal().getSelectionModel().select(tabLogin);
         }catch(TpvException e){
             log.error(e.getMessage());
             Context.getInstance().currentDMTicket().setException(e);
@@ -228,7 +228,7 @@ public class TabPanePrincipalController implements Initializable {
     public void gotoMenuPrincipal(){
         this.getLabelTituloVentana().setText("MENU PRINCIPAL");
         this.getLabelShortCut().setText("1-Facturacion   |   2-Controlador   |   3-Carga Retiro de Dinero  |   4-Retiro de Dinero  |   5-Salir del Sistema");
-        this.tabPanePrincipal.getSelectionModel().select(tabMenuPrincipal);
+        this.getTabPanePrincipal().getSelectionModel().select(tabMenuPrincipal);
         
         this.menuPrincipalController.configurarInicio();
     }
@@ -238,7 +238,7 @@ public class TabPanePrincipalController implements Initializable {
             this.getLabelTituloVentana().setText("FACTURACIÓN");
             this.getLabelShortCut().setText("F2-Cliente     |   F3-Producto |   F4-Ing.Cantidad     |   F5-Negativo     |   F6-Deshabilita Negativo     |   F7-Cancela Ticket   |   F8-Ofertas   |  F11-Menú Principal");            
             this.facturacionController.configurarInicio();
-            this.tabPanePrincipal.getSelectionModel().select(tabFacturacion);
+            this.getTabPanePrincipal().getSelectionModel().select(tabFacturacion);
         }catch(TpvException e){
             Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
             Context.getInstance().currentDMTicket().setException(e);
@@ -251,14 +251,14 @@ public class TabPanePrincipalController implements Initializable {
         this.getLabelTituloVentana().setText("ERROR");
         this.getLabelShortCut().setText("Esc-Recuperar Sistema | F12-Salir de Sistema");
         this.errorController.configurarInicio();
-        this.tabPanePrincipal.getSelectionModel().select(tabError);
+        this.getTabPanePrincipal().getSelectionModel().select(tabError);
     }
     
     public void gotoSupervisor(){
         this.getLabelTituloVentana().setText("AUTORIZACIÓN DE SUPERVISOR");
         this.getLabelShortCut().setText("Esc-Cancela Operación");
         this.supervisorController.configurarInicio();
-        this.tabPanePrincipal.getSelectionModel().select(tabSupervisor);
+        this.getTabPanePrincipal().getSelectionModel().select(tabSupervisor);
         
     }
     
@@ -266,21 +266,21 @@ public class TabPanePrincipalController implements Initializable {
         this.getLabelTituloVentana().setText("BÚSQUEDA DE CLIENTE");
         this.getLabelShortCut().setText("Esc-Volver");
         this.buscarPorNombreClienteController.configurarInicio();
-        this.tabPanePrincipal.getSelectionModel().select(tabCliente);
+        this.getTabPanePrincipal().getSelectionModel().select(tabCliente);
     }
     
     public void gotoProducto(){
         this.getLabelTituloVentana().setText("BÚSQUEDA DE PRODUCTO");
         this.getLabelShortCut().setText("Esc-Volver");
         this.productoController.configurarInicio();
-        this.tabPanePrincipal.getSelectionModel().select(tabProducto);
+        this.getTabPanePrincipal().getSelectionModel().select(tabProducto);
     }
     
     public void gotoConfirmarPago(){
         this.getLabelTituloVentana().setText("CONFIRMACIÓN DE PAGO Y CIERRE DE TICKET");
         this.getLabelShortCut().setText("Esc-Volver");
         this.confirmaPagoController.configurarInicio();
-        this.tabPanePrincipal.getSelectionModel().select(tabConfirmarPago);
+        this.getTabPanePrincipal().getSelectionModel().select(tabConfirmarPago);
     }
     
     public void gotoPago(){
@@ -288,7 +288,7 @@ public class TabPanePrincipalController implements Initializable {
             this.getLabelTituloVentana().setText("INGRESO DE PAGOS");
             this.getLabelShortCut().setText("Esc-Volver  |   F3-Formas de Pago ");
             this.pagoTicketController.configurarInicio();
-            this.tabPanePrincipal.getSelectionModel().select(tabPago);
+            this.getTabPanePrincipal().getSelectionModel().select(tabPago);
         }catch(TpvException e)    {
             Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_PAGOTICKET);
             Context.getInstance().currentDMTicket().setException(e);
@@ -301,13 +301,13 @@ public class TabPanePrincipalController implements Initializable {
         this.getLabelTituloVentana().setText("BONIFICACIONES DE LA COMPRA");
         this.getLabelShortCut().setText("Esc-Volver");        
         this.combosController.configurarInicio();
-        this.tabPanePrincipal.getSelectionModel().select(tabCombos);
+        this.getTabPanePrincipal().getSelectionModel().select(tabCombos);
     }
     
     public void gotoMenuRetiroDinero(){
         this.getLabelTituloVentana().setText("MENU RETIRO DE DINERO");
         this.getLabelShortCut().setText("1-Carga de Retiro de Dinero	|	2-Listado de Retiro de Dinero	|	F11-Retornar a Menú Principal");
-        this.tabPanePrincipal.getSelectionModel().select(tabRetiroDineroMenu);
+        this.getTabPanePrincipal().getSelectionModel().select(tabRetiroDineroMenu);
         this.retiroDineroMenuController.configurarInicio();
     }
     
@@ -315,7 +315,7 @@ public class TabPanePrincipalController implements Initializable {
         this.getLabelTituloVentana().setText("OPERACIONES DE CONTROLADOR");
         this.getLabelShortCut().setText("1-Cancelar Ticket   |   2-Cierre Z  |   3-Cierre X  |   F11-Retornar a Menú Principal");        
         this.configImpresoraController.configurarInicio();
-        this.tabPanePrincipal.getSelectionModel().select(tabControlador);
+        this.getTabPanePrincipal().getSelectionModel().select(getTabControlador());
     }
     
     public void gotoRetiroDinero(){
@@ -323,7 +323,7 @@ public class TabPanePrincipalController implements Initializable {
             this.getLabelTituloVentana().setText("RETIRO DE DINERO");
             this.getLabelShortCut().setText("F11 - Retornar a Menú Principal");        
             this.retiroDineroController.configurarInicio();
-            this.tabPanePrincipal.getSelectionModel().select(tabRetiroDinero);
+            this.getTabPanePrincipal().getSelectionModel().select(tabRetiroDinero);
         }catch(TpvException e)    {
             Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CARGARETIRODINERO);
             Context.getInstance().currentDMTicket().setException(e);
@@ -334,7 +334,7 @@ public class TabPanePrincipalController implements Initializable {
     public void gotoRetiroDineroConfirmacion(boolean readOnly){
         try{
             this.retiroDineroConfirmacionController.configurarInicio(readOnly);
-            this.tabPanePrincipal.getSelectionModel().select(tabRetiroDineroConfirmacion);
+            this.getTabPanePrincipal().getSelectionModel().select(tabRetiroDineroConfirmacion);
         }catch(TpvException e){
             Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_LOGIN);
             Context.getInstance().currentDMTicket().setException(e);
@@ -415,6 +415,20 @@ public class TabPanePrincipalController implements Initializable {
      */
     public Label getLabelShortCut() {
         return labelShortCut;
+    }
+
+    /**
+     * @return the tabPanePrincipal
+     */
+    public TabPane getTabPanePrincipal() {
+        return tabPanePrincipal;
+    }
+
+    /**
+     * @return the tabControlador
+     */
+    public Tab getTabControlador() {
+        return tabControlador;
     }
     
     
