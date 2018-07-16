@@ -179,7 +179,7 @@ public abstract class HasarFiscalPrinter extends BasicFiscalPrinter implements H
 	public FiscalPacket cmdCloseDNFH(Integer copies) {
 		FiscalPacket cmd = createFiscalPacket(CMD_CLOSE_DNFH);
 		int i = 1;
-		//cmd.setNumber(i++, copies, true);
+		cmd.setNumber(i++, copies, true);
                 
 		return cmd;
 	}

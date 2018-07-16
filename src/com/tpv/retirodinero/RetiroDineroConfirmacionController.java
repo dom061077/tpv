@@ -119,7 +119,7 @@ public class RetiroDineroConfirmacionController implements Initializable, TabPan
                 if(keyEvent.getCode() == KeyCode.TAB){
                     keyEvent.consume();
                 }
-                if(keyEvent.getCode() == KeyCode.ENTER && !this.readOnly){
+                if(keyEvent.getCode() == KeyCode.ENTER && !this.readOnly && retiroDineroDataList.size()>0){
                     keyEvent.consume();
                     //int index = tableViewRetiro.getSelectionModel().getSelectedIndex();
                     selectedItem = (RetiroDineroConfirmacionData)tableViewRetiro.getSelectionModel().getSelectedItem();
@@ -187,7 +187,7 @@ public class RetiroDineroConfirmacionController implements Initializable, TabPan
     public void aceptarMensajeModal(){
         confirmarRetiro(this.selectedItem.getIdRetiro());
         tabController.ocultarMensajeModal();
-        tabController.gotoMenuPrincipal();
+        tabController.gotoMenuRetiroDinero();
     }
     
     public void cancelarMensajeModal(){

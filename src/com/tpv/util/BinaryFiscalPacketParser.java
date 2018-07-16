@@ -7,6 +7,7 @@ package com.tpv.util;
 
 import com.tpv.principal.FXMLMainController;
 import java.math.BigInteger;
+import java.text.DecimalFormat;
 import org.apache.log4j.Logger;
 import org.tpv.print.fiscal.FiscalPacket;
 
@@ -205,7 +206,7 @@ public class BinaryFiscalPacketParser {
     }
     
     public static void main(String[] args){
-        String cadena="1234567890123";
+        /*String cadena="1234567890123";
         StringBuffer sb = new StringBuffer(cadena);
         StringBuffer sb2 = new StringBuffer(cadena);
         for(int i = 7;i<sb.length();i++){
@@ -216,6 +217,12 @@ public class BinaryFiscalPacketParser {
                 sb2.replace(i, i+1, str);
             
         }
-        System.out.println(sb2.substring(0, 13) .toString());
+        System.out.println(sb2.substring(0, 13) .toString());*/
+        DecimalFormat df = new DecimalFormat("##,##0");
+        System.out.println(df.format(9));
+        System.out.println(String.format("%3d",9.2));
+        System.out.println(String.format("%3d",19));
+        System.out.println(String.format("%6d","$1.000"));
+        System.out.println(String.format("%6s","$500"));
     }
 }

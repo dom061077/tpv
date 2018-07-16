@@ -118,12 +118,12 @@ public class HasarPrinterP715F extends HasarFiscalPrinter {
 		return cmd; 
 	}
 	
-	@Override
+	/*@Override
 	public FiscalPacket cmdCloseDNFH(Integer copies) {
 		// Este modelo no acepta el parámetro de copias.
 		FiscalPacket cmd = createFiscalPacket(CMD_CLOSE_DNFH);
 		return cmd; 
-	}
+	}*/
 	
 	public FiscalPacket cmdSetCustomerData(String name, String customerDocNumber, String ivaResponsibility, String docType, String location) {
 		FiscalPacket cmd = super.cmdSetCustomerData(name, customerDocNumber, ivaResponsibility, docType, location);
@@ -161,11 +161,11 @@ public class HasarPrinterP715F extends HasarFiscalPrinter {
 		return cmd;
 	}
 
-	@Override
+	/*@Override
 	public FiscalPacket cmdCloseNonFiscalReceipt(Integer copies) {
 		FiscalPacket cmd = createFiscalPacket(CMD_CLOSE_NON_FISCAL_RECEIPT);
 		return cmd;
-	}
+	}*/
 	
 	@Override
 	public FiscalPacket cmdOpenDrawer(){

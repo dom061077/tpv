@@ -27,7 +27,7 @@ sample.log.2017-11     -->
     <errorHandler class='org.apache.log4j.helpers.OnlyOnceErrorHandler' />
     <param name='File' value='logs/orm_log.log' />
     <param name='Append' value='false' />
-    <param name='DatePattern' value='&apos;.&apos;yyyy-MM-dd' />
+    <param name='DatePattern' value="'.'yyyy-MM-dd-HH" />
     <layout class='org.apache.log4j.PatternLayout'>
       <param name='ConversionPattern' value='%d %-5p [%-30.40c{1}] %2X{tid} %X{sid} %X{uid} %m%n' />
     </layout>
@@ -36,7 +36,7 @@ sample.log.2017-11     -->
     <errorHandler class='org.apache.log4j.helpers.OnlyOnceErrorHandler' />
     <param name='File' value='logs/orm_sql_log.log' />
     <param name='Append' value='false' />
-    <param name='DatePattern' value='&apos;.&apos;yyyy-MM-dd' />
+    <param name='DatePattern' value="'.'yyyy-MM-dd-HH" />
     <layout class='org.apache.log4j.PatternLayout'>
       <param name='ConversionPattern' value='%d %-5p [%-30.40c{1}] %2X{tid} %X{sid} %X{uid} %m%n' />
     </layout>
@@ -45,7 +45,7 @@ sample.log.2017-11     -->
     <errorHandler class='org.apache.log4j.helpers.OnlyOnceErrorHandler' />
     <param name='File' value='logs/cache_log.log' />
     <param name='Append' value='false' />
-    <param name='DatePattern' value='&apos;.&apos;yyyy-MM-dd' />
+    <param name='DatePattern' value="'.'yyyy-MM-dd-HH" />
     <layout class='org.apache.log4j.PatternLayout'>
       <param name='ConversionPattern' value='%d %-5p [%-30.40c{1}] %2X{tid} %X{sid} %X{uid} %m%n' />
     </layout>

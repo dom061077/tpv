@@ -109,15 +109,6 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
                     return;
                 }
                 
-                if(keyEvent.getCode() == KeyCode.F10){
-                    try{
-                        impresoraService.imprimirRetiroDinero();
-                    }catch(TpvException e){
-                        Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_LOGIN);
-                        Context.getInstance().currentDMTicket().setException(e);
-                        this.tabController.gotoError();
-                    }
-                }
                 
                 if(keyEvent.getCode() == KeyCode.ENTER){
                     tabController.getLabelMensaje().setText("¿Confirma la carga de retiro de dinero?");
@@ -262,7 +253,7 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
             retiroDinero.setMonto(total);
             retiroDineroService.registrarRetiro(retiroDinero);
             this.tabController.ocultarMensajeModal();
-            this.tabController.gotoMenuPrincipal();
+            this.tabController.gotoMenuRetiroDinero();
         }catch(TpvException e){
             log.error("Error en controlador llamando al método registrarRetiro de RetiroDineroService",e);
             tabController.ocultarMensajeModal();

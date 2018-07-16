@@ -8,6 +8,8 @@ package com.tpv.service;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Factura;
 import com.tpv.modelo.FacturaDetalleCombo;
+import com.tpv.modelo.RetiroDinero;
+import com.tpv.modelo.RetiroDineroDetalle;
 import com.tpv.principal.Context;
 import com.tpv.util.BinaryFiscalPacketParser;
 import com.tpv.util.Connection;
@@ -254,8 +256,17 @@ public class ImpresoraService {
     
     public void imprimirLineaTicket(String descripcion,BigDecimal cantidad
             ,BigDecimal precio, BigDecimal iva,boolean imprimeNegativo,BigDecimal impuestoInterno) throws TpvException{
-        String _2daLineaDetalle = descripcion.substring(descripcion.length()-21,descripcion.length()-1);
-        String _1erLineaDetalle = descripcion.substring(0,descripcion.length()-21);
+        String _2daLineaDetalle = "";
+        String _1erLineaDetalle = "";
+        
+        if(descripcion.length()>20){
+            _1erLineaDetalle = descripcion.substring(0,descripcion.length()-21);
+            _2daLineaDetalle = descripcion.substring(descripcion.length()-21,descripcion.length()-1);
+        }else{
+            _1erLineaDetalle = descripcion;
+        }
+            
+        
         
         
         //HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
@@ -272,7 +283,8 @@ public class ImpresoraService {
         try{
             response = getHfp().execute(requestEstado);
             response = getHfp().execute(request1eraLineaDetalle);
-            response = getHfp().execute(request2daLineaDetalle);
+            if(_2daLineaDetalle.compareTo("")!=0)
+                response = getHfp().execute(request2daLineaDetalle);
         }catch(FiscalPrinterStatusError e){
             fMsg = getHfp().getMessages();
             log.warn("Error fiscal al imprimir linea de ticket",e);
@@ -437,19 +449,53 @@ public class ImpresoraService {
     }
     
     
-    public void imprimirRetiroDinero() throws TpvException{
+    public void imprimirRetiroDinero(RetiroDinero retiroDinero) throws TpvException{
         FiscalPacket requestOpen;
         FiscalPacket requestCerrar;
         FiscalPacket requestFiscalText;
         FiscalPacket response;
         FiscalMessages fMsg;
-        requestOpen = getHfp().cmdOpenDNFH("1", "12345");
-        requestCerrar = getHfp().cmdCloseDNFH(Integer.parseInt("1"));
-        requestFiscalText = getHfp().cmdPrintNonFiscalText("$1000   3   20.000,00",Integer.valueOf("0"));
+        requestOpen = getHfp().cmdOpenNonFiscalReceipt();
+        requestCerrar = getHfp().cmdCloseNonFiscalReceipt(Integer.valueOf("1"));
+        
         
         try{
+            /*response = getHfp().execute(requestOpen);
+            
+            requestFiscalText = getHfp().cmdPrintNonFiscalText("$1000   3   20.000,00",Integer.valueOf("0"));
+            response = getHfp().execute(requestFiscalText);
+            
+            requestFiscalText = getHfp().cmdPrintNonFiscalText("$ 500   1      500,00",Integer.valueOf("0"));
+            response = getHfp().execute(requestFiscalText);
+
+            requestFiscalText = getHfp().cmdPrintNonFiscalText("$ 200   3      600,00",Integer.valueOf("0"));
+            response = getHfp().execute(requestFiscalText);
+            
+            response = getHfp().execute(requestCerrar);
             response = getHfp().execute(requestOpen);
-            //response = getHfp().execute(requestFiscalText);
+            
+            requestFiscalText = getHfp().cmdPrintNonFiscalText("$1000   3   20.000,00",Integer.valueOf("0"));
+            response = getHfp().execute(requestFiscalText);
+            
+            requestFiscalText = getHfp().cmdPrintNonFiscalText("$ 500   1      500,00",Integer.valueOf("0"));
+            response = getHfp().execute(requestFiscalText);
+
+            requestFiscalText = getHfp().cmdPrintNonFiscalText("$ 200   3      600,00",Integer.valueOf("0"));
+            response = getHfp().execute(requestFiscalText);            
+            
+            
+            response = getHfp().execute(requestCerrar);*/
+            
+            response = getHfp().execute(requestOpen);
+            
+            for(Iterator<RetiroDineroDetalle> it = retiroDinero.getDetalle().iterator();it.hasNext(); ){
+                RetiroDineroDetalle retDetalle = it.next();
+                String strLine =  retDetalle.getBillete().getDetalleFormulario();
+                requestFiscalText = getHfp().cmdPrintNonFiscalText("", Integer.valueOf("0"));
+                
+            }
+            
+            
             response = getHfp().execute(requestCerrar);
         }catch(FiscalPrinterStatusError e){
             fMsg = getHfp().getMessages();
