@@ -5,38 +5,40 @@
  */
 package com.tpv.modelo;
 
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
  *
- * @author daniel
+ * @author COMPUTOS
  */
-
 @Entity
-@Table(name="suctes_aperturacierrecajero")
+@Table(name="suctes_aperturacierre")
 public class AperturaCierreCajero {
     @Id
-    @Column(name ="idsuctes_APERTURACIERRECAJERO" )
+    @Column(name="idsuctes_APERTURACIERRE")
     private Long id;
     
-    @Column(name = "ESTADO")
-    private boolean estado;
+    @Column(name="FECHACAJA")
+    private java.sql.Date fecha;
     
-    @Column(name = "TURNO")   
-    private int caja;
+    @Column(name="APERTURA")
+    private boolean abierta;
     
-    @ManyToOne
-    @JoinColumn(name = "idCHECKOUT", referencedColumnName = "idCHECKOUT")
-    private Checkout checkout;
+    @Column(name="CIERRE")
+    private boolean cerrada;
     
-    @ManyToOne
-    @JoinColumn(name = "idsuctes_CAJERO", referencedColumnName="idUSUARIOS")
-    private Usuario usuario;
+    @Column(name="ESTADO")
+    private int estado;
+    
+    @OneToMany(mappedBy="aperturaCierreCab", fetch = FetchType.EAGER)
+    private List<AperturaCierreCajeroDetalle> detalle;
 
     /**
      * @return the id
@@ -53,59 +55,73 @@ public class AperturaCierreCajero {
     }
 
     /**
+     * @return the fecha
+     */
+    public java.sql.Date getFecha() {
+        return fecha;
+    }
+
+    /**
+     * @param fecha the fecha to set
+     */
+    public void setFecha(java.sql.Date fecha) {
+        this.fecha = fecha;
+    }
+
+    /**
+     * @return the abierta
+     */
+    public boolean isAbierta() {
+        return abierta;
+    }
+
+    /**
+     * @param abierta the abierta to set
+     */
+    public void setAbierta(boolean abierta) {
+        this.abierta = abierta;
+    }
+
+    /**
+     * @return the cerrada
+     */
+    public boolean isCerrada() {
+        return cerrada;
+    }
+
+    /**
+     * @param cerrada the cerrada to set
+     */
+    public void setCerrada(boolean cerrada) {
+        this.cerrada = cerrada;
+    }
+
+    /**
      * @return the estado
      */
-    public boolean isEstado() {
+    public int getEstado() {
         return estado;
     }
 
     /**
      * @param estado the estado to set
      */
-    public void setEstado(boolean estado) {
+    public void setEstado(int estado) {
         this.estado = estado;
     }
 
     /**
-     * @return the caja
+     * @return the detalle
      */
-    public int getCaja() {
-        return caja;
+    public List<AperturaCierreCajeroDetalle> getDetalle() {
+        return detalle;
     }
 
     /**
-     * @param caja the caja to set
+     * @param detalle the detalle to set
      */
-    public void setCaja(int caja) {
-        this.caja = caja;
-    }
-
-    /**
-     * @return the checkout
-     */
-    public Checkout getCheckout() {
-        return checkout;
-    }
-
-    /**
-     * @param checkout the checkout to set
-     */
-    public void setCheckout(Checkout checkout) {
-        this.checkout = checkout;
-    }
-
-    /**
-     * @return the usuario
-     */
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    /**
-     * @param usuario the usuario to set
-     */
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setDetalle(List<AperturaCierreCajeroDetalle> detalle) {
+        this.detalle = detalle;
     }
     
 }

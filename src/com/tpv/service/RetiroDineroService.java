@@ -61,7 +61,7 @@ public class RetiroDineroService {
         EntityManager em = Connection.getEm();
         Billete billete = null;
         try{
-            Query q = em.createQuery("FROM Billete b WHERE b.estado = true AND b.id = :idBillete")
+            Query q = em.createQuery("FROM Billete b WHERE b.estado = false AND b.id = :idBillete")
                     .setParameter("idBillete", idBillete);
             billete = (Billete)q.getSingleResult();
         }catch(NoResultException e){

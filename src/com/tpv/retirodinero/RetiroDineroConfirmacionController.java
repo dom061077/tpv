@@ -179,7 +179,7 @@ public class RetiroDineroConfirmacionController implements Initializable, TabPan
             impresoraService.imprimirRetiroDinero(retiro);
         }catch(TpvException e){
             log.error("Error en controlador llamando al método confirmarRetiro de RetiroDineroService",e);
-            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CONFIRMARETIRODINERO);
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_MENUPRINCIPAL);
             Context.getInstance().currentDMTicket().setException(e);
             tabController.gotoError();            
         }
@@ -190,9 +190,22 @@ public class RetiroDineroConfirmacionController implements Initializable, TabPan
     }
     
     public void aceptarMensajeModal(){
-        confirmarRetiro(this.selectedItem.getIdRetiro());
-        tabController.ocultarMensajeModal();
-        tabController.gotoMenuRetiroDinero();
+        RetiroDinero retiro;
+        try{
+            retiro = retiroDineroService.confirmarRetiro(
+                    this.selectedItem.getIdRetiro()
+                    ,Context.getInstance()
+                    .currentDMTicket().getUsuarioSupervisor());
+            impresoraService.imprimirRetiroDinero(retiro);
+        }catch(TpvException e){
+            log.error("Error en controlador llamando al método confirmarRetiro de RetiroDineroService",e);
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_MENUPRINCIPAL);
+            Context.getInstance().currentDMTicket().setException(e);
+            tabController.gotoError();            
+        }finally{
+            tabController.ocultarMensajeModal();
+        }
+        
     }
     
     public void cancelarMensajeModal(){

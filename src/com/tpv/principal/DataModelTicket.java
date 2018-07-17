@@ -53,6 +53,7 @@ public class DataModelTicket {
     private int nroTicket;
     private Long puntoVenta;//checkout
     private Checkout checkout;
+    private int caja;
     private boolean clienteSelecciondo = false;
     private int codigoProdSelecEnBuscarPorDesc;
     private int codigoClienteSelecEnBuscarPorDesc;
@@ -492,6 +493,20 @@ public class DataModelTicket {
      */
     public void setUsuarioSupervisor(Usuario usuarioSupervisor) {
         this.usuarioSupervisor = usuarioSupervisor;
+    }
+
+    /**
+     * @return the caja
+     */
+    public int getCaja() {
+        return caja;
+    }
+
+    /**
+     * @param caja the caja to set
+     */
+    public void setCaja(int caja) {
+        this.caja = caja;
     }
     
     

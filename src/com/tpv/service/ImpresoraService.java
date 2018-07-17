@@ -14,7 +14,9 @@ import com.tpv.principal.Context;
 import com.tpv.util.BinaryFiscalPacketParser;
 import com.tpv.util.Connection;
 import java.math.BigDecimal;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Iterator;
 import org.apache.log4j.Logger;
 import org.tpv.print.fiscal.FiscalPacket;
@@ -212,17 +214,56 @@ public class ImpresoraService {
         return "";
     }
     
+    private void printHeaderTrailer(String linea11NroTarj,String linea12Villeco
+            ,String linea13DatosFact,String linea14Concurso, String linea15Concurso)
+            throws FiscalPrinterIOException, FiscalPrinterStatusError {
+        FiscalPacket request;
+        FiscalPacket response;
+        request = getHfp().cmdSetHeaderTrailer(11,linea11NroTarj);
+        response = getHfp().execute(request);
+        
+        request  = getHfp().cmdSetHeaderTrailer(12,linea12Villeco);
+        response = getHfp().execute(request);
+        
+        request = getHfp().cmdSetHeaderTrailer(13,linea13DatosFact);
+        response = getHfp().execute(request);
+        
+        request = getHfp().cmdSetHeaderTrailer(14,linea14Concurso);
+        response = getHfp().execute(request);
+        
+        request = getHfp().cmdSetHeaderTrailer(15, linea15Concurso);
+        response = getHfp().execute(request);
+        
+    }
+    
     public void abrirTicket() throws TpvException{
+                /*líneas SetHeaderTrailer
+                11 Numero tarjeta
+                12 producto Y orden Y cuenta de villeto
+                13 CHECKOUT CAJERO CAJA DIA MES Y HORA PREFIJO - NRO DE COMPROBANTE(ID factura)
+                14 concurso
+                15 concurso*/        
         if(!Connection.getStcp().isConnected()){
             throw new TpvException("La impresora no está conectada");
         }
         
         //HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
         FiscalPacket request;
+        FiscalPacket requestStatus;
         FiscalPacket response;
         FiscalMessages fMsg;
         
         try{
+            requestStatus = getHfp().cmdStatusRequest();
+            response = getHfp().execute(requestStatus);
+            
+            /*printHeaderTrailer(""
+                    ,Context.getInstance().currentDMParametroGral().getSetHeaderTrailerLinea12()
+                    ,Context.getInstance().currentDMTicket().getCheckout().getId()+" "
+                        +Context.getInstance().currentDMTicket().getUsuario().getIdUsuario()+" "
+                        +Context.getInstance().currentDMTicket().getca
+                    ,"","");*/
+            
             if(Context.getInstance().currentDMTicket().getCliente()!=null){
                 if(Context.getInstance().currentDMTicket().getCliente().getCondicionIva().getId()!=1){
                     //cmdSetCustomerData(String name, String customerDocNumber, String ivaResponsibility, String docType, String location)
@@ -453,7 +494,7 @@ public class ImpresoraService {
     public void imprimirRetiroDinero(RetiroDinero retiroDinero) throws TpvException{
         FiscalPacket requestOpen;
         FiscalPacket requestCerrar;
-        FiscalPacket requestFiscalText;
+        FiscalPacket requestNonFiscalText;
         FiscalPacket response;
         FiscalMessages fMsg;
         requestOpen = getHfp().cmdOpenNonFiscalReceipt();
@@ -488,13 +529,40 @@ public class ImpresoraService {
             response = getHfp().execute(requestCerrar);*/
             
             response = getHfp().execute(requestOpen);
+            
+            requestNonFiscalText = getHfp().cmdPrintNonFiscalText("                Original                ", Integer.valueOf("1"));
+            response = getHfp().execute(requestNonFiscalText);
+            
+            requestNonFiscalText = getHfp().cmdPrintNonFiscalText(" ", Integer.valueOf("1"));            
+            response = getHfp().execute(requestNonFiscalText);            
+            
+            requestNonFiscalText = getHfp().cmdPrintNonFiscalText("       RETIRO DE DINERO DE CAJERO       ", Integer.valueOf("1"));
+            response = getHfp().execute(requestNonFiscalText);
+            
+            requestNonFiscalText = getHfp().cmdPrintNonFiscalText(" ", Integer.valueOf("1"));
+            response = getHfp().execute(requestNonFiscalText);
+            
+            SimpleDateFormat dateF = new SimpleDateFormat("dd/MM/yyyy");
+            requestNonFiscalText = getHfp()
+                    .cmdPrintNonFiscalText("Fecha: "+dateF.format(retiroDinero.getFechaRetiro())
+                        + " Cajero: "+retiroDinero.getUsuario().getIdUsuario()
+                        + " Caja: "+retiroDinero.getCaja()
+                        , Integer.valueOf("1"));
+            response = getHfp().execute(requestNonFiscalText);
+            
+            requestNonFiscalText = getHfp().cmdPrintNonFiscalText("Checkout: "
+                    +retiroDinero.getCheckout().getId()
+                    +" Retiro Nro: "+retiroDinero.getId()
+                    , Integer.valueOf("1"));
+            response = getHfp().execute(requestNonFiscalText);
+            
             String strColumns = "Billete";
             strColumns+="   ";
             strColumns+="Cantidad";
             strColumns+="   ";
             strColumns+="   SubTotal ";
-            requestFiscalText = getHfp().cmdPrintNonFiscalText(strColumns,Integer.valueOf("0"));
-            response = getHfp().execute(requestFiscalText);
+            requestNonFiscalText = getHfp().cmdPrintNonFiscalText(strColumns,Integer.valueOf("0"));
+            response = getHfp().execute(requestNonFiscalText);
             for(Iterator<RetiroDineroDetalle> it = retiroDinero.getDetalle().iterator();it.hasNext(); ){
                 RetiroDineroDetalle retDetalle = it.next();
                 DecimalFormat dfCantidad = new DecimalFormat("###,##0");
@@ -505,13 +573,28 @@ public class ImpresoraService {
                 strLine += "   ";
                 strLine += String.format("%13s",dfSubTtal.format(retDetalle.getMonto()));
                 strLine += "   ";
-                requestFiscalText = getHfp().cmdPrintNonFiscalText(strLine, Integer.valueOf("0"));
-                response = getHfp().execute(requestFiscalText);
+                requestNonFiscalText = getHfp().cmdPrintNonFiscalText(strLine, Integer.valueOf("0"));
+                response = getHfp().execute(requestNonFiscalText);
             }
             DecimalFormat dfTotalGral = new DecimalFormat("###,###,##0.00");
-            String strTotalGral = String.format("%32s",dfTotalGral.format(retiroDinero.getMonto()));
-            requestFiscalText = getHfp().cmdPrintNonFiscalText(strTotalGral,Integer.valueOf("0"));
-            response = getHfp().execute(requestFiscalText);
+            String strTotalGral = String.format("%33s",dfTotalGral.format(retiroDinero.getMonto()));
+            requestNonFiscalText = getHfp().cmdPrintNonFiscalText(strTotalGral,Integer.valueOf("1"));
+            response = getHfp().execute(requestNonFiscalText);
+            requestNonFiscalText = getHfp().cmdPrintNonFiscalText(
+                        String.format("%40s", "Obs: "+retiroDinero.getObservacion())
+                        ,Integer.valueOf("1"));
+            
+            requestNonFiscalText = getHfp().cmdPrintNonFiscalText(" ", Integer.valueOf("1"));
+            response = getHfp().execute(requestNonFiscalText);
+            requestNonFiscalText = getHfp().cmdPrintNonFiscalText(" ", Integer.valueOf("1"));
+            response = getHfp().execute(requestNonFiscalText);
+            requestNonFiscalText = getHfp().cmdPrintNonFiscalText(" ", Integer.valueOf("1"));
+            response = getHfp().execute(requestNonFiscalText);
+            
+            requestNonFiscalText = getHfp().cmdPrintNonFiscalText("Firma Cajero            Firma Supervisor"
+                    , Integer.valueOf("1"));
+            response = getHfp().execute(requestNonFiscalText);
+            
             
             response = getHfp().execute(requestCerrar);
         }catch(FiscalPrinterStatusError e){

@@ -20,6 +20,7 @@ public class DataModelParametroGral {
     private String leyendaBonifTarjeta;
     private String formatNumeroDinero;
     private String perfilSupervisor;
+    private String setHeaderTrailerLinea12;
 
     /**
      * @return the leyendaRetIngBrutosCliente
@@ -131,6 +132,20 @@ public class DataModelParametroGral {
      */
     public void setPerfilSupervisor(String perfilSupervisor) {
         this.perfilSupervisor = perfilSupervisor;
+    }
+
+    /**
+     * @return the setHeaderTrailerLinea12
+     */
+    public String getSetHeaderTrailerLinea12() {
+        return setHeaderTrailerLinea12;
+    }
+
+    /**
+     * @param setHeaderTrailerLinea12 the setHeaderTrailerLinea12 to set
+     */
+    public void setSetHeaderTrailerLinea12(String setHeaderTrailerLinea12) {
+        this.setHeaderTrailerLinea12 = setHeaderTrailerLinea12;
     }
     
 }

@@ -7,6 +7,7 @@ package com.tpv.login;
 
 import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.exceptions.TpvException;
+import com.tpv.modelo.AperturaCierreCajeroDetalle;
 import com.tpv.modelo.Checkout;
 import com.tpv.modelo.Usuario;
 import com.tpv.principal.Context;
@@ -20,8 +21,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
@@ -109,8 +108,11 @@ public class LoginController implements Initializable, TabPaneModalCommand{
             password.setOnKeyPressed(keyEvent->{
                 if(keyEvent.getCode() == KeyCode.ENTER){
                     Usuario usuario = null;
+                    AperturaCierreCajeroDetalle aperturaCierreCajDet;
                     try{
                         usuario = usuarioService.authenticar(userName.getText(), password.getText());
+                        aperturaCierreCajDet = usuarioService.verificarAperturaCaja(usuario.getIdUsuario()
+                                , Context.getInstance().currentDMTicket().getCheckout().getId());
                     }catch(TpvException e){
                         log.error("Error: "+e.getMessage());
                         Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_LOGIN);

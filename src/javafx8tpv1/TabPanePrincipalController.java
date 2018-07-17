@@ -203,6 +203,9 @@ public class TabPanePrincipalController implements Initializable {
         
         param = UtilidadesService.getParametroGral("PERFIL_SUPERVISOR");
         Context.getInstance().currentDMParametroGral().setPerfilSupervisor(param.getParametroCadena());
+        
+        param = UtilidadesService.getParametroGral("SETHEADERTRAILER_LINEA12");
+        Context.getInstance().currentDMParametroGral().setSetHeaderTrailerLinea12(param.getParametroCadena());
        
 
     }

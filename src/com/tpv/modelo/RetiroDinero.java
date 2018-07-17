@@ -65,6 +65,9 @@ public class RetiroDinero {
     @Column(name = "MONTOTOTAL")
     private BigDecimal monto;
     
+    @Column(name = "CAJA")
+    private int caja;
+    
     @Column(name = "OBSERVACION")
     private String observacion;
     
@@ -218,6 +221,20 @@ public class RetiroDinero {
      */
     public java.sql.Date getFechaHoy() {
         return fechaHoy;
+    }
+
+    /**
+     * @return the caja
+     */
+    public int getCaja() {
+        return caja;
+    }
+
+    /**
+     * @param caja the caja to set
+     */
+    public void setCaja(int caja) {
+        this.caja = caja;
     }
 
 

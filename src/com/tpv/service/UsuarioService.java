@@ -6,6 +6,7 @@
 package com.tpv.service;
 
 import com.tpv.exceptions.TpvException;
+import com.tpv.modelo.AperturaCierreCajeroDetalle;
 import com.tpv.modelo.Checkout;
 import com.tpv.modelo.Usuario;
 import com.tpv.modelo.UsuarioPerfil;
@@ -152,6 +153,35 @@ public class UsuarioService {
             
         }
         return md5;
+    }
+    
+    /*
+        Apertura de cajero:
+        APERTURA = 1;
+        CIERRE   = 0;
+        en cabecera y detalle
+    */
+    
+    public AperturaCierreCajeroDetalle verificarAperturaCaja(int idUsuario,int idCheckout) throws TpvException{
+        log.info("Verificando apertura de caja para Uusuario Id: ");
+        Query query;
+        EntityManager em = Connection.getEm();
+        AperturaCierreCajeroDetalle a = null;
+        try{
+            query = em.createQuery("FROM AperturaCierreCajeroDetalle a "
+                    +" WHERE a.aperturaCierreCab.fecha = a.aperturaCierreCab.fechaHoy"
+            );
+            a = (AperturaCierreCajeroDetalle)query.getSingleResult();
+        }catch(NoResultException e){
+            log.info("No se encontró ninguna apertura de caja para usuario: "+idUsuario
+                    +" checkout: "+idCheckout);
+            throw new TpvException("La caja no está abierta");
+        }catch(RuntimeException e){
+            log.error("Error en la capa de servicios al verificar apertura de caja.",e);
+            throw new TpvException("Error en la capa de servicios al verificar apertura de caja");
+        }
+        return a;
+
     }
     
     public static void main(String[] args){
