@@ -106,6 +106,13 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
             textFieldObservacion.setOnKeyPressed(keyEvent->{
                 if(keyEvent.getCode() == KeyCode.F11){
                     tabController.gotoMenuRetiroDinero();
+                    keyEvent.consume();
+                    return;
+                }
+                
+                if(keyEvent.getCode() == KeyCode.ESCAPE){
+                    tabController.repeatFocus(tableViewRetiro);
+                    keyEvent.consume();
                     return;
                 }
                 

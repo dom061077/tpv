@@ -9,6 +9,7 @@ import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.RetiroDinero;
 import com.tpv.principal.Context;
+import com.tpv.service.ImpresoraService;
 import com.tpv.service.RetiroDineroService;
 import com.tpv.util.ui.TabPaneModalCommand;
 import java.math.BigDecimal;
@@ -44,6 +45,7 @@ public class RetiroDineroConfirmacionController implements Initializable, TabPan
     private ObservableList<RetiroDineroConfirmacionData> retiroDineroDataList;
     private RetiroDineroConfirmacionData selectedItem;
     private boolean readOnly;
+    private ImpresoraService impresoraService = new ImpresoraService();
     
     @FXML TableColumn idRetiroDineroColumn;
     @FXML TableColumn fechaHoraCargaColumn;
@@ -118,6 +120,7 @@ public class RetiroDineroConfirmacionController implements Initializable, TabPan
                 }
                 if(keyEvent.getCode() == KeyCode.TAB){
                     keyEvent.consume();
+                    return;
                 }
                 if(keyEvent.getCode() == KeyCode.ENTER && !this.readOnly && retiroDineroDataList.size()>0){
                     keyEvent.consume();
@@ -169,9 +172,11 @@ public class RetiroDineroConfirmacionController implements Initializable, TabPan
     }
     
     private void confirmarRetiro(Long idRetiro){
+        RetiroDinero retiro;
         try{
-            retiroDineroService.confirmarRetiro(idRetiro,Context.getInstance()
+            retiro = retiroDineroService.confirmarRetiro(idRetiro,Context.getInstance()
                     .currentDMTicket().getUsuarioSupervisor());
+            impresoraService.imprimirRetiroDinero(retiro);
         }catch(TpvException e){
             log.error("Error en controlador llamando al método confirmarRetiro de RetiroDineroService",e);
             Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CONFIRMARETIRODINERO);

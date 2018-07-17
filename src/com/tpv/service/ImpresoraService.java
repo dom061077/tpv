@@ -14,6 +14,7 @@ import com.tpv.principal.Context;
 import com.tpv.util.BinaryFiscalPacketParser;
 import com.tpv.util.Connection;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.Iterator;
 import org.apache.log4j.Logger;
 import org.tpv.print.fiscal.FiscalPacket;
@@ -487,14 +488,30 @@ public class ImpresoraService {
             response = getHfp().execute(requestCerrar);*/
             
             response = getHfp().execute(requestOpen);
-            
+            String strColumns = "Billete";
+            strColumns+="   ";
+            strColumns+="Cantidad";
+            strColumns+="   ";
+            strColumns+="   SubTotal ";
+            requestFiscalText = getHfp().cmdPrintNonFiscalText(strColumns,Integer.valueOf("0"));
+            response = getHfp().execute(requestFiscalText);
             for(Iterator<RetiroDineroDetalle> it = retiroDinero.getDetalle().iterator();it.hasNext(); ){
                 RetiroDineroDetalle retDetalle = it.next();
-                String strLine =  retDetalle.getBillete().getDetalleFormulario();
-                requestFiscalText = getHfp().cmdPrintNonFiscalText("", Integer.valueOf("0"));
-                
+                DecimalFormat dfCantidad = new DecimalFormat("###,##0");
+                DecimalFormat dfSubTtal = new DecimalFormat("##,###,##0.00");
+                String strLine =  String.format("%6s",retDetalle.getBillete().getDetalleFormulario());
+                strLine += "   ";
+                strLine += String.format("%8s",dfCantidad.format(retDetalle.getCantidadBilletes()));
+                strLine += "   ";
+                strLine += String.format("%13s",dfSubTtal.format(retDetalle.getMonto()));
+                strLine += "   ";
+                requestFiscalText = getHfp().cmdPrintNonFiscalText(strLine, Integer.valueOf("0"));
+                response = getHfp().execute(requestFiscalText);
             }
-            
+            DecimalFormat dfTotalGral = new DecimalFormat("###,###,##0.00");
+            String strTotalGral = String.format("%32s",dfTotalGral.format(retiroDinero.getMonto()));
+            requestFiscalText = getHfp().cmdPrintNonFiscalText(strTotalGral,Integer.valueOf("0"));
+            response = getHfp().execute(requestFiscalText);
             
             response = getHfp().execute(requestCerrar);
         }catch(FiscalPrinterStatusError e){

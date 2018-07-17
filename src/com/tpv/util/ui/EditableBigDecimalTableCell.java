@@ -5,7 +5,6 @@
  */
 package com.tpv.util.ui;
 
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import javafx.event.Event;
 import javafx.geometry.Pos;
@@ -108,6 +107,9 @@ private void createTextField() {
     textField.setOnKeyPressed((ke) -> {
         if (ke.getCode().equals(KeyCode.ESCAPE)) {
             cancelEdit();
+        }
+        if (ke.getCode().equals(KeyCode.TAB)){
+            ke.consume();
         }
         
     });

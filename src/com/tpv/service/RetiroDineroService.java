@@ -93,14 +93,15 @@ public class RetiroDineroService {
         }
     }
     
-    public void confirmarRetiro(Long idRetiro,Usuario usuarioSupervisor) throws TpvException{
+    public RetiroDinero confirmarRetiro(Long idRetiro,Usuario usuarioSupervisor) throws TpvException{
         log.info("Capa de servicios RetiroDineroService, confirmación de retiro");
         EntityManager em = Connection.getEm();
         EntityTransaction tx = null;
+        RetiroDinero  retiro=null;
         try{
             tx = em.getTransaction();
             tx.begin();
-            RetiroDinero retiro = em.find(RetiroDinero.class, idRetiro);
+            retiro = em.find(RetiroDinero.class, idRetiro);
             retiro.setEstado(RetiroDineroEnum.RETIRADO);
             retiro.setFechaRetiro(retiro.getFechaHoy());
             retiro.setUsuarioSupervisor(usuarioSupervisor);
@@ -112,6 +113,7 @@ public class RetiroDineroService {
         }finally{
             em.clear();
         }
+        return retiro;
     }
     
     

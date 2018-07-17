@@ -219,10 +219,11 @@ public class BinaryFiscalPacketParser {
         }
         System.out.println(sb2.substring(0, 13) .toString());*/
         DecimalFormat df = new DecimalFormat("##,##0");
-        System.out.println(df.format(9));
-        System.out.println(String.format("%3d",9.2));
+        System.out.println(df.format(99999));
+        System.out.println(String.format("%8.2f",99999999.2));
+        System.out.println(String.format("%8.2f",9999.2));
         System.out.println(String.format("%3d",19));
-        System.out.println(String.format("%6d","$1.000"));
+        System.out.println(String.format("%6s","$1.000"));
         System.out.println(String.format("%6s","$500"));
     }
 }
