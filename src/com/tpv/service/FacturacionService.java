@@ -47,13 +47,12 @@ public class FacturacionService  {
         try{
             tx = em.getTransaction();
             tx.begin(); 
-
             factura.setTotal(BigDecimal.ZERO);
             factura.setBonificaTarjeta(BigDecimal.ZERO);
             factura.setIvaBonificaTarjeta(BigDecimal.ZERO);
             factura.setImpuestoInterno(BigDecimal.ZERO);
             factura.setCondicionIva(em.find(CondicionIva.class, 1));
-            
+            factura.setFechaAlta(factura.getUsuario().getFechaHoy());
             em.persist(factura);
             tx.commit();
         }catch(RuntimeException e){
@@ -142,7 +141,7 @@ public class FacturacionService  {
             factura.setDescuento(BigDecimal.ZERO);
             factura.getBonificacionCombos();
             factura.setEstado(FacturaEstadoEnum.CERRADA);
-            factura.setFechaAlta(factura.getFechaHoy());
+            factura.setFechaHoraCierre(factura.getFechaHoy());
             factura=em.merge(factura);
             tx.commit();
             log.info("Factura guardada, id: "+factura.getId());
@@ -523,8 +522,7 @@ public class FacturacionService  {
         for(Iterator<LineaPagoData> it = pagos;it.hasNext();){
             LineaPagoData item = it.next();
             FacturaFormaPagoDetalle formaPagoDetalle = new FacturaFormaPagoDetalle();
-                formaPagoDetalle.setFormaPago(pagoService.getFormaPago(item.getCodigoPago()));
-
+            formaPagoDetalle.setFormaPago(pagoService.getFormaPago(item.getCodigoPago()));
             formaPagoDetalle.setFactura(factura);
 
             formaPagoDetalle.setMontoPago(item.getMonto());

@@ -55,6 +55,7 @@ public class ConfirmaPagoTicketController implements Initializable, TabPaneModal
     private ProductoService productoService = new ProductoService();
     private PagoService pagoService = new PagoService();
     private FiscalPrinterEvent fiscalPrinterEvent;
+    private String fechaHoraFiscal;
 
     
     
@@ -445,6 +446,10 @@ public class ConfirmaPagoTicketController implements Initializable, TabPaneModal
             public void commandExecuted(FiscalPrinter source, FiscalPacket command, FiscalPacket response){
                 log.debug("Se ejecutó correctamente el siguiente comando:");
                 
+                if(command.getCommandCode()==HasarCommands.CMD_GET_DATE_TIME){
+                    fechaHoraFiscal = response.getString(3)+" "+response.getString(4);
+                }
+                
                 if(command.getCommandCode()==HasarCommands.CMD_CLOSE_FISCAL_RECEIPT){
                     String nroTicketEmitido = response.getString(3);
                     try{
@@ -459,7 +464,7 @@ public class ConfirmaPagoTicketController implements Initializable, TabPaneModal
                                                 ,Context.getInstance().currentDMTicket().getPagos().iterator());
                             
                             factura.setNumeroComprobante(nroTicketEmitido);
-                            
+                            factura.setFechaHoraFiscal(fechaHoraFiscal);
 
 
                             

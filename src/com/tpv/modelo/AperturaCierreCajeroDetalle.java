@@ -35,7 +35,7 @@ public class AperturaCierreCajeroDetalle {
     private Checkout checkout;
     
     @ManyToOne
-    @JoinColumn(name = "idsuctes_CAJERO", referencedColumnName="idUSUARIOS")
+    @JoinColumn(name = "idUsuarios", referencedColumnName="idUSUARIOS")
     private Usuario usuario;
     
     @ManyToOne

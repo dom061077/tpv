@@ -170,12 +170,15 @@ public class UsuarioService {
         try{
             query = em.createQuery("FROM AperturaCierreCajeroDetalle a "
                     +" WHERE a.aperturaCierreCab.fecha = a.aperturaCierreCab.fechaHoy"
+                    +" AND a.aperturaCierreCab.abierta = 1 AND a.aperturaCierreCab.cerrada = 0"
+                    +" AND a.checkout.id = "+idCheckout
+                    +" AND a.usuario.idUsuario = "+idUsuario
             );
             a = (AperturaCierreCajeroDetalle)query.getSingleResult();
         }catch(NoResultException e){
-            log.info("No se encontró ninguna apertura de caja para usuario: "+idUsuario
+            log.warn("No se encontró ninguna apertura de caja para usuario: "+idUsuario
                     +" checkout: "+idCheckout);
-            throw new TpvException("La caja no está abierta");
+            //throw new TpvException("La caja no está abierta");
         }catch(RuntimeException e){
             log.error("Error en la capa de servicios al verificar apertura de caja.",e);
             throw new TpvException("Error en la capa de servicios al verificar apertura de caja");

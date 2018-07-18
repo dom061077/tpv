@@ -819,13 +819,13 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
             factura.setCondicionIva(Context.getInstance().currentDMTicket().getCliente().getCondicionIva());
         factura.setCheckout(Context.getInstance().currentDMTicket().getCheckout());
         factura.setPrefijoFiscal(Context.getInstance().currentDMTicket().getPuntoVenta());
-        ListProperty<LineaTicketData> detalle =  Context.getInstance().currentDMTicket().getDetalle();
+        /*ListProperty<LineaTicketData> detalle =  Context.getInstance().currentDMTicket().getDetalle();
         
         detalle.forEach(item->{
             FacturaDetalle facturaDetalle = new FacturaDetalle();
             Producto producto = null;
             try{
-                productoService.getProductoPorCodigo(item.getCodigoProducto());
+                producto=productoService.getProductoPorCodigo(item.getCodigoProducto());
             }catch(TpvException e){
                 log.error("Error: "+e.getMessage());
                 Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
@@ -841,7 +841,7 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
             facturaDetalle.setPrecioUnitario(item.getPrecioUnitario());
             facturaDetalle.setPorcentajeIva(item.getPorcentajeIva());
             factura.getDetalle().add(facturaDetalle);
-        });
+        });*/
         Factura facturaGuardada=null;
         try{
             factura.setNumeroComprobante(impresoraService.getNroUltimoTicketBC());

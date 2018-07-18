@@ -41,7 +41,8 @@ public class FormaPago {
     private boolean tieneVuelto;
     
     @Formula("(SELECT current_date())")
-    private java.sql.Date fechaHoy;
+    private java.util.Date fechaHoy;
+    
 
 
     @OneToMany(fetch = FetchType.EAGER,mappedBy = "formaPago")
@@ -160,6 +161,13 @@ public class FormaPago {
      */
     public void setTieneVuelto(boolean tieneVuelto) {
         this.tieneVuelto = tieneVuelto;
+    }
+
+    /**
+     * @return the fechaHoy
+     */
+    public java.util.Date getFechaHoy() {
+        return fechaHoy;
     }
     
     

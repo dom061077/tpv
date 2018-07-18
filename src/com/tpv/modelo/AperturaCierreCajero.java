@@ -13,6 +13,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import org.hibernate.annotations.Formula;
 
 /**
  *
@@ -39,6 +40,11 @@ public class AperturaCierreCajero {
     
     @OneToMany(mappedBy="aperturaCierreCab", fetch = FetchType.EAGER)
     private List<AperturaCierreCajeroDetalle> detalle;
+    
+    
+    @Formula("(SELECT current_date())")
+    private java.sql.Date fechaHoy;
+    
 
     /**
      * @return the id
@@ -122,6 +128,13 @@ public class AperturaCierreCajero {
      */
     public void setDetalle(List<AperturaCierreCajeroDetalle> detalle) {
         this.detalle = detalle;
+    }
+
+    /**
+     * @return the fechaHoy
+     */
+    public java.util.Date getFechaHoy() {
+        return fechaHoy;
     }
     
 }

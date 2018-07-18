@@ -217,6 +217,12 @@ public class ImpresoraService {
     private void printHeaderTrailer(String linea11NroTarj,String linea12Villeco
             ,String linea13DatosFact,String linea14Concurso, String linea15Concurso)
             throws FiscalPrinterIOException, FiscalPrinterStatusError {
+                /*líneas SetHeaderTrailer
+                11 Numero tarjeta
+                12 producto Y orden Y cuenta de villeto
+                13 CHECKOUT CAJERO CAJA DIA MES Y HORA PREFIJO - NRO DE COMPROBANTE(ID factura)
+                14 concurso
+                15 concurso*/          
         FiscalPacket request;
         FiscalPacket response;
         request = getHfp().cmdSetHeaderTrailer(11,linea11NroTarj);
@@ -237,12 +243,7 @@ public class ImpresoraService {
     }
     
     public void abrirTicket() throws TpvException{
-                /*líneas SetHeaderTrailer
-                11 Numero tarjeta
-                12 producto Y orden Y cuenta de villeto
-                13 CHECKOUT CAJERO CAJA DIA MES Y HORA PREFIJO - NRO DE COMPROBANTE(ID factura)
-                14 concurso
-                15 concurso*/        
+      
         if(!Connection.getStcp().isConnected()){
             throw new TpvException("La impresora no está conectada");
         }
@@ -257,12 +258,7 @@ public class ImpresoraService {
             requestStatus = getHfp().cmdStatusRequest();
             response = getHfp().execute(requestStatus);
             
-            /*printHeaderTrailer(""
-                    ,Context.getInstance().currentDMParametroGral().getSetHeaderTrailerLinea12()
-                    ,Context.getInstance().currentDMTicket().getCheckout().getId()+" "
-                        +Context.getInstance().currentDMTicket().getUsuario().getIdUsuario()+" "
-                        +Context.getInstance().currentDMTicket().getca
-                    ,"","");*/
+
             
             if(Context.getInstance().currentDMTicket().getCliente()!=null){
                 if(Context.getInstance().currentDMTicket().getCliente().getCondicionIva().getId()!=1){
@@ -417,7 +413,43 @@ public class ImpresoraService {
                 throw new TpvException(e.getMessage());
             }
         }        
-                        
+        try{        
+            SimpleDateFormat sdfDia = new SimpleDateFormat("dd");
+            SimpleDateFormat sdfMes = new SimpleDateFormat("MM");
+            SimpleDateFormat sdfHora = new SimpleDateFormat("hh:mm");
+            
+            printHeaderTrailer(" "
+                        ,Context.getInstance().currentDMParametroGral().getSetHeaderTrailerLinea12()
+                        ,Context.getInstance().currentDMTicket().getCheckout().getId()+" "
+                            +Context.getInstance().currentDMTicket().getUsuario().getIdUsuario()+" "
+                            +Context.getInstance().currentDMTicket().getCaja()+" "
+                            +sdfDia.format(factura.getFechaHoy())+" "
+                            +sdfMes.format(factura.getFechaHoy())+" "
+                            +sdfHora.format(factura.getFechaHoy())+" "
+                            +factura.getPrefijoFiscal()+" "
+                            +factura.getNumeroComprobante()
+                        ," "," ");
+        }catch(FiscalPrinterStatusError e){
+            log.warn("Error en estado fiscal de la impresora al imprimir retención");
+            throw new TpvException(e.getMessage());
+        }catch(FiscalPrinterIOException e){
+            log.warn("Error de entrada/salida en la impresora fiscal al imprimir retención",e);
+            throw new TpvException(e.getMessage());
+        }
+        
+        //comando para extraer la fecha y hora fiscal
+        request = getHfp().cmdGetDateTime();
+        try{
+            response = getHfp().execute(request);
+        }catch(FiscalPrinterStatusError e){
+            log.warn("Error en estado fiscal de la impresora al cerrar el ticket fiscal",e);
+            throw new TpvException(e.getMessage());
+            
+        }catch(FiscalPrinterIOException e){
+            log.warn("Error de entrada/salida en la impresora fical",e);
+            throw new TpvException(e.getMessage());
+        }
+        
         request = getHfp().cmdCloseFiscalReceipt(null);
         try{
           response = getHfp().execute(requestStatus);

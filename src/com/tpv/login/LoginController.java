@@ -61,12 +61,9 @@ public class LoginController implements Initializable, TabPaneModalCommand{
     
     
     public void configurarInicio() throws TpvException{
-        
+            this.tabController.setTabPaneModalCommand(this);
             checkMac();
-            userName.requestFocus();            
-            repeatFocus(userName);
-            
-        
+            this.tabController.repeatFocus(userName);
     }
     
     private void checkMac() throws TpvException{
@@ -111,8 +108,6 @@ public class LoginController implements Initializable, TabPaneModalCommand{
                     AperturaCierreCajeroDetalle aperturaCierreCajDet;
                     try{
                         usuario = usuarioService.authenticar(userName.getText(), password.getText());
-                        aperturaCierreCajDet = usuarioService.verificarAperturaCaja(usuario.getIdUsuario()
-                                , Context.getInstance().currentDMTicket().getCheckout().getId());
                     }catch(TpvException e){
                         log.error("Error: "+e.getMessage());
                         Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_LOGIN);
@@ -121,14 +116,30 @@ public class LoginController implements Initializable, TabPaneModalCommand{
                     }                        
                     if(usuario!=null){
                         Context.getInstance().currentDMTicket().setUsuario(usuario);
-                        //buttonLogin.fire();
-                       tabController.gotoMenuPrincipal();
+                        try{
+                            aperturaCierreCajDet = usuarioService.verificarAperturaCaja(usuario.getIdUsuario()
+                                    , Context.getInstance().currentDMTicket().getCheckout().getId());
+                            if(aperturaCierreCajDet!=null){
+                                Context.getInstance().currentDMTicket().setCaja(aperturaCierreCajDet.getCaja());
+                                tabController.gotoMenuPrincipal();
+                            }else{
+                                this.tabController.getLabelCancelarModal().setVisible(false);
+                                this.tabController.getLabelMensaje().setText("La caja no está abierta. Consulte a su administrador");
+                                this.tabController.mostrarMensajeModal();
+                            }
+                        }catch(TpvException e){
+                            log.error("Error: "+e.getMessage());
+                            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_LOGIN);
+                            Context.getInstance().currentDMTicket().setException(e);
+                            tabController.gotoError();
+                        }    
                     }else{
-                        labelError.setText("Usuario o contraseña incorrectos");
-                        
+                        /*labelError.setText("Usuario o contraseña incorrectos");
                         stackPaneError.setVisible(true);
-                        labelError.requestFocus();
-                        
+                        labelError.requestFocus();*/
+                        this.tabController.getLabelMensaje().setText("Nombre de Usuario o Contraseña incorrectos");
+                        this.tabController.getLabelCancelarModal().setVisible(false);
+                        this.tabController.mostrarMensajeModal();
                     }
                     
                 }
@@ -161,17 +172,19 @@ public class LoginController implements Initializable, TabPaneModalCommand{
         return password;
     }
     
-    private void repeatFocus(Node node){
+    /*private void repeatFocus(Node node){
         Platform.runLater(() -> {
             if (!node.isFocused()) {
                 node.requestFocus();
                 repeatFocus(node);
             }
         });        
-    }
+    }*/
 
     public void aceptarMensajeModal(){
-        
+        this.tabController.ocultarMensajeModal();
+        this.tabController.getLabelCancelarModal().setVisible(true);
+        this.tabController.repeatFocus(userName);
     }
     
     public void cancelarMensajeModal(){

@@ -32,7 +32,7 @@ public class Usuario {
     @Column(name="CODIGOBARRA")
     private String codigoBarra;
     
-    @Formula("(SELECT NOW())")
+    @Formula("(SELECT current_date())")
     private java.util.Date fechaHoy;
 
 

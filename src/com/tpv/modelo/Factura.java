@@ -74,8 +74,11 @@ public class Factura {
     @Column(name = "idFACTURAS")
     private Long id;
     
-    @Column(name = "FECHAALTA")
+    @Column(name = "FECHAALTA" )
     private java.util.Date fechaAlta;
+    
+    @Column(name = "FECHAHORACIERRE")
+    private java.util.Date fechaHoraCierre;
     
     @Formula("(SELECT NOW())")
     private java.util.Date fechaHoy;    
@@ -156,6 +159,8 @@ public class Factura {
     @Column(name = "CAJA", nullable = false, columnDefinition = "TINYINT(2)")
     private int caja;
     
+    @Column(name = "FECHAHORAFISCAL")
+    private String fechaHoraFiscal;
     
     @Column(name = "ESTADO",nullable = false)
     @Enumerated(EnumType.STRING)
@@ -710,6 +715,34 @@ public class Factura {
      */
     public void setInteresTarjeta(BigDecimal interesTarjeta) {
         this.interesTarjeta = interesTarjeta;
+    }
+
+    /**
+     * @return the fechaHoraCierre
+     */
+    public java.util.Date getFechaHoraCierre() {
+        return fechaHoraCierre;
+    }
+
+    /**
+     * @param fechaHoraCierre the fechaHoraCierre to set
+     */
+    public void setFechaHoraCierre(java.util.Date fechaHoraCierre) {
+        this.fechaHoraCierre = fechaHoraCierre;
+    }
+
+    /**
+     * @return the fechaHoraFiscal
+     */
+    public String getFechaHoraFiscal() {
+        return fechaHoraFiscal;
+    }
+
+    /**
+     * @param fechaHoraFiscal the fechaHoraFiscal to set
+     */
+    public void setFechaHoraFiscal(String fechaHoraFiscal) {
+        this.fechaHoraFiscal = fechaHoraFiscal;
     }
     
     

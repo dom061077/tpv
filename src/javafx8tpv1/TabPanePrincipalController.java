@@ -122,6 +122,8 @@ public class TabPanePrincipalController implements Initializable {
 
         labelMensaje.wrapTextProperty().set(true);
         //loadImage();
+        this.loginController.setTabController(this);
+        
         try{
             initParametrosGenerales();
             initImpresora();
@@ -138,7 +140,6 @@ public class TabPanePrincipalController implements Initializable {
         this.loginController.getPassword().requestFocus();
         this.stackPaneModal.setVisible(false);
         
-        this.loginController.setTabController(this);
         this.menuPrincipalController.setTabController(this);
         this.facturacionController.setTabController(this);
         this.errorController.setTabController(this);
