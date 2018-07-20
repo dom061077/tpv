@@ -29,7 +29,7 @@ public class RetiroDineroService {
         List<Billete> list=null;
         EntityManager em = Connection.getEm();
         try{
-            Query q = em.createQuery("FROM Billete WHERE retiroHabilitado = true");
+            Query q = em.createQuery("FROM Billete WHERE estado = false");
             list = q.getResultList();
         }catch(RuntimeException e){
             log.error("Error en la capa de servicios al recuperar billetes",e);
@@ -65,6 +65,9 @@ public class RetiroDineroService {
                     .setParameter("idBillete", idBillete);
             billete = (Billete)q.getSingleResult();
         }catch(NoResultException e){
+            log.error("No se puedo econtrar el billete con id: "+idBillete);
+            throw new TpvException("Error en la capa de servicios al recuperar un billete con código: "+idBillete);
+        }catch(RuntimeException e){    
             log.error("No se puedo econtrar el billete con id: "+idBillete);
             throw new TpvException("Error en la capa de servicios al recuperar un billete con código: "+idBillete);
         }finally{

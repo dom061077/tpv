@@ -608,6 +608,10 @@ public class ImpresoraService {
                 requestNonFiscalText = getHfp().cmdPrintNonFiscalText(strLine, Integer.valueOf("0"));
                 response = getHfp().execute(requestNonFiscalText);
             }
+            
+            requestNonFiscalText = getHfp().cmdPrintNonFiscalText("                                    ---------------", Integer.valueOf("1"));
+            response = getHfp().execute(requestNonFiscalText);
+            
             DecimalFormat dfTotalGral = new DecimalFormat("###,###,##0.00");
             String strTotalGral = String.format("%33s",dfTotalGral.format(retiroDinero.getMonto()));
             requestNonFiscalText = getHfp().cmdPrintNonFiscalText(strTotalGral,Integer.valueOf("1"));
@@ -623,8 +627,16 @@ public class ImpresoraService {
             requestNonFiscalText = getHfp().cmdPrintNonFiscalText(" ", Integer.valueOf("1"));
             response = getHfp().execute(requestNonFiscalText);
             
+            requestNonFiscalText = getHfp().cmdPrintNonFiscalText("_ _ _ _ _ _ _          _ _ _ _ _ _ _ _ _"
+                    , Integer.valueOf("1"));
+            response = getHfp().execute(requestNonFiscalText);
+            
             requestNonFiscalText = getHfp().cmdPrintNonFiscalText("Firma Cajero            Firma Supervisor"
                     , Integer.valueOf("1"));
+            response = getHfp().execute(requestNonFiscalText);
+            
+            requestNonFiscalText = getHfp().cmdPrintNonFiscalText("Observaciones: "
+                    +retiroDinero.getObservacion(), Integer.valueOf("1"));
             response = getHfp().execute(requestNonFiscalText);
             
             
