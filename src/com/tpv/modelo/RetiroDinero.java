@@ -71,8 +71,12 @@ public class RetiroDinero {
     @Column(name = "OBSERVACION")
     private String observacion;
     
-    @Formula("(SELECT CURRENT_DATE)")
+    @Formula("(SELECT NOW())")
+    private java.util.Date fechaHoraHoy;    
+    
+    @Formula("(SELECT CURRENT_DATE())")
     private java.sql.Date fechaHoy;    
+    
     
     @ManyToOne
     @JoinColumn(name = "idUSUARIOS",referencedColumnName="idUSUARIOS", nullable=false)
@@ -219,8 +223,8 @@ public class RetiroDinero {
     /**
      * @return the fechaHoy
      */
-    public java.sql.Date getFechaHoy() {
-        return fechaHoy;
+    public java.util.Date getFechaHoraHoy() {
+        return fechaHoraHoy;
     }
 
     /**
@@ -235,6 +239,13 @@ public class RetiroDinero {
      */
     public void setCaja(int caja) {
         this.caja = caja;
+    }
+
+    /**
+     * @return the fechaHoy
+     */
+    public java.sql.Date getFechaHoy() {
+        return fechaHoy;
     }
 
 

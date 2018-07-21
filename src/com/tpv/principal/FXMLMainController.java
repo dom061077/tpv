@@ -95,6 +95,7 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
     private MaskTextField textFieldCodCliente;
     
     private FadeTransition fadeInOut;
+    private FadeTransition fadeRetiroDinero;
     private LineaTicketData lineaTicketData;
     
     @FXML
@@ -102,6 +103,12 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
 
     @FXML
     private Label nroticket;
+    
+    @FXML
+    private Label retiroDineroLabel;
+    
+    //@FXML
+    //private Pane retiroDineroPane;
     
     @FXML
     private Label labelProducto;
@@ -191,15 +198,16 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
     public void configurarInicio() throws TpvException{
         log.info("Ingresando a pantalla de facturación");
         //impresoraService.getPrinterVersion();        
-        stackPaneIngresos.requestFocus();
-        textFieldCodCliente.requestFocus();
+        verificarRetiroDinero();        
+        this.tabPaneController.setTabPaneModalCommand(this);
+        this.tabPaneController.repeatFocus(textFieldCodCliente);
         
         if(impresoraService.getHfp().getEventListener()==null)
             asignarEvento();
         
-        
+
         traerInfoImpresora();        
-        configurarAnimacionIngresoNegativo();
+        
         initTableViewTickets();
         verificarDetalleTableView();
         
@@ -248,6 +256,9 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
     @FXML
     public void initialize(URL url, ResourceBundle rb) {
         setBanner();
+        configurarAnimacionIngresoNegativo();
+        retiroDineroLabel.setText("Pedir retiro de dinero");
+        activarAnimacionRetiroDinero();
         asignarEvento();
         
         labelCantidad.setText(LABEL_CANTIDAD);
@@ -358,10 +369,13 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
                         if(Context.getInstance().currentDMTicket().getDetalle().size()>0)
                             tabPaneController.gotoPago();
                         else{
-                            Alert alert = new Alert(AlertType.WARNING
+                            /*Alert alert = new Alert(AlertType.WARNING
                                     ,"No es posible ir al pago con un ticket sin Productos"
                                     ,ButtonType.OK);
-                            alert.showAndWait();
+                            alert.showAndWait();*/
+                            tabPaneController.getLabelCancelarModal().setVisible(false);
+                            tabPaneController.getLabelMensaje().setText("No es posible ir al pago con un ticket sin Productos");
+                            tabPaneController.mostrarMensajeModal();
                         }
                     }
                 }
@@ -765,6 +779,15 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
         
     }
     
+    private void activarAnimacionRetiroDinero(){
+        fadeRetiroDinero = new FadeTransition(Duration.millis(400),retiroDineroLabel);
+        fadeRetiroDinero.setFromValue(1.0);
+        fadeRetiroDinero.setToValue(.20);
+        fadeRetiroDinero.setCycleCount(FadeTransition.INDEFINITE);
+        fadeRetiroDinero.setAutoReverse(true);
+        fadeRetiroDinero.play();
+    }
+    
     private boolean anulaItemIngresado(int codigo,BigDecimal cantidad ){
         Iterator iterator = tableViewTickets.getItems().iterator();
         BigDecimal totalCantidad= new BigDecimal(0);
@@ -1047,6 +1070,7 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
 
                     agregarDetalleFactura();
                     calcularTotalGeneral();
+                    verificarRetiroDinero();
                 }
 //                log.debug("Mensajes de error: ");
 //                source.getMessages().getErrorMsgs().forEach(item->{
@@ -1094,8 +1118,8 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
 
 
 
-        //String f = this.getClass().getResource("/com/tpv/resources/gif-emilio luque.gif").toExternalForm();
-        //imageViewDer.setImage(new Image(f));
+        String f = this.getClass().getResource("/com/tpv/resources/gif-emilio-luque.gif").toExternalForm();
+        imageViewDer.setImage(new Image(f));
         
         
 //        imageViewIzq.setImage(new Image(f));
@@ -1177,6 +1201,20 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
         }*/
     }
     
+    private void verificarRetiroDinero(){
+        BigDecimal saldoRetiro = BigDecimal.ZERO;
+        try{
+            saldoRetiro = factService.saldoRetiroDinero(Context.getInstance()
+                        .currentDMTicket().getUsuario().getIdUsuario(), Context.getInstance().currentDMTicket().getCheckout().getId());
+        }catch(){
+            
+        }    
+        if(saldoRetiro.compareTo(Context.getInstance().currentDMParametroGral().getMontoRetiroDinero())>=0)
+            retiroDineroLabel.setVisible(true);
+        else
+            retiroDineroLabel.setVisible(false);        
+    }
+    
     private void verCombos(){
         ObservableList<FacturaDetalleComboData> combosItems = FXCollections.observableArrayList();
         ListProperty<FacturaDetalleComboData> listCombos = new SimpleListProperty<>(combosItems);
@@ -1208,7 +1246,9 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
     }
     
     public void aceptarMensajeModal(){
-        
+        this.tabPaneController.ocultarMensajeModal();
+        this.tabPaneController.getLabelCancelarModal().setVisible(true);
+        this.tabPaneController.repeatFocus(textFieldProducto);
     }
     
     public void cancelarMensajeModal(){

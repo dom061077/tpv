@@ -21,6 +21,7 @@ public class DataModelParametroGral {
     private String formatNumeroDinero;
     private String perfilSupervisor;
     private String setHeaderTrailerLinea12;
+    private BigDecimal montoRetiroDinero;
 
     /**
      * @return the leyendaRetIngBrutosCliente
@@ -146,6 +147,20 @@ public class DataModelParametroGral {
      */
     public void setSetHeaderTrailerLinea12(String setHeaderTrailerLinea12) {
         this.setHeaderTrailerLinea12 = setHeaderTrailerLinea12;
+    }
+
+    /**
+     * @return the montoRetiroDinero
+     */
+    public BigDecimal getMontoRetiroDinero() {
+        return montoRetiroDinero;
+    }
+
+    /**
+     * @param montoRetiroDinero the montoRetiroDinero to set
+     */
+    public void setMontoRetiroDinero(BigDecimal montoRetiroDinero) {
+        this.montoRetiroDinero = montoRetiroDinero;
     }
     
 }

@@ -52,7 +52,7 @@ public class FacturacionService  {
             factura.setIvaBonificaTarjeta(BigDecimal.ZERO);
             factura.setImpuestoInterno(BigDecimal.ZERO);
             factura.setCondicionIva(em.find(CondicionIva.class, 1));
-            factura.setFechaAlta(factura.getUsuario().getFechaHoy());
+            factura.setFechaAlta(factura.getUsuario().getFechaHoraHoy());
             em.persist(factura);
             tx.commit();
         }catch(RuntimeException e){
@@ -554,5 +554,45 @@ public class FacturacionService  {
         factura.setTotal(totalFactura);
         return factura;
     } 
+    
+    public BigDecimal saldoRetiroDinero(int idUsuario, int idCheckout) throws TpvException{
+        EntityManager em = Connection.getEm();
+        BigDecimal totalRetiro = BigDecimal.ZERO;
+        BigDecimal totalFacturado = BigDecimal.ZERO;
+        try{
+           Query q = em.createQuery("SELECT SUM(r.monto) FROM RetiroDinero r WHERE"
+                                +"  r.usuario.id = :idUsuario AND r.checkout.id = :idCheckout"
+                                +"  AND r.fechaAlta >= r.fechaHoy"
+                            ).setParameter("idUsuario", idUsuario)
+                            .setParameter("idCheckout",idCheckout)
+                                ;
+           totalRetiro = (BigDecimal)q.getSingleResult();
+        }catch(RuntimeException e){
+            log.error("No se pudo calcular el total de retiros del día. Id usuario: "
+                            +idUsuario+", Id checkout: "+idCheckout,e);
+            throw new TpvException("\"No se pudo calcular el total de retiros del día. Id usuario: \"\n" +
+"                            +idUsuario+\", Id checkout: \"+idCheckout");
+        }
+        if(totalRetiro==null)
+            totalRetiro = BigDecimal.ZERO;
+        try{
+           Query q = em.createQuery("SELECT SUM(f.total) FROM Factura f"
+                            +" WHERE f.usuario.idUsuario=:idUsuario AND f.checkout.id=:idCheckout"
+                            +" AND f.fechaAlta>=f.fechaHoy"
+                            ).setParameter("idUsuario", idUsuario)
+                            .setParameter("idCheckout",idCheckout)
+                                ;
+           totalFacturado = (BigDecimal)q.getSingleResult();
+        }catch(RuntimeException e){
+            log.error("No se pudo calcular el total de retiros del día. Id usuario: "
+                            +idUsuario+", Id checkout: "+idCheckout,e);
+            throw new TpvException("\"No se pudo calcular el total de retiros del día. Id usuario: \"\n" +
+"                            +idUsuario+\", Id checkout: \"+idCheckout");
+        }
+        if(totalFacturado==null)
+            totalFacturado = BigDecimal.ZERO;
+        
+        return totalFacturado.subtract(totalRetiro);
+    }
     
 }

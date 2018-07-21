@@ -50,7 +50,7 @@ public class ConfiguracionImpresoraController implements Initializable,TabPaneMo
                     try{
                         impresoraService.cancelarTicket();
                         tabController.getLabelCancelarModal().setVisible(false);
-                        //tabController.getLabelMensaje().setText("El ticket fue cancelado con éxito");
+                        tabController.getLabelMensaje().setText("El ticket fue cancelado con éxito");
                         tabController.mostrarMensajeModal();
                     }catch(TpvException e){
                         log.error("Error al tratar de cancelar el ticket",e);

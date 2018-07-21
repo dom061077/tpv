@@ -83,7 +83,7 @@ public class RetiroDineroService {
         try{
             tx = em.getTransaction();
             tx.begin();
-            retiroDinero.setFechaAlta(retiroDinero.getUsuario().getFechaHoy());
+            retiroDinero.setFechaAlta(retiroDinero.getUsuario().getFechaHoraHoy());
             em.persist(retiroDinero);
             tx.commit();
             log.info("RetiroDinero guardado, id: "+retiroDinero.getId());
@@ -106,7 +106,7 @@ public class RetiroDineroService {
             tx.begin();
             retiro = em.find(RetiroDinero.class, idRetiro);
             retiro.setEstado(RetiroDineroEnum.RETIRADO);
-            retiro.setFechaRetiro(retiro.getFechaHoy());
+            retiro.setFechaRetiro(retiro.getFechaHoraHoy());
             retiro.setUsuarioSupervisor(usuarioSupervisor);
             tx.commit();
             log.info("RetiroDinero confirmado, id: "+idRetiro);

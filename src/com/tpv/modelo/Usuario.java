@@ -34,6 +34,9 @@ public class Usuario {
     
     @Formula("(SELECT current_date())")
     private java.util.Date fechaHoy;
+    
+    @Formula("(SELECT NOW())")
+    private java.util.Date fechaHoraHoy;
 
 
     /**
@@ -92,5 +95,9 @@ public class Usuario {
         return fechaHoy;
     }
 
+    
+    public java.util.Date getFechaHoraHoy(){
+        return fechaHoraHoy;
+    }
 
 }

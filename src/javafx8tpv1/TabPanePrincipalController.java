@@ -130,9 +130,9 @@ public class TabPanePrincipalController implements Initializable {
             
             gotoLogin();            
         }catch(TpvException e){
-            log.error(e.getMessage());
+            log.error("Error iniciando sistema",e);
             Context.getInstance().currentDMTicket().setException(e);
-            //Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_LOGIN);
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_LOGIN);
             this.gotoError();
         }
         
@@ -207,7 +207,9 @@ public class TabPanePrincipalController implements Initializable {
         
         param = UtilidadesService.getParametroGral("SETHEADERTRAILER_LINEA12");
         Context.getInstance().currentDMParametroGral().setSetHeaderTrailerLinea12(param.getParametroCadena());
-       
+
+        param = UtilidadesService.getParametroGral("MONTO_RETIRODINERO");
+        Context.getInstance().currentDMParametroGral().setMontoRetiroDinero(param.getParametroNumerico());
 
     }
     
@@ -244,6 +246,7 @@ public class TabPanePrincipalController implements Initializable {
             this.facturacionController.configurarInicio();
             this.getTabPanePrincipal().getSelectionModel().select(tabFacturacion);
         }catch(TpvException e){
+            log.error("Error en inicio de facturación",e);
             Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
             Context.getInstance().currentDMTicket().setException(e);
             gotoError();

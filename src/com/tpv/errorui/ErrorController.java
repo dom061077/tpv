@@ -88,7 +88,46 @@ public class ErrorController implements Initializable {
                 textAreaError.setOnKeyPressed(keyEvent->{
                     if(keyEvent.getCode()==KeyCode.ESCAPE){
                         recuperarFallo();
-                        if(Context.getInstance().currentDMTicket().getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_FACTURACION)
+                        switch (Context.getInstance().currentDMTicket().getOrigenPantalla()){
+                            case PANTALLA_FACTURACION:
+                                tabController.gotoFacturacion();
+                                break;
+                            case PANTALLA_MENUPRINCIPAL:
+                                tabController.gotoMenuPrincipal();
+                                break;
+                            case PANTALLA_CONFIRMARTICKET:
+                                tabController.gotoConfirmarPago();
+                                break;
+                            case PANTALLA_BUSCARPORNOMBRECLIENTE:
+                                tabController.gotoCliente();
+                                break;
+                            case PANTALLA_BUSCARPORDESCPRODUCTO:
+                                tabController.gotoProducto();
+                                break;
+                            case PANTALLA_PAGOTICKET:
+                                tabController.gotoPago();
+                                break;
+                            case PANTALLA_LOGIN:
+                                tabController.gotoLogin();
+                                break;
+                            case PANTALLA_SUPERVISOR:
+                                tabController.gotoSupervisor();
+                                break;
+                            case PANTALLA_CONTROLADOR:
+                                tabController.gotoControlador();
+                                break;
+                        
+                            case PANTALLA_CARGARETIRODINERO:
+                                tabController.gotoRetiroDinero();
+                                break;
+                            case PANTALLA_CONFIRMARETIRODINERO:
+                                tabController.gotoMenuRetiroDinero();
+                                break;
+                            default:
+                                tabController.gotoLogin();
+                                break;
+                        }
+                        /*if(Context.getInstance().currentDMTicket().getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_FACTURACION)
                             tabController.gotoFacturacion();
                         if(Context.getInstance().currentDMTicket().getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_MENUPRINCIPAL)
                             tabController.gotoMenuPrincipal();
@@ -114,9 +153,14 @@ public class ErrorController implements Initializable {
                         
                         if(Context.getInstance().currentDMTicket().getOrigenPantalla()==OrigenPantallaErrorEnum.PANTALLA_CONFIRMARETIRODINERO)
                             tabController.gotoMenuRetiroDinero();
+                        */
                     }
                     if(keyEvent.getCode()==KeyCode.F12)
                         System.exit(0);
+                    
+                    if(keyEvent.getCode()==KeyCode.TAB){
+                        keyEvent.consume();
+                    }
                     
                 });
             });

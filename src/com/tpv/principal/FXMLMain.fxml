@@ -57,6 +57,7 @@
          <top>
             <GridPane prefHeight="66.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
@@ -64,7 +65,8 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label fx:id="nroticket" alignment="BOTTOM_LEFT" prefHeight="32.0" prefWidth="374.0" styleClass="label_nroticket" GridPane.columnIndex="1" />
+                  <Label fx:id="nroticket" alignment="BOTTOM_LEFT" prefHeight="32.0" prefWidth="374.0" styleClass="label_nroticket" GridPane.columnIndex="2" />
+                  <Label fx:id="retiroDineroLabel" alignment="BOTTOM_LEFT" contentDisplay="BOTTOM" prefHeight="40.0" prefWidth="375.0" styleClass="label_retirodinero" textAlignment="CENTER" GridPane.columnIndex="1" />
                   <Label fx:id="checkout" alignment="BOTTOM_LEFT" prefHeight="35.0" prefWidth="631.0" styleClass="label_nroticket" />
                </children>
             </GridPane>

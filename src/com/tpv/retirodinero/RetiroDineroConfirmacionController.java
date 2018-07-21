@@ -197,6 +197,7 @@ public class RetiroDineroConfirmacionController implements Initializable, TabPan
                     ,Context.getInstance()
                     .currentDMTicket().getUsuarioSupervisor());
             impresoraService.imprimirRetiroDinero(retiro);
+            this.tabController.repeatFocus(tableViewRetiro);
         }catch(TpvException e){
             log.error("Error en controlador llamando al método confirmarRetiro de RetiroDineroService",e);
             Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_MENUPRINCIPAL);
