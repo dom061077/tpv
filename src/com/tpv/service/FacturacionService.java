@@ -579,9 +579,12 @@ public class FacturacionService  {
            Query q = em.createQuery("SELECT SUM(f.total) FROM Factura f"
                             +" WHERE f.usuario.idUsuario=:idUsuario AND f.checkout.id=:idCheckout"
                             +" AND f.fechaAlta>=f.fechaHoy"
+                            +" AND f.estado = :estado"   
+                   
                             ).setParameter("idUsuario", idUsuario)
                             .setParameter("idCheckout",idCheckout)
-                                ;
+                            .setParameter("estado", FacturaEstadoEnum.CERRADA)
+                            ;
            totalFacturado = (BigDecimal)q.getSingleResult();
         }catch(RuntimeException e){
             log.error("No se pudo calcular el total de retiros del día. Id usuario: "

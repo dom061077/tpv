@@ -1118,8 +1118,8 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
 
 
 
-        String f = this.getClass().getResource("/com/tpv/resources/gif-emilio-luque.gif").toExternalForm();
-        imageViewDer.setImage(new Image(f));
+        //String f = this.getClass().getResource("/com/tpv/resources/gif-emilio-luque.gif").toExternalForm();
+        //imageViewDer.setImage(new Image(f));
         
         
 //        imageViewIzq.setImage(new Image(f));
@@ -1206,9 +1206,12 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
         try{
             saldoRetiro = factService.saldoRetiroDinero(Context.getInstance()
                         .currentDMTicket().getUsuario().getIdUsuario(), Context.getInstance().currentDMTicket().getCheckout().getId());
-        }catch(){
-            
-        }    
+        }catch(TpvException e){
+            log.error("Error en capa controller: "+e.getMessage());
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+            Context.getInstance().currentDMTicket().setException(e);
+            tabPaneController.gotoError();
+        }   
         if(saldoRetiro.compareTo(Context.getInstance().currentDMParametroGral().getMontoRetiroDinero())>=0)
             retiroDineroLabel.setVisible(true);
         else

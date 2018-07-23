@@ -80,7 +80,7 @@ public class Factura {
     @Column(name = "FECHAHORACIERRE")
     private java.util.Date fechaHoraCierre;
     
-    @Formula("(SELECT NOW())")
+    @Formula("(SELECT CURRENT_DATE())")
     private java.util.Date fechaHoy;    
     
     @Column(name = "TIPOCOMPROBANTE")

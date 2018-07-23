@@ -12,6 +12,7 @@ import com.tpv.modelo.RetiroDinero;
 import com.tpv.modelo.RetiroDineroDetalle;
 import com.tpv.modelo.enums.RetiroDineroEnum;
 import com.tpv.principal.Context;
+import com.tpv.service.FacturacionService;
 import com.tpv.service.ImpresoraService;
 import com.tpv.service.RetiroDineroService;
 import com.tpv.util.ui.EditableBigDecimalTableCell;
@@ -51,8 +52,11 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
     Logger log = Logger.getLogger(RetiroDineroController.class);
     private TabPanePrincipalController tabController;
     private RetiroDineroService retiroDineroService = new RetiroDineroService();
-    private ObservableList<RetiroDineroData> retiroDineroDataList;
     private ImpresoraService impresoraService = new ImpresoraService();
+    private FacturacionService factService = new FacturacionService();
+        
+    private ObservableList<RetiroDineroData> retiroDineroDataList;
+    private boolean guardar;
     
     @FXML BorderPane borderPane;
     @FXML GridPane gridPane;
@@ -119,6 +123,7 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
                 
                 if(keyEvent.getCode() == KeyCode.ENTER){
                     tabController.getLabelMensaje().setText("¿Confirma la carga de retiro de dinero?");
+                    this.guardar=true;
                     tabController.mostrarMensajeModal();
                     return;
                 }
@@ -215,7 +220,13 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
     
     public void aceptarMensajeModal(){
         RetiroDinero retiroDinero = null;
-        this.guardarRetiro();
+        if(guardar)
+            this.guardarRetiro();
+        else{
+            this.tabController.getLabelCancelarModal().setVisible(true);
+            this.tabController.ocultarMensajeModal();
+            this.tabController.repeatFocus(this.tableViewRetiro);
+        }
     }
     
     public void cancelarMensajeModal(){
@@ -232,6 +243,24 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
             }   
             DecimalFormat df = new DecimalFormat("###,###,##0.00");
             totalRetiroLabel.setText(df.format(totalRetiro));
+    }
+    
+    private boolean esSuperiorSaldoRetiro(BigDecimal totalRetiro){
+        BigDecimal saldo = BigDecimal.ZERO;
+        try{
+            saldo = factService.saldoRetiroDinero(
+            Context.getInstance().currentDMTicket().getUsuario().getIdUsuario(),
+            Context.getInstance().currentDMTicket().getCheckout().getId());
+            if(totalRetiro.compareTo(saldo)>0)
+                return true;
+        }catch(TpvException e){
+            log.error("Error en controlador llamando al método verificarSaldoRetiro de FacturacionService",e);
+            tabController.ocultarMensajeModal();
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+            Context.getInstance().currentDMTicket().setException(e);
+            tabController.gotoError();
+        }
+        return false;        
     }
     
     public void guardarRetiro(){
@@ -257,10 +286,18 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
                     retiroDinero.getDetalle().add(retDetalle);
                 }
             }
-            retiroDinero.setMonto(total);
-            retiroDineroService.registrarRetiro(retiroDinero);
-            this.tabController.ocultarMensajeModal();
-            this.tabController.gotoMenuRetiroDinero();
+            boolean saldoSuperior = esSuperiorSaldoRetiro(total);
+            if(saldoSuperior){
+                this.tabController.getLabelCancelarModal().setVisible(false);
+                this.tabController.getLabelMensaje().setText("No es posible registrar el retiro. La suma de dinero cargada es superior a la disponibilidad en la caja.");
+                this.guardar = false;
+                this.tabController.mostrarMensajeModal();
+            }else{
+                retiroDinero.setMonto(total);
+                retiroDineroService.registrarRetiro(retiroDinero);
+                this.tabController.ocultarMensajeModal();
+                this.tabController.gotoMenuRetiroDinero();
+            }
         }catch(TpvException e){
             log.error("Error en controlador llamando al método registrarRetiro de RetiroDineroService",e);
             tabController.ocultarMensajeModal();
