@@ -191,7 +191,8 @@ public class ConfirmaPagoTicketController implements Initializable, TabPaneModal
             totalIVALabel.setText(df.format(Context.getInstance().currentDMTicket().getTotalIva()));
             totalInternoLabel.setText(df.format(Context.getInstance().currentDMTicket().getTotalInterno()));
             totalExentoIVALabel.setText(df.format(Context.getInstance().currentDMTicket().getTotalExento()));
-            
+            ingBrutosLabel.setText(df.format(Context.getInstance().currentDMTicket().getRetencion()));
+                    
             stackPaneMensajeCancelar.setVisible(false);
             
             tabPaneController.repeatFocus(borderPane);

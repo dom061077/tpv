@@ -408,12 +408,10 @@ public class FacturacionService  {
         return porcentaje;
     }
     
-    
+     
     
     public Factura getFacturaConTotalesSinPagos(Long id)throws TpvException{
             Factura factura = calcularCombos(id);
-        
-        
             //-----------resumen de calculos en cabecera-----------
             BigDecimal totalBonifCombos = BigDecimal.ZERO;
             BigDecimal totalIvaBonifCombos = BigDecimal.ZERO;
@@ -597,5 +595,46 @@ public class FacturacionService  {
         
         return totalFacturado.subtract(totalRetiro);
     }
+    
+    public String getConcursosStr(Long idFactura) throws TpvException{
+        String concursosStr="";
+        EntityManager em = Connection.getEm();
+        try{
+            Query q = em.createQuery(
+                    "SELECT DISTINCT fd.idFACTURASDETALLE,c.idCONCURSOS,c.TEXTOCORTO,c.CANTIDADPRODUCTOS,c.CANTIDADCUPONES"
+                    +"                ,((fd.CANTIDAD/c.CANTIDADPRODUCTOS)*c.CANTIDADCUPONES) AS CUPONESENTREGADOS"
+                    +" FROM facturasdetalle fd"
+                    +" INNER JOIN productos p ON fd.idPRODUCTOS = p.idPRODUCTOS"
+                    +" INNER JOIN proveedores_productos pp ON fd.idPRODUCTOS = pp.idPRODUCTOS"
+                    +" LEFT JOIN concursos cgp ON cgp.idGRUPOPRODUCTOS=p.idGRUPOPRODUCTOS"
+                    +" LEFT JOIN  concursos cgph ON cgph.idSUBGRUPO = p.idGRUPOPRODUCTOS"
+                    +" LEFT JOIN  concursos cp ON fd.idPRODUCTOS = cp.idPRODUCTOS"
+                    +" LEFT JOIN concursos c ON c.idCONCURSOS = cgp.idCONCURSOS OR"
+                    +" c.idCONCURSOS = cgph.idCONCURSOS OR c.idCONCURSOS = cp.idCONCURSOS"
+                    +" WHERE fd.idFACTURAS = :idFacturas AND c.idCONCURSOS IS NOT NULL");
+            asdfasdf
+        }catch(RuntimeException e){
+            
+        }
+        
+        return concursosStr;
+    }
+    
+    
+    /*
+ SELECT DISTINCT fd.`idFACTURASDETALLE`,c.`idCONCURSOS`,c.`CANTIDADPRODUCTOS`,c.`CANTIDADCUPONES`
+		 ,((fd.`CANTIDAD`/c.`CANTIDADPRODUCTOS`)*c.`CANTIDADCUPONES`) AS CUPONESENTREGADOS
+  FROM `facturasdetalle` fd
+ INNER JOIN productos p ON fd.`idPRODUCTOS` = p.`idPRODUCTOS`
+ INNER JOIN proveedores_productos pp ON fd.`idPRODUCTOS` = pp.idPRODUCTOS
+ LEFT JOIN `concursos` cgp ON cgp.`idGRUPOPRODUCTOS`=p.`idGRUPOPRODUCTOS`
+ LEFT JOIN  concursos cgph ON cgph.`idSUBGRUPO` = p.idGRUPOPRODUCTOS
+ LEFT JOIN  concursos cp ON fd.idPRODUCTOS = cp.`idPRODUCTOS`
+ LEFT JOIN concursos c ON c.`idCONCURSOS` = cgp.`idCONCURSOS` OR
+ c.`idCONCURSOS` = cgph.`idCONCURSOS` OR c.`idCONCURSOS` = cp.`idCONCURSOS`
+ WHERE fd.`idFACTURAS` = 1    
+    */
+    
+    
     
 }

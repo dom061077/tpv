@@ -427,7 +427,8 @@ public class ImpresoraService {
                             +sdfMes.format(factura.getFechaHoy())+" "
                             +sdfHora.format(factura.getFechaHoy())+" "
                             +factura.getPrefijoFiscal()+" "
-                            +factura.getNumeroComprobante()
+                            +factura.getNumeroComprobante()+" "
+                            +factura.getId()
                         ," "," ");
         }catch(FiscalPrinterStatusError e){
             log.warn("Error en estado fiscal de la impresora al imprimir retención");
@@ -522,8 +523,23 @@ public class ImpresoraService {
         }
     }
     
+    public void imprimirRetiroDinero(RetiroDinero retiroDinero)throws TpvException{
+        FiscalMessages fMsg;
+        try{
+            printHeaderTrailer(" ", " ", " ", " ", " ");
+        }catch(FiscalPrinterStatusError e){
+            fMsg = getHfp().getMessages();
+            log.warn("Error de estado en la impresora al imprimir retiro de dinero",e);
+            throw new TpvException(e.getMessage());
+        }catch(FiscalPrinterIOException e){
+            log.warn("Error mécanico de impresora al imprimir retiro de dinero",e);
+            throw new TpvException(e.getMessage());
+        }            
+        imprimirRetiroDinero(retiroDinero,"Original ");
+        imprimirRetiroDinero(retiroDinero,"Duplicado");
+    }
     
-    public void imprimirRetiroDinero(RetiroDinero retiroDinero) throws TpvException{
+    private void imprimirRetiroDinero(RetiroDinero retiroDinero,String titulo) throws TpvException{
         FiscalPacket requestOpen;
         FiscalPacket requestCerrar;
         FiscalPacket requestNonFiscalText;
@@ -534,35 +550,9 @@ public class ImpresoraService {
         
         
         try{
-            /*response = getHfp().execute(requestOpen);
-            
-            requestFiscalText = getHfp().cmdPrintNonFiscalText("$1000   3   20.000,00",Integer.valueOf("0"));
-            response = getHfp().execute(requestFiscalText);
-            
-            requestFiscalText = getHfp().cmdPrintNonFiscalText("$ 500   1      500,00",Integer.valueOf("0"));
-            response = getHfp().execute(requestFiscalText);
-
-            requestFiscalText = getHfp().cmdPrintNonFiscalText("$ 200   3      600,00",Integer.valueOf("0"));
-            response = getHfp().execute(requestFiscalText);
-            
-            response = getHfp().execute(requestCerrar);
             response = getHfp().execute(requestOpen);
             
-            requestFiscalText = getHfp().cmdPrintNonFiscalText("$1000   3   20.000,00",Integer.valueOf("0"));
-            response = getHfp().execute(requestFiscalText);
-            
-            requestFiscalText = getHfp().cmdPrintNonFiscalText("$ 500   1      500,00",Integer.valueOf("0"));
-            response = getHfp().execute(requestFiscalText);
-
-            requestFiscalText = getHfp().cmdPrintNonFiscalText("$ 200   3      600,00",Integer.valueOf("0"));
-            response = getHfp().execute(requestFiscalText);            
-            
-            
-            response = getHfp().execute(requestCerrar);*/
-            
-            response = getHfp().execute(requestOpen);
-            
-            requestNonFiscalText = getHfp().cmdPrintNonFiscalText("                Original                ", Integer.valueOf("1"));
+            requestNonFiscalText = getHfp().cmdPrintNonFiscalText("                "+titulo+"                ", Integer.valueOf("1"));
             response = getHfp().execute(requestNonFiscalText);
             
             requestNonFiscalText = getHfp().cmdPrintNonFiscalText(" ", Integer.valueOf("1"));            
@@ -609,7 +599,7 @@ public class ImpresoraService {
                 response = getHfp().execute(requestNonFiscalText);
             }
             
-            requestNonFiscalText = getHfp().cmdPrintNonFiscalText("                                    ---------------", Integer.valueOf("1"));
+            requestNonFiscalText = getHfp().cmdPrintNonFiscalText("                      ---------------", Integer.valueOf("1"));
             response = getHfp().execute(requestNonFiscalText);
             
             DecimalFormat dfTotalGral = new DecimalFormat("###,###,##0.00");
@@ -619,24 +609,14 @@ public class ImpresoraService {
             requestNonFiscalText = getHfp().cmdPrintNonFiscalText(
                         String.format("%40s", "Obs: "+retiroDinero.getObservacion())
                         ,Integer.valueOf("1"));
-            
-            requestNonFiscalText = getHfp().cmdPrintNonFiscalText(" ", Integer.valueOf("1"));
-            response = getHfp().execute(requestNonFiscalText);
-            requestNonFiscalText = getHfp().cmdPrintNonFiscalText(" ", Integer.valueOf("1"));
-            response = getHfp().execute(requestNonFiscalText);
-            requestNonFiscalText = getHfp().cmdPrintNonFiscalText(" ", Integer.valueOf("1"));
             response = getHfp().execute(requestNonFiscalText);
             
-            requestNonFiscalText = getHfp().cmdPrintNonFiscalText("_ _ _ _ _ _ _          _ _ _ _ _ _ _ _ _"
+            requestNonFiscalText = getHfp().cmdPrintNonFiscalText("_ _ _ _ _ _ _ _ _      _ _ _ _ _ _ _ _ _"
                     , Integer.valueOf("1"));
             response = getHfp().execute(requestNonFiscalText);
             
-            requestNonFiscalText = getHfp().cmdPrintNonFiscalText("Firma Cajero            Firma Supervisor"
+            requestNonFiscalText = getHfp().cmdPrintNonFiscalText("  Firma Cajero          Firma Supervisor"
                     , Integer.valueOf("1"));
-            response = getHfp().execute(requestNonFiscalText);
-            
-            requestNonFiscalText = getHfp().cmdPrintNonFiscalText("Observaciones: "
-                    +retiroDinero.getObservacion(), Integer.valueOf("1"));
             response = getHfp().execute(requestNonFiscalText);
             
             
