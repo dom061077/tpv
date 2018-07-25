@@ -173,6 +173,9 @@ public class Factura {
     @OneToMany(cascade = CascadeType.ALL,mappedBy="factura", fetch = FetchType.EAGER)
     //@org.hibernate.annotations.IndexColumn(name = "BID_POSITION")
     private List<FacturaDetalleCombo> detalleCombos = new ArrayList<FacturaDetalleCombo>();    
+    
+    @OneToMany(cascade = CascadeType.ALL,mappedBy="factura", fetch = FetchType.EAGER)
+    private List<FacturaDetalleConcurso> detalleConcursos = new ArrayList<FacturaDetalleConcurso>();
 
     @Transient
     private List<FacturaDetalleCombo> detalleCombosAux = new ArrayList<FacturaDetalleCombo>();   
@@ -206,6 +209,7 @@ public class Factura {
     @ManyToOne
     @JoinColumn(name = "idCONDICIONESIVA", referencedColumnName = "idCONDICIONESIVA", nullable=true)
     private CondicionIva condicionIva;
+    
     
 
     
@@ -743,6 +747,20 @@ public class Factura {
      */
     public void setFechaHoraFiscal(String fechaHoraFiscal) {
         this.fechaHoraFiscal = fechaHoraFiscal;
+    }
+
+    /**
+     * @return the detalleConcurso
+     */
+    public List<FacturaDetalleConcurso> getDetalleConcursos() {
+        return detalleConcursos;
+    }
+
+    /**
+     * @param detalleConcurso the detalleConcurso to set
+     */
+    public void setDetalleConcursos(List<FacturaDetalleConcurso> detalleConcursos) {
+        this.detalleConcursos = detalleConcursos;
     }
     
     

@@ -286,7 +286,13 @@ public class TabPanePrincipalController implements Initializable {
     public void gotoConfirmarPago(){
         this.getLabelTituloVentana().setText("CONFIRMACIÓN DE PAGO Y CIERRE DE TICKET");
         this.getLabelShortCut().setText("Esc-Volver");
-        this.confirmaPagoController.configurarInicio();
+        try{
+            this.confirmaPagoController.configurarInicio();
+        }catch(TpvException e){
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_PAGOTICKET);
+            Context.getInstance().currentDMTicket().setException(e);
+            gotoError();
+        }
         this.getTabPanePrincipal().getSelectionModel().select(tabConfirmarPago);
     }
     

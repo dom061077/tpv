@@ -10,11 +10,13 @@ import com.tpv.modelo.AlicuotaIngresosBrutos;
 import com.tpv.modelo.Combo;
 import com.tpv.modelo.ComboGrupo;
 import com.tpv.modelo.ComboGrupoDetalle;
+import com.tpv.modelo.Concurso;
 import com.tpv.modelo.CondicionIva;
 import com.tpv.modelo.Factura;
 import com.tpv.modelo.FacturaDetalle;
 import com.tpv.modelo.FacturaDetalleCombo;
 import com.tpv.modelo.FacturaDetalleComboAbierto;
+import com.tpv.modelo.FacturaDetalleConcurso;
 import com.tpv.modelo.FacturaFormaPagoDetalle;
 import com.tpv.modelo.ProductoAgrupadoEnFactura;
 import com.tpv.modelo.Usuario;
@@ -31,6 +33,7 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 import org.apache.log4j.Logger;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 /**
  *
@@ -130,12 +133,38 @@ public class FacturacionService  {
         }
     }
     
-    public void confirmarFactura(Factura factura)throws TpvException{
+    public Factura confirmarFactura(Factura factura)throws TpvException{
         //Factura factura;
         log.info("Capa de servicios, Confirmar Factura con id: "+factura.getId());
         EntityManager em = Connection.getEm();
         EntityTransaction tx = null;
         try{
+            
+            Query q = em.createNativeQuery(
+                    "SELECT DISTINCT fd.idFACTURASDETALLE,c.idCONCURSOS,c.TEXTOCORTO,c.CANTIDADPRODUCTOS,c.CANTIDADCUPONES"
+                    +"                ,CONVERT(((fd.CANTIDAD/c.CANTIDADPRODUCTOS)*c.CANTIDADCUPONES),UNSIGNED INTEGER )AS CUPONESENTREGADOS"
+                    +" FROM facturasdetalle fd"
+                    +" INNER JOIN productos p ON fd.idPRODUCTOS = p.idPRODUCTOS"
+                    +" INNER JOIN proveedores_productos pp ON fd.idPRODUCTOS = pp.idPRODUCTOS"
+                    +" LEFT JOIN concursos cgp ON cgp.idGRUPOPRODUCTOS=p.idGRUPOPRODUCTOS"
+                    +" LEFT JOIN  concursos cgph ON cgph.idSUBGRUPO = p.idGRUPOPRODUCTOS"
+                    +" LEFT JOIN  concursos cp ON fd.idPRODUCTOS = cp.idPRODUCTOS"
+                    +" LEFT JOIN concursos c ON c.idCONCURSOS = cgp.idCONCURSOS OR"
+                    +" c.idCONCURSOS = cgph.idCONCURSOS OR c.idCONCURSOS = cp.idCONCURSOS"
+                    +" WHERE fd.idFACTURAS = :idFacturas AND c.idCONCURSOS IS NOT NULL")
+                    .setParameter("idFacturas", factura.getId());
+            List list = q.getResultList();            
+            for(Iterator<Object[]> it = list.iterator();it.hasNext();){
+                Object[] o = it.next();
+                FacturaDetalleConcurso detConcurso = new FacturaDetalleConcurso();
+                detConcurso.setCantidadCupones(Integer.parseInt(o[5].toString()));
+                detConcurso.setConcurso(em.find(Concurso.class, new Long(o[1].toString())));
+                
+                no encuentra el concurso
+                        
+                detConcurso.setFactura(factura);
+                factura.getDetalleConcursos().add(detConcurso);
+            }
             tx = em.getTransaction();
             tx.begin();
             factura.setDescuento(BigDecimal.ZERO);
@@ -147,12 +176,15 @@ public class FacturacionService  {
             log.info("Factura guardada, id: "+factura.getId());
             log.info("                      Nro. factura: "+factura.getNumeroComprobante());
         }catch(RuntimeException e){
-            tx.rollback();
+            if(tx!=null)
+                tx.rollback();
             log.error("Error en la capa de servicios al confirmar la factura.",e);
             throw new TpvException("Error en la capa de servicios al confirmar la factura.");
         }finally{
             em.clear();
         }
+        
+        return factura;
     }
     
     public void cancelarFacturaSupervisor(Long id) throws TpvException{
@@ -596,11 +628,11 @@ public class FacturacionService  {
         return totalFacturado.subtract(totalRetiro);
     }
     
-    public String getConcursosStr(Long idFactura) throws TpvException{
-        String concursosStr="";
+    public List getConcursos(Long idFactura) throws TpvException{
+        List list=new ArrayList();
         EntityManager em = Connection.getEm();
         try{
-            Query q = em.createQuery(
+            Query q = em.createNativeQuery(
                     "SELECT DISTINCT fd.idFACTURASDETALLE,c.idCONCURSOS,c.TEXTOCORTO,c.CANTIDADPRODUCTOS,c.CANTIDADCUPONES"
                     +"                ,((fd.CANTIDAD/c.CANTIDADPRODUCTOS)*c.CANTIDADCUPONES) AS CUPONESENTREGADOS"
                     +" FROM facturasdetalle fd"
@@ -611,13 +643,20 @@ public class FacturacionService  {
                     +" LEFT JOIN  concursos cp ON fd.idPRODUCTOS = cp.idPRODUCTOS"
                     +" LEFT JOIN concursos c ON c.idCONCURSOS = cgp.idCONCURSOS OR"
                     +" c.idCONCURSOS = cgph.idCONCURSOS OR c.idCONCURSOS = cp.idCONCURSOS"
-                    +" WHERE fd.idFACTURAS = :idFacturas AND c.idCONCURSOS IS NOT NULL");
-            asdfasdf
+                    +" WHERE fd.idFACTURAS = :idFacturas AND c.idCONCURSOS IS NOT NULL")
+                    .setParameter("idFacturas", idFactura);
+            list = q.getResultList();
+            /*for(Iterator<Object[]> it = list.iterator();it.hasNext();){
+               Object[] o = it.next();
+               concursosStr+= "-"+ o[2].toString()+" Cupones: "+String.format("%d5", o[5]);
+            }*/
+                
         }catch(RuntimeException e){
-            
+            log.error("Error al consultar los concursos",e);
+            throw new TpvException("Error al consultar los concursos");
         }
         
-        return concursosStr;
+        return list;
     }
     
     

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.tpv.concursos;
+package com.tpv.pagoticket;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
@@ -21,7 +21,7 @@ import javafx.beans.property.StringProperty;
  * @author COMPUTOS
  */
 public class LineaConcursoData {
-    private LongProperty CodigoConcurso;
+    private LongProperty IdFacDetConcurso;
     private StringProperty TextoCorto;
     private BooleanProperty ImprimeTexto;
     private ObjectProperty VigenciaDesde;
@@ -34,10 +34,10 @@ public class LineaConcursoData {
     }
     
     
-    public LineaConcursoData(Long codigoProducto,String textoCorto,boolean imprimeTexto
+    public LineaConcursoData(Long IdFacDetConcurso,String textoCorto,boolean imprimeTexto
             ,java.sql.Date vigenciaDesde, java.sql.Date vigenciaHasta
             ,int cantidadProductos, int cantidadConcursos){
-        this.CodigoConcurso = new SimpleLongProperty(codigoProducto);
+        this.IdFacDetConcurso = new SimpleLongProperty(IdFacDetConcurso);
         this.TextoCorto = new SimpleStringProperty(textoCorto);
         this.ImprimeTexto = new SimpleBooleanProperty(imprimeTexto);
         this.VigenciaDesde = new SimpleObjectProperty(vigenciaDesde);
@@ -46,53 +46,53 @@ public class LineaConcursoData {
         this.CantidadProductos = new SimpleIntegerProperty(cantidadProductos);
     }
     
-    public LongProperty codigoConcursoProperty(){
-        return getCodigoConcurso();
+    public LongProperty idFacDetConcursoProperty(){
+        return IdFacDetConcurso;
     }
     
     public StringProperty textoCortoProperty(){
-        return getTextoCorto();
+        return TextoCorto;
     }
     
     public BooleanProperty imprimeTextoProperty(){
-        return getImprimeTexto();
+        return ImprimeTexto;
     }
     
     public ObjectProperty vigenciaDesdeProperty(){
-        return getVigenciaDesde();
+        return VigenciaDesde;
     }
     
     public ObjectProperty vigenciaHastaProperty(){
-        return getVigenciaHasta();
+        return VigenciaHasta;
     }
     
     public IntegerProperty cantidadProductosProperty(){
-        return getCantidadProductos();
+        return CantidadProductos;
     }
     
     public IntegerProperty cantidadConcursosProperty(){
-        return getCantidadConcursos();
+        return CantidadConcursos;
     }
 
     /**
      * @return the CodigoConcurso
      */
-    public LongProperty getCodigoConcurso() {
-        return CodigoConcurso;
+    public Long getIdFactDetConcurso() {
+        return IdFacDetConcurso.get();
     }
 
     /**
      * @return the TextoCorto
      */
-    public StringProperty getTextoCorto() {
-        return TextoCorto;
+    public String getTextoCorto() {
+        return TextoCorto.get();
     }
 
     /**
      * @return the ImprimeTexto
      */
-    public BooleanProperty getImprimeTexto() {
-        return ImprimeTexto;
+    public boolean getImprimeTexto() {
+        return ImprimeTexto.get();
     }
 
     /**

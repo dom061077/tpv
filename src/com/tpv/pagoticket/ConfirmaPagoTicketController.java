@@ -21,8 +21,13 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.Iterator;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -56,6 +61,7 @@ public class ConfirmaPagoTicketController implements Initializable, TabPaneModal
     private PagoService pagoService = new PagoService();
     private FiscalPrinterEvent fiscalPrinterEvent;
     private String fechaHoraFiscal;
+    private ListProperty<LineaConcursoData> concursosList;
 
     
     
@@ -141,7 +147,18 @@ public class ConfirmaPagoTicketController implements Initializable, TabPaneModal
     private Label labelRetIngBrutos;
     
     @FXML
-    private StackPane stackPaneMensajeCancelar;
+    private StackPane stackPaneConcursos;
+    
+    @FXML
+    private TableView tableViewConcursos;
+    
+    @FXML
+    private TableColumn concursoColumn;
+    
+    @FXML
+    private TableColumn cantidadCuponesColumn;
+    
+    
     
     
     @FXML
@@ -149,12 +166,21 @@ public class ConfirmaPagoTicketController implements Initializable, TabPaneModal
     
     private boolean ticketConfirmado;        
             
-    public void configurarInicio(){
+    public void configurarInicio()throws TpvException{
             log.info("Ingresando a la confirmación de pago");
             ticketConfirmado=false;
+            /*List concursos = factService.getConcursos(Context.getInstance().currentDMTicket().getIdFactura());
+            for(Iterator<Object[]> it = concursos.iterator();it.hasNext();){
+               Object[] o = it.next();
+                //LineaConcursoData(Long codigoConcurso,String textoCorto,boolean imprimeTexto
+                //,java.sql.Date vigenciaDesde, java.sql.Date vigenciaHasta
+                //,int cantidadProductos, int cantidadConcursos)               
+               LineaConcursoData lineaData = new LineaConcursoData(
+                       Long.parseLong(o[1].toString()),o[2],
+                );
+            } */           
             if(impresoraService.getHfp().getEventListener()==null)
                 asignarEvento();            
-            
             DecimalFormat df = new DecimalFormat("##,##0.00");
             if(Context.getInstance().currentDMTicket().getCliente()==null
                     || Context.getInstance().currentDMTicket().getCliente().getCondicionIva().getId()==1){
@@ -193,7 +219,7 @@ public class ConfirmaPagoTicketController implements Initializable, TabPaneModal
             totalExentoIVALabel.setText(df.format(Context.getInstance().currentDMTicket().getTotalExento()));
             ingBrutosLabel.setText(df.format(Context.getInstance().currentDMTicket().getRetencion()));
                     
-            stackPaneMensajeCancelar.setVisible(false);
+            stackPaneConcursos.setVisible(false);
             
             tabPaneController.repeatFocus(borderPane);
             tabPaneController.setTabPaneModalCommand(this);
@@ -273,8 +299,15 @@ public class ConfirmaPagoTicketController implements Initializable, TabPaneModal
             });
             bonificacionTarjetaColumn.setStyle("-fx-alignment: CENTER-RIGHT");
             
+            ObservableList<LineaConcursoData> innerList = FXCollections.observableArrayList();
+            concursosList = new SimpleListProperty<>(innerList);
+            
+            concursoColumn.setCellValueFactory(new PropertyValueFactory("textocorto"));
+            cantidadCuponesColumn.setStyle("-fx-alignment: CENTER-RIGHT");
+            cantidadCuotaColumn.setCellValueFactory(new PropertyValueFactory("cantidadconcursos"));
             
             
+            tableViewConcursos.setItems(concursosList);
             Platform.runLater(()->{
                 tableViewPagos.setItems(Context.getInstance().currentDMTicket().getPagos());
                 borderPane.setOnKeyPressed(keyEvent->{
@@ -292,16 +325,16 @@ public class ConfirmaPagoTicketController implements Initializable, TabPaneModal
                     keyEvent.consume();
                 });
                 
-                /*stackPaneMensajeCancelar.setOnKeyPressed(keyEvent->{
-                    if(keyEvent.getCode()==KeyCode.S){
-                        tabPaneController.gotoPago();
+                stackPaneConcursos.setOnKeyPressed(keyEvent->{
+                    if(keyEvent.getCode()==KeyCode.ENTER){
+                        tabPaneController.gotoFacturacion();
                     }
                     if(keyEvent.getCode()==KeyCode.ESCAPE){
-                        stackPaneMensajeCancelar.setVisible(false);
+                        stackPaneConcursos.setVisible(false);
                         tabPaneController.repeatFocus(borderPane);
                     }
                     keyEvent.consume();
-                });*/
+                });
             });
             
             
@@ -440,6 +473,21 @@ public class ConfirmaPagoTicketController implements Initializable, TabPaneModal
         }
     }
     
+    /*public LineaConcursoData(Long codigoConcurso,String textoCorto,boolean imprimeTexto
+            ,java.sql.Date vigenciaDesde, java.sql.Date vigenciaHasta
+            ,int cantidadProductos, int cantidadConcursos){*/
+    private void cargarGrillaConcursos(Factura factura){
+        factura.getDetalleConcursos().forEach(item->{
+            LineaConcursoData detConcurso = 
+                    new LineaConcursoData(item.getId(),item.getConcurso().getTextoCorto()
+                            ,item.getConcurso().isImprimeTexto()
+                            ,item.getConcurso().getVigenciaDesde()
+                            ,item.getConcurso().getVigenciaHasta()
+                            ,item.getConcurso().getCantidadProductos()
+                            ,item.getCantidadCupones());
+            concursosList.add(detConcurso);
+        });
+    }
     
     private void asignarEvento(){
         this.fiscalPrinterEvent = new FiscalPrinterEvent(){
@@ -501,16 +549,20 @@ public class ConfirmaPagoTicketController implements Initializable, TabPaneModal
                             
                             //setTotales(factura);
                             
-                            factService.confirmarFactura(factura);
+                            factura = factService.confirmarFactura(factura);
                             Context.getInstance().currentDMTicket().setCliente(null);
                             Context.getInstance().currentDMTicket().setClienteSeleccionado(false);
                             Context.getInstance().currentDMTicket().setNroTicket(Context.getInstance().currentDMTicket().getNroTicket()+1);
                             Context.getInstance().currentDMTicket().getDetalle().clear();
                             Context.getInstance().currentDMTicket().getPagos().clear();
                             Context.getInstance().currentDMTicket().setImprimeComoNegativo(false);
-                            log.info("Factura cerrada y confirmada");
-                            tabPaneController.gotoFacturacion();
-                            //confirmarButton.fire();
+                            log.info("Factura cerrada y confirmada: "+factura.getId());
+                            if(factura.getDetalleConcursos().size()>0){
+                                cargarGrillaConcursos(factura);
+                                stackPaneConcursos.setVisible(true);
+                                tabPaneController.repeatFocus(stackPaneConcursos);
+                            }else
+                                tabPaneController.gotoFacturacion();
                     }catch(TpvException e){
                         Context.getInstance().currentDMTicket().setException(e);
                         Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CONFIRMARTICKET);
