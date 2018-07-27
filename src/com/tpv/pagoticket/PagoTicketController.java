@@ -38,6 +38,7 @@ import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
 /**
@@ -50,6 +51,7 @@ public class PagoTicketController implements Initializable {
     private MaskTextField textFieldTipoPago;
     private MaskTextField textFieldMonto;
     private MaskTextField textFieldCantidadCuotas;
+    private MaskTextField textFieldImporteTarjeta;
     private MaskTextField textFieldNroCupon;
     private MaskTextField textFieldNroTarjeta;
     private MaskTextField textFieldNroLote;
@@ -97,8 +99,6 @@ public class PagoTicketController implements Initializable {
     @FXML
     private Label saldoPagar;
     
-    @FXML
-    private Label bonificaciones;
     
     @FXML
     private Label bonificacionPorPagoTotal;
@@ -157,7 +157,13 @@ public class PagoTicketController implements Initializable {
     private GridPane gridPanePagos;
     
     @FXML
+    private Pane paneIngresos;
+    
+    @FXML
     private Label labelCantidadCuotas;
+    
+    @FXML
+    private Label labelImporteTarjeta;
     
     @FXML
     private Label tituloFormaPagoLabel;
@@ -217,7 +223,6 @@ public class PagoTicketController implements Initializable {
             textFieldMonto.setText("0");
 
         
-        bonificaciones.setText(df.format(Context.getInstance().currentDMTicket().getBonificaciones()));
         saldoPagar.setText(Context.getInstance().currentDMTicket().getFormatSaldo());        
         bonificacionPorPagoTotal.setText(Context.getInstance().currentDMTicket().getFormatBonificacionPorPagoTotal());
         interesPorPagoTotal.setText(Context.getInstance().currentDMTicket().getFormatInteresPorPagoTotal());
@@ -318,11 +323,15 @@ public class PagoTicketController implements Initializable {
         textFieldCantidadCuotas.getStyleClass().add("textfield_sin_border");
         textFieldCantidadCuotas.setMask("N!");
         textFieldCantidadCuotas.setMaxDigitos(2);
+        textFieldCantidadCuotas.setDisable(true);
         textFieldNroCupon = new MaskTextField();
         textFieldNroCupon.setMask("N!");
         textFieldNroCupon.setMaxDigitos(16);
         textFieldNroCupon.getStyleClass().add("textfield_sin_border");
         
+        textFieldImporteTarjeta = new MaskTextField();
+        textFieldImporteTarjeta.getStyleClass().add("textfield_sin_border");
+        textFieldImporteTarjeta.setDisable(true);
         
         textFieldNroTarjeta = new MaskTextField();
         textFieldNroTarjeta.setMask("N!");
@@ -354,11 +363,12 @@ public class PagoTicketController implements Initializable {
         gridPanePagos.add(textFieldTipoPago,1,1);
         gridPanePagos.add(textFieldMonto,1,2);
         gridPanePagos.add(textFieldCantidadCuotas,1,3);
-        gridPanePagos.add(textFieldNroTarjeta,1,4);
-        gridPanePagos.add(textFieldNroCupon,1,5);
-        gridPanePagos.add(textFieldNroLote,1,6);
-        gridPanePagos.add(textFieldTerminal,1,7);
-        gridPanePagos.add(textFieldDniCliente,1,8);
+        gridPanePagos.add(textFieldImporteTarjeta,1,4);
+        gridPanePagos.add(textFieldNroTarjeta,1,5);
+        gridPanePagos.add(textFieldNroCupon,1,6);
+        gridPanePagos.add(textFieldNroLote,1,7);
+        gridPanePagos.add(textFieldTerminal,1,8);
+        gridPanePagos.add(textFieldDniCliente,1,9);
         
         cantidadCuotaColumn.setCellValueFactory(new PropertyValueFactory("cantidadCuotas"));
         cantidadCuotaColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
@@ -366,13 +376,14 @@ public class PagoTicketController implements Initializable {
         codigoCuponColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
         textFieldMonto.setStyle("-fx-alignment: CENTER-RIGHT;");
         textFieldTipoPago.setStyle("-fx-alignment: CENTER-RIGHT;");
+        textFieldImporteTarjeta.setStyle("-fx-alignment: CENTER-RIGHT;");
         textFieldNroTarjeta.setStyle("-fx-alignment: CENTER-RIGHT;");
         textFieldNroCupon.setStyle("-fx-alignment: CENTER-RIGHT;");
         textFieldCantidadCuotas.setStyle("-fx-alignment: CENTER-RIGHT;");
         textFieldNroLote.setStyle("-fx-alignment: CENTER-RIGHT;");
         textFieldTerminal.setStyle("-fx-alignment: CENTER-RIGHT;");
         textFieldDniCliente.setStyle("-fx-alignment: CENTER-RIGHT;");
-        textFieldCantidadCuotas.setDisable(true);
+        
         
         
         Platform.runLater(() -> {
@@ -408,7 +419,7 @@ public class PagoTicketController implements Initializable {
                     textFieldNroTarjeta.setDisable(false);
                     tabPaneController.repeatFocus(textFieldNroTarjeta);
                     porcentajeIntBonifTarjeta = ((LineaInteresTarjetaData)tableViewIntTarjeta.getSelectionModel().getSelectedItem()).getPorcentaje();
-                        
+                    calcularYMostrarImporteConIntBonifTarjeta();    
                 }
                 if(keyEvent.getCode() == KeyCode.TAB){
                     keyEvent.consume();
@@ -658,6 +669,8 @@ public class PagoTicketController implements Initializable {
         textFieldDniCliente.setVisible(false);
         textFieldTerminal.setVisible(false);
         textFieldNroLote.setVisible(false);
+        labelImporteTarjeta.setVisible(false);
+        textFieldImporteTarjeta.setVisible(false);
         
     }
     
@@ -685,6 +698,11 @@ public class PagoTicketController implements Initializable {
                 labelDniCliente.setVisible(true);
                 textFieldDniCliente.setVisible(true);
                 
+                labelImporteTarjeta.setVisible(true);
+                textFieldImporteTarjeta.setVisible(true);
+                gridPanePagos.setMaxHeight(507);
+                paneIngresos.setMaxHeight(507);
+                tableViewPagos.setPrefHeight(177);
                 
             }else{
                 textFieldNroCupon.setVisible(false);
@@ -698,7 +716,11 @@ public class PagoTicketController implements Initializable {
                 textFieldTerminal.setVisible(false);
                 labelDniCliente.setVisible(false);
                 textFieldDniCliente.setVisible(false);
-                
+                labelImporteTarjeta.setVisible(false);
+                textFieldImporteTarjeta.setVisible(false);
+                gridPanePagos.setMaxHeight(380);
+                paneIngresos.setMaxHeight(380);
+                tableViewPagos.setPrefHeight(397);
             }
             if(formaPago.getInteresesTarjeta().size()>0){
                 labelCantidadCuotas.setVisible(true);
@@ -892,6 +914,14 @@ public class PagoTicketController implements Initializable {
         }
     }
     
+    private void calcularYMostrarImporteConIntBonifTarjeta(){
+        //DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
+        BigDecimal importeTarjeta = BigDecimal.ZERO;
+        importeTarjeta = this.porcentajeIntBonifTarjeta
+                .multiply(Context.getInstance().currentDMTicket().getSaldo())
+                .divide(BigDecimal.valueOf(100));
+        textFieldImporteTarjeta.setText(importeTarjeta.toString());
+    }
     
     private void scrollDown(){
             if(tableViewPagos.getItems().size()>0){

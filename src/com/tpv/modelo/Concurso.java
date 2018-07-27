@@ -45,15 +45,19 @@ public class Concurso {
    private boolean imprimeTexto;
    
    @ManyToOne
-   @JoinColumn(name = "idGRUPOPRODUCTOS", referencedColumnName = "idGRUPOPRODUCTOS",nullable = false)
+   @JoinColumn(name="idProveedor",referencedColumnName="idProveedor",nullable = true)
+   private Proveedor proveedor;
+   
+   @ManyToOne
+   @JoinColumn(name = "idGRUPOPRODUCTOS", referencedColumnName = "idGRUPOPRODUCTOS",nullable = true)
    private GrupoProducto grupoProducto;
    
    @ManyToOne
-   @JoinColumn(name = "idSUBGRUPO", referencedColumnName = "idGRUPOPRODUCTOS", nullable = false)
+   @JoinColumn(name = "idSUBGRUPO", referencedColumnName = "idGRUPOPRODUCTOS", nullable = true)
    private GrupoProducto grupoProductoHijo;
    
    @ManyToOne
-   @JoinColumn(name = "idPRODUCTOS", referencedColumnName = "idPRODUCTOS", nullable = false)
+   @JoinColumn(name = "idPRODUCTOS", referencedColumnName = "idPRODUCTOS", nullable = true)
    private Producto producto;
 
     /**

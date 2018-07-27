@@ -149,8 +149,10 @@ public class FacturacionService  {
                     +" LEFT JOIN concursos cgp ON cgp.idGRUPOPRODUCTOS=p.idGRUPOPRODUCTOS"
                     +" LEFT JOIN  concursos cgph ON cgph.idSUBGRUPO = p.idGRUPOPRODUCTOS"
                     +" LEFT JOIN  concursos cp ON fd.idPRODUCTOS = cp.idPRODUCTOS"
+                    +" LEFT JOIN proveedores prov ON pp.idProveedor = prov.idProveedor "
                     +" LEFT JOIN concursos c ON c.idCONCURSOS = cgp.idCONCURSOS OR"
                     +" c.idCONCURSOS = cgph.idCONCURSOS OR c.idCONCURSOS = cp.idCONCURSOS"
+                    +" OR c.idProveedor = prov.idProveedor "            
                     +" WHERE fd.idFACTURAS = :idFacturas AND c.idCONCURSOS IS NOT NULL")
                     .setParameter("idFacturas", factura.getId());
             List list = q.getResultList();            
@@ -158,9 +160,10 @@ public class FacturacionService  {
                 Object[] o = it.next();
                 FacturaDetalleConcurso detConcurso = new FacturaDetalleConcurso();
                 detConcurso.setCantidadCupones(Integer.parseInt(o[5].toString()));
-                detConcurso.setConcurso(em.find(Concurso.class, new Long(o[1].toString())));
+                Concurso concurso = em.find(Concurso.class, Long.parseLong(o[1].toString()));
+                detConcurso.setConcurso(concurso);
                 
-                no encuentra el concurso
+                
                         
                 detConcurso.setFactura(factura);
                 factura.getDetalleConcursos().add(detConcurso);

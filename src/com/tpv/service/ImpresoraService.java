@@ -439,7 +439,7 @@ public class ImpresoraService {
         }
         
         //comando para extraer la fecha y hora fiscal
-        request = getHfp().cmdGetDateTime();
+        /*request = getHfp().cmdGetDateTime();
         try{
             response = getHfp().execute(request);
         }catch(FiscalPrinterStatusError e){
@@ -449,7 +449,7 @@ public class ImpresoraService {
         }catch(FiscalPrinterIOException e){
             log.warn("Error de entrada/salida en la impresora fical",e);
             throw new TpvException(e.getMessage());
-        }
+        }*/
         
         request = getHfp().cmdCloseFiscalReceipt(null);
         try{
