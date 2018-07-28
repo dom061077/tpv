@@ -4479,6 +4479,23 @@ to the top and bottom -fx-padding values of the parent toolbar. */
  
 }
 
+.textfield_sin_border_madium{
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-background-color: transparent;//-fx-control-inner-background;
+    -fx-background-insets: 0;
+    //-fx-padding: 1 3 1 3;    
+    //-fx-background-color: none ;
+    -fx-text-box-border: transparent;
+    -fx-border-color: transparent transparent -fx-base transparent;
+    -fx-border-width: 3;
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+ 
+}
+
+
+
 .rounded_corner{
 /*    -fx-background-color: linear-gradient(#EEFAFF 50%, white 100%) ;    
     -fx-border-width:2;

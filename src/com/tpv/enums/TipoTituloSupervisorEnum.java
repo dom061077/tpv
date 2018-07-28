@@ -14,7 +14,9 @@ public enum TipoTituloSupervisorEnum {
     CANCELAR_TICKET("Cancelar Ticket",2),
     HABILITAR_MENU("Ir a Menu",3),
     HABILITAR_CONTROLADOR("Habilitar Controlador",4),
-    HABILITAR_CONFIRMARETIRODINERO("Confirmar Retiro de Dinero",5);
+    HABILITAR_CONFIRMARETIRODINERO("Confirmar Retiro de Dinero",5),
+    CANCELAR_PAGO("Cancelar Pago",6),
+    CANCELAR_CONFIRMACION_PAGO("Cancelar Confirmación Pago",7);
     
     
     private String titulo;

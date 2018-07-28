@@ -6,6 +6,7 @@
 package com.tpv.pagoticket;
 
 import com.tpv.enums.OrigenPantallaErrorEnum;
+import com.tpv.enums.TipoTituloSupervisorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Factura;
 import com.tpv.modelo.FormaPago;
@@ -198,7 +199,7 @@ public class PagoTicketController implements Initializable {
             textFieldTerminal.setText(""+Context.getInstance().getDataModelTicket().getCheckout().getPosnet());
         
         iniciarIngresosVisibles();
-        tableViewPagos.getItems().clear();
+        //tableViewPagos.getItems().clear();
         tableViewPagos.setItems(Context.getInstance().currentDMTicket().getPagos());
         if(tableViewPagos.getItems().size()>0){
             tableViewPagos.getSelectionModel().selectLast();
@@ -368,7 +369,7 @@ public class PagoTicketController implements Initializable {
         gridPanePagos.add(textFieldNroCupon,1,6);
         gridPanePagos.add(textFieldNroLote,1,7);
         gridPanePagos.add(textFieldTerminal,1,8);
-        gridPanePagos.add(textFieldDniCliente,1,9);
+        gridPanePagos.add(textFieldDniCliente,3,8);
         
         cantidadCuotaColumn.setCellValueFactory(new PropertyValueFactory("cantidadCuotas"));
         cantidadCuotaColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
@@ -468,7 +469,8 @@ public class PagoTicketController implements Initializable {
                     }
                 }
                 if(keyEvent.getCode() == KeyCode.ESCAPE){
-                    tabPaneController.gotoFacturacion();//volverButton.fire();
+                    Context.getInstance().currentDMTicket().setTipoTituloSupervisor(TipoTituloSupervisorEnum.CANCELAR_PAGO);
+                    tabPaneController.gotoSupervisor();                        
                 }
                 
                 
@@ -700,9 +702,6 @@ public class PagoTicketController implements Initializable {
                 
                 labelImporteTarjeta.setVisible(true);
                 textFieldImporteTarjeta.setVisible(true);
-                gridPanePagos.setMaxHeight(507);
-                paneIngresos.setMaxHeight(507);
-                tableViewPagos.setPrefHeight(177);
                 
             }else{
                 textFieldNroCupon.setVisible(false);
@@ -718,9 +717,6 @@ public class PagoTicketController implements Initializable {
                 textFieldDniCliente.setVisible(false);
                 labelImporteTarjeta.setVisible(false);
                 textFieldImporteTarjeta.setVisible(false);
-                gridPanePagos.setMaxHeight(380);
-                paneIngresos.setMaxHeight(380);
-                tableViewPagos.setPrefHeight(397);
             }
             if(formaPago.getInteresesTarjeta().size()>0){
                 labelCantidadCuotas.setVisible(true);
@@ -824,6 +820,8 @@ public class PagoTicketController implements Initializable {
         textFieldNroLote.setVisible(false);
         textFieldTerminal.setVisible(false);
         textFieldDniCliente.setVisible(false);
+        textFieldImporteTarjeta.setVisible(false);
+        
         tableViewPagos.getSelectionModel().selectLast();
         saldoPagar.setText(null);
         
@@ -833,6 +831,7 @@ public class PagoTicketController implements Initializable {
         labelNroLote.setVisible(false);
         labelTerminal.setVisible(false);
         labelDniCliente.setVisible(false);
+        labelImporteTarjeta.setVisible(false);
         porcentajeIntBonifTarjeta=BigDecimal.ZERO;
         
         textFieldNroCupon.setText("");
@@ -915,12 +914,14 @@ public class PagoTicketController implements Initializable {
     }
     
     private void calcularYMostrarImporteConIntBonifTarjeta(){
-        //DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
+        DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
         BigDecimal importeTarjeta = BigDecimal.ZERO;
+        BigDecimal importePago = new BigDecimal(textFieldMonto.getText());
         importeTarjeta = this.porcentajeIntBonifTarjeta
-                .multiply(Context.getInstance().currentDMTicket().getSaldo())
-                .divide(BigDecimal.valueOf(100));
-        textFieldImporteTarjeta.setText(importeTarjeta.toString());
+                .multiply(importePago)
+                .divide(BigDecimal.valueOf(100),RoundingMode.HALF_EVEN)
+                .add(importePago);
+        textFieldImporteTarjeta.setText(df.format(importeTarjeta));
     }
     
     private void scrollDown(){

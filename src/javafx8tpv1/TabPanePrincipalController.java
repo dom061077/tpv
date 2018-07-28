@@ -299,7 +299,7 @@ public class TabPanePrincipalController implements Initializable {
     public void gotoPago(){
         try{
             this.getLabelTituloVentana().setText("INGRESO DE PAGOS");
-            this.getLabelShortCut().setText("Esc-Volver  |   F3-Formas de Pago ");
+            this.getLabelShortCut().setText("Esc-Volver  |   F3-Formas de Pago  |   Singo Menos (-) Elimina Pago");
             this.pagoTicketController.configurarInicio();
             this.getTabPanePrincipal().getSelectionModel().select(tabPago);
         }catch(TpvException e)    {

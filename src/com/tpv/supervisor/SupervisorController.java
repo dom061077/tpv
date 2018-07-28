@@ -126,6 +126,12 @@ public class SupervisorController implements Initializable, TabPaneModalCommand{
                         case HABILITAR_CONFIRMARETIRODINERO:
                             tabController.gotoMenuPrincipal();
                             break;
+                        case CANCELAR_PAGO:
+                            tabController.gotoPago();
+                            break;
+                        case CANCELAR_CONFIRMACION_PAGO:
+                            tabController.gotoConfirmarPago();
+                            break;
                     }                    
                     
                     keyEvent.consume();
@@ -157,6 +163,7 @@ public class SupervisorController implements Initializable, TabPaneModalCommand{
                     keyEvent.consume();
                     return;
                 }
+                
             });
             
             textFieldCodigoBarra = new MaskTextField();
@@ -208,6 +215,12 @@ public class SupervisorController implements Initializable, TabPaneModalCommand{
                                         break;
                                     case HABILITAR_CONFIRMARETIRODINERO:
                                         tabController.gotoRetiroDineroConfirmacion(false);
+                                        break;
+                                    case CANCELAR_PAGO:
+                                        tabController.gotoFacturacion();
+                                        break;
+                                    case CANCELAR_CONFIRMACION_PAGO:
+                                        tabController.gotoPago();
                                         break;
                                 }
                                 keyEvent.consume();

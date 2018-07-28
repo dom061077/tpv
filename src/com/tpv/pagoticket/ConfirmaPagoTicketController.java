@@ -6,10 +6,12 @@
 package com.tpv.pagoticket;
 
 import com.tpv.enums.OrigenPantallaErrorEnum;
+import com.tpv.enums.TipoTituloSupervisorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Factura;
 import com.tpv.modelo.FacturaDetalle;
 import com.tpv.modelo.FacturaDetalleCombo;
+import com.tpv.modelo.FacturaDetalleConcurso;
 import com.tpv.principal.Context;
 import com.tpv.print.event.FiscalPrinterEvent;
 import com.tpv.service.FacturacionService;
@@ -21,7 +23,6 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.Iterator;
-import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
@@ -221,7 +222,7 @@ public class ConfirmaPagoTicketController implements Initializable, TabPaneModal
                     
             stackPaneConcursos.setVisible(false);
             
-            tabPaneController.repeatFocus(borderPane);
+            tabPaneController.repeatFocus(tableViewPagos);
             tabPaneController.setTabPaneModalCommand(this);
                     
     }
@@ -304,34 +305,28 @@ public class ConfirmaPagoTicketController implements Initializable, TabPaneModal
             
             concursoColumn.setCellValueFactory(new PropertyValueFactory("textocorto"));
             cantidadCuponesColumn.setStyle("-fx-alignment: CENTER-RIGHT");
-            cantidadCuotaColumn.setCellValueFactory(new PropertyValueFactory("cantidadconcursos"));
             
             
             tableViewConcursos.setItems(concursosList);
             Platform.runLater(()->{
                 tableViewPagos.setItems(Context.getInstance().currentDMTicket().getPagos());
-                borderPane.setOnKeyPressed(keyEvent->{
+                tableViewPagos.setOnKeyPressed(keyEvent->{
                     if(keyEvent.getCode()==KeyCode.ESCAPE){
-                        //stackPaneMensajeCancelar.setVisible(true);
-                        //tabPaneController.repeatFocus(stackPaneMensajeCancelar);
-                        this.tabPaneController.getLabelMensaje().setText("¿Desea abandonar la confirmación del ticket?");
-                        this.tabPaneController.mostrarMensajeModal();
+                        Context.getInstance().currentDMTicket().setTipoTituloSupervisor(TipoTituloSupervisorEnum.CANCELAR_CONFIRMACION_PAGO);
+                        tabPaneController.gotoSupervisor();                        
                     }
                     if(keyEvent.getCode() == KeyCode.ENTER){
                         this.tabPaneController.getLabelMensaje().setText("¿Confirma el cierre del ticket?");
                         this.ticketConfirmado = true;
                         this.tabPaneController.mostrarMensajeModal();
                     }
-                    keyEvent.consume();
+                    if(keyEvent.getCode() == KeyCode.TAB)
+                        keyEvent.consume();
                 });
                 
                 stackPaneConcursos.setOnKeyPressed(keyEvent->{
                     if(keyEvent.getCode()==KeyCode.ENTER){
                         tabPaneController.gotoFacturacion();
-                    }
-                    if(keyEvent.getCode()==KeyCode.ESCAPE){
-                        stackPaneConcursos.setVisible(false);
-                        tabPaneController.repeatFocus(borderPane);
                     }
                     keyEvent.consume();
                 });
@@ -478,6 +473,7 @@ public class ConfirmaPagoTicketController implements Initializable, TabPaneModal
             ,int cantidadProductos, int cantidadConcursos){*/
     private void cargarGrillaConcursos(Factura factura){
         factura.getDetalleConcursos().forEach(item->{
+            FacturaDetalleConcurso factDetConcurso =  (FacturaDetalleConcurso)item;
             LineaConcursoData detConcurso = 
                     new LineaConcursoData(item.getId(),item.getConcurso().getTextoCorto()
                             ,item.getConcurso().isImprimeTexto()
@@ -560,6 +556,7 @@ public class ConfirmaPagoTicketController implements Initializable, TabPaneModal
                             if(factura.getDetalleConcursos().size()>0){
                                 cargarGrillaConcursos(factura);
                                 stackPaneConcursos.setVisible(true);
+                                
                                 tabPaneController.repeatFocus(stackPaneConcursos);
                             }else
                                 tabPaneController.gotoFacturacion();
@@ -667,17 +664,15 @@ public class ConfirmaPagoTicketController implements Initializable, TabPaneModal
     }*/    
     
     public void aceptarMensajeModal(){
+        this.tabPaneController.getLabelCancelarModal().setVisible(true);
         this.tabPaneController.ocultarMensajeModal();
-        if (this.ticketConfirmado)
-            confirmarFactura();            
-        else    
-            this.tabPaneController.gotoPago();
+        confirmarFactura();            
     }
     
     public void cancelarMensajeModal(){
         this.ticketConfirmado = false;
         this.tabPaneController.ocultarMensajeModal();
-        this.tabPaneController.repeatFocus(borderPane);
+        this.tabPaneController.repeatFocus(tableViewPagos);
     }
 
 
