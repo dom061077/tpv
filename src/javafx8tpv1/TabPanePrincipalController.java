@@ -51,6 +51,13 @@ import javafx.scene.layout.StackPane;
  */
 
 public class TabPanePrincipalController implements Initializable {
+
+    /**
+     * @return the labelMenssajeModalSuperior
+     */
+    public Label getLabelMenssajeModalSuperior() {
+        return labelMenssajeModalSuperior;
+    }
     Logger log = Logger.getLogger(TabPanePrincipalController.class);
     UsuarioService usuarioService = new UsuarioService();        
     ImpresoraService impresoraService = new ImpresoraService();
@@ -96,7 +103,7 @@ public class TabPanePrincipalController implements Initializable {
     @FXML private Label labelCancelarModal;
     @FXML private Label labelTituloVentana;
     @FXML private Label labelShortCut;
-    
+    @FXML private Label labelMenssajeModalSuperior;
     @FXML private ImageView imageSuperiorDerecha;
     @FXML private ImageView imageSuperiorIzquierda;
     @FXML private ImageView imageIzquierda;
@@ -374,6 +381,8 @@ public class TabPanePrincipalController implements Initializable {
     }
 
     public void mostrarMensajeModal(){
+        if(getLabelMenssajeModalSuperior().getText().trim().equals(""))
+            getLabelMenssajeModalSuperior().setVisible(false);
         this.stackPaneModal.setVisible(true);
         this.repeatFocus(this.getStackPaneModal());
     }

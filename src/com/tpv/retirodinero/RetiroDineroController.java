@@ -122,7 +122,17 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
                 
                 
                 if(keyEvent.getCode() == KeyCode.ENTER){
-                    tabController.getLabelMensaje().setText("¿Confirma la carga de retiro de dinero?");
+                     BigDecimal totalIngresado=BigDecimal.ZERO;
+                    for(Iterator<RetiroDineroData> it = retiroDineroDataList.iterator();it.hasNext();){
+                        RetiroDineroData item = it.next();
+                        totalIngresado = totalIngresado.add(item.getValorRetiro().multiply(BigDecimal.valueOf(item.getCantidadBilletes())));
+                    }
+                    boolean saldoSuperior = esSuperiorSaldoRetiro(totalIngresado);
+                    if(saldoSuperior){
+                        tabController.getLabelMenssajeModalSuperior().setText("El total ingresado supera el monto disponible en caja");
+                        tabController.getLabelMensaje().setText("¿Confirma la carga de retiro de dinero?");
+                    }else
+                        tabController.getLabelMensaje().setText("¿Confirma la carga de retiro de dinero?");
                     this.guardar=true;
                     tabController.mostrarMensajeModal();
                     return;
@@ -220,13 +230,13 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
     
     public void aceptarMensajeModal(){
         RetiroDinero retiroDinero = null;
-        if(guardar)
+        //if(guardar)
             this.guardarRetiro();
-        else{
+        /*else{
             this.tabController.getLabelCancelarModal().setVisible(true);
             this.tabController.ocultarMensajeModal();
             this.tabController.repeatFocus(this.tableViewRetiro);
-        }
+        }*/
     }
     
     public void cancelarMensajeModal(){
@@ -263,6 +273,8 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
         return false;        
     }
     
+
+    
     public void guardarRetiro(){
         log.info("Guardando retiro de dinero");
         RetiroDinero retiroDinero = new RetiroDinero();
@@ -286,18 +298,18 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
                     retiroDinero.getDetalle().add(retDetalle);
                 }
             }
-            boolean saldoSuperior = esSuperiorSaldoRetiro(total);
+            /*boolean saldoSuperior = esSuperiorSaldoRetiro(total);
             if(saldoSuperior){
                 this.tabController.getLabelCancelarModal().setVisible(false);
                 this.tabController.getLabelMensaje().setText("No es posible registrar el retiro. La suma de dinero cargada es superior a la disponibilidad en la caja.");
                 this.guardar = false;
                 this.tabController.mostrarMensajeModal();
-            }else{
+            }else{*/
                 retiroDinero.setMonto(total);
                 retiroDineroService.registrarRetiro(retiroDinero);
                 this.tabController.ocultarMensajeModal();
                 this.tabController.gotoMenuRetiroDinero();
-            }
+            //}
         }catch(TpvException e){
             log.error("Error en controlador llamando al método registrarRetiro de RetiroDineroService",e);
             tabController.ocultarMensajeModal();

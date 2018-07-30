@@ -885,14 +885,15 @@ public class PagoTicketController implements Initializable {
     
     private void cargarDatosTableViewInteresesTarjeta(){
 
-        BigDecimal totalPago = new BigDecimal(textFieldMonto.getText());
+        BigDecimal montoIngresado = new BigDecimal(textFieldMonto.getText());
         tableViewIntTarjeta.getItems().clear();
         for(Iterator<InteresTarjeta> it=formaPago.getInteresesTarjeta().iterator();it.hasNext();){
             InteresTarjeta intTarj = it.next();
+            BigDecimal totalPago = BigDecimal.ZERO;
             if(intTarj.getTipo()==InteresBonifTarjetaEnum.BONIFICACION)
-                totalPago=totalPago.subtract(intTarj.getMonto(totalPago));
+                totalPago=montoIngresado.subtract(intTarj.getMonto(montoIngresado));
             else
-                totalPago=totalPago.add(intTarj.getMonto(totalPago));
+                totalPago=montoIngresado.add(intTarj.getMonto(montoIngresado));
             tableViewIntTarjeta.getItems().add(new LineaInteresTarjetaData(
                     intTarj.getCuota(),intTarj.getTipo().toString()
                     ,intTarj.getPorcentaje(),totalPago)
