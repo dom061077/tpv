@@ -141,7 +141,7 @@
                                       </rowConstraints>
                                        <children>
                                           <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="450.0" prefHeight="21.0" prefWidth="450.0" styleClass="label_sub_titulo_modal" text="Mensaje" textFill="#d31818fa" />
-                                          <Label fx:id="labelMenssajeModalSuperior" alignment="CENTER" prefHeight="17.0" prefWidth="455.0" styleClass="label_textfield_negativo" GridPane.rowIndex="1" />
+                                          <Label fx:id="labelMenssajeModalSuperior" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="455.0" styleClass="label_textfield_negativo" GridPane.rowIndex="1" />
                                        </children>
                                     </GridPane>
                                  </top>
