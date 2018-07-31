@@ -128,11 +128,9 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
                         totalIngresado = totalIngresado.add(item.getValorRetiro().multiply(BigDecimal.valueOf(item.getCantidadBilletes())));
                     }
                     boolean saldoSuperior = esSuperiorSaldoRetiro(totalIngresado);
-                    if(saldoSuperior){
+                    if(saldoSuperior)
                         tabController.getLabelMenssajeModalSuperior().setText("El total ingresado supera el monto disponible en caja");
-                        tabController.getLabelMensaje().setText("¿Confirma la carga de retiro de dinero?");
-                    }else
-                        tabController.getLabelMensaje().setText("¿Confirma la carga de retiro de dinero?");
+                    tabController.getLabelMensaje().setText("¿Confirma la carga de retiro de dinero?");
                     this.guardar=true;
                     tabController.mostrarMensajeModal();
                     return;
@@ -237,6 +235,7 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
             this.tabController.ocultarMensajeModal();
             this.tabController.repeatFocus(this.tableViewRetiro);
         }*/
+        tabController.getLabelMenssajeModalSuperior().setText("");
     }
     
     public void cancelarMensajeModal(){

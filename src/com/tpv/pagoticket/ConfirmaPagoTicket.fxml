@@ -85,20 +85,20 @@
                      <children>
                         <BorderPane prefHeight="250.0" prefWidth="551.0">
                            <top>
-                              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="21.0" prefWidth="498.0" styleClass="label_sub_titulo_modal" text="Mensaje" BorderPane.alignment="CENTER" />
+                              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="21.0" prefWidth="549.0" styleClass="label_sub_titulo_modal" text="Mensaje" BorderPane.alignment="CENTER" />
                            </top>
                            <bottom>
                               <HBox prefHeight="37.0" prefWidth="400.0" BorderPane.alignment="CENTER">
                                  <children>
-                                    <Label prefHeight="21.0" prefWidth="276.0" styleClass="label_sub_titulo" text="Enter-Aceptar" />
+                                    <Label prefHeight="21.0" prefWidth="276.0" styleClass="label_shorcut" text="Enter-Aceptar" />
                                  </children>
                               </HBox>
                            </bottom>
                            <center>
                               <TableView fx:id="tableViewConcursos" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                 <columns>
-                                  <TableColumn fx:id="concursoColumn" prefWidth="321.0" text="Concurso" />
-                                  <TableColumn fx:id="cantidadCuponesColumn" prefWidth="171.0" text="Cantidad Cupones" />
+                                  <TableColumn fx:id="concursoColumn" prefWidth="257.0" text="Concurso" />
+                                  <TableColumn fx:id="cantidadCuponesColumn" prefWidth="271.0" text="Cantidad Cupones" />
                                 </columns>
                               </TableView>
                            </center>

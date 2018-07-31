@@ -43,6 +43,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 
 /**
@@ -56,7 +57,7 @@ public class TabPanePrincipalController implements Initializable {
      * @return the labelMenssajeModalSuperior
      */
     public Label getLabelMenssajeModalSuperior() {
-        return labelMenssajeModalSuperior;
+        return labelMensajeModalSuperior;
     }
     Logger log = Logger.getLogger(TabPanePrincipalController.class);
     UsuarioService usuarioService = new UsuarioService();        
@@ -103,7 +104,8 @@ public class TabPanePrincipalController implements Initializable {
     @FXML private Label labelCancelarModal;
     @FXML private Label labelTituloVentana;
     @FXML private Label labelShortCut;
-    @FXML private Label labelMenssajeModalSuperior;
+    @FXML private Label labelMensajeModalSuperior;
+    @FXML private GridPane gridPaneMensajeSuperior;
     @FXML private ImageView imageSuperiorDerecha;
     @FXML private ImageView imageSuperiorIzquierda;
     @FXML private ImageView imageIzquierda;
@@ -128,6 +130,7 @@ public class TabPanePrincipalController implements Initializable {
         });           
 
         labelMensaje.wrapTextProperty().set(true);
+        labelMensajeModalSuperior.wrapTextProperty().set(true);
         //loadImage();
         this.loginController.setTabController(this);
         
@@ -381,8 +384,14 @@ public class TabPanePrincipalController implements Initializable {
     }
 
     public void mostrarMensajeModal(){
-        if(getLabelMenssajeModalSuperior().getText().trim().equals(""))
+        if(getLabelMenssajeModalSuperior().getText().trim().equals("")){
             getLabelMenssajeModalSuperior().setVisible(false);
+            gridPaneMensajeSuperior.setPrefHeight(0);
+        }else{
+            getLabelMenssajeModalSuperior().setVisible(true);
+            gridPaneMensajeSuperior.setPrefHeight(170);
+        }
+            
         this.stackPaneModal.setVisible(true);
         this.repeatFocus(this.getStackPaneModal());
     }

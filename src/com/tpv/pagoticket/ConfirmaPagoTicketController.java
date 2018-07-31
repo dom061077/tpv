@@ -287,7 +287,7 @@ public class ConfirmaPagoTicketController implements Initializable, TabPaneModal
                         super.updateItem(item, empty);
                         this.setText(null);
                         this.setGraphic(null);
-                        log.debug("Bonifiacion en updateItem: "+item);
+                        log.debug("Bonificación en updateItem: "+item);
                         if (!empty) {
                                 //String formattedDob = De
                                 DecimalFormat df = new DecimalFormat("##,##0.00");
@@ -303,7 +303,8 @@ public class ConfirmaPagoTicketController implements Initializable, TabPaneModal
             ObservableList<LineaConcursoData> innerList = FXCollections.observableArrayList();
             concursosList = new SimpleListProperty<>(innerList);
             
-            concursoColumn.setCellValueFactory(new PropertyValueFactory("textocorto"));
+            concursoColumn.setCellValueFactory(new PropertyValueFactory("textoCorto"));
+            cantidadCuponesColumn.setCellValueFactory(new PropertyValueFactory("cantidadConcursos"));
             cantidadCuponesColumn.setStyle("-fx-alignment: CENTER-RIGHT");
             
             
@@ -324,7 +325,7 @@ public class ConfirmaPagoTicketController implements Initializable, TabPaneModal
                         keyEvent.consume();
                 });
                 
-                stackPaneConcursos.setOnKeyPressed(keyEvent->{
+                tableViewConcursos.setOnKeyPressed(keyEvent->{
                     if(keyEvent.getCode()==KeyCode.ENTER){
                         tabPaneController.gotoFacturacion();
                     }
@@ -483,6 +484,7 @@ public class ConfirmaPagoTicketController implements Initializable, TabPaneModal
                             ,item.getCantidadCupones());
             concursosList.add(detConcurso);
         });
+        
     }
     
     private void asignarEvento(){
@@ -557,7 +559,8 @@ public class ConfirmaPagoTicketController implements Initializable, TabPaneModal
                                 cargarGrillaConcursos(factura);
                                 stackPaneConcursos.setVisible(true);
                                 
-                                tabPaneController.repeatFocus(stackPaneConcursos);
+                                tabPaneController.repeatFocus(tableViewConcursos);
+                                tableViewConcursos.getSelectionModel().select(0);
                             }else
                                 tabPaneController.gotoFacturacion();
                     }catch(TpvException e){

@@ -702,6 +702,7 @@ public class PagoTicketController implements Initializable {
                 
                 labelImporteTarjeta.setVisible(true);
                 textFieldImporteTarjeta.setVisible(true);
+                textFieldImporteTarjeta.setText("");
                 
             }else{
                 textFieldNroCupon.setVisible(false);

@@ -296,11 +296,11 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
                 if(keyEvent.getCode()==KeyCode.F11 ){
                     if(Context.getInstance().currentDMTicket().getDetalle().size()==0)
                         this.tabPaneController.gotoMenuPrincipal();
-                    else{
+                    /*else{
                         Context.getInstance().currentDMTicket().setTipoTituloSupervisor(TipoTituloSupervisorEnum.HABILITAR_MENU);
                         tabPaneController.gotoSupervisor();
                         
-                    }
+                    }*/
                 }
                 
                 if(keyEvent.getCode() == KeyCode.BACK_SPACE
@@ -408,18 +408,13 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
                 }
                 
                 if(keyEvent.getCode() == KeyCode.F11){
-                    if(Context.getInstance().currentDMTicket().getDetalle().size()==0)
+                    if(Context.getInstance().currentDMTicket().getDetalle().isEmpty())
                         
                         this.tabPaneController.gotoMenuPrincipal();
                     else{
                         
-                        /*Alert alert = new Alert(AlertType.WARNING,
-                            "No se puede volver al menú principal cuando hay un ticket abierto"
-                            , ButtonType.OK);
-                        alert.getDialogPane().getScene().getStylesheets().add(Connection.getCss());
-                        alert.showAndWait();*/
-                        Context.getInstance().currentDMTicket().setTipoTituloSupervisor(TipoTituloSupervisorEnum.HABILITAR_MENU);
-                        tabPaneController.gotoSupervisor();
+                        //Context.getInstance().currentDMTicket().setTipoTituloSupervisor(TipoTituloSupervisorEnum.HABILITAR_MENU);
+                        //tabPaneController.gotoSupervisor();
                         
                     }
                 }
@@ -661,7 +656,7 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
     public void traerCliente(){
         
         try{
-            Cliente cliente = clienteService.getClientePorCodODniOCuit(Integer.parseInt(textFieldCodCliente.getText()));
+            Cliente cliente = clienteService.getClientePorCodODniOCuit(textFieldCodCliente.getText());
             if(cliente!=null){
                 nombreCliente.setText(cliente.getRazonSocial());
                 nombreCliente.setVisible(true);

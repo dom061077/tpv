@@ -141,8 +141,8 @@ public class FacturacionService  {
         try{
             
             Query q = em.createNativeQuery(
-                    "SELECT DISTINCT fd.idFACTURASDETALLE,c.idCONCURSOS,c.TEXTOCORTO,c.CANTIDADPRODUCTOS,c.CANTIDADCUPONES"
-                    +"                ,CONVERT(((fd.CANTIDAD/c.CANTIDADPRODUCTOS)*c.CANTIDADCUPONES),UNSIGNED INTEGER )AS CUPONESENTREGADOS"
+                     "SELECT c.idCONCURSOS,c.TEXTOCORTO,c.CANTIDADPRODUCTOS,c.CANTIDADCUPONES"
+                    +" ,(SUM(fd.CANTIDAD) DIV c.CANTIDADPRODUCTOS)*c.CANTIDADCUPONES AS CUPONESENTREGADOS"
                     +" FROM facturasdetalle fd"
                     +" INNER JOIN productos p ON fd.idPRODUCTOS = p.idPRODUCTOS"
                     +" INNER JOIN proveedores_productos pp ON fd.idPRODUCTOS = pp.idPRODUCTOS"
@@ -153,14 +153,15 @@ public class FacturacionService  {
                     +" LEFT JOIN concursos c ON c.idCONCURSOS = cgp.idCONCURSOS OR"
                     +" c.idCONCURSOS = cgph.idCONCURSOS OR c.idCONCURSOS = cp.idCONCURSOS"
                     +" OR c.idProveedor = prov.idProveedor "            
-                    +" WHERE fd.idFACTURAS = :idFacturas AND c.idCONCURSOS IS NOT NULL")
+                    +" WHERE fd.idFACTURAS = :idFacturas AND c.idCONCURSOS IS NOT NULL"
+                    +" GROUP BY c.idCONCURSOS,c.TEXTOCORTO,c.CANTIDADPRODUCTOS,c.CANTIDADCUPONES")
                     .setParameter("idFacturas", factura.getId());
             List list = q.getResultList();            
             for(Iterator<Object[]> it = list.iterator();it.hasNext();){
                 Object[] o = it.next();
                 FacturaDetalleConcurso detConcurso = new FacturaDetalleConcurso();
-                detConcurso.setCantidadCupones(Integer.parseInt(o[5].toString()));
-                Concurso concurso = em.find(Concurso.class, Long.parseLong(o[1].toString()));
+                detConcurso.setCantidadCupones(Integer.parseInt(o[4].toString()));
+                Concurso concurso = em.find(Concurso.class, Long.parseLong(o[0].toString()));
                 detConcurso.setConcurso(concurso);
                 
                 

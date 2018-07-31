@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
@@ -15,7 +20,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane focusTraversable="true" maxHeight="768.0" maxWidth="1366.0" minHeight="768.0" minWidth="1366.0" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafx8tpv1.TabPanePrincipalController">
+<AnchorPane focusTraversable="true" maxHeight="768.0" maxWidth="1366.0" minHeight="768.0" minWidth="1366.0" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafx8tpv1.TabPanePrincipalController">
    <children>
       <BorderPane focusTraversable="true" maxHeight="700.0" maxWidth="1366.0" minHeight="700.0" minWidth="1366.0" prefHeight="700.0" prefWidth="1366.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
@@ -127,24 +132,32 @@
                                        </children>
                                     </HBox>
                                  </bottom>
-                                 <center>
-                                    <Label fx:id="labelMensaje" alignment="CENTER" prefHeight="256.0" prefWidth="493.0" styleClass="label_textfield" text="Label" textAlignment="CENTER" BorderPane.alignment="CENTER" />
-                                 </center>
                                  <top>
-                                    <GridPane BorderPane.alignment="CENTER">
+                                    <GridPane fx:id="gridPaneMensajeSuperior" prefHeight="171.0" prefWidth="450.0" BorderPane.alignment="CENTER">
                                       <columnConstraints>
                                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                       </columnConstraints>
                                       <rowConstraints>
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints maxHeight="45.0" minHeight="10.0" prefHeight="44.0" vgrow="SOMETIMES" />
+                                          <RowConstraints maxHeight="77.0" minHeight="10.0" prefHeight="65.0" vgrow="SOMETIMES" />
                                       </rowConstraints>
                                        <children>
-                                          <Label alignment="CENTER" contentDisplay="CENTER" maxWidth="450.0" prefHeight="21.0" prefWidth="450.0" styleClass="label_sub_titulo_modal" text="Mensaje" textFill="#d31818fa" />
-                                          <Label fx:id="labelMenssajeModalSuperior" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="455.0" styleClass="label_textfield_negativo" GridPane.rowIndex="1" />
+                                          <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+                                             <children>
+                                                <Label fx:id="labelMensajeModalSuperior" alignment="CENTER" prefHeight="171.0" prefWidth="450.0" styleClass="label_textfield_negativo" textAlignment="CENTER" />
+                                             </children>
+                                          </Pane>
+                                          <Label alignment="CENTER" contentDisplay="TOP" maxWidth="450.0" prefHeight="21.0" prefWidth="450.0" styleClass="label_barra_titulo" text="Mensaje" textFill="#d31818fa" />
                                        </children>
                                     </GridPane>
                                  </top>
+                                 <center>
+                                    <Pane prefHeight="116.0" prefWidth="450.0" BorderPane.alignment="CENTER">
+                                       <children>
+                                          <Label fx:id="labelMensaje" alignment="CENTER" contentDisplay="CENTER" prefHeight="171.0" prefWidth="450.0" styleClass="label_textfield" text="Label" textAlignment="CENTER" />
+                                       </children>
+                                    </Pane>
+                                 </center>
                               </BorderPane>
                            </children>
                         </StackPane>

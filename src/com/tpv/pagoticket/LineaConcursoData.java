@@ -80,12 +80,20 @@ public class LineaConcursoData {
     public Long getIdFactDetConcurso() {
         return IdFacDetConcurso.get();
     }
+    
+    public void setIdFactDetConcurso(Long valor){
+        IdFacDetConcurso.set(valor);
+    }
 
     /**
      * @return the TextoCorto
      */
     public String getTextoCorto() {
         return TextoCorto.get();
+    }
+    
+    public void setTextoCorto(String texto){
+        TextoCorto.set(texto);
     }
 
     /**
@@ -95,11 +103,19 @@ public class LineaConcursoData {
         return ImprimeTexto.get();
     }
 
+    public void setImprimeTexto(boolean value){
+        ImprimeTexto.set(value);
+    }
+    
     /**
      * @return the VigenciaDesde
      */
     public ObjectProperty getVigenciaDesde() {
         return VigenciaDesde;
+    }
+    
+    public void setVigenciaDesde(java.sql.Date value){
+       VigenciaDesde.set(value);
     }
 
     /**
@@ -108,6 +124,10 @@ public class LineaConcursoData {
     public ObjectProperty getVigenciaHasta() {
         return VigenciaHasta;
     }
+    
+    public void setVigenciaHasta(java.sql.Date value){
+        VigenciaHasta.set(value);
+    }
 
     /**
      * @return the CantidadProductos
@@ -115,11 +135,19 @@ public class LineaConcursoData {
     public IntegerProperty getCantidadProductos() {
         return CantidadProductos;
     }
+    
+    public void setCantidadProductos(int value){
+        CantidadProductos.set(value);
+    }
 
     /**
      * @return the CantidadConcursos
      */
     public IntegerProperty getCantidadConcursos() {
         return CantidadConcursos;
+    }
+    
+    public void setCantidadConcursos(int value){
+        CantidadConcursos.set(value);
     }
 }
