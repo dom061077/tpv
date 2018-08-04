@@ -639,8 +639,9 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
         
         textFieldCodCliente = new MaskTextField();
         textFieldCodCliente.setMask("N!");
-        textFieldCodCliente.setPrefWidth(150);
-        textFieldCodCliente.setMaxWidth(150);
+        textFieldCodCliente.setMaxDigitos(11);
+        textFieldCodCliente.setPrefWidth(190);
+        textFieldCodCliente.setMaxWidth(190);
         textFieldCodCliente.getStyleClass().add("textfield_sin_border");
         textFieldCodCliente.setFocusTraversable(true);
         

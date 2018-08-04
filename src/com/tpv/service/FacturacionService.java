@@ -133,13 +133,15 @@ public class FacturacionService  {
         }
     }
     
+    
+    
     public Factura confirmarFactura(Factura factura)throws TpvException{
         //Factura factura;
         log.info("Capa de servicios, Confirmar Factura con id: "+factura.getId());
         EntityManager em = Connection.getEm();
         EntityTransaction tx = null;
         try{
-            
+            /*
             Query q = em.createNativeQuery(
                      "SELECT c.idCONCURSOS,c.TEXTOCORTO,c.CANTIDADPRODUCTOS,c.CANTIDADCUPONES"
                     +" ,(SUM(fd.CANTIDAD) DIV c.CANTIDADPRODUCTOS)*c.CANTIDADCUPONES AS CUPONESENTREGADOS"
@@ -169,6 +171,7 @@ public class FacturacionService  {
                 detConcurso.setFactura(factura);
                 factura.getDetalleConcursos().add(detConcurso);
             }
+            */
             tx = em.getTransaction();
             tx.begin();
             factura.setDescuento(BigDecimal.ZERO);
@@ -586,6 +589,46 @@ public class FacturacionService  {
         BigDecimal totalFactura = factura.getTotal();
         totalFactura = totalFactura.subtract(totalBonificacionPago).add(totalInteresPago);
         factura.setTotal(totalFactura);
+        //---------CARGANDO CONCURSOS -----
+        EntityManager em = Connection.getEm();
+        try{
+                Query q = em.createNativeQuery(
+                             "SELECT c.idCONCURSOS,c.TEXTOCORTO,c.CANTIDADPRODUCTOS,c.CANTIDADCUPONES"
+                            +" ,(SUM(fd.CANTIDAD) DIV c.CANTIDADPRODUCTOS)*c.CANTIDADCUPONES AS CUPONESENTREGADOS"
+                            +" FROM facturasdetalle fd"
+                            +" INNER JOIN productos p ON fd.idPRODUCTOS = p.idPRODUCTOS"
+                            +" INNER JOIN proveedores_productos pp ON fd.idPRODUCTOS = pp.idPRODUCTOS"
+                            +" LEFT JOIN concursos cgp ON cgp.idGRUPOPRODUCTOS=p.idGRUPOPRODUCTOS"
+                            +" LEFT JOIN  concursos cgph ON cgph.idSUBGRUPO = p.idGRUPOPRODUCTOS"
+                            +" LEFT JOIN  concursos cp ON fd.idPRODUCTOS = cp.idPRODUCTOS"
+                            +" LEFT JOIN proveedores prov ON pp.idProveedor = prov.idProveedor "
+                            +" LEFT JOIN concursos c ON c.idCONCURSOS = cgp.idCONCURSOS OR"
+                            +" c.idCONCURSOS = cgph.idCONCURSOS OR c.idCONCURSOS = cp.idCONCURSOS"
+                            +" OR c.idProveedor = prov.idProveedor "            
+                            +" WHERE fd.idFACTURAS = :idFacturas AND c.idCONCURSOS IS NOT NULL"
+                            +" GROUP BY c.idCONCURSOS,c.TEXTOCORTO,c.CANTIDADPRODUCTOS,c.CANTIDADCUPONES")
+                            .setParameter("idFacturas", factura.getId());
+                    List list = q.getResultList();            
+                    for(Iterator<Object[]> it = list.iterator();it.hasNext();){
+                        Object[] o = it.next();
+                        FacturaDetalleConcurso detConcurso = new FacturaDetalleConcurso();
+                        detConcurso.setCantidadCupones(Integer.parseInt(o[4].toString()));
+                        Concurso concurso = em.find(Concurso.class, Long.parseLong(o[0].toString()));
+                        detConcurso.setConcurso(concurso);
+
+
+
+                        detConcurso.setFactura(factura);
+                        factura.getDetalleConcursos().add(detConcurso);
+                    }
+        }catch(RuntimeException e){
+            log.error("Error al consultar los concursos",e);
+            throw new TpvException("Error al consultar los concursos");
+        }
+        
+        //---------------------------------------
+        
+        
         return factura;
     } 
     

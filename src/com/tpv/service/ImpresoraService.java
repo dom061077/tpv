@@ -8,15 +8,16 @@ package com.tpv.service;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Factura;
 import com.tpv.modelo.FacturaDetalleCombo;
+import com.tpv.modelo.FacturaDetalleConcurso;
 import com.tpv.modelo.RetiroDinero;
 import com.tpv.modelo.RetiroDineroDetalle;
 import com.tpv.principal.Context;
 import com.tpv.util.BinaryFiscalPacketParser;
 import com.tpv.util.Connection;
 import java.math.BigDecimal;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Iterator;
 import org.apache.log4j.Logger;
 import org.tpv.print.fiscal.FiscalPacket;
@@ -215,7 +216,7 @@ public class ImpresoraService {
     }
     
     private void printHeaderTrailer(String linea11NroTarj,String linea12Villeco
-            ,String linea13DatosFact,String linea14Concurso, String linea15Concurso)
+            ,String linea13DatosFact,ArrayList<String> concursos)
             throws FiscalPrinterIOException, FiscalPrinterStatusError {
                 /*líneas SetHeaderTrailer
                 11 Numero tarjeta
@@ -233,12 +234,14 @@ public class ImpresoraService {
         
         request = getHfp().cmdSetHeaderTrailer(13,linea13DatosFact);
         response = getHfp().execute(request);
-        
-        request = getHfp().cmdSetHeaderTrailer(14,linea14Concurso);
-        response = getHfp().execute(request);
-        
-        request = getHfp().cmdSetHeaderTrailer(15, linea15Concurso);
-        response = getHfp().execute(request);
+        int linea = 14;
+        for(String item : concursos){
+            request = getHfp().cmdSetHeaderTrailer(linea,item);
+            response = getHfp().execute(request);
+            linea++;
+            if(linea>17)
+                break;
+        }
         
     }
     
@@ -412,11 +415,33 @@ public class ImpresoraService {
                 log.warn("Error de entrada/salida en la impresora fiscal al imprimir retención",e);
                 throw new TpvException(e.getMessage());
             }
-        }        
+        }   
+        ArrayList<String> concursos = new ArrayList();
+        if(!factura.getDetalleConcursos().isEmpty()){
+            for(Iterator<FacturaDetalleConcurso> it = factura.getDetalleConcursos().iterator();it.hasNext(); ){
+                FacturaDetalleConcurso fdet = it.next();
+                String linea=
+                        String.format("%1$-15.15s",fdet.getConcurso().getTextoCorto())+" "
+                        +String.format("%2s",fdet.getCantidadCupones());
+                fdet=null;
+                if(it.hasNext())
+                    fdet = it.next();
+                if(fdet!=null)
+                    linea= linea + " | "
+                            +String.format("%1$-15.15s",fdet.getConcurso().getTextoCorto())+" "
+                            +String.format("%2s",fdet.getCantidadCupones());
+                concursos.add(linea);
+            }
+        }
+        
         try{        
             SimpleDateFormat sdfDia = new SimpleDateFormat("dd");
             SimpleDateFormat sdfMes = new SimpleDateFormat("MM");
             SimpleDateFormat sdfHora = new SimpleDateFormat("hh:mm");
+            
+            for(int i = concursos.size();i<=2;i++){
+                concursos.add(" ");
+            }
             
             printHeaderTrailer(" "
                         ,Context.getInstance().currentDMParametroGral().getSetHeaderTrailerLinea12()
@@ -429,7 +454,7 @@ public class ImpresoraService {
                             +factura.getPrefijoFiscal()+" "
                             +factura.getNumeroComprobante()+" "
                             +factura.getId()
-                        ," "," ");
+                        ,concursos);
         }catch(FiscalPrinterStatusError e){
             log.warn("Error en estado fiscal de la impresora al imprimir retención");
             throw new TpvException(e.getMessage());
@@ -525,8 +550,12 @@ public class ImpresoraService {
     
     public void imprimirRetiroDinero(RetiroDinero retiroDinero)throws TpvException{
         FiscalMessages fMsg;
+        ArrayList<String> concursos = new ArrayList();
+        concursos.add(" ");
+        concursos.add(" ");
+        concursos.add(" ");
         try{
-            printHeaderTrailer(" ", " ", " ", " ", " ");
+            printHeaderTrailer(" ", " ", " ", concursos);
         }catch(FiscalPrinterStatusError e){
             fMsg = getHfp().getMessages();
             log.warn("Error de estado en la impresora al imprimir retiro de dinero",e);

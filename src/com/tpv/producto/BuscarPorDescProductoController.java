@@ -158,14 +158,14 @@ public class BuscarPorDescProductoController implements Initializable{
              Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_BUSCARPORDESCPRODUCTO);
              Context.getInstance().currentDMTicket().setException(e);
         }
-            
-        productosPrecios.forEach(lstPrecioProducto->{
-            data.add(new ProductoData(
-                    lstPrecioProducto.getProducto().getCodigoProducto(),
-                    lstPrecioProducto.getProducto().getDescripcion()
-                    ,lstPrecioProducto.getPrecioFinal()
-            ));
-        });
+        if(productosPrecios!=null)    
+            productosPrecios.forEach(lstPrecioProducto->{
+                data.add(new ProductoData(
+                        lstPrecioProducto.getProducto().getCodigoProducto(),
+                        lstPrecioProducto.getProducto().getDescripcion()
+                        ,lstPrecioProducto.getPrecioFinal()
+                ));
+            });
         
         
         tableView.getItems().clear();

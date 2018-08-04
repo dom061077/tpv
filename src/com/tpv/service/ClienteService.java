@@ -26,11 +26,18 @@ public class ClienteService {
         log.info("Capa de servicios, recuperar cliente por parametro: "+filtroCodigo);
         Cliente cliente = null;
         EntityManager em = Connection.getEm();
-        int 
+        int filtroCodigoInt=0;
+        filtroCodigo = filtroCodigo.replace("-", "");
         try{
+            filtroCodigoInt = Integer.parseInt(filtroCodigo);
+        }catch(Exception e){
+            
+        }
+        String cuit = filtroCodigo.substring(0,2)+"-"+filtroCodigo.substring(2,10)+"-"
+              +filtroCodigo.substring(10,11);        try{
             
             Query q = em.createQuery("FROM Cliente c WHERE c.id = :id or c.dni = :dni or c.cuit = :cuit").setParameter("id"
-                    ,filtroCodigo).setParameter("dni", filtroCodigo).setParameter("cuit", filtroCodigo);
+                    ,filtroCodigoInt).setParameter("dni", filtroCodigoInt).setParameter("cuit", cuit);
             cliente = (Cliente)q.getSingleResult();
             log.info("Cliente recuperado "+cliente.getCuit()+" - "+cliente.getRazonSocial());
         }catch(NoResultException e){

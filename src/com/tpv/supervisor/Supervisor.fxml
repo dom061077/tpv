@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
@@ -9,14 +13,14 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.supervisor.SupervisorController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.supervisor.SupervisorController">
    <center>
       <BorderPane fx:id="borderPaneIngreso" prefHeight="574.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
          <padding>
             <Insets left="20.0" right="20.0" />
          </padding>
          <center>
-            <GridPane fx:id="gridPane" alignment="CENTER" maxHeight="400.0" maxWidth="600.0" minHeight="400.0" minWidth="600.0" prefHeight="400.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+            <GridPane fx:id="gridPane" alignment="CENTER" maxHeight="400.0" maxWidth="700.0" minHeight="400.0" minWidth="600.0" prefHeight="400.0" prefWidth="700.0" BorderPane.alignment="CENTER">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="501.0" minWidth="10.0" prefWidth="183.0" />
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="613.0" minWidth="10.0" prefWidth="217.0" />
@@ -31,7 +35,7 @@
                   <TextField fx:id="textFieldCodigoSupervisor" prefHeight="31.0" prefWidth="100.0" styleClass="textfield_sin_border" GridPane.columnIndex="1" />
                   <Label styleClass="label_textfield" text="Contraseña:" GridPane.rowIndex="1" />
                   <Label styleClass="label_textfield" text="Nombre de Usuario:" />
-                  <Label styleClass="label_textfield" text="Código de Supervisor:" GridPane.rowIndex="2" />
+                  <Label prefHeight="17.0" prefWidth="333.0" styleClass="label_textfield" text="Código de Supervisor:" GridPane.rowIndex="2" />
                </children>
             </GridPane>
          </center>

@@ -473,6 +473,7 @@ public class ConfirmaPagoTicketController implements Initializable, TabPaneModal
             ,java.sql.Date vigenciaDesde, java.sql.Date vigenciaHasta
             ,int cantidadProductos, int cantidadConcursos){*/
     private void cargarGrillaConcursos(Factura factura){
+        concursosList.clear();
         factura.getDetalleConcursos().forEach(item->{
             FacturaDetalleConcurso factDetConcurso =  (FacturaDetalleConcurso)item;
             LineaConcursoData detConcurso = 
