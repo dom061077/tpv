@@ -593,6 +593,8 @@ public class FacturacionService  {
         EntityManager em = Connection.getEm();
         try{
                 Query q = em.createNativeQuery(
+                            si la factura tiene anulaciones, no sumar las mismas
+                                    para los concursos
                              "SELECT c.idCONCURSOS,c.TEXTOCORTO,c.CANTIDADPRODUCTOS,c.CANTIDADCUPONES"
                             +" ,(SUM(fd.CANTIDAD) DIV c.CANTIDADPRODUCTOS)*c.CANTIDADCUPONES AS CUPONESENTREGADOS"
                             +" FROM facturasdetalle fd"
@@ -606,7 +608,8 @@ public class FacturacionService  {
                             +" c.idCONCURSOS = cgph.idCONCURSOS OR c.idCONCURSOS = cp.idCONCURSOS"
                             +" OR c.idProveedor = prov.idProveedor "            
                             +" WHERE fd.idFACTURAS = :idFacturas AND c.idCONCURSOS IS NOT NULL"
-                            +" GROUP BY c.idCONCURSOS,c.TEXTOCORTO,c.CANTIDADPRODUCTOS,c.CANTIDADCUPONES")
+                            +" GROUP BY c.idCONCURSOS,c.TEXTOCORTO,c.CANTIDADPRODUCTOS,c.CANTIDADCUPONES"
+                            +" HAVING (SUM(fd.CANTIDAD) DIV c.CANTIDADPRODUCTOS)*c.CANTIDADCUPONES>0")
                             .setParameter("idFacturas", factura.getId());
                     List list = q.getResultList();            
                     for(Iterator<Object[]> it = list.iterator();it.hasNext();){
@@ -675,7 +678,7 @@ public class FacturacionService  {
         return totalFacturado.subtract(totalRetiro);
     }
     
-    public List getConcursos(Long idFactura) throws TpvException{
+    /*public List getConcursos(Long idFactura) throws TpvException{
         List list=new ArrayList();
         EntityManager em = Connection.getEm();
         try{
@@ -693,10 +696,6 @@ public class FacturacionService  {
                     +" WHERE fd.idFACTURAS = :idFacturas AND c.idCONCURSOS IS NOT NULL")
                     .setParameter("idFacturas", idFactura);
             list = q.getResultList();
-            /*for(Iterator<Object[]> it = list.iterator();it.hasNext();){
-               Object[] o = it.next();
-               concursosStr+= "-"+ o[2].toString()+" Cupones: "+String.format("%d5", o[5]);
-            }*/
                 
         }catch(RuntimeException e){
             log.error("Error al consultar los concursos",e);
@@ -704,7 +703,7 @@ public class FacturacionService  {
         }
         
         return list;
-    }
+    }*/
     
     
     /*
