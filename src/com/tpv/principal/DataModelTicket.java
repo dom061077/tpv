@@ -30,6 +30,12 @@ import javafx.collections.ObservableList;
 
 public class DataModelTicket {
 
+
+
+    /**
+     * @return the esUsuarioSupervisor
+     */
+
     /**
      * @param totalIva the totalIva to set
      */
@@ -47,6 +53,7 @@ public class DataModelTicket {
     private ListProperty<LineaPagoData> pagos;
     private Usuario usuario = null;
     private Usuario usuarioSupervisor = null;
+    private boolean usuarioLogueadoSupervisor = false;
     private Cliente cliente = null;
     private FormaPago formaPago = null;
     private TpvException exception;

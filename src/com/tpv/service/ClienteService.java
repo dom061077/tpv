@@ -33,9 +33,11 @@ public class ClienteService {
         }catch(Exception e){
             
         }
-        String cuit = filtroCodigo.substring(0,2)+"-"+filtroCodigo.substring(2,10)+"-"
-              +filtroCodigo.substring(10,11);        try{
-            
+        String cuit = "";
+        if(filtroCodigo.length()==11)
+            cuit = filtroCodigo.substring(0,2)+"-"+filtroCodigo.substring(2,10)+"-"
+              +filtroCodigo.substring(10,11);        
+        try{
             Query q = em.createQuery("FROM Cliente c WHERE c.id = :id or c.dni = :dni or c.cuit = :cuit").setParameter("id"
                     ,filtroCodigoInt).setParameter("dni", filtroCodigoInt).setParameter("cuit", cuit);
             cliente = (Cliente)q.getSingleResult();

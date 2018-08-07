@@ -116,23 +116,32 @@ public class LoginController implements Initializable, TabPaneModalCommand{
                     }                        
                     if(usuario!=null){
                         Context.getInstance().currentDMTicket().setUsuario(usuario);
-                        try{
-                            aperturaCierreCajDet = usuarioService.verificarAperturaCaja(usuario.getIdUsuario()
-                                    , Context.getInstance().currentDMTicket().getCheckout().getId());
-                            if(aperturaCierreCajDet!=null){
-                                Context.getInstance().currentDMTicket().setCaja(aperturaCierreCajDet.getCaja());
-                                tabController.gotoMenuPrincipal();
-                            }else{
-                                this.tabController.getLabelCancelarModal().setVisible(false);
-                                this.tabController.getLabelMensaje().setText("La caja no está abierta. Consulte a su administrador");
-                                this.tabController.mostrarMensajeModal();
-                            }
-                        }catch(TpvException e){
-                            log.error("Error: "+e.getMessage());
-                            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_LOGIN);
-                            Context.getInstance().currentDMTicket().setException(e);
-                            tabController.gotoError();
-                        }    
+                        if(usuario.isSupervisor()){
+                            tabController.getUsuarioLogueadoLabel().setText("Usuario: "+usuario.getNombre());
+                            tabController.gotoMenuPrincipal();
+                        }else{
+                        
+                            try{
+
+                                aperturaCierreCajDet = usuarioService.verificarAperturaCaja(usuario.getIdUsuario()
+                                        , Context.getInstance().currentDMTicket().getCheckout().getId());
+
+                                if(aperturaCierreCajDet!=null){
+                                    Context.getInstance().currentDMTicket().setCaja(aperturaCierreCajDet.getCaja());
+                                    tabController.getUsuarioLogueadoLabel().setText("Usuario: "+usuario.getNombre());
+                                    tabController.gotoMenuPrincipal();
+                                }else{
+                                    this.tabController.getLabelCancelarModal().setVisible(false);
+                                    this.tabController.getLabelMensaje().setText("La caja no está abierta. Consulte a su administrador");
+                                    this.tabController.mostrarMensajeModal();
+                                }
+                            }catch(TpvException e){
+                                log.error("Error: "+e.getMessage());
+                                Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_LOGIN);
+                                Context.getInstance().currentDMTicket().setException(e);
+                                tabController.gotoError();
+                            }    
+                        }
                     }else{
                         /*labelError.setText("Usuario o contraseña incorrectos");
                         stackPaneError.setVisible(true);

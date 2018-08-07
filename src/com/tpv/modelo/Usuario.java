@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import org.hibernate.annotations.Formula;
 
 /**
@@ -18,6 +19,20 @@ import org.hibernate.annotations.Formula;
 @Entity
 @Table(name="usuarios")
 public class Usuario {
+
+    /**
+     * @return the supervisor
+     */
+    public boolean isSupervisor() {
+        return supervisor;
+    }
+
+    /**
+     * @param supervisor the supervisor to set
+     */
+    public void setSupervisor(boolean supervisor) {
+        this.supervisor = supervisor;
+    }
     @Id
     @Column(name="idUSUARIOS")
     private int idUsuario;
@@ -38,6 +53,9 @@ public class Usuario {
     @Formula("(SELECT NOW())")
     private java.util.Date fechaHoraHoy;
 
+    @Transient
+    private boolean supervisor; 
+    
 
     /**
      * @return the idUsuario

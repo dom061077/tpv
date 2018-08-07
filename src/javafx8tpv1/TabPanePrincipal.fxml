@@ -22,7 +22,7 @@
 
 <AnchorPane focusTraversable="true" maxHeight="768.0" maxWidth="1366.0" minHeight="768.0" minWidth="1366.0" prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafx8tpv1.TabPanePrincipalController">
    <children>
-      <BorderPane focusTraversable="true" maxHeight="700.0" maxWidth="1366.0" minHeight="700.0" minWidth="1366.0" prefHeight="700.0" prefWidth="1366.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <BorderPane focusTraversable="true" maxHeight="768.0" maxWidth="1366.0" minHeight="700.0" minWidth="1366.0" prefHeight="768.0" prefWidth="1366.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
             <VBox maxWidth="138.0" minWidth="138.0" prefWidth="138.0" BorderPane.alignment="CENTER">
                <children>
@@ -36,7 +36,7 @@
                </children></VBox>
          </right>
          <center>
-            <BorderPane maxHeight="720.0" minHeight="720.0" prefHeight="720.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <BorderPane maxHeight="720.0" minHeight="696.0" prefHeight="696.0" prefWidth="1124.0" BorderPane.alignment="CENTER">
                <center>
                   <Pane maxHeight="700.0" maxWidth="1124.0" minHeight="700.0" minWidth="1124.0" prefHeight="700.0" prefWidth="1124.0" styleClass="rounded_corner" BorderPane.alignment="CENTER">
                      <children>
@@ -176,17 +176,19 @@
             </BorderPane>
          </center>
          <top>
-            <GridPane maxHeight="108.0" minHeight="108.0" prefHeight="108.0" BorderPane.alignment="CENTER">
+            <GridPane alignment="TOP_RIGHT" maxHeight="108.0" minHeight="25.0" prefHeight="25.0" prefWidth="1366.0" BorderPane.alignment="TOP_RIGHT">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <ImageView fx:id="imageSuperiorIzquierda" fitHeight="75.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" x="1000.0" GridPane.halignment="LEFT" />
-                  <ImageView fx:id="imageSuperiorDerecha" fitHeight="75.0" fitWidth="200.0" layoutX="500.0" pickOnBounds="true" preserveRatio="true" x="500.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" />
+                  <ImageView fx:id="imageSuperiorIzquierda" fitHeight="75.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" x="1000.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" />
+                  <ImageView fx:id="imageSuperiorDerecha" fitHeight="75.0" fitWidth="200.0" layoutX="500.0" pickOnBounds="true" preserveRatio="true" x="500.0" GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
+                  <Label fx:id="usuarioLogueadoLabel" alignment="TOP_RIGHT" contentDisplay="TOP" styleClass="label_usuario" textAlignment="CENTER" GridPane.columnIndex="1" />
                </children>
             </GridPane>
          </top>

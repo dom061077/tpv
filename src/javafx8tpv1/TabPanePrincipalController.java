@@ -54,6 +54,15 @@ import javafx.scene.layout.StackPane;
 public class TabPanePrincipalController implements Initializable {
 
     /**
+     * @return the usuarioLogueadoLabel
+     */
+    public Label getUsuarioLogueadoLabel() {
+        return usuarioLogueadoLabel;
+    }
+
+
+
+    /**
      * @return the labelMenssajeModalSuperior
      */
     public Label getLabelMenssajeModalSuperior() {
@@ -110,6 +119,7 @@ public class TabPanePrincipalController implements Initializable {
     @FXML private ImageView imageSuperiorIzquierda;
     @FXML private ImageView imageIzquierda;
     @FXML private ImageView imageDerecha;
+    @FXML private Label usuarioLogueadoLabel;
     
     
     public Button getButtonMenuPrincipal(){

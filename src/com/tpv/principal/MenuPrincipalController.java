@@ -11,6 +11,7 @@ import com.tpv.errorui.ErrorController;
 import com.tpv.exceptions.TpvException;
 import com.tpv.print.fiscal.ConfiguracionImpresoraController;
 import com.tpv.util.Connection;
+import com.tpv.util.ui.TabPaneModalCommand;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -32,7 +33,7 @@ import org.apache.log4j.Logger;
  * @author daniel
  */
 //@FXMLController(value="MenuPrincipal.fxml", title = "Menu Principal")
-public class MenuPrincipalController implements Initializable {
+public class MenuPrincipalController implements Initializable,TabPaneModalCommand {
     private TabPanePrincipalController tabController;
     Logger log = Logger.getLogger(MenuPrincipalController.class);
     @FXML
@@ -106,7 +107,7 @@ public class MenuPrincipalController implements Initializable {
     
     
     public void configurarInicio(){
-        
+        tabController.setTabPaneModalCommand(this);
         repeatFocus(borderPane);
     }    
         
@@ -122,11 +123,17 @@ public class MenuPrincipalController implements Initializable {
             borderPane.setOnKeyPressed(keyEvent->{
                 log.debug("Tecla pulsada: "+keyEvent.getCode());
                 if(keyEvent.getCode()==KeyCode.NUMPAD1){
-                    Context.getInstance().currentDMTicket().setCliente(null);
-                    Context.getInstance().currentDMTicket().setClienteSeleccionado(false);
-                    Context.getInstance().currentDMTicket().setReinicioVerificado(false);
-                    Context.getInstance().currentDMTicket().getDetalle().clear();
-                    tabController.gotoFacturacion();
+                    if(Context.getInstance().currentDMTicket().getUsuario().isSupervisor()){
+                        this.tabController.getLabelCancelarModal().setVisible(false);
+                        this.tabController.getLabelMensaje().setText("Esta opción es solo para cajeros habilitados");
+                        this.tabController.mostrarMensajeModal();
+                    }else{
+                        Context.getInstance().currentDMTicket().setCliente(null);
+                        Context.getInstance().currentDMTicket().setClienteSeleccionado(false);
+                        Context.getInstance().currentDMTicket().setReinicioVerificado(false);
+                        Context.getInstance().currentDMTicket().getDetalle().clear();
+                        tabController.gotoFacturacion();
+                    }
                 }
                 if(keyEvent.getCode()==KeyCode.NUMPAD5)
                     System.exit(0);
@@ -135,7 +142,14 @@ public class MenuPrincipalController implements Initializable {
                     tabController.gotoSupervisor();
                 }
                 if(keyEvent.getCode()==KeyCode.NUMPAD3){
+                    if(Context.getInstance().currentDMTicket().getUsuario().isSupervisor()){
+                        this.tabController.getLabelCancelarModal().setVisible(false);
+                        this.tabController.getLabelMensaje().setText("Esta opción es solo para cajeros habilitados");
+                        this.tabController.mostrarMensajeModal();
+                    }else{
+
                         tabController.gotoMenuRetiroDinero();
+                    }
                 }
                 
                 if(keyEvent.getCode() == KeyCode.NUMPAD4){
@@ -172,6 +186,15 @@ public class MenuPrincipalController implements Initializable {
         });        
     }
     
+    public void aceptarMensajeModal(){
+        this.tabController.ocultarMensajeModal();
+        this.tabController.getLabelCancelarModal().setVisible(true);
+        this.tabController.repeatFocus(borderPane);
+                
+    }
     
+    public void cancelarMensajeModal(){
+        
+    }
     
 }

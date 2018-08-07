@@ -4438,6 +4438,12 @@ to the top and bottom -fx-padding values of the parent toolbar. */
     -fx-font-size:18;
 }
 
+.label_usuario{
+    -fx-text-fill: #3757a7;
+    -fx-font-weight: bold;
+    -fx-font-size:14;
+}
+
 .label_retirodinero{
     -fx-text-fill: #ed0404;
     -fx-font-weight: bold;
