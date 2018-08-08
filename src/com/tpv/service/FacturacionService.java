@@ -593,10 +593,8 @@ public class FacturacionService  {
         EntityManager em = Connection.getEm();
         try{
                 Query q = em.createNativeQuery(
-                            si la factura tiene anulaciones, no sumar las mismas
-                                    para los concursos
                              "SELECT c.idCONCURSOS,c.TEXTOCORTO,c.CANTIDADPRODUCTOS,c.CANTIDADCUPONES"
-                            +" ,(SUM(fd.CANTIDAD) DIV c.CANTIDADPRODUCTOS)*c.CANTIDADCUPONES AS CUPONESENTREGADOS"
+                            +" ,(SUM( IF(fd.total<0,fd.CANTIDAD*(-1),fd.CANTIDAD)) DIV c.CANTIDADPRODUCTOS)*c.CANTIDADCUPONES"
                             +" FROM facturasdetalle fd"
                             +" INNER JOIN productos p ON fd.idPRODUCTOS = p.idPRODUCTOS"
                             +" INNER JOIN proveedores_productos pp ON fd.idPRODUCTOS = pp.idPRODUCTOS"
@@ -609,7 +607,7 @@ public class FacturacionService  {
                             +" OR c.idProveedor = prov.idProveedor "            
                             +" WHERE fd.idFACTURAS = :idFacturas AND c.idCONCURSOS IS NOT NULL"
                             +" GROUP BY c.idCONCURSOS,c.TEXTOCORTO,c.CANTIDADPRODUCTOS,c.CANTIDADCUPONES"
-                            +" HAVING (SUM(fd.CANTIDAD) DIV c.CANTIDADPRODUCTOS)*c.CANTIDADCUPONES>0")
+                            +" HAVING (SUM( IF(fd.total<0,fd.CANTIDAD*(-1),fd.CANTIDAD)) DIV c.CANTIDADPRODUCTOS)*c.CANTIDADCUPONES>0")
                             .setParameter("idFacturas", factura.getId());
                     List list = q.getResultList();            
                     for(Iterator<Object[]> it = list.iterator();it.hasNext();){
