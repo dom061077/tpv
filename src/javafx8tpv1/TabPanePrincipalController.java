@@ -36,6 +36,9 @@ import com.tpv.service.UsuarioService;
 import com.tpv.service.UtilidadesService;
 import com.tpv.supervisor.SupervisorController;
 import com.tpv.util.Connection;
+import com.tpv.util.ui.MensajeModalAbstract;
+import com.tpv.util.ui.MensajeModalAceptar;
+import com.tpv.util.ui.MensajeModalCancelar;
 import com.tpv.util.ui.TabPaneModalCommand;
 import javafx.application.Platform;
 import javafx.scene.Node;
@@ -470,6 +473,18 @@ public class TabPanePrincipalController implements Initializable {
      */
     public Tab getTabControlador() {
         return tabControlador;
+    }
+    
+    
+    public void showMsgModal(MensajeModalAbstract mensajeModal){
+        getLabelMensaje().setText(mensajeModal.getMensaje());
+        getLabelTituloVentana().setText(mensajeModal.getTitulo());
+        if(mensajeModal instanceof MensajeModalAceptar){
+            getLabelCancelarModal().setVisible(false);
+        }
+        if(mensajeModal instanceof MensajeModalCancelar){
+            getLabelAceptarModal().setVisible(false);
+        }
     }
     
     

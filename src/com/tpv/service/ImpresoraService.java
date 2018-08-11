@@ -235,13 +235,19 @@ public class ImpresoraService {
         request = getHfp().cmdSetHeaderTrailer(13,linea13DatosFact);
         response = getHfp().execute(request);
         int linea = 14;
-        for(String item : concursos){
+        //request=getHfp().cmdSetHeaderTrailer(14, "Linea 14");
+        //response = getHfp().execute(request);
+        request=getHfp().cmdSetHeaderTrailer(14, "Linea 14");
+        response = getHfp().execute(request);
+        //request=getHfp().cmdSetHeaderTrailer(16, "Linea 16");
+        //response = getHfp().execute(request);
+        /*for(String item : concursos){
             request = getHfp().cmdSetHeaderTrailer(linea,item);
             response = getHfp().execute(request);
             linea++;
             if(linea>17)
                 break;
-        }
+        }*/
         
     }
     
