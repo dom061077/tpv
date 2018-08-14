@@ -5,12 +5,49 @@
  */
 package com.tpv.util.ui;
 
+import javafx.scene.Node;
+
 /**
  *
  * @author COMPUTOS
  */
 public abstract class MensajeModalAbstract implements MensajeModalInterface {
 
+    /**
+     * @return the mensajeSuperior
+     */
+    public String getMensajeSuperior() {
+        return mensajeSuperior;
+    }
+
+    /**
+     * @param mensajeSuperior the mensajeSuperior to set
+     */
+    public void setMensajeSuperior(String mensajeSuperior) {
+        this.mensajeSuperior = mensajeSuperior;
+    }
+
+    /**
+     * @return the node
+     */
+    public Node getNode() {
+        return node;
+    }
+
+    /**
+     * @param node the node to set
+     */
+    public void setNode(Node node) {
+        this.node = node;
+    }
+
+    public MensajeModalAbstract(String titulo,String mensaje, String mensajeSuperior, Node node){
+        this.titulo = titulo;
+        this.mensaje = mensaje;
+        this.mensajeSuperior = mensajeSuperior;
+        this.node = node;
+    }
+    
     /**
      * @return the titulo
      */
@@ -40,6 +77,8 @@ public abstract class MensajeModalAbstract implements MensajeModalInterface {
     }
     private String titulo;
     private String mensaje;
+    private String mensajeSuperior;
+    private Node node;
     @Override
     public void aceptarMensaje(){
         

@@ -36,6 +36,7 @@ import com.tpv.service.UsuarioService;
 import com.tpv.service.UtilidadesService;
 import com.tpv.supervisor.SupervisorController;
 import com.tpv.util.Connection;
+import com.tpv.util.ui.MensajeModal;
 import com.tpv.util.ui.MensajeModalAbstract;
 import com.tpv.util.ui.MensajeModalAceptar;
 import com.tpv.util.ui.MensajeModalCancelar;
@@ -57,6 +58,20 @@ import javafx.scene.layout.StackPane;
 public class TabPanePrincipalController implements Initializable {
 
     /**
+     * @return the mensajeModal
+     */
+    public MensajeModal getMensajeModal() {
+        return mensajeModal;
+    }
+
+    /**
+     * @param mensajeModal the mensajeModal to set
+     */
+    public void setMensajeModal(MensajeModal mensajeModal) {
+        this.mensajeModal = mensajeModal;
+    }
+
+    /**
      * @return the usuarioLogueadoLabel
      */
     public Label getUsuarioLogueadoLabel() {
@@ -75,6 +90,7 @@ public class TabPanePrincipalController implements Initializable {
     UsuarioService usuarioService = new UsuarioService();        
     ImpresoraService impresoraService = new ImpresoraService();
     private TabPaneModalCommand tabPaneModalCommand;
+    private MensajeModal mensajeModal;
     
     @FXML private LoginController loginController;
     @FXML private MenuPrincipalController menuPrincipalController;
@@ -188,9 +204,19 @@ public class TabPanePrincipalController implements Initializable {
         stackPaneModal.setOnKeyPressed(keyEvent->{
             if(keyEvent.getCode() == KeyCode.ENTER){
                 getTabPaneModalCommand().aceptarMensajeModal();
+                if(getMensajeModal() != null){
+                    getMensajeModal().aceptarMensaje();
+                    stackPaneModal.setVisible(false);
+                    repeatFocus(getMensajeModal().getNode());
+                }
             }
             if(keyEvent.getCode() == KeyCode.ESCAPE){
                 getTabPaneModalCommand().cancelarMensajeModal();
+                if(getMensajeModal() != null){
+                    getMensajeModal().cancelarMensaje();
+                    stackPaneModal.setVisible(false);
+                    repeatFocus(getMensajeModal().getNode());
+                }
             }
         });
         
@@ -478,13 +504,20 @@ public class TabPanePrincipalController implements Initializable {
     
     public void showMsgModal(MensajeModalAbstract mensajeModal){
         getLabelMensaje().setText(mensajeModal.getMensaje());
+        getLabelMenssajeModalSuperior().setText(mensajeModal.getMensajeSuperior());
         getLabelTituloVentana().setText(mensajeModal.getTitulo());
+        getLabelAceptarModal().setVisible(true);
+        getLabelCancelarModal().setVisible(true);
         if(mensajeModal instanceof MensajeModalAceptar){
             getLabelCancelarModal().setVisible(false);
         }
         if(mensajeModal instanceof MensajeModalCancelar){
             getLabelAceptarModal().setVisible(false);
         }
+        this.setMensajeModal((MensajeModal)mensajeModal);
+        
+        this.stackPaneModal.setVisible(true);
+        this.repeatFocus(stackPaneModal);
     }
     
     

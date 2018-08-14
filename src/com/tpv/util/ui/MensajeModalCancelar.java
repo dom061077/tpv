@@ -5,11 +5,18 @@
  */
 package com.tpv.util.ui;
 
+import javafx.scene.Node;
+
 /**
  *
  * @author COMPUTOS
  */
 public class MensajeModalCancelar extends MensajeModalAbstract {
+    
+    public MensajeModalCancelar(String titulo, String mensaje, String mensajeSuperior,Node node){
+        super(titulo, mensaje, mensajeSuperior,node);
+    }
+    
     @Override
     public void cancelarMensaje(){
         

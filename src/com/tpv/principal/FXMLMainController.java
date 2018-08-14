@@ -211,6 +211,8 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
         initTableViewTickets();
         verificarDetalleTableView();
         
+        textFieldCodCliente.setText("");
+        
         chequearInterfazNegativo();    
         
         initLoadingIcon();

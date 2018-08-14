@@ -16,6 +16,7 @@ import com.tpv.service.FacturacionService;
 import com.tpv.service.ImpresoraService;
 import com.tpv.service.RetiroDineroService;
 import com.tpv.util.ui.EditableBigDecimalTableCell;
+import com.tpv.util.ui.MensajeModal;
 import com.tpv.util.ui.TabPaneModalCommand;
 import java.math.BigDecimal;
 import java.net.URL;
@@ -48,7 +49,7 @@ import org.apache.log4j.Logger;
      *
  * @author COMPUTOS
  */
-public class RetiroDineroController implements Initializable,TabPaneModalCommand {
+public class RetiroDineroController implements Initializable {
     Logger log = Logger.getLogger(RetiroDineroController.class);
     private TabPanePrincipalController tabController;
     private RetiroDineroService retiroDineroService = new RetiroDineroService();
@@ -128,11 +129,31 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
                         totalIngresado = totalIngresado.add(item.getValorRetiro().multiply(BigDecimal.valueOf(item.getCantidadBilletes())));
                     }
                     boolean saldoSuperior = esSuperiorSaldoRetiro(totalIngresado);
-                    if(saldoSuperior)
+                    /*if(saldoSuperior)
                         tabController.getLabelMenssajeModalSuperior().setText("El total ingresado supera el monto disponible en caja");
                     tabController.getLabelMensaje().setText("¿Confirma la carga de retiro de dinero?");
                     this.guardar=true;
                     tabController.mostrarMensajeModal();
+                    */
+                    String superaMontoCajaStr;
+                    if(saldoSuperior){
+                        superaMontoCajaStr = "El total ingresado supera el monto disponible en caja";
+                    }else{
+                        superaMontoCajaStr = "";
+                    }     
+                    
+                    tabController.showMsgModal(new MensajeModal("Confirmación"
+                                ,"¿Confirma la carga de retiro de dinero?"
+                                ,superaMontoCajaStr
+                                ,tableViewRetiro){
+                                    @Override
+                                    public void aceptarMensaje(){
+                                        guardarRetiro();
+                                    }
+                                }
+                    );
+                    
+                        
                     return;
                 }
                 
@@ -189,7 +210,7 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
 
     public void configurarInicio() throws TpvException{
         tableViewRetiro.getItems().clear();
-        this.tabController.setTabPaneModalCommand(this);
+        //this.tabController.setTabPaneModalCommand(this);
         tabController.repeatFocus(tableViewRetiro);
         textFieldObservacion.setText("");
         totalizar();
@@ -226,22 +247,16 @@ public class RetiroDineroController implements Initializable,TabPaneModalCommand
     
     
     
-    public void aceptarMensajeModal(){
+    /*public void aceptarMensajeModal(){
         RetiroDinero retiroDinero = null;
-        //if(guardar)
-            this.guardarRetiro();
-        /*else{
-            this.tabController.getLabelCancelarModal().setVisible(true);
-            this.tabController.ocultarMensajeModal();
-            this.tabController.repeatFocus(this.tableViewRetiro);
-        }*/
+        this.guardarRetiro();
         tabController.getLabelMenssajeModalSuperior().setText("");
     }
     
     public void cancelarMensajeModal(){
         this.tabController.ocultarMensajeModal();
         tabController.repeatFocus(textFieldObservacion);
-    }
+    }*/
     
     private void totalizar(){
             BigDecimal totalRetiro = BigDecimal.ZERO;
