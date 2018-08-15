@@ -17,7 +17,7 @@ import com.tpv.service.ImpresoraService;
 import com.tpv.service.RetiroDineroService;
 import com.tpv.util.ui.EditableBigDecimalTableCell;
 import com.tpv.util.ui.MensajeModal;
-import com.tpv.util.ui.TabPaneModalCommand;
+import com.tpv.util.ui.MensajeModalAceptar;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -135,6 +135,13 @@ public class RetiroDineroController implements Initializable {
                     this.guardar=true;
                     tabController.mostrarMensajeModal();
                     */
+                    if(totalIngresado.compareTo(BigDecimal.ZERO)==0){
+                        tabController.showMsgModal(new MensajeModalAceptar("Error"
+                                ,"No se puede registrar un retiro de dinero con total CERO ","",textFieldObservacion));
+                        return;
+                    }
+                    
+                    
                     String superaMontoCajaStr;
                     if(saldoSuperior){
                         superaMontoCajaStr = "El total ingresado supera el monto disponible en caja";
@@ -153,7 +160,7 @@ public class RetiroDineroController implements Initializable {
                                 }
                     );
                     
-                        
+                    keyEvent.consume();
                     return;
                 }
                 
@@ -312,6 +319,7 @@ public class RetiroDineroController implements Initializable {
                     retiroDinero.getDetalle().add(retDetalle);
                 }
             }
+            
             /*boolean saldoSuperior = esSuperiorSaldoRetiro(total);
             if(saldoSuperior){
                 this.tabController.getLabelCancelarModal().setVisible(false);
@@ -321,7 +329,6 @@ public class RetiroDineroController implements Initializable {
             }else{*/
                 retiroDinero.setMonto(total);
                 retiroDineroService.registrarRetiro(retiroDinero);
-                this.tabController.ocultarMensajeModal();
                 this.tabController.gotoMenuRetiroDinero();
             //}
         }catch(TpvException e){

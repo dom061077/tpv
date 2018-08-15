@@ -147,7 +147,7 @@
                                                 <Label fx:id="labelMensajeModalSuperior" alignment="CENTER" prefHeight="171.0" prefWidth="450.0" styleClass="label_textfield_negativo" textAlignment="CENTER" />
                                              </children>
                                           </Pane>
-                                          <Label alignment="CENTER" contentDisplay="TOP" maxWidth="450.0" prefHeight="21.0" prefWidth="450.0" styleClass="label_barra_titulo" text="Mensaje" textFill="#d31818fa" />
+                                          <Label fx:id="labelTituloVentanaModal" alignment="CENTER" contentDisplay="TOP" maxWidth="450.0" prefHeight="21.0" prefWidth="450.0" styleClass="label_barra_titulo" text="Mensaje" textFill="#d31818fa" />
                                        </children>
                                     </GridPane>
                                  </top>

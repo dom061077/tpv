@@ -36,7 +36,6 @@ import com.tpv.service.UsuarioService;
 import com.tpv.service.UtilidadesService;
 import com.tpv.supervisor.SupervisorController;
 import com.tpv.util.Connection;
-import com.tpv.util.ui.MensajeModal;
 import com.tpv.util.ui.MensajeModalAbstract;
 import com.tpv.util.ui.MensajeModalAceptar;
 import com.tpv.util.ui.MensajeModalCancelar;
@@ -58,16 +57,30 @@ import javafx.scene.layout.StackPane;
 public class TabPanePrincipalController implements Initializable {
 
     /**
+     * @return the labelTituloVentanaMoal
+     */
+    public Label getLabelTituloVentanaModal() {
+        return labelTituloVentanaModal;
+    }
+
+    /**
+     * @param labelTituloVentanaModal the labelTituloVentanaMoal to set
+     */
+    public void setLabelTituloVentanaModal(Label labelTituloVentanaModal) {
+        this.labelTituloVentanaModal = labelTituloVentanaModal;
+    }
+
+    /**
      * @return the mensajeModal
      */
-    public MensajeModal getMensajeModal() {
+    public MensajeModalAbstract getMensajeModal() {
         return mensajeModal;
     }
 
     /**
      * @param mensajeModal the mensajeModal to set
      */
-    public void setMensajeModal(MensajeModal mensajeModal) {
+    public void setMensajeModal(MensajeModalAbstract mensajeModal) {
         this.mensajeModal = mensajeModal;
     }
 
@@ -90,7 +103,7 @@ public class TabPanePrincipalController implements Initializable {
     UsuarioService usuarioService = new UsuarioService();        
     ImpresoraService impresoraService = new ImpresoraService();
     private TabPaneModalCommand tabPaneModalCommand;
-    private MensajeModal mensajeModal;
+    private MensajeModalAbstract mensajeModal;
     
     @FXML private LoginController loginController;
     @FXML private MenuPrincipalController menuPrincipalController;
@@ -131,6 +144,7 @@ public class TabPanePrincipalController implements Initializable {
     @FXML private Label labelAceptarModal;
     @FXML private Label labelCancelarModal;
     @FXML private Label labelTituloVentana;
+    @FXML private Label labelTituloVentanaModal;
     @FXML private Label labelShortCut;
     @FXML private Label labelMensajeModalSuperior;
     @FXML private GridPane gridPaneMensajeSuperior;
@@ -203,7 +217,8 @@ public class TabPanePrincipalController implements Initializable {
                 });
         stackPaneModal.setOnKeyPressed(keyEvent->{
             if(keyEvent.getCode() == KeyCode.ENTER){
-                getTabPaneModalCommand().aceptarMensajeModal();
+                if(getTabPaneModalCommand()!=null)
+                    getTabPaneModalCommand().aceptarMensajeModal();
                 if(getMensajeModal() != null){
                     getMensajeModal().aceptarMensaje();
                     stackPaneModal.setVisible(false);
@@ -211,7 +226,8 @@ public class TabPanePrincipalController implements Initializable {
                 }
             }
             if(keyEvent.getCode() == KeyCode.ESCAPE){
-                getTabPaneModalCommand().cancelarMensajeModal();
+                if(getTabPaneModalCommand()!=null)                
+                    getTabPaneModalCommand().cancelarMensajeModal();
                 if(getMensajeModal() != null){
                     getMensajeModal().cancelarMensaje();
                     stackPaneModal.setVisible(false);
@@ -406,6 +422,8 @@ public class TabPanePrincipalController implements Initializable {
             
 
     public void repeatFocus(Node node){
+        if(node == null)
+            return;
         Platform.runLater(() -> {
             if (!node.isFocused()) {
                 node.requestFocus();
@@ -422,7 +440,7 @@ public class TabPanePrincipalController implements Initializable {
         return this.tabPaneModalCommand;
     }
 
-    public void mostrarMensajeModal(){
+    /*public void mostrarMensajeModal(){
         if(getLabelMenssajeModalSuperior().getText().trim().equals("")){
             getLabelMenssajeModalSuperior().setVisible(false);
             gridPaneMensajeSuperior.setPrefHeight(0);
@@ -433,7 +451,7 @@ public class TabPanePrincipalController implements Initializable {
             
         this.stackPaneModal.setVisible(true);
         this.repeatFocus(this.getStackPaneModal());
-    }
+    }*/
     
     
     public void ocultarMensajeModal(){
@@ -505,7 +523,7 @@ public class TabPanePrincipalController implements Initializable {
     public void showMsgModal(MensajeModalAbstract mensajeModal){
         getLabelMensaje().setText(mensajeModal.getMensaje());
         getLabelMenssajeModalSuperior().setText(mensajeModal.getMensajeSuperior());
-        getLabelTituloVentana().setText(mensajeModal.getTitulo());
+        getLabelTituloVentanaModal().setText(mensajeModal.getTitulo());
         getLabelAceptarModal().setVisible(true);
         getLabelCancelarModal().setVisible(true);
         if(mensajeModal instanceof MensajeModalAceptar){
@@ -514,7 +532,7 @@ public class TabPanePrincipalController implements Initializable {
         if(mensajeModal instanceof MensajeModalCancelar){
             getLabelAceptarModal().setVisible(false);
         }
-        this.setMensajeModal((MensajeModal)mensajeModal);
+        this.setMensajeModal((MensajeModalAbstract)mensajeModal);
         
         this.stackPaneModal.setVisible(true);
         this.repeatFocus(stackPaneModal);

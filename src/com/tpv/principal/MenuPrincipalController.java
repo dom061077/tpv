@@ -5,12 +5,9 @@
  */
 package com.tpv.principal;
 
-import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.enums.TipoTituloSupervisorEnum;
-import com.tpv.errorui.ErrorController;
-import com.tpv.exceptions.TpvException;
-import com.tpv.print.fiscal.ConfiguracionImpresoraController;
-import com.tpv.util.Connection;
+import com.tpv.util.ui.MensajeModal;
+import com.tpv.util.ui.MensajeModalAceptar;
 import com.tpv.util.ui.TabPaneModalCommand;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -33,7 +30,7 @@ import org.apache.log4j.Logger;
  * @author daniel
  */
 //@FXMLController(value="MenuPrincipal.fxml", title = "Menu Principal")
-public class MenuPrincipalController implements Initializable,TabPaneModalCommand {
+public class MenuPrincipalController implements Initializable {
     private TabPanePrincipalController tabController;
     Logger log = Logger.getLogger(MenuPrincipalController.class);
     @FXML
@@ -107,7 +104,6 @@ public class MenuPrincipalController implements Initializable,TabPaneModalComman
     
     
     public void configurarInicio(){
-        tabController.setTabPaneModalCommand(this);
         repeatFocus(borderPane);
     }    
         
@@ -124,9 +120,13 @@ public class MenuPrincipalController implements Initializable,TabPaneModalComman
                 log.debug("Tecla pulsada: "+keyEvent.getCode());
                 if(keyEvent.getCode()==KeyCode.NUMPAD1){
                     if(Context.getInstance().currentDMTicket().getUsuario().isSupervisor()){
-                        this.tabController.getLabelCancelarModal().setVisible(false);
-                        this.tabController.getLabelMensaje().setText("Esta opción es solo para cajeros habilitados");
-                        this.tabController.mostrarMensajeModal();
+                        //this.tabController.getLabelCancelarModal().setVisible(false);
+                        //this.tabController.getLabelMensaje().setText("Esta opción es solo para cajeros habilitados");
+                        //this.tabController.mostrarMensajeModal();
+                        tabController.showMsgModal(new MensajeModalAceptar("Error",
+                                 "Esta opción es solo para cajeros habilitados",
+                                 "",borderPane
+                        ));
                     }else{
                         Context.getInstance().currentDMTicket().setCliente(null);
                         Context.getInstance().currentDMTicket().setClienteSeleccionado(false);
@@ -143,9 +143,11 @@ public class MenuPrincipalController implements Initializable,TabPaneModalComman
                 }
                 if(keyEvent.getCode()==KeyCode.NUMPAD3){
                     if(Context.getInstance().currentDMTicket().getUsuario().isSupervisor()){
-                        this.tabController.getLabelCancelarModal().setVisible(false);
-                        this.tabController.getLabelMensaje().setText("Esta opción es solo para cajeros habilitados");
-                        this.tabController.mostrarMensajeModal();
+                        //this.tabController.getLabelCancelarModal().setVisible(false);
+                        //this.tabController.getLabelMensaje().setText("Esta opción es solo para cajeros habilitados");
+                        //this.tabController.mostrarMensajeModal();
+                        tabController.showMsgModal(new MensajeModalAceptar("Error","Esta opción es solo para cajeros habilitados"
+                            ,"",borderPane));
                     }else{
 
                         tabController.gotoMenuRetiroDinero();
@@ -186,7 +188,7 @@ public class MenuPrincipalController implements Initializable,TabPaneModalComman
         });        
     }
     
-    public void aceptarMensajeModal(){
+    /*public void aceptarMensajeModal(){
         this.tabController.ocultarMensajeModal();
         this.tabController.getLabelCancelarModal().setVisible(true);
         this.tabController.repeatFocus(borderPane);
@@ -195,6 +197,6 @@ public class MenuPrincipalController implements Initializable,TabPaneModalComman
     
     public void cancelarMensajeModal(){
         
-    }
+    }*/
     
 }

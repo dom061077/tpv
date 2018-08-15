@@ -12,13 +12,13 @@ import com.tpv.modelo.Checkout;
 import com.tpv.modelo.Usuario;
 import com.tpv.principal.Context;
 import com.tpv.service.UsuarioService;
+import com.tpv.util.ui.MensajeModalAceptar;
 import com.tpv.util.ui.TabPaneModalCommand;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -34,7 +34,7 @@ import org.apache.log4j.Logger;
 
 //@FXMLController(value="Login.fxml", title = "Ingreso al Sistema")
 
-public class LoginController implements Initializable, TabPaneModalCommand{
+public class LoginController implements Initializable{
     private TabPanePrincipalController tabController;
     Logger log = Logger.getLogger(LoginController.class);
     UsuarioService usuarioService = new UsuarioService();    
@@ -61,7 +61,6 @@ public class LoginController implements Initializable, TabPaneModalCommand{
     
     
     public void configurarInicio() throws TpvException{
-            this.tabController.setTabPaneModalCommand(this);
             checkMac();
             this.tabController.repeatFocus(userName);
     }
@@ -131,9 +130,12 @@ public class LoginController implements Initializable, TabPaneModalCommand{
                                     tabController.getUsuarioLogueadoLabel().setText("Usuario: "+usuario.getNombre());
                                     tabController.gotoMenuPrincipal();
                                 }else{
-                                    this.tabController.getLabelCancelarModal().setVisible(false);
-                                    this.tabController.getLabelMensaje().setText("La caja no está abierta. Consulte a su administrador");
-                                    this.tabController.mostrarMensajeModal();
+                                    //this.tabController.getLabelCancelarModal().setVisible(false);
+                                    //this.tabController.getLabelMensaje().setText("La caja no está abierta. Consulte a su administrador");
+                                    //this.tabController.mostrarMensajeModal();
+                                    tabController.showMsgModal(new MensajeModalAceptar     
+                                        ("Error", "La caja no está abierta. Consulte con su administrador"
+                                                ,"", userName));
                                 }
                             }catch(TpvException e){
                                 log.error("Error: "+e.getMessage());
@@ -143,12 +145,11 @@ public class LoginController implements Initializable, TabPaneModalCommand{
                             }    
                         }
                     }else{
-                        /*labelError.setText("Usuario o contraseña incorrectos");
-                        stackPaneError.setVisible(true);
-                        labelError.requestFocus();*/
-                        this.tabController.getLabelMensaje().setText("Nombre de Usuario o Contraseña incorrectos");
+                        /*this.tabController.getLabelMensaje().setText("Nombre de Usuario o Contraseña incorrectos");
                         this.tabController.getLabelCancelarModal().setVisible(false);
-                        this.tabController.mostrarMensajeModal();
+                        this.tabController.mostrarMensajeModal();*/
+                        tabController.showMsgModal(new MensajeModalAceptar("Error"
+                                , "Nombre de Usuario o Contraseña incorrectos", "", userName));
                     }
                     
                 }
@@ -190,7 +191,7 @@ public class LoginController implements Initializable, TabPaneModalCommand{
         });        
     }*/
 
-    public void aceptarMensajeModal(){
+/*    public void aceptarMensajeModal(){
         this.tabController.ocultarMensajeModal();
         this.tabController.getLabelCancelarModal().setVisible(true);
         this.tabController.repeatFocus(userName);
@@ -199,4 +200,5 @@ public class LoginController implements Initializable, TabPaneModalCommand{
     public void cancelarMensajeModal(){
         
     }
+*/
 }

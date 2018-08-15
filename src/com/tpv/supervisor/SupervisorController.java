@@ -6,7 +6,6 @@
 package com.tpv.supervisor;
 
 import com.tpv.enums.OrigenPantallaErrorEnum;
-import com.tpv.enums.TipoTituloSupervisorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Usuario;
 import com.tpv.principal.Context;
@@ -15,6 +14,7 @@ import com.tpv.service.FacturacionService;
 import com.tpv.service.ImpresoraService;
 import com.tpv.service.UsuarioService;
 import com.tpv.util.ui.MaskTextField;
+import com.tpv.util.ui.MensajeModalAceptar;
 import com.tpv.util.ui.TabPaneModalCommand;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -39,7 +39,7 @@ import org.tpv.print.fiscal.hasar.HasarCommands;
 
         
 
-public class SupervisorController implements Initializable, TabPaneModalCommand{
+public class SupervisorController implements Initializable{
     Logger log = Logger.getLogger(SupervisorController.class);
 
     private ImpresoraService impresoraService = new ImpresoraService();
@@ -83,7 +83,6 @@ public class SupervisorController implements Initializable, TabPaneModalCommand{
         textFieldPassword.setText("");
         textFieldCodigoBarra.setText("");
         tabController.repeatFocus(textFieldCodigoSupervisor);
-        this.tabController.setTabPaneModalCommand(this);
         if(impresoraService.getHfp().getEventListener()==null)
             asignarEvento();        
     }
@@ -179,13 +178,15 @@ public class SupervisorController implements Initializable, TabPaneModalCommand{
                             usuario = usuarioService.authenticarSupervisor(textFieldCodigoSupervisor.getText()
                             ,textFieldPassword.getText(), textFieldCodigoBarra.getText());
                             if(usuario==null){
-                                /*labelError.setText("Credenciales de Supervisor incorrectas");
-                                borderPaneIngreso.setDisable(true);
-                                stackPaneError.setVisible(true);
-                                labelError.requestFocus();*/
-                                this.tabController.getLabelMensaje().setText("Credenciales de Supervisor Incorrectas");
-                                this.tabController.getLabelCancelarModal().setVisible(false);
-                                this.tabController.mostrarMensajeModal();
+                                //this.tabController.getLabelMensaje().setText("Credenciales de Supervisor Incorrectas");
+                                //this.tabController.getLabelCancelarModal().setVisible(false);
+                                //this.tabController.mostrarMensajeModal();
+                                tabController.showMsgModal(
+                                        new MensajeModalAceptar("Error"
+                                                ,"Credenciales de Supervisor Incorrectas"
+                                                ,"", textFieldCodigoSupervisor  )
+                                );
+                                
                             }else{
                                 /*if(Context.getInstance().currentDMTicket().getTipoTituloSupervisor()==TipoTituloSupervisorEnum.HABILITAR_MENU){
                                     tabController.gotoMenuPrincipal();

@@ -12,7 +12,8 @@ import com.tpv.modelo.enums.RetiroDineroEnum;
 import com.tpv.principal.Context;
 import com.tpv.service.ImpresoraService;
 import com.tpv.service.RetiroDineroService;
-import com.tpv.util.ui.TabPaneModalCommand;
+import com.tpv.util.ui.MensajeModal;
+import com.tpv.util.ui.MensajeModalAceptar;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -26,17 +27,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.Region;
-import javafx.stage.Stage;
 import javafx8tpv1.TabPanePrincipalController;
 import org.apache.log4j.Logger;
 
@@ -44,7 +40,7 @@ import org.apache.log4j.Logger;
  *
  * @author COMPUTOS
  */
-public class RetiroDineroConfirmacionController implements Initializable, TabPaneModalCommand {
+public class RetiroDineroConfirmacionController implements Initializable {
     Logger log = Logger.getLogger(RetiroDineroController.class);
     private TabPanePrincipalController tabController;
     private RetiroDineroService retiroDineroService = new RetiroDineroService();
@@ -132,59 +128,24 @@ public class RetiroDineroConfirmacionController implements Initializable, TabPan
                 if(keyEvent.getCode() == KeyCode.ENTER && !this.readOnly && retiroDineroDataList.size()>0){
                     keyEvent.consume();
                     selectedItem = (RetiroDineroConfirmacionData)tableViewRetiro.getSelectionModel().getSelectedItem();
-                    /*if(selectedItem.getEstado()==RetiroDineroEnum.PENDIENTE){
-                        banderaMensaje=true;
-                        tabController.getLabelMensaje().setText("¿Confirma el retiro de dinero Nº: "+
-                                +selectedItem.getIdRetiro()
-                                +"?");
+                    if(selectedItem.getEstado()==RetiroDineroEnum.PENDIENTE){
+                        tabController.showMsgModal(new MensajeModal("Confirmación"
+                                , "¿Confirma el retiro de dinero Nº: ?"
+                                    +selectedItem.getIdRetiro()
+                                , "", tableViewRetiro){
+                                    
+                                    @Override
+                                    public void aceptarMensaje(){
+                                        confirmarRetiro();
+                                    }
+                                }
+                        );
                     }else{
-                        banderaMensaje=false;
-                        tabController.getLabelMensaje().setText("Solo se puede confirmar un retiro en estado pendiente.");
                         tabController.getLabelCancelarModal().setVisible(false);
+                        tabController.showMsgModal(new MensajeModalAceptar("Error"
+                                ,"Solo se puede confirmar un retiro en estado pendiente."
+                                ,"",tableViewRetiro));
                     }
-                    tabController.mostrarMensajeModal();*/
-                    Alert alert= new Alert(AlertType.CONFIRMATION,"¿Confirma el retiro de dinero?",ButtonType.YES
-                            ,ButtonType.NO);
-                   // alert.initOwner(tableViewRetiro.getParent().getScene().getWindow());
-                    
-                    alert.getDialogPane().requestFocus();
-                    
-                    alert.showAndWait();
-                    tabController.repeatFocus(tableViewRetiro);
-                    if(alert.getResult() == ButtonType.YES){
-                        if(this.selectedItem.getEstado()==RetiroDineroEnum.PENDIENTE){
-                            RetiroDinero retiro;
-                            try{
-                                retiro = retiroDineroService.confirmarRetiro(
-                                        this.selectedItem.getIdRetiro()
-                                        ,Context.getInstance()
-                                        .currentDMTicket().getUsuarioSupervisor());
-                                impresoraService.imprimirRetiroDinero(retiro);
-                                cargarRetiro();
-                                this.tabController.repeatFocus(tableViewRetiro);
-                            }catch(TpvException e){
-                                log.error("Error en controlador llamando al método confirmarRetiro de RetiroDineroService",e);
-                                Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_MENUPRINCIPAL);
-                                Context.getInstance().currentDMTicket().setException(e);
-                                tabController.gotoError();            
-                            }finally{
-                                
-                            }     
-                        }else{
-                            tabController.repeatFocus(tableViewRetiro);
-                            Alert alert2 = new Alert(AlertType.ERROR,"No se puede hacer la confirmacion para un retiro que no tenga estado pendiente!!!!."
-                                    ,ButtonType.OK);
-                            alert2.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-                            
-                            //alert2.initOwner(tableViewRetiro.getParent().getScene().getWindow());
-                            
-                            alert2.getDialogPane().requestFocus();
-                            alert2.showAndWait();
-                           
-                        }
-                    }
-                    tabController.repeatFocus(tableViewRetiro);
-                    
                 }
             });    
         });
@@ -202,7 +163,6 @@ public class RetiroDineroConfirmacionController implements Initializable, TabPan
         tableViewRetiro.getItems().clear();
         cargarRetiro();
         this.tabController.repeatFocus(tableViewRetiro);
-        this.tabController.setTabPaneModalCommand(this);
         tableViewRetiro.getSelectionModel().select(0);        
         
     }
@@ -250,6 +210,31 @@ public class RetiroDineroConfirmacionController implements Initializable, TabPan
         this.tabController=tabController;
     }
     
+    public void confirmarRetiro(){
+        
+        RetiroDinero retiro;
+        if(this.selectedItem.getEstado()==RetiroDineroEnum.PENDIENTE)
+            try{
+                retiro = retiroDineroService.confirmarRetiro(
+                        this.selectedItem.getIdRetiro()
+                        ,Context.getInstance()
+                        .currentDMTicket().getUsuarioSupervisor());
+                impresoraService.imprimirRetiroDinero(retiro);
+                cargarRetiro();
+            }catch(TpvException e){
+                log.error("Error en controlador llamando al método confirmarRetiro de RetiroDineroService",e);
+                Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_MENUPRINCIPAL);
+                Context.getInstance().currentDMTicket().setException(e);
+                tabController.gotoError();            
+            }finally{
+                tabController.ocultarMensajeModal();
+            }
+        
+        
+        
+    }
+    
+    /*
     public void aceptarMensajeModal(){
         RetiroDinero retiro;
         if(this.selectedItem.getEstado()==RetiroDineroEnum.PENDIENTE)
@@ -277,7 +262,7 @@ public class RetiroDineroConfirmacionController implements Initializable, TabPan
         this.tabController.repeatFocus(tableViewRetiro);
     }
     
-    
+    */
     
     
 }

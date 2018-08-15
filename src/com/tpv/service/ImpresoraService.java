@@ -226,28 +226,31 @@ public class ImpresoraService {
                 15 concurso*/          
         FiscalPacket request;
         FiscalPacket response;
-        request = getHfp().cmdSetHeaderTrailer(11,linea11NroTarj);
+        
+        
+        request = getHfp().cmdDeleteHeaderTrailerGroup(-2);
         response = getHfp().execute(request);
         
-        request  = getHfp().cmdSetHeaderTrailer(12,linea12Villeco);
-        response = getHfp().execute(request);
+        if(linea11NroTarj.trim().compareTo("")!=0){
+            request = getHfp().cmdSetHeaderTrailer(11,linea11NroTarj);
+            response = getHfp().execute(request);
+        }
         
-        request = getHfp().cmdSetHeaderTrailer(13,linea13DatosFact);
-        response = getHfp().execute(request);
+        if(linea12Villeco.trim().compareTo("")!=0){
+            request  = getHfp().cmdSetHeaderTrailer(12,linea12Villeco);
+            response = getHfp().execute(request);
+        }
+        
+        if(linea13DatosFact.trim().compareTo("")!=0){
+            request = getHfp().cmdSetHeaderTrailer(13,linea13DatosFact);
+            response = getHfp().execute(request);
+        }
         int linea = 14;
-        //request=getHfp().cmdSetHeaderTrailer(14, "Linea 14");
-        //response = getHfp().execute(request);
-        request=getHfp().cmdSetHeaderTrailer(14, "Linea 14");
-        response = getHfp().execute(request);
-        //request=getHfp().cmdSetHeaderTrailer(16, "Linea 16");
-        //response = getHfp().execute(request);
-        /*for(String item : concursos){
+        for(String item : concursos){
             request = getHfp().cmdSetHeaderTrailer(linea,item);
             response = getHfp().execute(request);
             linea++;
-            if(linea>17)
-                break;
-        }*/
+        }
         
     }
     
@@ -285,9 +288,9 @@ public class ImpresoraService {
                 if(Context.getInstance().currentDMTicket().getCliente().getCondicionIva().getId()==2)
                     request = getHfp().cmdOpenFiscalReceipt("A");
                 else    
-                    request = getHfp().cmdOpenFiscalReceipt("B");
+                    request = getHfp().cmdOpenFiscalReceipt("T");
             }else
-                request = getHfp().cmdOpenFiscalReceipt("B");
+                request = getHfp().cmdOpenFiscalReceipt("T");
             response = getHfp().execute(request);
         }catch(FiscalPrinterStatusError e){
             fMsg = getHfp().getMessages();
@@ -445,10 +448,6 @@ public class ImpresoraService {
             SimpleDateFormat sdfMes = new SimpleDateFormat("MM");
             SimpleDateFormat sdfHora = new SimpleDateFormat("hh:mm");
             
-            for(int i = concursos.size();i<=2;i++){
-                concursos.add(" ");
-            }
-            
             printHeaderTrailer(" "
                         ,Context.getInstance().currentDMParametroGral().getSetHeaderTrailerLinea12()
                         ,Context.getInstance().currentDMTicket().getCheckout().getId()+" "
@@ -557,9 +556,6 @@ public class ImpresoraService {
     public void imprimirRetiroDinero(RetiroDinero retiroDinero)throws TpvException{
         FiscalMessages fMsg;
         ArrayList<String> concursos = new ArrayList();
-        concursos.add(" ");
-        concursos.add(" ");
-        concursos.add(" ");
         try{
             printHeaderTrailer(" ", " ", " ", concursos);
         }catch(FiscalPrinterStatusError e){

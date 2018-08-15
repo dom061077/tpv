@@ -18,6 +18,7 @@ import com.tpv.service.FacturacionService;
 import com.tpv.service.ImpresoraService;
 import com.tpv.service.PagoService;
 import com.tpv.service.ProductoService;
+import com.tpv.util.ui.MensajeModal;
 import com.tpv.util.ui.TabPaneModalCommand;
 import java.math.BigDecimal;
 import java.net.URL;
@@ -53,7 +54,7 @@ import org.tpv.print.fiscal.msg.FiscalMessages;
  */
 
 //@FXMLController(value="ConfirmarPagoTicket.fxml", title = "Confirmar Ticket")
-public class ConfirmaPagoTicketController implements Initializable, TabPaneModalCommand{
+public class ConfirmaPagoTicketController implements Initializable{
     Logger log = Logger.getLogger(ConfirmaPagoTicketController.class);
     
     private FacturacionService factService = new FacturacionService();
@@ -223,7 +224,6 @@ public class ConfirmaPagoTicketController implements Initializable, TabPaneModal
             stackPaneConcursos.setVisible(false);
             
             tabPaneController.repeatFocus(tableViewPagos);
-            tabPaneController.setTabPaneModalCommand(this);
                     
     }
     
@@ -317,9 +317,18 @@ public class ConfirmaPagoTicketController implements Initializable, TabPaneModal
                         tabPaneController.gotoSupervisor();                        
                     }
                     if(keyEvent.getCode() == KeyCode.ENTER){
-                        this.tabPaneController.getLabelMensaje().setText("¿Confirma el cierre del ticket?");
-                        this.ticketConfirmado = true;
-                        this.tabPaneController.mostrarMensajeModal();
+                        //this.tabPaneController.getLabelMensaje().setText("¿Confirma el cierre del ticket?");
+                        //this.ticketConfirmado = true;
+                        //this.tabPaneController.mostrarMensajeModal();
+                        tabPaneController.showMsgModal(new MensajeModal("Confirmación"
+                                , "¿Confirma el cierre del ticket?", "", null){
+                                    @Override
+                                    public void aceptarMensaje(){
+                                        confirmarFactura();
+                                    }
+                               });
+                        
+                        
                     }
                     if(keyEvent.getCode() == KeyCode.TAB)
                         keyEvent.consume();
@@ -667,7 +676,7 @@ public class ConfirmaPagoTicketController implements Initializable, TabPaneModal
         });        
     }*/    
     
-    public void aceptarMensajeModal(){
+    /*public void aceptarMensajeModal(){
         this.tabPaneController.getLabelCancelarModal().setVisible(true);
         this.tabPaneController.ocultarMensajeModal();
         confirmarFactura();            
@@ -677,7 +686,7 @@ public class ConfirmaPagoTicketController implements Initializable, TabPaneModal
         this.ticketConfirmado = false;
         this.tabPaneController.ocultarMensajeModal();
         this.tabPaneController.repeatFocus(tableViewPagos);
-    }
+    }*/
 
 
     

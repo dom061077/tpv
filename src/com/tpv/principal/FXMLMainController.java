@@ -21,8 +21,8 @@ import com.tpv.service.ClienteService;
 import com.tpv.service.FacturacionService;
 import com.tpv.service.ImpresoraService;
 import com.tpv.service.ProductoService;
-import com.tpv.util.ui.EditableBigDecimalTableCell;
 import com.tpv.util.ui.MaskTextField;
+import com.tpv.util.ui.MensajeModalAceptar;
 import com.tpv.util.ui.TabPaneModalCommand;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -38,10 +38,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -69,7 +66,7 @@ import org.tpv.print.fiscal.msg.FiscalMessages;
  * @author daniel
  */
 //@FXMLController(value="FXMLMain.fxml", title = "Edit user")
-public class FXMLMainController implements Initializable, TabPaneModalCommand {
+public class FXMLMainController implements Initializable {
     TabPanePrincipalController tabPaneController;
     private final static String LABEL_CANTIDAD="Cantidad:";
     private final static String LABEL_CANTIDAD_INGRESADA="(Cantidad->";
@@ -199,7 +196,6 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
         log.info("Ingresando a pantalla de facturación");
         //impresoraService.getPrinterVersion();        
         verificarRetiroDinero();        
-        this.tabPaneController.setTabPaneModalCommand(this);
         this.tabPaneController.repeatFocus(textFieldCodCliente);
         
         if(impresoraService.getHfp().getEventListener()==null)
@@ -371,13 +367,13 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
                         if(Context.getInstance().currentDMTicket().getDetalle().size()>0)
                             tabPaneController.gotoPago();
                         else{
-                            /*Alert alert = new Alert(AlertType.WARNING
-                                    ,"No es posible ir al pago con un ticket sin Productos"
-                                    ,ButtonType.OK);
-                            alert.showAndWait();*/
-                            tabPaneController.getLabelCancelarModal().setVisible(false);
-                            tabPaneController.getLabelMensaje().setText("No es posible ir al pago con un ticket sin Productos");
-                            tabPaneController.mostrarMensajeModal();
+                            //tabPaneController.getLabelCancelarModal().setVisible(false);
+                            //tabPaneController.getLabelMensaje().setText("No es posible ir al pago con un ticket sin Productos");
+                            //tabPaneController.mostrarMensajeModal();
+                            tabPaneController.showMsgModal(new  MensajeModalAceptar(
+                                    "Error","No es posible ir al pago con un ticket sin Productos"
+                                    ,"",textFieldProducto
+                            ));
                         }
                     }
                 }
@@ -635,6 +631,7 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
         textFieldCantidad = new MaskTextField();
         textFieldCantidad.setMask("N!.N!");
         textFieldCantidad.setVisible(false);
+        textFieldCantidad.setMaxDigitos(7);
         textFieldCantidad.setPrefWidth(150);
         textFieldCantidad.setMaxWidth(150);
         textFieldCantidad.getStyleClass().add("textfield_sin_border");
@@ -1246,6 +1243,7 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
         this.tabPaneController=tabPane;
     }
     
+    /*
     public void aceptarMensajeModal(){
         this.tabPaneController.ocultarMensajeModal();
         this.tabPaneController.getLabelCancelarModal().setVisible(true);
@@ -1255,6 +1253,7 @@ public class FXMLMainController implements Initializable, TabPaneModalCommand {
     public void cancelarMensajeModal(){
 
     }
+    */
     
     public void efectoAbrirTicket(){
         Platform.runLater(new Runnable(){
