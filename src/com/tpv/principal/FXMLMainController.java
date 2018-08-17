@@ -311,6 +311,13 @@ public class FXMLMainController implements Initializable {
                 if(keyEvent.getCode() == KeyCode.ENTER ||
                         keyEvent.getCode() == KeyCode.ESCAPE){
                     if(keyEvent.getCode() == KeyCode.ENTER){
+                        try{
+                            int cantidad = Integer.parseInt(textFieldCantidad.getText());
+                            if(cantidad <=0)
+                                return;
+                        }catch(Exception e){
+                            return;
+                        }
                         labelCantidadIngresada.setText(LABEL_CANTIDAD_INGRESADA+textFieldCantidad.getText()+")");
                         labelCantidadIngresada.setVisible(true);
                     }else{
@@ -418,6 +425,7 @@ public class FXMLMainController implements Initializable {
                 }
                 if(keyEvent.getCode() == KeyCode.F4){
                         textFieldCantidad.setVisible(true);
+                        textFieldCantidad.setText("");
                         textFieldProducto.setVisible(false);
                         labelCantidad.setText(LABEL_CANTIDAD);
                         labelCantidad.setVisible(true);
@@ -629,9 +637,9 @@ public class FXMLMainController implements Initializable {
         textFieldProducto.getStyleClass().add("textfield_sin_border");
         
         textFieldCantidad = new MaskTextField();
-        textFieldCantidad.setMask("N!.N!");
+        textFieldCantidad.setMask("N!");//textFieldCantidad.setRawMask("^[0-9]+(\\.([0-9]{1,2})?)?$");
         textFieldCantidad.setVisible(false);
-        textFieldCantidad.setMaxDigitos(7);
+        textFieldCantidad.setMaxDigitos(4);
         textFieldCantidad.setPrefWidth(150);
         textFieldCantidad.setMaxWidth(150);
         textFieldCantidad.getStyleClass().add("textfield_sin_border");
