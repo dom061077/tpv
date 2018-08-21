@@ -137,6 +137,9 @@ public class RetiroDineroConfirmacionController implements Initializable {
                                     @Override
                                     public void aceptarMensaje(){
                                         confirmarRetiro();
+                                            tabController.repeatFocus(tableViewRetiro);
+                                            tableViewRetiro.getSelectionModel().select(0);        
+
                                     }
                                 }
                         );

@@ -4338,6 +4338,21 @@ to the top and bottom -fx-padding values of the parent toolbar. */
     -fx-font-weight: bold;
 }
 
+.label_subtotal{
+    -fx-text-fill: #3757a7;
+    -fx-font-weight: bold;
+    -fx-font-family: "Arial";
+   -fx-font-size: 24;
+}
+
+.label_bonificaciones{
+    -fx-text-fill: #3757a7;
+    -fx-font-weight: bold;
+    -fx-font-family: "Arial";
+   -fx-font-size: 24;
+}
+
+
 .label_total{
     -fx-text-fill: #3757a7;
     -fx-font-weight: bold;
@@ -4428,7 +4443,7 @@ to the top and bottom -fx-padding values of the parent toolbar. */
 .label_cliente{
     -fx-text-fill: #3757a7;
     -fx-font-weight: bold;
-    -fx-font-size:22;
+    -fx-font-size:18;
 }
 
 

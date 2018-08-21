@@ -41,7 +41,7 @@
                         <Font name="Arial" size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="nombreCliente" prefHeight="17.0" prefWidth="396.0" styleClass="label_cliente" GridPane.columnSpan="2" />
+                  <Label fx:id="nombreCliente" prefHeight="17.0" prefWidth="479.0" styleClass="label_cliente" GridPane.columnSpan="2" />
                   <Pane fx:id="ingresoNegativoPane" prefHeight="18.0" prefWidth="480.0" visible="false" GridPane.columnSpan="2" GridPane.rowIndex="3">
                      <children>
                         <Label fx:id="ingresoNegativoHabilitado" alignment="CENTER" prefHeight="17.0" prefWidth="529.0" styleClass="label_textfield_negativo" text="Ingreso Negativo Habilitado" />
@@ -50,7 +50,7 @@
                   <ImageView fx:id="imageViewLoading" fitHeight="41.0" fitWidth="168.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.rowIndex="2" />
                </children>
                <padding>
-                  <Insets bottom="20.0" right="20.0" top="20.0" />
+                  <Insets bottom="20.0" right="20.0" top="5.0" />
                </padding>
             </GridPane>
          </center>
@@ -58,15 +58,15 @@
             <GridPane prefHeight="66.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
               <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="368.0" minWidth="10.0" prefWidth="353.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="452.0" minWidth="10.0" prefWidth="452.0" />
               </columnConstraints>
               <rowConstraints>
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label fx:id="nroticket" alignment="BOTTOM_LEFT" prefHeight="32.0" prefWidth="374.0" styleClass="label_nroticket" GridPane.columnIndex="2" />
-                  <Label fx:id="retiroDineroLabel" alignment="BOTTOM_LEFT" contentDisplay="BOTTOM" prefHeight="40.0" prefWidth="375.0" styleClass="label_retirodinero" textAlignment="CENTER" GridPane.columnIndex="1" />
+                  <Label fx:id="nroticket" alignment="BOTTOM_LEFT" prefHeight="32.0" prefWidth="452.0" styleClass="label_nroticket" GridPane.columnIndex="2" />
+                  <Label fx:id="retiroDineroLabel" alignment="BOTTOM_LEFT" contentDisplay="BOTTOM" prefHeight="40.0" prefWidth="370.0" styleClass="label_retirodinero" textAlignment="CENTER" GridPane.columnIndex="1" />
                   <Label fx:id="checkout" alignment="BOTTOM_LEFT" prefHeight="35.0" prefWidth="631.0" styleClass="label_nroticket" />
                </children>
             </GridPane>
@@ -93,9 +93,12 @@
             <Insets />
          </BorderPane.margin>
          <center>
-            <Pane focusTraversable="true" maxHeight="350.0" maxWidth="1124.0" minHeight="350.0" minWidth="1124.0" prefHeight="350.0" prefWidth="1124.0" BorderPane.alignment="CENTER">
+            <Pane focusTraversable="true" maxHeight="350.0" maxWidth="1124.0" minHeight="329.0" minWidth="1124.0" prefHeight="329.0" prefWidth="1124.0" BorderPane.alignment="CENTER">
                <children>
-                  <TableView fx:id="tableViewTickets" editable="true" focusTraversable="false" layoutY="-10.0" maxHeight="349.0" minHeight="280.0" prefHeight="349.0" prefWidth="1124.0" styleClass="tpv-table-view">
+                  <TableView fx:id="tableViewTickets" editable="true" focusTraversable="false" layoutY="-10.0" maxHeight="358.0" minHeight="280.0" prefHeight="358.0" prefWidth="1124.0" styleClass="tpv-table-view">
+                    <placeholder>
+                        <Label text="" />
+                    </placeholder>
                     <columns>
                         <TableColumn fx:id="codigoColumn" minWidth="108.0" prefWidth="100.0" resizable="false" text="CODIGO" />
                       <TableColumn fx:id="descripcionColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="503.0" resizable="false" sortable="false" text="DESCRIPCION" />
@@ -133,17 +136,34 @@
       </BorderPane>
    </center>
    <bottom>
-      <GridPane alignment="BOTTOM_CENTER" maxHeight="50.0" maxWidth="500.0" minHeight="50.0" minWidth="500.0" prefHeight="50.0" prefWidth="500.0" styleClass="rounded_corner" BorderPane.alignment="BOTTOM_CENTER">
+      <GridPane alignment="BOTTOM_CENTER" maxHeight="78.0" maxWidth="500.0" minHeight="50.0" minWidth="500.0" prefHeight="78.0" prefWidth="500.0" styleClass="rounded_corner" BorderPane.alignment="BOTTOM_CENTER">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label fx:id="labelTotalGral" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="620.0" styleClass="label_total" text="TOTAL GRAL.:" textAlignment="RIGHT" />
-            <Label fx:id="totalGeneral" alignment="CENTER_RIGHT" prefHeight="56.0" prefWidth="243.0" styleClass="label_total" textAlignment="RIGHT" GridPane.columnIndex="1" />
+            <Label fx:id="labelTotalGral" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="620.0" styleClass="label_total" text="TOTAL GRAL.:" textAlignment="RIGHT" GridPane.rowIndex="2">
+               <padding>
+                  <Insets left="10.0" />
+               </padding></Label>
+            <Label fx:id="totalGeneral" alignment="CENTER_RIGHT" prefHeight="26.0" prefWidth="218.0" styleClass="label_total" textAlignment="RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label contentDisplay="RIGHT" prefHeight="17.0" prefWidth="249.0" styleClass="label_subtotal" text="SUB-TOTAL:" textAlignment="RIGHT">
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </Label>
+            <Label prefHeight="17.0" prefWidth="250.0" styleClass="label_bonificaciones" text="BONIFICACIONES:" GridPane.rowIndex="1">
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </Label>
+            <Label fx:id="bonificaciones" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="218.0" styleClass="label_bonificaciones" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label fx:id="subtotal" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="218.0" styleClass="label_subtotal" GridPane.columnIndex="1" />
          </children>
          <BorderPane.margin>
             <Insets left="250.0" right="250.0" />

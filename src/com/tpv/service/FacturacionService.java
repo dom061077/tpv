@@ -21,6 +21,7 @@ import com.tpv.modelo.FacturaFormaPagoDetalle;
 import com.tpv.modelo.ProductoAgrupadoEnFactura;
 import com.tpv.modelo.Usuario;
 import com.tpv.modelo.enums.FacturaEstadoEnum;
+import com.tpv.modelo.enums.RetiroDineroEnum;
 import com.tpv.pagoticket.LineaPagoData;
 import com.tpv.principal.Context;
 import com.tpv.util.Connection;
@@ -641,9 +642,10 @@ public class FacturacionService  {
            Query q = em.createQuery("SELECT SUM(r.monto) FROM RetiroDinero r WHERE"
                                 +"  r.usuario.id = :idUsuario AND r.checkout.id = :idCheckout"
                                 +"  AND r.fechaAlta >= r.fechaHoy"
+                                +"  AND r.estado = :estado"
                             ).setParameter("idUsuario", idUsuario)
                             .setParameter("idCheckout",idCheckout)
-                                ;
+                            .setParameter("estado",RetiroDineroEnum.RETIRADO);
            totalRetiro = (BigDecimal)q.getSingleResult();
         }catch(RuntimeException e){
             log.error("No se pudo calcular el total de retiros del día. Id usuario: "

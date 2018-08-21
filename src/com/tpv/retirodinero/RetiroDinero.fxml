@@ -20,6 +20,10 @@
       <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <center>
             <TableView fx:id="tableViewRetiro" prefHeight="413.0" prefWidth="874.0" BorderPane.alignment="CENTER">
+                <placeholder>
+                    <Label text=""/>
+                </placeholder>                
+                
               <columns>
                 <TableColumn fx:id="billeteColumn" prefWidth="364.0" text="Billete" />
                 <TableColumn fx:id="cantidadRetiradaColumn" prefWidth="251.0" text="Cantidad Retirada" />

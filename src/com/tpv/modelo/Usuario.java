@@ -21,6 +21,20 @@ import org.hibernate.annotations.Formula;
 public class Usuario {
 
     /**
+     * @return the nombreCompleto
+     */
+    public String getNombreCompleto() {
+        return nombreCompleto;
+    }
+
+    /**
+     * @param nombreCompleto the nombreCompleto to set
+     */
+    public void setNombreCompleto(String nombreCompleto) {
+        this.nombreCompleto = nombreCompleto;
+    }
+
+    /**
      * @return the supervisor
      */
     public boolean isSupervisor() {
@@ -41,6 +55,10 @@ public class Usuario {
     
     @Column(name="NOMBRE")
     private String nombre;
+    
+    @Column(name="NOMBRECOMPLETO")
+    private String nombreCompleto;
+    
     @Column(name="PASSWORD")
     private String password;
     

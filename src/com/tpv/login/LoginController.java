@@ -116,7 +116,7 @@ public class LoginController implements Initializable{
                     if(usuario!=null){
                         Context.getInstance().currentDMTicket().setUsuario(usuario);
                         if(usuario.isSupervisor()){
-                            tabController.getUsuarioLogueadoLabel().setText("Usuario: "+usuario.getNombre());
+                            tabController.getUsuarioLogueadoLabel().setText("Usuario: "+usuario.getNombreCompleto());
                             tabController.gotoMenuPrincipal();
                         }else{
                         
@@ -127,7 +127,7 @@ public class LoginController implements Initializable{
 
                                 if(aperturaCierreCajDet!=null){
                                     Context.getInstance().currentDMTicket().setCaja(aperturaCierreCajDet.getCaja());
-                                    tabController.getUsuarioLogueadoLabel().setText("Usuario: "+usuario.getNombre());
+                                    tabController.getUsuarioLogueadoLabel().setText("Usuario: "+usuario.getNombreCompleto());
                                     tabController.gotoMenuPrincipal();
                                 }else{
                                     //this.tabController.getLabelCancelarModal().setVisible(false);

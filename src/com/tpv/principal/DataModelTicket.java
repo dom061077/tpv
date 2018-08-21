@@ -30,6 +30,20 @@ import javafx.collections.ObservableList;
 
 public class DataModelTicket {
 
+    /**
+     * @return the nroFacturaA
+     */
+    public int getNroFacturaA() {
+        return nroFacturaA;
+    }
+
+    /**
+     * @param nroFacturaA the nroFacturaA to set
+     */
+    public void setNroFacturaA(int nroFacturaA) {
+        this.nroFacturaA = nroFacturaA;
+    }
+
 
 
     /**
@@ -58,6 +72,7 @@ public class DataModelTicket {
     private FormaPago formaPago = null;
     private TpvException exception;
     private int nroTicket;
+    private int nroFacturaA;
     private Long puntoVenta;//checkout
     private Checkout checkout;
     private int caja;

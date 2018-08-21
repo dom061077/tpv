@@ -133,6 +133,9 @@
       <Pane prefHeight="222.0" prefWidth="1124.0" BorderPane.alignment="CENTER">
          <children>
             <TableView fx:id="tableViewPagos" focusTraversable="false" layoutY="4.0" prefHeight="208.0" prefWidth="1124.0" styleClass="tpv-table-view">
+                <placeholder>
+                    <Label text=""/>
+                </placeholder>                
               <columns>
                 <TableColumn fx:id="codigoPagoColumn" text="Cod. " visible="false" />
                   <TableColumn fx:id="descripcionPagoColumn" prefWidth="200.0" text="Descripción Pago" />

@@ -21,6 +21,10 @@
       <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <center>
             <TableView fx:id="tableViewRetiro" prefHeight="364.0" prefWidth="742.0" BorderPane.alignment="CENTER">
+                <placeholder>
+                    <Label text=""/>
+                </placeholder>                
+                
               <columns>
                 <TableColumn fx:id="idRetiroDineroColumn" prefWidth="206.0" text="Nº de Retiro" />
                 <TableColumn fx:id="fechaHoraCargaColumn" prefWidth="278.0" text="Carga" />

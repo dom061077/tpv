@@ -188,6 +188,12 @@ public class FXMLMainController implements Initializable {
     private Label totalGeneral;
     
     @FXML
+    private Label subtotal;
+    
+    @FXML
+    private Label bonificaciones;
+    
+    @FXML
     private Label labelTotalGral;
     
     private boolean imprimiendo;
@@ -489,7 +495,9 @@ public class FXMLMainController implements Initializable {
 
     private void calcularTotalGeneral(){
         DecimalFormat df = new DecimalFormat("##,##0.00");
+        subtotal.setText(df.format(Context.getInstance().currentDMTicket().getTotalTicket()));
         totalGeneral.setText(df.format(Context.getInstance().currentDMTicket().getTotalTicket()));
+        
     }
     
     private void scrollDown(){
@@ -666,7 +674,7 @@ public class FXMLMainController implements Initializable {
         try{
             Cliente cliente = clienteService.getClientePorCodODniOCuit(textFieldCodCliente.getText());
             if(cliente!=null){
-                nombreCliente.setText(cliente.getRazonSocial());
+                nombreCliente.setText("Cliente: "+cliente.getCuit()+" "+cliente.getRazonSocial());
                 nombreCliente.setVisible(true);
                 labelCliente.setVisible(false);
                 textFieldCodCliente.setVisible(false);
@@ -692,6 +700,7 @@ public class FXMLMainController implements Initializable {
 
                 String retorno[] = impresoraService.getPtoVtaNrosTicket();
                 Context.getInstance().currentDMTicket().setNroTicket(Integer.parseInt(retorno[1])+1);
+                Context.getInstance().currentDMTicket().setNroFacturaA(Integer.parseInt(retorno[2])+1);
                 Context.getInstance().currentDMTicket().setPuntoVenta(Long.parseLong(retorno[0]));
                 Context.getInstance().currentDMTicket().setTicketAbierto(Boolean.parseBoolean(retorno[3]));
 
@@ -703,11 +712,14 @@ public class FXMLMainController implements Initializable {
                 
 //            }
         }
-        nroticket.setText("Pto.Venta: "+Context.getInstance().currentDMTicket().getPuntoVenta()+" Nro. Ticket (B/C): "
+        nroticket.setText("Pto.Venta: "+Context.getInstance().currentDMTicket().getPuntoVenta()+" ║ Nº Ticket: "
                             +Context.getInstance().currentDMTicket().getNroTicket()
+                            +" ║ Nº Fact.A: "+Context.getInstance().currentDMTicket().getNroFacturaA()
                 //+" Nro. Ticket (A): "+retorno[2]
         );
-        checkout.setText("Checkout: "+Context.getInstance().currentDMTicket().getCheckout().getId());
+        checkout.setText("Checkout: "+Context.getInstance().currentDMTicket().getCheckout().getId()
+                    +" ║ Caja: "+Context.getInstance().currentDMTicket().getCaja()
+            );
         
 //            Worker<String> worker = new Task<String>(){
 //                @Override
@@ -1121,8 +1133,8 @@ public class FXMLMainController implements Initializable {
 
 
 
-        //String f = this.getClass().getResource("/com/tpv/resources/gif-emilio-luque.gif").toExternalForm();
-        //imageViewDer.setImage(new Image(f));
+        String f = this.getClass().getResource("/com/tpv/resources/gif-emilio-luque.gif").toExternalForm();
+        imageViewDer.setImage(new Image(f));
         
         
 //        imageViewIzq.setImage(new Image(f));
