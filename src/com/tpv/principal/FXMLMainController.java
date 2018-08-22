@@ -494,8 +494,23 @@ public class FXMLMainController implements Initializable {
     
 
     private void calcularTotalGeneral(){
-        DecimalFormat df = new DecimalFormat("##,##0.00");
+        DecimalFormat df = new DecimalFormat("#,###,##0.00");
+        Factura factura = null;
+        /*try{
+            factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdFactura());
+        }catch(TpvException e){
+                Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+                Context.getInstance().currentDMTicket().setException(e);
+                tabPaneController.gotoError();
+        }
+        BigDecimal totalBonificado = BigDecimal.ZERO;
+        if(factura != null)
+            for(Iterator<FacturaDetalleCombo> it = factura.getDetalleCombosAux().iterator();it.hasNext();){        
+                FacturaDetalleCombo fdc = it.next();            
+                totalBonificado = totalBonificado.add(fdc.getBonificacion());
+            }*/
         subtotal.setText(df.format(Context.getInstance().currentDMTicket().getTotalTicket()));
+        //bonificaciones.setText(df.format(totalBonificado));
         totalGeneral.setText(df.format(Context.getInstance().currentDMTicket().getTotalTicket()));
         
     }
@@ -633,8 +648,8 @@ public class FXMLMainController implements Initializable {
         textFieldProducto.setText("");
         //(String descripcion,BigDecimal cantidad
         //,BigDecimal precio, BigDecimal iva,BigDecimal impuestoInterno) 
-        calcularTotalGeneral();
         textFieldCantidad.setText("");
+        calcularTotalGeneral();
     }
     
     public void iniciaIngresosVisibles(){

@@ -468,7 +468,8 @@ public class Combo {
     public int getCantidadArmada(){
         int cantidadCombos=0;
         
-        //limpio el detalle del combo abierto
+        //limpio el detalle del combo abierto. Aqui es donde guardo qué producto
+        //interviene en el combo
         getComboAbierto().clear();
         
         for(Iterator<ComboGrupo> itcg = getCombosGrupo().iterator();itcg.hasNext();){
@@ -504,7 +505,7 @@ public class Combo {
                 for(Iterator<ComboGrupo>itcg = getCombosGrupo().iterator();itcg.hasNext();){
                     cgaux = itcg.next();
                     BigDecimal cantidadAcumulada=BigDecimal.ZERO;
-                    boolean isDecrementar=true;
+                    //boolean isDecrementar=true;
                     for(Iterator<ComboGrupoDetallePrecioProducto> itcdpp = 
                             cgaux.getDetallePreciosProductos().iterator();itcdpp.hasNext();){
                         ComboGrupoDetallePrecioProducto cdpp = itcdpp.next();
@@ -540,7 +541,11 @@ public class Combo {
             }
         }
         
+        
         if(getCombosGrupo().size()>0)
+            //getCombosGrupo trae los grupos con cantidades armadas ordenados
+            // en forma ascendente. Tomo el primero porque será la mínima
+            // cantidad de combos que se armarán
             cantidadCombos = getCombosGrupo().get(0).getCantidadGruposEnCombo();
         
         
@@ -609,8 +614,10 @@ public class Combo {
                                                         addComboAbierto(cdpp,cantidadDecrementada,cg.getPorcentaje());    
 
                                     }
-                                    if(cantidadADecrementar.compareTo(BigDecimal.ZERO)==0)//if(cantidadADecrementar==0)
-                                        break;
+                                    if(cantidadDecrementada.compareTo(BigDecimal.ZERO)==0)//if(cantidadADecrementar==0)
+                                        //estas dos lineas fueron agregadas tras deectar un bucle infinito
+                                        //en un combo mal configurado en la tabla
+                                        cantidadADecrementar = BigDecimal.ZERO;
                                     orden++;
                                 }
                             }
@@ -629,6 +636,10 @@ public class Combo {
                         ;itcdpp.hasNext();){
                     ComboGrupoDetallePrecioProducto cdpp = itcdpp.next();
                     BigDecimal cantidadDecrementada = cdpp.getPaf().getCantidad().divide(cg.getCantidad(),RoundingMode.HALF_EVEN); //cdpp.getPaf().getCantidad()/cg.getCantidad();
+                    
+                    //cantidadDecrementada  = cantidadDecrementada.setScale(0,BigDecimal.ROUND_DOWN);
+                    
+                    
                     cdpp.getPaf().decCantidad(cantidadDecrementada.multiply(cg.getCantidad()));//cdpp.getPaf().decCantidad(cantidadDecrementada*cg.getCantidad());
                     if(cg.getMonto().compareTo(BigDecimal.ZERO)>0){
                         //bonificacionFinal = bonificacionFinal.add(cdpp.getPaf()

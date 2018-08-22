@@ -564,15 +564,18 @@ public class Factura {
         paf.setPrecioUnitario(fd.getPrecioUnitario());
         paf.setPrecioUnitarioBase(fd.getPrecioUnitarioBase());
         paf.setProducto(fd.getProducto());
-        paf.setCantidad(fd.getCantidad());
+        if(fd.getSubTotal().compareTo(BigDecimal.ZERO)<0)
+            paf.setCantidad(fd.getCantidad().multiply(BigDecimal.valueOf(-1)));
+        else    
+            paf.setCantidad(fd.getCantidad());
+        
         getProductosAgrupados().add(paf);
     }
     
     public void agruparProductosEnFactura(){
         for(Iterator<FacturaDetalle> it = getDetalle().iterator();it.hasNext(); ){
             FacturaDetalle fd = it.next();
-            //if(fd.getSubTotal().compareTo(BigDecimal.ZERO)>0)
-                addProductoAgrupadoEnFactura(fd);
+            addProductoAgrupadoEnFactura(fd);
         }
     }
 
