@@ -239,6 +239,9 @@ public class ListaPrecioProducto {
         @Transient
         private BigDecimal descuentoCliente;
         
+        @Trasient
+        private esPrecioOferta
+        
       
         
         @ManyToOne
@@ -305,8 +308,10 @@ public class ListaPrecioProducto {
                    if(fechaInicioOferta.compareTo(fechaHoy)<=0 &&
                        fechaFinOferta.compareTo(fechaHoy)>=0)
                        precioAux = precioOferta;
-                   else
+                   else{
                        precioAux = precioPublico;
+                       /*solo por aqui habilita descuento al cliente*/
+                   }
                }
                precioAux = precioAux.subtract(getDescuentoCliente());
                return precioAux;

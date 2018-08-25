@@ -226,6 +226,7 @@ public class ProductoService {
                     +" lpp.producto.discontinuado = 0"
                     +" and lpp.producto.codigoProducto = :codigoProducto").setParameter("codigoProducto", filtroCodigo);
                 lstPrecioProducto = (ListaPrecioProducto)q.getSingleResult();
+                
                 precio = lstPrecioProducto.getPrecioFinal();
                 
             if(cliente!= null && cliente.getEmpresa().isEstado()){
@@ -241,6 +242,7 @@ public class ProductoService {
                                     +" y el proveedor 418");
                     }
                     
+                    /*NO APLICAAR DESCUENTO AL CLIENTE SI EL PRECIO ES DE OFERTA O ESPECIAL*/
                     if(proveedor==null && !isProductoEnCombo(filtroCodigo)){
                         log.debug("el proveedor es null ");
                         q = em.createQuery("FROM BonificacionCliente bc WHERE bc.cliente.id = :clienteId "

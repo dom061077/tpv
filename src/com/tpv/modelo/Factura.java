@@ -8,6 +8,7 @@ package com.tpv.modelo;
 import com.tpv.modelo.enums.FacturaEstadoEnum;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -288,6 +289,11 @@ public class Factura {
      * @return the detalle
      */
     public List<FacturaDetalle> getDetalle() {
+        return detalle;
+    }
+    
+    public List<FacturaDetalle> getDetalleOrdenadoPorId(){
+        Collections.sort(detalle,(o1,o2)->o1.getId().compareTo(o2.getId()));
         return detalle;
     }
 

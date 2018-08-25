@@ -1188,7 +1188,7 @@ public class FXMLMainController implements Initializable {
                 
                 impresoraService.abrirTicket();
                     
-                        for(Iterator iterator = factura.getDetalle().iterator();iterator.hasNext();){
+                        for(Iterator iterator = factura.getDetalleOrdenadoPorId().iterator();iterator.hasNext();){
                             FacturaDetalle fd = (FacturaDetalle)iterator.next();
 
 
@@ -1209,8 +1209,11 @@ public class FXMLMainController implements Initializable {
                             //Context.getInstance().currentDMTicket().getDetalle().add(lineaTicketData);
                             impresoraService.imprimirLineaTicket(
                                     fd.getProducto().getDescripcionConCodigo()
-                                    ,fd.getCantidad()
-                                    ,fd.getPrecioUnitario()
+                                    ,(fd.getSubTotal()
+                                        .compareTo(BigDecimal.ZERO)<0?fd.getCantidad().multiply(BigDecimal.valueOf(-1)):fd.getCantidad())
+                                    ,fd.getSubTotal()
+                                        .compareTo(BigDecimal.ZERO)<0?fd.getPrecioUnitario().multiply(BigDecimal.valueOf(-1)):fd.getPrecioUnitario()
+                                    //,fd.getPrecioUnitario()
                                     ,fd.getProducto().getValorImpositivo().getValor() 
                                     ,(fd.getSubTotal().compareTo(BigDecimal.ZERO)<0?true:false)
                                     ,fd.getProducto().getImpuestoInterno());

@@ -51,7 +51,7 @@ public class ProductoAgrupadoEnFactura {
     }
     
     public void decCantidad(BigDecimal dec){
-        cantidad=dec.subtract(dec);//cantidad-=dec;
+        cantidad=cantidad.subtract(dec);//cantidad-=dec;
     }
     
 
