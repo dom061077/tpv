@@ -358,6 +358,9 @@ public class ImpresoraService {
         FiscalPacket requestStatus;
         FiscalPacket response;
         requestStatus = getHfp().cmdStatusRequest();
+        
+            HAY QUE CAMBIAR LA IMPRESION DE BONIFICACION POR COMBO.
+            DEBO IMPRIMIR LA LINEA DE DETALLE NEGATIVO QUE REPRESENTA EL COMBO
         for(Iterator<FacturaDetalleCombo> it = factura.getDetalleCombosAux().iterator();it.hasNext();){
             FacturaDetalleCombo fdc = it.next();
             

@@ -475,8 +475,8 @@ public class FXMLMainController implements Initializable {
                         tabPaneController.gotoCombos();
                 }
                 
-                if(keyEvent.getCode() == KeyCode.F2)
-                    tabPaneController.gotoCliente();
+                //if(keyEvent.getCode() == KeyCode.F2)
+                //    tabPaneController.gotoCliente();
                 
                 if(keyEvent.getCode() == KeyCode.F3)
                     tabPaneController.gotoProducto();
@@ -496,7 +496,7 @@ public class FXMLMainController implements Initializable {
     private void calcularTotalGeneral(){
         DecimalFormat df = new DecimalFormat("#,###,##0.00");
         Factura factura = null;
-        /*try{
+        try{
             factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdFactura());
         }catch(TpvException e){
                 Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
@@ -508,10 +508,14 @@ public class FXMLMainController implements Initializable {
             for(Iterator<FacturaDetalleCombo> it = factura.getDetalleCombosAux().iterator();it.hasNext();){        
                 FacturaDetalleCombo fdc = it.next();            
                 totalBonificado = totalBonificado.add(fdc.getBonificacion());
-            }*/
+            }
         subtotal.setText(df.format(Context.getInstance().currentDMTicket().getTotalTicket()));
-        //bonificaciones.setText(df.format(totalBonificado));
-        totalGeneral.setText(df.format(Context.getInstance().currentDMTicket().getTotalTicket()));
+        bonificaciones.setText(df.format(totalBonificado));
+        totalGeneral.setText(
+                df.format(Context.getInstance()
+                        .currentDMTicket().getTotalTicket().subtract(totalBonificado)
+                )
+        );
         
     }
     

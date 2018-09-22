@@ -28,6 +28,24 @@ import org.hibernate.annotations.Formula;
 public class ListaPrecioProducto {
 
     /**
+     * @return the esPrecioOferta
+     */
+    public boolean isEsPrecioOferta() {
+        boolean esOferta=false;
+        if(fechaInicioEspecial.compareTo(fechaHoy)<=0 &&
+                fechaFinEspecial.compareTo(fechaHoy)>=0){
+        }else{
+            if(fechaInicioOferta.compareTo(fechaHoy)<=0 &&
+                fechaFinOferta.compareTo(fechaHoy)>=0)
+                esOferta=true;
+            else;
+        }
+        return esOferta;
+    }
+
+
+
+    /**
      * @return the precioLista
      */
     public BigDecimal getPrecioLista() {
@@ -239,8 +257,6 @@ public class ListaPrecioProducto {
         @Transient
         private BigDecimal descuentoCliente;
         
-        @Trasient
-        private esPrecioOferta
         
       
         

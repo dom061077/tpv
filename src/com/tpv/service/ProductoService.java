@@ -243,7 +243,8 @@ public class ProductoService {
                     }
                     
                     /*NO APLICAAR DESCUENTO AL CLIENTE SI EL PRECIO ES DE OFERTA O ESPECIAL*/
-                    if(proveedor==null && !isProductoEnCombo(filtroCodigo)){
+                    if(proveedor==null && !isProductoEnCombo(filtroCodigo)
+                            && !lstPrecioProducto.isEsPrecioOferta()){
                         log.debug("el proveedor es null ");
                         q = em.createQuery("FROM BonificacionCliente bc WHERE bc.cliente.id = :clienteId "
                                 +" AND mesAnio = mesAnioCalc")
