@@ -54,6 +54,7 @@ public class UsuarioService {
                     usuario.setSupervisor(true);
                 else
                     usuario.setSupervisor(false);
+                
             }    
             //if(usuario.getPassword().compareTo(password)==0)
             //        flagReturn=true;
@@ -67,7 +68,51 @@ public class UsuarioService {
         }finally{
             em.clear();
         }
+        if(usuario!=null){
+            EntityTransaction tx = em.getTransaction();
+            Checkout checkout;
+            try{
+                tx.begin();
+                checkout = em.find(Checkout.class,
+                            Context.getInstance().currentDMTicket()
+                                .getCheckout().getId()
+                        );
+                checkout.setTomado(true);
+                tx.commit();
+                log.info("Checkout tomado luego de la autenticación");
+            }catch(RuntimeException e){
+                if(tx!=null)
+                    tx.rollback();
+                log.error("Error en la capa de servicios al tomar el checkout.",e);
+                throw new TpvException("Error en la capa de servicios al tomar el checkout.");
+            }finally{
+                em.clear();
+            }
+        }
+        
         return usuario;
+    }
+    
+    public void logout() throws TpvException{
+        EntityManager em = Connection.getEm();
+        EntityTransaction tx = em.getTransaction();
+        Checkout checkout;
+        try{
+            tx.begin();
+            checkout = em.find(Checkout.class,
+                            Context.getInstance().currentDMTicket()
+                              .getCheckout().getId());
+            checkout.setTomado(false);
+            tx.commit();
+        }catch(RuntimeException e){
+            if(tx!=null)
+                tx.rollback();
+            log.error("Error en la capa de servicios al liberar el checkout",e);
+            throw new TpvException("Error en la capa de servicios al liberar el checkout");
+        }finally{
+            em.clear();
+        }
+                
     }
     
     public Usuario authenticarSupervisor(String nombre, String password, String codigoBarra)throws TpvException{
@@ -132,7 +177,7 @@ public class UsuarioService {
                     try{
                         tx = em.getTransaction();
                         tx.begin();
-                        Query q = em.createQuery("FROM Checkout c WHERE c.placa = :placa").setParameter("placa",mac);    
+                        Query q = em.createQuery("FROM Checkout c WHERE c.placa = :placa AND c.habilitado=true").setParameter("placa",mac);    
                         Checkout checkout = null;
                         checkout = (Checkout)q.getSingleResult();
                         tx.commit();

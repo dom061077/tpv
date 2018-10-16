@@ -17,6 +17,20 @@ import javax.persistence.Table;
 @Entity
 @Table(name="checkout")
 public class Checkout {
+
+    /**
+     * @return the tomado
+     */
+    public boolean isTomado() {
+        return tomado;
+    }
+
+    /**
+     * @param tomado the tomado to set
+     */
+    public void setTomado(boolean tomado) {
+        this.tomado = tomado;
+    }
     @Id
     @Column(name = "idCHECKOUT")
     private int id;
@@ -31,7 +45,10 @@ public class Checkout {
     private int posnet;
     
     @Column(name = "HABILITADO", columnDefinition = "TINYINT(1)")
-    private boolean habitado;
+    private boolean habilitado;
+    
+    @Column(name = "TOMADO", columnDefinition = "TYNYINT(1)")
+    private boolean tomado;
 
     /**
      * @return the id
@@ -92,15 +109,15 @@ public class Checkout {
     /**
      * @return the habitado
      */
-    public boolean isHabitado() {
-        return habitado;
+    public boolean isHabilitado() {
+        return habilitado;
     }
 
     /**
      * @param habitado the habitado to set
      */
-    public void setHabitado(boolean habitado) {
-        this.habitado = habitado;
+    public void setHabilitado(boolean habitado) {
+        this.habilitado = habitado;
     }
     
 }

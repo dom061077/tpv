@@ -15,6 +15,7 @@ import com.tpv.principal.Context;
 import com.tpv.util.BinaryFiscalPacketParser;
 import com.tpv.util.Connection;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -359,15 +360,18 @@ public class ImpresoraService {
         FiscalPacket response;
         requestStatus = getHfp().cmdStatusRequest();
         
-            HAY QUE CAMBIAR LA IMPRESION DE BONIFICACION POR COMBO.
-            DEBO IMPRIMIR LA LINEA DE DETALLE NEGATIVO QUE REPRESENTA EL COMBO
         for(Iterator<FacturaDetalleCombo> it = factura.getDetalleCombosAux().iterator();it.hasNext();){
             FacturaDetalleCombo fdc = it.next();
-            
+            BigDecimal neto=fdc.getNetoCompletoBonif().add(
+                        fdc.getNetoReducidoBonif()
+                    );
+            BigDecimal impInterno = fdc.getImpuestoInterno()
+                    .multiply(BigDecimal.valueOf(100))
+                    .divide(neto,RoundingMode.HALF_EVEN).setScale(2, RoundingMode.HALF_EVEN);
             request = getHfp().cmdReturnRecharge(fdc.getCombo().getDescripcion(),
                             fdc.getBonificacion(),
                             BigDecimal.valueOf(21), true,
-                            BigDecimal.ZERO, false, 0, "B");
+                            impInterno, false, 0, "B");
             try{
                 response = getHfp().execute(requestStatus);
                 response = getHfp().execute(request);

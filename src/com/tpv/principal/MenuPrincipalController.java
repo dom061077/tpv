@@ -5,10 +5,11 @@
  */
 package com.tpv.principal;
 
+import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.enums.TipoTituloSupervisorEnum;
-import com.tpv.util.ui.MensajeModal;
+import com.tpv.exceptions.TpvException;
+import com.tpv.service.UsuarioService;
 import com.tpv.util.ui.MensajeModalAceptar;
-import com.tpv.util.ui.TabPaneModalCommand;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -33,6 +34,7 @@ import org.apache.log4j.Logger;
 public class MenuPrincipalController implements Initializable {
     private TabPanePrincipalController tabController;
     Logger log = Logger.getLogger(MenuPrincipalController.class);
+    UsuarioService usuarioService = new UsuarioService();
     @FXML
     private Button buttonFacturacion;
          
@@ -135,8 +137,16 @@ public class MenuPrincipalController implements Initializable {
                         tabController.gotoFacturacion();
                     }
                 }
-                if(keyEvent.getCode()==KeyCode.NUMPAD5)
+                if(keyEvent.getCode()==KeyCode.NUMPAD5){
+                    try{
+                        usuarioService.logout();
+                    }catch(TpvException e){
+                        Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_MENUPRINCIPAL);
+                        Context.getInstance().currentDMTicket().setException(e);
+                        tabController.gotoError();
+                    }
                     System.exit(0);
+                }
                 if(keyEvent.getCode()==KeyCode.NUMPAD2){
                     Context.getInstance().currentDMTicket().setTipoTituloSupervisor(TipoTituloSupervisorEnum.HABILITAR_CONTROLADOR);
                     tabController.gotoSupervisor();

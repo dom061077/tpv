@@ -34,7 +34,7 @@ public class FacturaDetalleComboAbierto {
     
 
     @Column(name="IMPUESTOINTERNO")
-    private BigDecimal impuestoInterno;
+    private BigDecimal impuestoInterno=BigDecimal.ZERO;
     
     @Column(name="NETO")
     private BigDecimal neto;

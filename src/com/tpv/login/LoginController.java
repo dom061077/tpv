@@ -127,6 +127,7 @@ public class LoginController implements Initializable{
 
                                 if(aperturaCierreCajDet!=null){
                                     Context.getInstance().currentDMTicket().setCaja(aperturaCierreCajDet.getCaja());
+                                    Context.getInstance().currentDMTicket().setAperturaCierreCajDetalle(aperturaCierreCajDet);
                                     tabController.getUsuarioLogueadoLabel().setText("Usuario: "+usuario.getNombreCompleto());
                                     tabController.gotoMenuPrincipal();
                                 }else{

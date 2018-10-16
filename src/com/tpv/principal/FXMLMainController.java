@@ -871,9 +871,16 @@ public class FXMLMainController implements Initializable {
         Factura factura = new Factura();
         factura.setTotal(Context.getInstance().currentDMTicket().getTotalTicket());
         factura.setEstado(FacturaEstadoEnum.ABIERTA);
+        factura.setClaseComprobante("B");        
         factura.setCliente(Context.getInstance().currentDMTicket().getCliente());
-        if(Context.getInstance().currentDMTicket().getCliente()!=null)
+        factura.setAperturaCierreCajeroDetalle(Context.getInstance()
+                    .currentDMTicket().getAperturaCierreCajDetalle());      
+        if(Context.getInstance().currentDMTicket().getCliente()!=null){
             factura.setCondicionIva(Context.getInstance().currentDMTicket().getCliente().getCondicionIva());
+            if(factura.getCondicionIva().getId()==2){
+                factura.setClaseComprobante("A");
+            }    
+        }
         factura.setCheckout(Context.getInstance().currentDMTicket().getCheckout());
         factura.setPrefijoFiscal(Context.getInstance().currentDMTicket().getPuntoVenta());
         /*ListProperty<LineaTicketData> detalle =  Context.getInstance().currentDMTicket().getDetalle();
@@ -904,6 +911,7 @@ public class FXMLMainController implements Initializable {
             factura.setNumeroComprobante(impresoraService.getNroUltimoTicketBC());
             factura.setUsuario(Context.getInstance().currentDMTicket().getUsuario());
             factura.setCheckout(Context.getInstance().currentDMTicket().getCheckout());
+            factura.setTipoComprobante("F");
             facturaGuardada=factService.registrarFactura(factura);
         }catch(TpvException e){
             log.error("Error: "+e.getMessage());

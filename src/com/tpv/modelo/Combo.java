@@ -430,10 +430,10 @@ public class Combo {
         fdca.setImpuestoInterno(
                 cgdpp.getPaf().getPrecioUnitarioBase()
                         .multiply(cgdpp.getPaf().getProducto().getImpuestoInterno())
-                        .divide(BigDecimal.valueOf(100))
+                        .divide(BigDecimal.valueOf(100),RoundingMode.HALF_EVEN)
                         .multiply(cantidad)
                         .multiply(porcentajeDesc)
-                        .divide(BigDecimal.valueOf(100))
+                        .divide(BigDecimal.valueOf(100),RoundingMode.HALF_EVEN)
             );
 
         fdca.setIva(cgdpp.getPaf().getPrecioUnitarioBase()

@@ -275,6 +275,9 @@ public class TabPanePrincipalController implements Initializable {
 
         param = UtilidadesService.getParametroGral("MONTO_RETIRODINERO");
         Context.getInstance().currentDMParametroGral().setMontoRetiroDinero(param.getParametroNumerico());
+        
+        param = UtilidadesService.getParametroGral("COMBOS_IVA");
+        Context.getInstance().currentDMParametroGral().setPorcentajeIvaCombo(param.getParametroNumerico());
 
     }
     

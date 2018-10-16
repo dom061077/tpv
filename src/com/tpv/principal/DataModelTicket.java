@@ -8,6 +8,7 @@ package com.tpv.principal;
 import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.enums.TipoTituloSupervisorEnum;
 import com.tpv.exceptions.TpvException;
+import com.tpv.modelo.AperturaCierreCajeroDetalle;
 import com.tpv.modelo.Checkout;
 import com.tpv.modelo.Cliente;
 import com.tpv.modelo.FormaPago;
@@ -29,6 +30,21 @@ import javafx.collections.ObservableList;
 
 
 public class DataModelTicket {
+
+    /**
+     * @return the aperturaCierreCajDetalle
+     */
+    public AperturaCierreCajeroDetalle getAperturaCierreCajDetalle() {
+        return aperturaCierreCajDetalle;
+    }
+
+    /**
+     * @param aperturaCierreCajDetalle the aperturaCierreCajDetalle to set
+     */
+    public void setAperturaCierreCajDetalle(AperturaCierreCajeroDetalle aperturaCierreCajDetalle) {
+        this.aperturaCierreCajDetalle = aperturaCierreCajDetalle;
+    }
+
 
     /**
      * @return the nroFacturaA
@@ -92,7 +108,7 @@ public class DataModelTicket {
     private BigDecimal totalImpuestoInterno;
     private BigDecimal totalExento;
     private BigDecimal retencion = BigDecimal.ZERO;
-    
+    private AperturaCierreCajeroDetalle aperturaCierreCajDetalle;
     
     public DataModelTicket(){
     }

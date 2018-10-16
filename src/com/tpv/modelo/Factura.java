@@ -37,6 +37,34 @@ import org.hibernate.annotations.Formula;
 public class Factura {
 
     /**
+     * @return the claseComprobante
+     */
+    public String getClaseComprobante() {
+        return claseComprobante;
+    }
+
+    /**
+     * @param claseComprobante the claseComprobante to set
+     */
+    public void setClaseComprobante(String claseComprobante) {
+        this.claseComprobante = claseComprobante;
+    }
+
+    /**
+     * @return the aperturaCierreCajeroDetalle
+     */
+    public AperturaCierreCajeroDetalle getAperturaCierreCajeroDetalle() {
+        return aperturaCierreCajeroDetalle;
+    }
+
+    /**
+     * @param aperturaCierreCajeroDetalle the aperturaCierreCajeroDetalle to set
+     */
+    public void setAperturaCierreCajeroDetalle(AperturaCierreCajeroDetalle aperturaCierreCajeroDetalle) {
+        this.aperturaCierreCajeroDetalle = aperturaCierreCajeroDetalle;
+    }
+
+    /**
      * @return the usuarioModificacion
      */
     public Usuario getUsuarioModificacion() {
@@ -86,6 +114,9 @@ public class Factura {
     
     @Column(name = "TIPOCOMPROBANTE")
     private String tipoComprobante;
+    
+    @Column(name = "CLASECOMPROBANTE")
+    private String claseComprobante;
     
     @Column(name = "NUMEROCOMPROBANTE")
     private String numeroComprobante;
@@ -163,6 +194,7 @@ public class Factura {
     @Column(name = "FECHAHORAFISCAL")
     private String fechaHoraFiscal;
     
+    
     @Column(name = "ESTADO",nullable = false)
     @Enumerated(EnumType.STRING)
     private FacturaEstadoEnum estado;
@@ -190,6 +222,10 @@ public class Factura {
     private List<FacturaFormaPagoDetalle> detallePagos = new ArrayList<FacturaFormaPagoDetalle>();
 
 
+    @ManyToOne
+    @JoinColumn(name = "idsuctes_APERTURACIERRECAJERO"
+            , referencedColumnName = "idsuctes_APERTURACIERRECAJERO", nullable=false)
+    private AperturaCierreCajeroDetalle aperturaCierreCajeroDetalle;
     
     @ManyToOne
     @JoinColumn(name = "idClientes", referencedColumnName = "idClientes", nullable=true)
