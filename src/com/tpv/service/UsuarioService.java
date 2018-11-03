@@ -226,7 +226,7 @@ public class UsuarioService {
         try{
             query = em.createQuery("FROM AperturaCierreCajeroDetalle a "
                     +" WHERE a.aperturaCierreCab.fecha = a.aperturaCierreCab.fechaHoy"
-                    +" AND a.aperturaCierreCab.abierta = 1 AND a.aperturaCierreCab.cerrada = 0"
+                    +" AND a.abierta = 1 AND a.cerrada = 0"
                     +" AND a.checkout.id = "+idCheckout
                     +" AND a.usuario.idUsuario = "+idUsuario
             );

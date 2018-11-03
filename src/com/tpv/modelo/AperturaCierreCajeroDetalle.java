@@ -20,6 +20,34 @@ import javax.persistence.Table;
 @Entity
 @Table(name="suctes_aperturacierrecajero")
 public class AperturaCierreCajeroDetalle {
+
+    /**
+     * @return the cerrada
+     */
+    public boolean isCerrada() {
+        return cerrada;
+    }
+
+    /**
+     * @param cerrada the cerrada to set
+     */
+    public void setCerrada(boolean cerrada) {
+        this.cerrada = cerrada;
+    }
+
+    /**
+     * @return the abierta
+     */
+    public boolean isAbierta() {
+        return abierta;
+    }
+
+    /**
+     * @param abierta the abierta to set
+     */
+    public void setAbierta(boolean abierta) {
+        this.abierta = abierta;
+    }
     @Id
     @Column(name ="idsuctes_APERTURACIERRECAJERO" )
     private Long id;
@@ -29,6 +57,12 @@ public class AperturaCierreCajeroDetalle {
     
     @Column(name = "TURNO")   
     private int caja;
+    
+    @Column(name = "APERTURA")
+    private boolean abierta;
+    
+    @Column(name = "CIERRE")
+    private boolean cerrada;
     
     @ManyToOne
     @JoinColumn(name = "idCHECKOUT", referencedColumnName = "idCHECKOUT")
