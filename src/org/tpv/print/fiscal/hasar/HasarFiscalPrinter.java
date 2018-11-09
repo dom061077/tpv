@@ -375,7 +375,8 @@ public abstract class HasarFiscalPrinter extends BasicFiscalPrinter implements H
 			cmd.setNumber(i++, ivaPercent, 2, 2, false,"");		
 		cmd.setBoolean(i++, substract, "m", "M", false);
                 //TODO signo porcentaje en impuesto interno
-		cmd.setNumber(i++, internalTaxes, 10, 8, false,"%");//cmd.setNumber(i++, internalTaxes, 10, 8, false,"");
+		//cmd.setNumber(i++, internalTaxes, 10, 8, false,"%");//
+                cmd.setNumber(i++, internalTaxes, 10, 8, false,"+");
 		cmd.setNumber(i++, display, true);
 		cmd.setBoolean(i++, basePrice, "x", "T", false);
 		return cmd;
@@ -513,7 +514,8 @@ public abstract class HasarFiscalPrinter extends BasicFiscalPrinter implements H
 		}
 		cmd.setNumber(i++, ivaPercent, 2, 2, false,"");		
 		cmd.setBoolean(i++, subtract, "m", "M", false);
-		cmd.setNumber(i++, internalTaxes, 1, 8, false,"%");//cmd.setNumber(i++, internalTaxes, 1, 8, false,"");
+		//cmd.setNumber(i++, internalTaxes, 1, 8, false,"%");//
+                cmd.setNumber(i++, internalTaxes, 1, 8, false,"+");
 		cmd.setNumber(i++, display, true);
 		cmd.setBoolean(i++, baseAmount, "x", "T", false);
 		cmd.setText(i++, operation, false);

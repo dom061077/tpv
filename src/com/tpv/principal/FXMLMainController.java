@@ -633,7 +633,7 @@ public class FXMLMainController implements Initializable {
                         //impresoraService.imprimirLineaTicket(producto.getDescripcionConCodigo(), cantidad
                         //        ,precio ,producto.getValorImpositivo().getValor() ,Context.getInstance().currentDMTicket().isImprimeComoNegativo(), producto.getImpuestoInterno());
                         imageViewLoading.setVisible(true);
-                        efectoImprimirLinea(producto, cantidad, precio);
+                        efectoImprimirLinea(producto, cantidad, precio,lpp.getMontoImpuestoInterno());
 
 
         //                    Context.getInstance().currentDMTicket().getDetalle().add(lineaTicketData);                    
@@ -1219,6 +1219,7 @@ public class FXMLMainController implements Initializable {
                                             ,(fd.getSubTotal().compareTo(BigDecimal.ZERO)<0?true:false)
                             );   
                             //Context.getInstance().currentDMTicket().getDetalle().add(lineaTicketData);
+                            BigDecimal coeficienteK = ImpresoraService.getCoeficienteK(fd.getImpuestoInterno());
                             impresoraService.imprimirLineaTicket(
                                     fd.getProducto().getDescripcionConCodigo()
                                     ,(fd.getSubTotal()
@@ -1228,7 +1229,8 @@ public class FXMLMainController implements Initializable {
                                     //,fd.getPrecioUnitario()
                                     ,fd.getProducto().getValorImpositivo().getValor() 
                                     ,(fd.getSubTotal().compareTo(BigDecimal.ZERO)<0?true:false)
-                                    ,fd.getProducto().getImpuestoInterno());
+                                    ,coeficienteK//fd.getProducto().getImpuestoInterno()
+                                    );
 
                         }
                         //Context.getInstance().currentDMTicket().setIdFactura(factura.getId());
@@ -1323,18 +1325,21 @@ public class FXMLMainController implements Initializable {
         });        
     }
     
+
+    
     
     public void efectoImprimirLinea(Producto producto,BigDecimal cantidad
-            ,BigDecimal precio){
+            ,BigDecimal precio,BigDecimal montoImpuestoInterno){
         
         Platform.runLater(new Runnable(){
             @Override
             public void run(){
                 try{
-                        
+                        BigDecimal coeficienteK = impresoraService.getCoeficienteK(montoImpuestoInterno);
                 
                         impresoraService.imprimirLineaTicket(producto.getDescripcionConCodigo(), cantidad
-                                ,precio ,producto.getValorImpositivo().getValor() ,Context.getInstance().currentDMTicket().isImprimeComoNegativo(), producto.getImpuestoInterno());
+                                ,precio ,producto.getValorImpositivo().getValor() ,Context.getInstance().currentDMTicket().isImprimeComoNegativo()
+                                ,coeficienteK /*producto.getImpuestoInterno()*/);
 
                         
                 }catch(TpvException e){

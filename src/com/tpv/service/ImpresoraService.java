@@ -101,6 +101,13 @@ public class ImpresoraService {
     }
     
             
+    public static BigDecimal getCoeficienteK(BigDecimal montoImpuestoInterno){
+        BigDecimal coeficienteK = BigDecimal.ONE;
+        coeficienteK = montoImpuestoInterno.add(coeficienteK);
+        coeficienteK = BigDecimal.ONE.divide(coeficienteK,2,RoundingMode.HALF_EVEN);
+        return coeficienteK;
+    }    
+    
     public String getNroPuntoVenta() throws TpvException{
         //HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
         FiscalPacket request;
@@ -365,9 +372,12 @@ public class ImpresoraService {
             BigDecimal neto=fdc.getNetoCompletoBonif().add(
                         fdc.getNetoReducidoBonif()
                     );
-            BigDecimal impInterno = fdc.getImpuestoInterno()
-                    .multiply(BigDecimal.valueOf(100))
-                    .divide(neto,RoundingMode.HALF_EVEN).setScale(2, RoundingMode.HALF_EVEN);
+            
+                    
+            //BigDecimal impInterno = fdc.getImpuestoInterno()
+            //        .multiply(BigDecimal.valueOf(100))
+            //        .divide(neto,RoundingMode.HALF_EVEN).setScale(2, RoundingMode.HALF_EVEN);
+            BigDecimal impInterno = ImpresoraService.getCoeficienteK(fdc.getImpuestoInterno());
             request = getHfp().cmdReturnRecharge(fdc.getCombo().getDescripcion(),
                             fdc.getBonificacion(),
                             BigDecimal.valueOf(21), true,
