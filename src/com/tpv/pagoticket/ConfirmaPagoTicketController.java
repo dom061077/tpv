@@ -213,7 +213,7 @@ public class ConfirmaPagoTicketController implements Initializable{
             totalPagosLabel.setText(df.format(Context.getInstance().currentDMTicket().getTotalPagos()));
             totalBonificacionesLabel.setText(df.format(Context.getInstance().currentDMTicket().getBonificaciones()));
             totalTicketLabel.setText(df.format(Context.getInstance().currentDMTicket().getTotalGral()));
-            cambioLabel.setText(df.format(Context.getInstance().currentDMTicket().getSaldo().abs()));
+            cambioLabel.setText(df.format(Context.getInstance().currentDMTicket().getCambioCliente()));
             
             totalNetoLabel.setText(df.format(Context.getInstance().currentDMTicket().getTotalNeto()));
             totalIVALabel.setText(df.format(Context.getInstance().currentDMTicket().getTotalIva()));
@@ -563,6 +563,10 @@ public class ConfirmaPagoTicketController implements Initializable{
                             Context.getInstance().currentDMTicket().setNroTicket(Context.getInstance().currentDMTicket().getNroTicket()+1);
                             Context.getInstance().currentDMTicket().getDetalle().clear();
                             Context.getInstance().currentDMTicket().getPagos().clear();
+                            Context.getInstance().currentDMTicket().setRetencion(BigDecimal.ZERO);
+                            Context.getInstance().currentDMTicket().setBonificaciones(BigDecimal.ZERO);
+                            Context.getInstance().currentDMTicket().setTotalIva(BigDecimal.ZERO);
+                            Context.getInstance().currentDMTicket().setTotalImpuestoInterno(BigDecimal.ZERO);
                             Context.getInstance().currentDMTicket().setImprimeComoNegativo(false);
                             log.info("Factura cerrada y confirmada: "+factura.getId());
                             if(factura.getDetalleConcursos().size()>0){

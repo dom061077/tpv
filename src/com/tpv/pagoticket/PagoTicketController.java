@@ -745,8 +745,18 @@ public class PagoTicketController implements Initializable {
         int codigoPago = 0;int cantidadCuotas=0;String codigoCupon;
         String nroTarjeta = "";
         BigDecimal monto = new BigDecimal(0);
+        BigDecimal cambioCliente = BigDecimal.ZERO;
         codigoPago = Integer.parseInt(textFieldTipoPago.getText());
-        monto = new BigDecimal(textFieldMonto.getText());
+        if(Context.getInstance().currentDMTicket()
+                .getSaldo()
+                .compareTo(new BigDecimal(textFieldMonto.getText()))<0){        
+            monto = Context.getInstance().currentDMTicket()
+                    .getSaldo();
+            cambioCliente = new BigDecimal(textFieldMonto.getText())
+                    .subtract(Context.getInstance().currentDMTicket()
+                    .getSaldo());
+        }else    
+            monto = new BigDecimal(textFieldMonto.getText());
         BigDecimal netoBonifTarjeta = BigDecimal.ZERO;
         BigDecimal ivaBonifTarjeta = BigDecimal.ZERO;
         BigDecimal netoInteresTarjeta = BigDecimal.ZERO;
@@ -772,7 +782,7 @@ public class PagoTicketController implements Initializable {
                     .valueOf(1 + Context.getInstance().currentDMParametroGral().getPorcentajeIvaBonifTarjeta().doubleValue()/100);
         netoBonifTarjeta = formaPago
                     .getBonificacionEnFormaPago(cantidadCuotas, monto)
-                    .divide(auxTarjeta,RoundingMode.HALF_EVEN);
+                    .divide(auxTarjeta,RoundingMode.HALF_UP);
         ivaBonifTarjeta = formaPago
                     .getBonificacionEnFormaPago(cantidadCuotas, monto)
                     .subtract(netoBonifTarjeta);
@@ -780,7 +790,7 @@ public class PagoTicketController implements Initializable {
                     .valueOf(1 + Context.getInstance().currentDMParametroGral().getPorcentajeIvaIntTarjeta().doubleValue()/100);
         netoInteresTarjeta = formaPago
                     .getInteresEnFormaPago(cantidadCuotas, monto)
-                    .divide(auxTarjeta,RoundingMode.HALF_EVEN);
+                    .divide(auxTarjeta,RoundingMode.HALF_UP);
         ivaInteresTarjeta = formaPago
                     .getInteresEnFormaPago(cantidadCuotas, monto)
                     .subtract(netoInteresTarjeta);
@@ -797,6 +807,7 @@ public class PagoTicketController implements Initializable {
             
         Context.getInstance().currentDMTicket().getPagos().add(new LineaPagoData(
             codigoPago,labelFormaPagoDescripcion.getText(),monto
+            ,cambioCliente
             ,cantidadCuotas,nroTarjeta,codigoCupon
             ,terminal,numeroLote,dniCliente
             ,porcentajeIntBonifTarjeta
@@ -921,7 +932,7 @@ public class PagoTicketController implements Initializable {
         BigDecimal importePago = new BigDecimal(textFieldMonto.getText());
         importeTarjeta = this.porcentajeIntBonifTarjeta
                 .multiply(importePago)
-                .divide(BigDecimal.valueOf(100),RoundingMode.HALF_EVEN)
+                .divide(BigDecimal.valueOf(100),RoundingMode.HALF_UP)
                 .add(importePago);
         textFieldImporteTarjeta.setText(df.format(importeTarjeta));
     }

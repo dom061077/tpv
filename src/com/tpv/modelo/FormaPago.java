@@ -118,7 +118,7 @@ public class FormaPago {
                     .divide(BigDecimal.valueOf(100));
             bonificaciones=bonificaciones.add(bonifAux);
         }
-        bonificaciones = bonificaciones.setScale(2,BigDecimal.ROUND_HALF_EVEN);
+        bonificaciones = bonificaciones.setScale(2,BigDecimal.ROUND_HALF_UP);
         return bonificaciones;
     }
     
@@ -131,7 +131,7 @@ public class FormaPago {
                         .divide(BigDecimal.valueOf(100));
             intereses=intereses.add(interesAux);
         }
-        intereses = intereses.setScale(2,BigDecimal.ROUND_HALF_EVEN);
+        intereses = intereses.setScale(2,BigDecimal.ROUND_HALF_UP);
         return intereses;
     }
 

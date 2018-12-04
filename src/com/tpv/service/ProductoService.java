@@ -283,7 +283,7 @@ public class ProductoService {
         }
 
         
-        //precio = precio.setScale(2,BigDecimal.ROUND_HALF_EVEN);
+        //precio = precio.setScale(2,BigDecimal.ROUND_HALF_UP);
         return lstPrecioProducto;
     }
     

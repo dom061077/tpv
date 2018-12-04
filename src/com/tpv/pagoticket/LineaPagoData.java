@@ -24,6 +24,7 @@ public class LineaPagoData {
     private IntegerProperty CodigoPago;
     private StringProperty Descripcion;
     private ObjectProperty<BigDecimal> Monto;
+    private ObjectProperty<BigDecimal> CambioCliente;
     private IntegerProperty CantidadCuotas;
     private StringProperty CodigoCupon;
     private StringProperty NroTarjeta;
@@ -42,6 +43,7 @@ public class LineaPagoData {
     }
     
     public LineaPagoData(int codigoPago,String descripcion,BigDecimal monto
+            ,BigDecimal cambioCliente
             ,int cantidadCuotas,String nroTarjeta, String codigoCupon
             ,String terminal,String numeroLote, String dniCliente
             ,BigDecimal porcentaje
@@ -50,6 +52,7 @@ public class LineaPagoData {
         this.CodigoPago = new SimpleIntegerProperty(codigoPago);
         this.Descripcion = new SimpleStringProperty(descripcion);
         this.Monto = new SimpleObjectProperty(monto);
+        this.CambioCliente = new SimpleObjectProperty(cambioCliente);
         this.CantidadCuotas = new SimpleIntegerProperty(cantidadCuotas);
         this.CodigoCupon = new SimpleStringProperty(codigoCupon);
         this.NroTarjeta = new SimpleStringProperty(nroTarjeta);
@@ -61,6 +64,7 @@ public class LineaPagoData {
         this.IvaBonificacion = new SimpleObjectProperty(ivaBonificacion);
         this.IvaInteres = new SimpleObjectProperty(ivaInteres);
         this.DniCliente = new SimpleStringProperty(dniCliente);
+        
     }
 
     /**
@@ -85,6 +89,11 @@ public class LineaPagoData {
     public ObjectProperty<BigDecimal> montoProperty() {
         return Monto;
     }
+    
+    public ObjectProperty<BigDecimal> cambioCliente(){
+        return CambioCliente;
+    }
+            
     
     public ObjectProperty<BigDecimal> interesProperty(){
         return Interes;
@@ -152,6 +161,10 @@ public class LineaPagoData {
      */
     public BigDecimal getMonto() {
         return montoProperty().get();
+    }
+    
+    public BigDecimal getCambioCliente(){
+        return cambioCliente().get();
     }
     
     

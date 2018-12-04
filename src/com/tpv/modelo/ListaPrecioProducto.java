@@ -8,6 +8,7 @@ package com.tpv.modelo;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
@@ -298,6 +299,7 @@ public class ListaPrecioProducto {
                    else
                        precioAux = precioPublico;
                }
+               precioAux = precioAux.setScale(2, RoundingMode.HALF_EVEN);
                return precioAux; 
         }
         
@@ -305,12 +307,14 @@ public class ListaPrecioProducto {
         public BigDecimal getPrecioFinal(){
                BigDecimal precioAux=getPrecioUnitarioConIvaDescCliente();
                precioAux = precioAux.add(getMontoImpuestoInterno());
+               precioAux = precioAux.setScale(2, RoundingMode.HALF_EVEN);
                return precioAux;
         }
         
         @Transient
         public BigDecimal getPrecioUnitarioConIvaDescCliente(){
             BigDecimal precioRef = getPrecioUnitarioConIva();
+            precioRef = precioRef.setScale(2, RoundingMode.HALF_EVEN);
             return precioRef;
         }
         
@@ -330,6 +334,7 @@ public class ListaPrecioProducto {
                    }
                }
                precioAux = precioAux.subtract(getDescuentoCliente());
+               precioAux = precioAux.setScale(2, RoundingMode.HALF_EVEN);
                return precioAux;
         }
         
@@ -341,6 +346,7 @@ public class ListaPrecioProducto {
             valorImpositivo = precioAux.multiply(producto.getValorImpositivo().getValor());
             valorImpositivo = valorImpositivo.divide(BigDecimal.valueOf(100));
             precioAux = precioAux.add(valorImpositivo);
+            precioAux = precioAux.setScale(2, RoundingMode.HALF_EVEN);
             return precioAux;
         }
         
@@ -358,6 +364,7 @@ public class ListaPrecioProducto {
             BigDecimal valorImpositivo = null;
             valorImpositivo = getPrecioUnitario().multiply(producto.getValorImpositivo().getValor());
             valorImpositivo = valorImpositivo.divide(BigDecimal.valueOf(100));
+            valorImpositivo = valorImpositivo.setScale(2, RoundingMode.HALF_EVEN);
             return valorImpositivo;
         }
 
@@ -415,6 +422,7 @@ public class ListaPrecioProducto {
             BigDecimal montoii=null;
             montoii = getPrecioUnitario()
                     .multiply(producto.getImpuestoInterno()).divide(BigDecimal.valueOf(100));
+            montoii = montoii.setScale(2, RoundingMode.HALF_EVEN);
             return montoii;
         }
         

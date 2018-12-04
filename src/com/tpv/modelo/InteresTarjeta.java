@@ -160,7 +160,7 @@ public class InteresTarjeta {
                 montoResultante = monto.multiply(getPorcentaje()).divide(BigDecimal.valueOf(100));
         }
 
-        return montoResultante.setScale(2,BigDecimal.ROUND_HALF_EVEN);
+        return montoResultante.setScale(2,BigDecimal.ROUND_HALF_UP);
     }
 
     /**

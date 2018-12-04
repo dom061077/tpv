@@ -207,7 +207,7 @@ public class FXMLMainController implements Initializable {
         if(impresoraService.getHfp().getEventListener()==null)
             asignarEvento();
         
-
+        //impresoraService.setComSpeed(Long.parseLong("4800"));
         traerInfoImpresora();        
         
         initTableViewTickets();
@@ -267,7 +267,7 @@ public class FXMLMainController implements Initializable {
         
         labelCantidad.setText(LABEL_CANTIDAD);
         
-       
+        
                 
         
         
@@ -509,6 +509,10 @@ public class FXMLMainController implements Initializable {
                 FacturaDetalleCombo fdc = it.next();            
                 totalBonificado = totalBonificado.add(fdc.getBonificacion());
             }
+        // agrego esta inicialización para evitar el arrastre desde la
+        // interfaz de ingresos de pagos
+        Context.getInstance().currentDMTicket().setRetencion(BigDecimal.ZERO);
+        
         subtotal.setText(df.format(Context.getInstance().currentDMTicket().getTotalTicket()));
         bonificaciones.setText(df.format(totalBonificado));
         totalGeneral.setText(
@@ -587,8 +591,17 @@ public class FXMLMainController implements Initializable {
                     }
                     if(precio.compareTo(BigDecimal.valueOf(0))>0){
                         if(Context.getInstance().currentDMTicket().getDetalle().size()==0){
-                                imageViewLoading.setVisible(true);
-                                efectoAbrirTicket();
+                                //------------------------------------
+                                //imageViewLoading.setVisible(true);
+                                //efectoAbrirTicket();
+                                try{
+                                    impresoraService.abrirTicket();                
+                                }catch(TpvException e){
+                                    Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+                                    Context.getInstance().currentDMTicket().setException(e);
+                                    tabPaneController.gotoError();
+                                }                                
+                                //------------------------------------                                
                         }
                         /*descripcion = producto.getCodigoProducto()+" "+ producto.getDescripcion();
                         if(producto.isProductoVilleco()){
@@ -632,8 +645,25 @@ public class FXMLMainController implements Initializable {
                         
                         //impresoraService.imprimirLineaTicket(producto.getDescripcionConCodigo(), cantidad
                         //        ,precio ,producto.getValorImpositivo().getValor() ,Context.getInstance().currentDMTicket().isImprimeComoNegativo(), producto.getImpuestoInterno());
-                        imageViewLoading.setVisible(true);
-                        efectoImprimirLinea(producto, cantidad, precio,lpp.getMontoImpuestoInterno());
+                        
+                        //--------------------------------
+                        //imageViewLoading.setVisible(true);
+                        //efectoImprimirLinea(producto, cantidad, precio,lpp.getMontoImpuestoInterno());
+                        
+                        try{
+                                BigDecimal coeficienteK = impresoraService.getCoeficienteK(lpp.getMontoImpuestoInterno());
+
+                                impresoraService.imprimirLineaTicket(producto.getDescripcionConCodigo(), cantidad
+                                        ,precio ,producto.getValorImpositivo().getValor() ,Context.getInstance().currentDMTicket().isImprimeComoNegativo()
+                                        ,coeficienteK /*producto.getImpuestoInterno()*/);
+
+
+                        }catch(TpvException e){
+                            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+                            Context.getInstance().currentDMTicket().setException(e);
+                            tabPaneController.gotoError();
+                        }
+                        //--------------------------------                        
 
 
         //                    Context.getInstance().currentDMTicket().getDetalle().add(lineaTicketData);                    
@@ -1161,7 +1191,7 @@ public class FXMLMainController implements Initializable {
 
 
         String f = this.getClass().getResource("/com/tpv/resources/gif-emilio-luque.gif").toExternalForm();
-        imageViewDer.setImage(new Image(f));
+        //imageViewDer.setImage(new Image(f));
         
         
 //        imageViewIzq.setImage(new Image(f));

@@ -104,7 +104,7 @@ public class ImpresoraService {
     public static BigDecimal getCoeficienteK(BigDecimal montoImpuestoInterno){
         BigDecimal coeficienteK = BigDecimal.ONE;
         coeficienteK = montoImpuestoInterno.add(coeficienteK);
-        coeficienteK = BigDecimal.ONE.divide(coeficienteK,2,RoundingMode.HALF_EVEN);
+        coeficienteK = BigDecimal.ONE.divide(coeficienteK,2,RoundingMode.HALF_UP);
         return coeficienteK;
     }    
     
@@ -376,7 +376,7 @@ public class ImpresoraService {
                     
             //BigDecimal impInterno = fdc.getImpuestoInterno()
             //        .multiply(BigDecimal.valueOf(100))
-            //        .divide(neto,RoundingMode.HALF_EVEN).setScale(2, RoundingMode.HALF_EVEN);
+            //        .divide(neto,RoundingMode.HALF_UP).setScale(2, RoundingMode.HALF_UP);
             BigDecimal impInterno = ImpresoraService.getCoeficienteK(fdc.getImpuestoInterno());
             request = getHfp().cmdReturnRecharge(fdc.getCombo().getDescripcion(),
                             fdc.getBonificacion(),
@@ -722,5 +722,21 @@ public class ImpresoraService {
         }        
     }
     
-    
+    public void setComSpeed(Long speed) throws TpvException{
+        FiscalPacket request = getHfp().cmdSetComSpeed(speed);
+        FiscalPacket response;
+        FiscalMessages fMsg;
+        try{
+            response = getHfp().execute(request);
+        }catch(FiscalPrinterStatusError e){
+            fMsg = getHfp().getMessages();
+            log.error(fMsg.getErrorsAsString());
+            throw new TpvException(e.getMessage());
+            
+        }catch(FiscalPrinterIOException e){
+            log.error(e.getFullMessage());
+            throw new TpvException(e.getMessage());
+        }        
+        
+    }
 }

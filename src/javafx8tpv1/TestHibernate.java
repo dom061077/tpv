@@ -231,7 +231,7 @@ public class TestHibernate {
         System.out.println("Peso o precio: "+codigoBarra.substring(7, 13));
         String precio = codigoBarra.substring(7,9)+"."+codigoBarra.substring(9, 13);
         System.out.println("String de precio armado: "+precio);
-        BigDecimal precioFinal = BigDecimal.valueOf(Double.parseDouble(precio)).setScale(3,BigDecimal.ROUND_HALF_EVEN);
+        BigDecimal precioFinal = BigDecimal.valueOf(Double.parseDouble(precio)).setScale(3,BigDecimal.ROUND_HALF_UP);
         System.out.println("BigDecimal final: "+precioFinal);
     }
         
@@ -273,8 +273,8 @@ public class TestHibernate {
 //            BigDecimal a = new BigDecimal("4.4182");
 //            BigDecimal b = new BigDecimal("10.1255");
 //
-//            a = a.setScale(2, BigDecimal.ROUND_HALF_EVEN);
-//            b = b.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+//            a = a.setScale(2, BigDecimal.ROUND_HALF_UP);
+//            b = b.setScale(2, BigDecimal.ROUND_HALF_UP);
 //
 //            System.out.println(a);
 //            System.out.println(b);

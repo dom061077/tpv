@@ -10,6 +10,8 @@ import com.tpv.enums.TipoTituloSupervisorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.service.UsuarioService;
 import com.tpv.util.ui.MensajeModalAceptar;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -145,7 +147,8 @@ public class MenuPrincipalController implements Initializable {
                         Context.getInstance().currentDMTicket().setException(e);
                         tabController.gotoError();
                     }
-                    System.exit(0);
+                    //System.exit(0);
+                    powerOffPc();
                 }
                 if(keyEvent.getCode()==KeyCode.NUMPAD2){
                     Context.getInstance().currentDMTicket().setTipoTituloSupervisor(TipoTituloSupervisorEnum.HABILITAR_CONTROLADOR);
@@ -197,6 +200,20 @@ public class MenuPrincipalController implements Initializable {
             }
         });        
     }
+    
+    private void powerOffPc(){
+         try {
+            log.info("Antes de ejecutar spooler");
+            Process process = Runtime
+                    .getRuntime()
+                    .exec("/home/tpv1/TPV/./shutdown.sh");
+            InputStream inputstream = process.getInputStream();
+            log.info("Despues de ejecutar spooler");           
+        } catch (IOException e) {
+            log.error(e);
+        }          
+    }
+    
     
     /*public void aceptarMensajeModal(){
         this.tabController.ocultarMensajeModal();

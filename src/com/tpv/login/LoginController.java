@@ -89,6 +89,13 @@ public class LoginController implements Initializable{
                     
                 }
                 if(keyEvent.getCode() == KeyCode.F12){
+                    try{
+                        usuarioService.logout();
+                    }catch(TpvException e){
+                        Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_MENUPRINCIPAL);
+                        Context.getInstance().currentDMTicket().setException(e);
+                        tabController.gotoError();
+                    }
                     System.exit(0);
                 }
                 

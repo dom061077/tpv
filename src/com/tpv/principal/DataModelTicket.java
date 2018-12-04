@@ -15,6 +15,7 @@ import com.tpv.modelo.FormaPago;
 import com.tpv.modelo.Usuario;
 import com.tpv.pagoticket.LineaPagoData;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Iterator;
 import javafx.beans.property.ListProperty;
@@ -139,19 +140,21 @@ public class DataModelTicket {
             total = total.add(ticket.getSubTotal());
         }
         total = total.add(getRetencion());
-        
+        //total = total.setScale(2, RoundingMode.HALF_EVEN);
         return total;
     }
 
     public BigDecimal getTotalPagos(){
         ListProperty<LineaPagoData> innerList = getPagos();
-        Double total = new Double(0);
+        BigDecimal total = BigDecimal.ZERO;
+        
         for(Iterator iter=innerList.iterator();iter.hasNext();){
             LineaPagoData pago = (LineaPagoData)iter.next();
-            total = total + pago.getMonto().doubleValue();
+            //total = total + pago.getMonto().doubleValue();
+            total = total.add(pago.getMonto());
         }
-        
-        return BigDecimal.valueOf(total);
+        //total = total.setScale(2,RoundingMode.HALF_EVEN);
+        return total;
     }
     
     public BigDecimal getTotalIva(){
@@ -163,6 +166,7 @@ public class DataModelTicket {
             totalIva = totalIva.add(ticket.getIva());
             totalIva = totalIva.add(ticket.getIvaReducido());
         }
+        //totalIva = totalIva.setScale(2,RoundingMode.HALF_EVEN);
         return totalIva;
     }
     
@@ -173,7 +177,7 @@ public class DataModelTicket {
             LineaTicketData ticket=(LineaTicketData)iter.next();
             totalInterno = totalInterno.add(ticket.getImpuestoInterno());
         }
-        
+        //totalInterno = totalInterno.setScale(2,RoundingMode.HALF_EVEN);
         return totalInterno;
     }
     
@@ -184,6 +188,7 @@ public class DataModelTicket {
             LineaTicketData ticket = (LineaTicketData)iter.next();
             totalExento = totalExento.add(ticket.getExento());
         }
+        //totalExento = totalExento.setScale(2,RoundingMode.HALF_EVEN);
         return totalExento;
     }
     
@@ -199,6 +204,7 @@ public class DataModelTicket {
             totalNeto = totalNeto.add(ticket.getNeto());
             totalNeto = totalNeto.add(ticket.getNetoReducido());
         }
+        //totalNeto = totalNeto.setScale(2,RoundingMode.HALF_EVEN);
         return totalNeto;
     }
     
@@ -209,6 +215,17 @@ public class DataModelTicket {
         return saldo;
     }
     
+    public BigDecimal getCambioCliente(){
+        ListProperty<LineaPagoData> innerList = getPagos();
+        BigDecimal cambio = BigDecimal.ZERO;
+        for(Iterator iter = innerList.iterator();iter.hasNext();){
+            LineaPagoData lineaPago = (LineaPagoData) iter.next();
+            cambio = cambio.add(lineaPago.getCambioCliente());
+        }
+        cambio = cambio.setScale(2,BigDecimal.ROUND_HALF_EVEN);
+        return cambio;
+    }
+    
     public BigDecimal getBonificacionPorPagoTotal(){
         BigDecimal bonifTotal = BigDecimal.ZERO;
         ListProperty<LineaPagoData> innerList = getPagos();
@@ -216,6 +233,7 @@ public class DataModelTicket {
             LineaPagoData pago = (LineaPagoData)iter.next();
             bonifTotal = bonifTotal.add(pago.getBonificacion());
         }
+        //bonifTotal = bonifTotal.setScale(2,RoundingMode.HALF_EVEN);
         return bonifTotal;
     }
     
@@ -226,7 +244,7 @@ public class DataModelTicket {
             LineaPagoData pago = (LineaPagoData)iter.next();
             interesTotal = interesTotal.add(pago.getInteres());
         }
-        
+        //interesTotal = interesTotal.setScale(2, RoundingMode.HALF_EVEN);
         return interesTotal;
     }
     
@@ -495,7 +513,7 @@ public class DataModelTicket {
         totalGral = totalGral.subtract(getBonificaciones());
         totalGral = totalGral.subtract(getBonificacionPorPagoTotal());
         totalGral = totalGral.add(getInteresPorPagoTotal());
-        totalGral = totalGral.setScale(2,BigDecimal.ROUND_HALF_EVEN);
+        totalGral = totalGral.setScale(2,BigDecimal.ROUND_CEILING);
         return totalGral;
     }
 

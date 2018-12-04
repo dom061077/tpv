@@ -68,27 +68,6 @@ public class UsuarioService {
         }finally{
             em.clear();
         }
-        if(usuario!=null){
-            EntityTransaction tx = em.getTransaction();
-            Checkout checkout;
-            try{
-                tx.begin();
-                checkout = em.find(Checkout.class,
-                            Context.getInstance().currentDMTicket()
-                                .getCheckout().getId()
-                        );
-                checkout.setTomado(true);
-                tx.commit();
-                log.info("Checkout tomado luego de la autenticación");
-            }catch(RuntimeException e){
-                if(tx!=null)
-                    tx.rollback();
-                log.error("Error en la capa de servicios al tomar el checkout.",e);
-                throw new TpvException("Error en la capa de servicios al tomar el checkout.");
-            }finally{
-                em.clear();
-            }
-        }
         
         return usuario;
     }
@@ -239,6 +218,32 @@ public class UsuarioService {
             log.error("Error en la capa de servicios al verificar apertura de caja.",e);
             throw new TpvException("Error en la capa de servicios al verificar apertura de caja");
         }
+        
+            
+        if(a!=null){
+            EntityTransaction tx = em.getTransaction();
+            Checkout checkout;
+            try{
+                tx.begin();
+                checkout = em.find(Checkout.class,
+                            Context.getInstance().currentDMTicket()
+                                .getCheckout().getId()
+                        );
+                checkout.setTomado(true);
+                tx.commit();
+                log.info("Checkout tomado luego de la autenticación");
+            }catch(RuntimeException e){
+                if(tx!=null)
+                    tx.rollback();
+                log.error("Error en la capa de servicios al tomar el checkout.",e);
+                throw new TpvException("Error en la capa de servicios al tomar el checkout.");
+            }finally{
+                em.clear();
+            }
+        }
+            
+            
+            
         return a;
 
     }

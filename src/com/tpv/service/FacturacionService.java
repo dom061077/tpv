@@ -372,9 +372,9 @@ public class FacturacionService  {
 //                    fd.setCombo(combo);
 //                    fd.setCantidad(combo.getCantidadCombosArmados());
 //                    if(combo.isCombinarProductos())
-//                        fd.setBonificacion(combo.getBonificacion().setScale(2,BigDecimal.ROUND_HALF_EVEN));
+//                        fd.setBonificacion(combo.getBonificacion().setScale(2,BigDecimal.ROUND_HALF_UP));
 //                    else    
-//                        fd.setBonificacion(combo.getBonificacionSinCombinacion().setScale(2,BigDecimal.ROUND_HALF_EVEN));
+//                        fd.setBonificacion(combo.getBonificacionSinCombinacion().setScale(2,BigDecimal.ROUND_HALF_UP));
 //                    factura.getDetalleCombosAux().add(fd);
 //                }
                 int cantidadArmada = combo.getCantidadArmada();
@@ -382,7 +382,7 @@ public class FacturacionService  {
                     FacturaDetalleCombo fd = new FacturaDetalleCombo();
                     fd.setCombo(combo);
                     fd.setCantidad(cantidadArmada);
-                    fd.setBonificacion(combo.getBonificacionFinal().setScale(2,BigDecimal.ROUND_HALF_EVEN));
+                    fd.setBonificacion(combo.getBonificacionFinal().setScale(2,BigDecimal.ROUND_HALF_UP));
                     for(Iterator<FacturaDetalleComboAbierto> it = combo.getComboAbierto().iterator();it.hasNext();){
                         FacturaDetalleComboAbierto fca = it.next();
                         fca.setFdCombo(fd);
