@@ -119,8 +119,10 @@ public class FacturacionService  {
             
             tx = em.getTransaction();
             tx.begin();
+            facturaDetalle.setCosto(facturaDetalle.getProducto().getCostoPiso());
             factura = em.find(Factura.class,id);
             facturaDetalle.setFactura(factura);
+            
             factura.getDetalle().add(facturaDetalle);
             
             tx.commit();

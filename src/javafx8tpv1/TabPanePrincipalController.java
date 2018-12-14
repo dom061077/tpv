@@ -278,6 +278,10 @@ public class TabPanePrincipalController implements Initializable {
         
         param = UtilidadesService.getParametroGral("COMBOS_IVA");
         Context.getInstance().currentDMParametroGral().setPorcentajeIvaCombo(param.getParametroNumerico());
+        
+        param = UtilidadesService.getParametroGral("PROVEEDOR_PROMOCION");
+        Context.getInstance().currentDMParametroGral()
+                .setIdProveedorPromo(new Long(param.getParametroNumerico().longValue() ));
 
     }
     

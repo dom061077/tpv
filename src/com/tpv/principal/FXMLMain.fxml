@@ -19,9 +19,9 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane focusTraversable="true" maxHeight="680.0" maxWidth="1124.0" minHeight="680.0" minWidth="1124.0" prefHeight="680.0" prefWidth="1124.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.principal.FXMLMainController">
+<BorderPane focusTraversable="true" maxHeight="680.0" maxWidth="1024.0" minHeight="680.0" minWidth="1024.0" prefHeight="680.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.principal.FXMLMainController">
    <top>
-      <BorderPane focusTraversable="true" maxHeight="230.0" maxWidth="1124.0" minHeight="200.0" minWidth="1124.0" prefHeight="230.0" prefWidth="1124.0" BorderPane.alignment="CENTER">
+      <BorderPane focusTraversable="true" maxHeight="230.0" maxWidth="1024.0" minHeight="200.0" minWidth="1024.0" prefHeight="230.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
          <center>
             <GridPane fx:id="gridPaneCodigoProducto" maxWidth="500.0" minWidth="500.0" prefHeight="177.0" prefWidth="500.0" BorderPane.alignment="CENTER_LEFT">
               <columnConstraints>
@@ -55,19 +55,19 @@
             </GridPane>
          </center>
          <top>
-            <GridPane prefHeight="66.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
+            <GridPane maxWidth="1024.0" minWidth="1024.0" prefHeight="66.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="368.0" minWidth="10.0" prefWidth="353.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="452.0" minWidth="10.0" prefWidth="452.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="299.0" minWidth="10.0" prefWidth="259.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="413.0" minWidth="10.0" prefWidth="319.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="546.0" minWidth="10.0" prefWidth="546.0" />
               </columnConstraints>
               <rowConstraints>
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label fx:id="nroticket" alignment="BOTTOM_LEFT" prefHeight="32.0" prefWidth="452.0" styleClass="label_nroticket" GridPane.columnIndex="2" />
+                  <Label fx:id="nroticket" alignment="BOTTOM_LEFT" prefHeight="32.0" prefWidth="512.0" styleClass="label_nroticket" GridPane.columnIndex="2" />
                   <Label fx:id="retiroDineroLabel" alignment="BOTTOM_LEFT" contentDisplay="BOTTOM" prefHeight="40.0" prefWidth="370.0" styleClass="label_retirodinero" textAlignment="CENTER" GridPane.columnIndex="1" />
-                  <Label fx:id="checkout" alignment="BOTTOM_LEFT" prefHeight="35.0" prefWidth="631.0" styleClass="label_nroticket" />
+                  <Label fx:id="checkout" alignment="BOTTOM_LEFT" prefHeight="35.0" prefWidth="225.0" styleClass="label_nroticket" />
                </children>
             </GridPane>
          </top>
@@ -88,23 +88,23 @@
       </BorderPane>
    </top>
    <center>
-      <BorderPane focusTraversable="true" maxHeight="350.0" maxWidth="1124.0" minHeight="350.0" minWidth="1124.0" prefHeight="364.0" prefWidth="1124.0" BorderPane.alignment="CENTER">
+      <BorderPane focusTraversable="true" maxHeight="350.0" maxWidth="1024.0" minHeight="350.0" minWidth="1024.0" prefHeight="364.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets />
          </BorderPane.margin>
          <center>
-            <Pane focusTraversable="true" maxHeight="350.0" maxWidth="1124.0" minHeight="329.0" minWidth="1124.0" prefHeight="329.0" prefWidth="1124.0" BorderPane.alignment="CENTER">
+            <Pane focusTraversable="true" maxHeight="350.0" maxWidth="1024.0" minHeight="329.0" minWidth="1024.0" prefHeight="329.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
                <children>
-                  <TableView fx:id="tableViewTickets" editable="true" focusTraversable="false" layoutY="-10.0" maxHeight="358.0" minHeight="280.0" prefHeight="358.0" prefWidth="1124.0" styleClass="tpv-table-view">
+                  <TableView fx:id="tableViewTickets" editable="true" focusTraversable="false" layoutY="-10.0" maxHeight="358.0" minHeight="280.0" prefHeight="358.0" prefWidth="1024.0" styleClass="tpv-table-view">
                     <placeholder>
                         <Label text="" />
                     </placeholder>
                     <columns>
                         <TableColumn fx:id="codigoColumn" minWidth="108.0" prefWidth="100.0" resizable="false" text="CODIGO" />
-                      <TableColumn fx:id="descripcionColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="503.0" resizable="false" sortable="false" text="DESCRIPCION" />
-                      <TableColumn fx:id="cantidadColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="91.0" prefWidth="147.0" resizable="false" sortable="false" text="CANTIDAD" />
-                        <TableColumn fx:id="precioUnitarioColumn" minWidth="100.0" prefWidth="165.0" resizable="false" text="\$/UNIDAD" />
-                        <TableColumn fx:id="subTotalColumn" minWidth="97.0" prefWidth="165.0" resizable="false" text="SUBTOTAL" />
+                      <TableColumn fx:id="descripcionColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="100.0" prefWidth="430.0" resizable="false" sortable="false" text="DESCRIPCION" />
+                      <TableColumn fx:id="cantidadColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="91.0" prefWidth="169.0" resizable="false" sortable="false" text="CANTIDAD" />
+                        <TableColumn fx:id="precioUnitarioColumn" minWidth="47.0" prefWidth="142.0" resizable="false" text="\$/UNIDAD" />
+                        <TableColumn fx:id="subTotalColumn" minWidth="97.0" prefWidth="150.0" resizable="false" text="SUBTOTAL" />
                     </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

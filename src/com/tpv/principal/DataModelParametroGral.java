@@ -14,6 +14,20 @@ import java.math.BigDecimal;
 public class DataModelParametroGral {
 
     /**
+     * @return the idProveedorPromo
+     */
+    public Long getIdProveedorPromo() {
+        return idProveedorPromo;
+    }
+
+    /**
+     * @param idProveedorPromo the idProveedorPromo to set
+     */
+    public void setIdProveedorPromo(Long idProveedorPromo) {
+        this.idProveedorPromo = idProveedorPromo;
+    }
+
+    /**
      * @return the porcentajeIvaCombo
      */
     public BigDecimal getPorcentajeIvaCombo() {
@@ -37,6 +51,7 @@ public class DataModelParametroGral {
     private String setHeaderTrailerLinea12;
     private BigDecimal montoRetiroDinero;
     private BigDecimal porcentajeIvaCombo;
+    private Long idProveedorPromo;
 
     /**
      * @return the leyendaRetIngBrutosCliente

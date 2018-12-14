@@ -15,11 +15,11 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 
-<BorderPane maxWidth="1124.0" minWidth="1124.0" prefHeight="700.0" prefWidth="1124.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.pagoticket.PagoTicketController">
+<BorderPane maxWidth="1024.0" minWidth="1024.0" prefHeight="700.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.pagoticket.PagoTicketController">
    <top>
-      <Pane fx:id="paneIngresos" maxWidth="1124.0" minWidth="1124.0" prefHeight="472.0" prefWidth="1124.0" BorderPane.alignment="CENTER">
+      <Pane fx:id="paneIngresos" maxWidth="1024.0" minWidth="1024.0" prefHeight="472.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
          <children>
-            <StackPane layoutX="590.0" layoutY="115.0" prefHeight="250.0" prefWidth="500.0" styleClass="rounded_corner">
+            <StackPane layoutX="590.0" layoutY="115.0" prefHeight="250.0" prefWidth="434.0" styleClass="rounded_corner">
                <children>
                   <GridPane prefHeight="273.0" prefWidth="500.0">
                     <columnConstraints>
@@ -130,21 +130,21 @@
       </Pane>
    </top>
    <center>
-      <Pane prefHeight="222.0" prefWidth="1124.0" BorderPane.alignment="CENTER">
+      <Pane maxWidth="1024.0" minWidth="1024.0" prefHeight="222.0" prefWidth="1024.0" BorderPane.alignment="CENTER">
          <children>
-            <TableView fx:id="tableViewPagos" focusTraversable="false" layoutY="4.0" prefHeight="208.0" prefWidth="1124.0" styleClass="tpv-table-view">
+            <TableView fx:id="tableViewPagos" focusTraversable="false" layoutY="4.0" maxWidth="1024.0" minWidth="1024.0" prefHeight="208.0" prefWidth="1024.0" styleClass="tpv-table-view">
                 <placeholder>
-                    <Label text=""/>
+                    <Label text="" />
                 </placeholder>                
               <columns>
                 <TableColumn fx:id="codigoPagoColumn" text="Cod. " visible="false" />
-                  <TableColumn fx:id="descripcionPagoColumn" prefWidth="200.0" text="Descripción Pago" />
-                  <TableColumn fx:id="montoPagoColumn" prefWidth="112.0" text="Monto" />
+                  <TableColumn fx:id="descripcionPagoColumn" prefWidth="160.0" text="Descripción" />
+                  <TableColumn fx:id="montoPagoColumn" prefWidth="120.0" text="Monto" />
                 <TableColumn fx:id="cantidadCuotaColumn" minWidth="96.0" prefWidth="96.0" text="Cuotas" />
                   <TableColumn fx:id="nroTarjetaColumn" prefWidth="228.0" text="Nº Tarjeta" />
                   <TableColumn fx:id="codigoCuponColumn" prefWidth="207.0" text="Cod.Cupón" />
-                  <TableColumn fx:id="interesTarjetaColumn" prefWidth="117.0" text="Intereses" />
-                  <TableColumn fx:id="bonificacionTarjetaColumn" prefWidth="134.0" text="Bonificaciones" />
+                  <TableColumn fx:id="interesTarjetaColumn" prefWidth="100.0" text="Int." />
+                  <TableColumn fx:id="bonificacionTarjetaColumn" prefWidth="100.0" text="Bonif." />
               </columns>
             </TableView>
          </children>

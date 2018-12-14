@@ -25,6 +25,20 @@ import javax.persistence.Table;
 @Entity
 @Table(name="productos")
 public class Producto {
+
+    /**
+     * @return the costoPiso
+     */
+    public BigDecimal getCostoPiso() {
+        return costoPiso;
+    }
+
+    /**
+     * @param costoPiso the costoPiso to set
+     */
+    public void setCostoPiso(BigDecimal costoPiso) {
+        this.costoPiso = costoPiso;
+    }
     @Id
     @Column(name = "idPRODUCTOS")
     private Long idProducto;
@@ -40,6 +54,9 @@ public class Producto {
     private int discontinuado;
     @Column(name = "IMPUESTOINTERNO")
     private BigDecimal impuestoInterno;
+    @Column(name = "COSTOPISO")
+    private BigDecimal costoPiso;
+    
     
     
     @ManyToOne
@@ -61,6 +78,12 @@ public class Producto {
      */
     public Long getIdProducto() {
         return idProducto;
+    }
+    
+    public boolean tieneEsteProveedor(Long idProveedor){
+        Proveedor prov = new Proveedor();
+        prov.setId(idProducto);
+        return tieneEsteProveedor(prov);
     }
 
     /**

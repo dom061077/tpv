@@ -98,8 +98,10 @@ public class BuscarPorDescProductoController implements Initializable{
                     if(keyEvent.getCode()==KeyCode.ENTER){
                         if(textFieldFiltroProducto.getText().trim().equals("")){
                             ProductoData productoData = (ProductoData)tableView.getSelectionModel().getSelectedItem();
-                            Context.getInstance().currentDMTicket().setCodigoProdSelecEnBuscarPorDesc(productoData.CodigoProductoProperty().get());
-                            tabPaneController.gotoFacturacion();
+                            if(productoData!=null){
+                                Context.getInstance().currentDMTicket().setCodigoProdSelecEnBuscarPorDesc(productoData.CodigoProductoProperty().get());
+                                tabPaneController.gotoFacturacion();
+                            }
                             keyEvent.consume();
                         }
                         else{
@@ -160,11 +162,15 @@ public class BuscarPorDescProductoController implements Initializable{
         }
         if(productosPrecios!=null)    
             productosPrecios.forEach(lstPrecioProducto->{
-                data.add(new ProductoData(
-                        lstPrecioProducto.getProducto().getCodigoProducto(),
-                        lstPrecioProducto.getProducto().getDescripcion()
-                        ,lstPrecioProducto.getPrecioFinal()
-                ));
+                if(!lstPrecioProducto.getProducto()
+                        .tieneEsteProveedor(Context.getInstance()
+                                .currentDMParametroGral()
+                                .getIdProveedorPromo()))
+                    data.add(new ProductoData(
+                            lstPrecioProducto.getProducto().getCodigoProducto(),
+                            lstPrecioProducto.getProducto().getDescripcion()
+                            ,lstPrecioProducto.getPrecioFinal()
+                    ));
             });
         
         

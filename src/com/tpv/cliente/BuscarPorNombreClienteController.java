@@ -80,8 +80,10 @@ public class BuscarPorNombreClienteController implements Initializable  {
                 if(keyEvent.getCode() == KeyCode.ENTER){
                     if(textFieldFiltroNombreCliente.getText().trim().equals("")){
                             ClienteData clienteData = (ClienteData)tableView.getSelectionModel().getSelectedItem();
-                            Context.getInstance().currentDMTicket().setCodigoClienteSelecEnBuscarPorDesc(clienteData.getCodigoCliente());
-                            tabPaneController.gotoFacturacion();
+                            if (clienteData!=null){    
+                                Context.getInstance().currentDMTicket().setCodigoClienteSelecEnBuscarPorDesc(clienteData.getCodigoCliente());
+                                tabPaneController.gotoFacturacion();
+                            }
                             keyEvent.consume();
                         
                     }else{

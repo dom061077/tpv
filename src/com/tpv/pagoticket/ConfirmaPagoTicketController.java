@@ -326,6 +326,11 @@ public class ConfirmaPagoTicketController implements Initializable{
                                     public void aceptarMensaje(){
                                         confirmarFactura();
                                     }
+                                    
+                                    @Override
+                                    public void cancelarMensaje(){
+                                        tabPaneController.repeatFocus(tableViewPagos);
+                                    }
                                });
                         
                         
