@@ -104,6 +104,9 @@ public class MenuPrincipalController implements Initializable {
     private ImageView imageCargaRetiroDinero;
     
     @FXML
+    private ImageView imageNotasCredito;
+    
+    @FXML
     private ImageView imageFin;
     
     
@@ -139,7 +142,12 @@ public class MenuPrincipalController implements Initializable {
                         tabController.gotoFacturacion();
                     }
                 }
+                
                 if(keyEvent.getCode()==KeyCode.NUMPAD5){
+                    tabController.gotoNotasDCMenu();
+                }
+                
+                if(keyEvent.getCode()==KeyCode.NUMPAD6){
                     try{
                         usuarioService.logout();
                     }catch(TpvException e){
@@ -147,8 +155,10 @@ public class MenuPrincipalController implements Initializable {
                         Context.getInstance().currentDMTicket().setException(e);
                         tabController.gotoError();
                     }
-                    //System.exit(0);
+                    
                     powerOffPc();
+                    System.exit(0);
+                    
                 }
                 if(keyEvent.getCode()==KeyCode.NUMPAD2){
                     Context.getInstance().currentDMTicket().setTipoTituloSupervisor(TipoTituloSupervisorEnum.HABILITAR_CONTROLADOR);
@@ -184,7 +194,7 @@ public class MenuPrincipalController implements Initializable {
         imageRetiroDinero.setImage(new Image(this.getClass().getResource("/com/tpv/resources/retiro_dinero.png").toExternalForm()));
         
         imageCargaRetiroDinero.setImage(new Image(this.getClass().getResource("/com/tpv/resources/carga_retirodinero.png").toExternalForm()));
-        
+        imageNotasCredito.setImage(new Image(this.getClass().getResource("/com/tpv/resources/notadecredito.png").toExternalForm()));
         imageFin.setImage(new Image(this.getClass().getResource("/com/tpv/resources/fin.png").toExternalForm()));
                 
     }    

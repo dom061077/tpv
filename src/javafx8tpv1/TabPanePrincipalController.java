@@ -7,6 +7,7 @@ package javafx8tpv1;
 
 import com.tpv.cliente.BuscarPorNombreClienteController;
 import com.tpv.combos.CombosController;
+import com.tpv.notasdc.NotasCreditoMontoController;
 import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.errorui.ErrorController;
 import com.tpv.login.LoginController;
@@ -24,6 +25,7 @@ import javafx.scene.control.TabPane;
 import org.apache.log4j.Logger;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.ParametroGeneral;
+import com.tpv.notasdc.NotasDCMenuController;
 import com.tpv.pagoticket.ConfirmaPagoTicketController;
 import com.tpv.pagoticket.PagoTicketController;
 import com.tpv.print.fiscal.ConfiguracionImpresoraController;
@@ -120,6 +122,8 @@ public class TabPanePrincipalController implements Initializable {
     @FXML private RetiroDineroConfirmacionController retiroDineroConfirmacionController;
     @FXML private CombosController combosController; 
     @FXML private RetiroDineroMenuController retiroDineroMenuController;
+    @FXML private NotasCreditoMontoController notasCreditoMontoController;
+    @FXML private NotasDCMenuController notasDCMenuController;
     
     @FXML private Button buttonMenuPrincipal;
     
@@ -137,6 +141,8 @@ public class TabPanePrincipalController implements Initializable {
     @FXML private Tab tabRetiroDinero;
     @FXML private Tab tabRetiroDineroConfirmacion;
     @FXML private Tab tabRetiroDineroMenu;
+    @FXML private Tab tabNotaCreditos;
+    @FXML private Tab tabNotasDCMenu;
     
     @FXML private TabPane tabPanePrincipal;
     @FXML private StackPane stackPaneModal;
@@ -207,6 +213,8 @@ public class TabPanePrincipalController implements Initializable {
         this.retiroDineroController.setTabController(this);
         this.retiroDineroConfirmacionController.setTabController(this);
         this.retiroDineroMenuController.setTabController(this);
+        this.notasCreditoMontoController.setTabController(this);
+        this.notasDCMenuController.setTabController(this);
         
 
         getTabPanePrincipal().getSelectionModel().selectedItemProperty()
@@ -305,7 +313,7 @@ public class TabPanePrincipalController implements Initializable {
     
     public void gotoMenuPrincipal(){
         this.getLabelTituloVentana().setText("MENU PRINCIPAL");
-        this.getLabelShortCut().setText("1-Facturacion   |   2-Controlador   |   3-Carga Retiro de Dinero  |   4-Retiro de Dinero  |   5-Salir del Sistema");
+        this.getLabelShortCut().setText("1-Facturacion   |   2-Controlador   |   3-Carga Retiro de Dinero  |   4-Retiro de Dinero  |   5-Notas Deb./Cred.   |   6-Salir de Sistema");
         this.getTabPanePrincipal().getSelectionModel().select(tabMenuPrincipal);
         
         this.menuPrincipalController.configurarInicio();
@@ -427,6 +435,20 @@ public class TabPanePrincipalController implements Initializable {
         }
     }
             
+    public void gotoNotasCreditoMonto(){
+        this.getLabelTituloVentana().setText("NOTAS DE CREDITO");
+        this.getLabelShortCut().setText("F11 - Retornar a Menú");
+
+        this.notasCreditoController
+        
+        this.getTabPanePrincipal().getSelectionModel().select(tabNotaCreditos);
+    }
+    
+    public void gotoNotasDCMenu(){
+        this.getLabelTituloVentana().setText("MENU NOTAS - CREDITO/DEBITO");
+        this.getLabelShortCut().setText("1- Nota Cred.Monto |   2- Nota Cred.Detalle    |   3- Nota Cred.Ing. Detalle   |   4- Nota de Débito   |   F11 - Retornar a Menú Principal");                
+        this.getTabPanePrincipal().getSelectionModel().select(tabNotasDCMenu);
+    }
 
     public void repeatFocus(Node node){
         if(node == null)

@@ -36,7 +36,7 @@
               </rowConstraints>
                <children>
                   <Label fx:id="labelCantidadIngresada" alignment="BOTTOM_LEFT" contentDisplay="BOTTOM" prefHeight="30.0" prefWidth="251.0" styleClass="label_textfield" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <Label fx:id="labelProducto" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="21.0" prefWidth="315.0" styleClass="label_textfield" text="Producto:" visible="false" GridPane.rowIndex="1">
+                  <Label fx:id="labelProducto" alignment="CENTER_RIGHT" prefHeight="21.0" prefWidth="315.0" styleClass="label_textfield" text="Producto:" visible="false" GridPane.rowIndex="1">
                      <font>
                         <Font name="Arial" size="18.0" />
                      </font>

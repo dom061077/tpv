@@ -29,6 +29,7 @@
             <RowConstraints maxHeight="100.0" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="100.0" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="100.0" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="100.0" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
             <Label styleClass="label_menu" text="4- RETIRO DE DINERO" GridPane.columnIndex="1" GridPane.rowIndex="3" />
@@ -50,13 +51,19 @@
                   <Font name="Arial" size="64.0" />
                </font>
             </Label>
-            <ImageView fx:id="imageFin" fitHeight="77.0" fitWidth="112.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="4" />
-            <Label styleClass="label_menu" text="5- CERRAR SISTEMA" textFill="#3062e1" GridPane.columnIndex="1" GridPane.rowIndex="4">
+            <ImageView fx:id="imageFin" fitHeight="77.0" fitWidth="112.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="5" />
+            <Label styleClass="label_menu" text="5- NOTAS DE CRED./DEB." textFill="#3062e1" GridPane.columnIndex="1" GridPane.rowIndex="4">
                <font>
                   <Font size="64.0" />
                </font>
             </Label>
             <ImageView fx:id="imageCargaRetiroDinero" fitHeight="77.0" fitWidth="112.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2" />
+            <Label styleClass="label_menu" text="6- CERRAR SISTEMA" textFill="#3062e1" GridPane.columnIndex="1" GridPane.rowIndex="5">
+               <font>
+                  <Font size="64.0" />
+               </font>
+            </Label>
+            <ImageView fx:id="imageNotasCredito" fitHeight="77.0" fitWidth="112.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="4" />
          </children>
          <BorderPane.margin>
             <Insets top="50.0" />

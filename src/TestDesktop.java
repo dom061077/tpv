@@ -15,20 +15,32 @@ import javax.persistence.Persistence;
  * @author daniel
  */
 public class TestDesktop {
+    enum TipoComprobanteEnum{
+        FACTURA("F"),
+        NOTA_CREDITO("NC");
+        private String value;
+        TipoComprobanteEnum(String value){
+            this.value=value;
+        }
+        public String getValue(){
+            return value;
+        }
+        
+        @Override
+        public String toString(){
+            return this.getValue();
+        }
+    }
     
     public static void main(String[] args){
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("tpvpersistence");        
+        /*EntityManagerFactory emf = Persistence.createEntityManagerFactory("tpvpersistence");        
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
         tx.begin();
-
-        //Message message = new Message("Hello World with JPA");
-        //em.persist(message);
-
         tx.commit();
         em.close();
-        System.exit(0);
-        
+        System.exit(0);*/
+        System.out.println(TipoComprobanteEnum.FACTURA);
     }
             
     

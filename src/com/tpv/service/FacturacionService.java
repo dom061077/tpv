@@ -22,6 +22,7 @@ import com.tpv.modelo.ProductoAgrupadoEnFactura;
 import com.tpv.modelo.Usuario;
 import com.tpv.modelo.enums.FacturaEstadoEnum;
 import com.tpv.modelo.enums.RetiroDineroEnum;
+import com.tpv.modelo.enums.TipoComprobanteEnum;
 import com.tpv.pagoticket.LineaPagoData;
 import com.tpv.principal.Context;
 import com.tpv.util.Connection;
@@ -63,6 +64,35 @@ public class FacturacionService  {
             tx.rollback();
             log.error("Error en la capa de servicios al registrar la factura por primera vez.",e);
             throw new TpvException("Error en la capa de servicios al registrar la factura por primera vez.");
+        }finally{
+            em.clear();
+        }
+        return factura;
+    }
+    
+    public Factura getFactura(String prefijo, String numero) throws TpvException{
+        Factura factura=null;
+        EntityManager em = Connection.getEm();
+        try{
+            Query q = em.createQuery("FROM Factura f WHERE f.tipoComprobante = :tipoComprobante "
+                    +" AND f.prefijoFiscal = :prefijoFiscal"
+                    +" AND f.numeroComprobante = :numeroComprobante"
+                    )
+                    .setParameter("tipoComprobante", TipoComprobanteEnum.F)
+                    .setParameter("prefijoFiscal", prefijo)
+                    .setParameter("numeroComprobante", numero);
+            factura = (Factura)q.getSingleResult();
+        }catch(NonUniqueResultException e){    
+            log.error("Hay más de una factura para el prefijo: "+prefijo
+                    +" y numero: "+numero,e);
+            throw new TpvException("Hay más de una factura para numero ingresado "
+                                    +" debe solucionar el problema");
+        }catch(NoResultException e){
+            log.info("no se encontró factura prefijo: "+prefijo+", número: "
+                    +numero+", no se toma como error NoResultException");
+        }catch(RuntimeException e){
+            log.error("Error en la capa de servicios al devolver la factura.",e);
+            throw new TpvException("Error en la capa de servicios al devolver la factura.");
         }finally{
             em.clear();
         }

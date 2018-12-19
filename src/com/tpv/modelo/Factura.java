@@ -6,6 +6,7 @@
 package com.tpv.modelo;
 
 import com.tpv.modelo.enums.FacturaEstadoEnum;
+import com.tpv.modelo.enums.TipoComprobanteEnum;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -113,7 +114,8 @@ public class Factura {
     private java.util.Date fechaHoy;    
     
     @Column(name = "TIPOCOMPROBANTE")
-    private String tipoComprobante;
+    @Enumerated(EnumType.STRING)
+    private TipoComprobanteEnum tipoComprobante;//private String tipoComprobante;
     
     @Column(name = "CLASECOMPROBANTE")
     private String claseComprobante;
@@ -209,6 +211,12 @@ public class Factura {
     
     @OneToMany(cascade = CascadeType.ALL,mappedBy="factura", fetch = FetchType.EAGER)
     private List<FacturaDetalleConcurso> detalleConcursos = new ArrayList<FacturaDetalleConcurso>();
+    
+    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL,mappedBy="factura")
+    private List<FacturaFormaPagoDetalle> detallePagos = new ArrayList<FacturaFormaPagoDetalle>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy="facturaOrigen", fetch = FetchType.EAGER)
+    private List<Factura> detalleNotasDC = new ArrayList<Factura>();
 
     @Transient
     private List<FacturaDetalleCombo> detalleCombosAux = new ArrayList<FacturaDetalleCombo>();   
@@ -218,8 +226,6 @@ public class Factura {
     
     
     
-    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL,mappedBy="factura")
-    private List<FacturaFormaPagoDetalle> detallePagos = new ArrayList<FacturaFormaPagoDetalle>();
 
 
     @ManyToOne
@@ -247,6 +253,9 @@ public class Factura {
     @JoinColumn(name = "idCONDICIONESIVA", referencedColumnName = "idCONDICIONESIVA", nullable=true)
     private CondicionIva condicionIva;
     
+    @ManyToOne
+    @JoinColumn(name = "idFACTURASORIGEN", referencedColumnName = "idFACTURAS",nullable=true)
+    private Factura facturaOrigen;
     
 
     
@@ -282,14 +291,14 @@ public class Factura {
     /**
      * @return the tipoComprobante
      */
-    public String getTipoComprobante() {
+    public TipoComprobanteEnum getTipoComprobante() {
         return tipoComprobante;
     }
 
     /**
      * @param tipoComprobante the tipoComprobante to set
      */
-    public void setTipoComprobante(String tipoComprobante) {
+    public void setTipoComprobante(TipoComprobanteEnum tipoComprobante) {
         this.tipoComprobante = tipoComprobante;
     }
 

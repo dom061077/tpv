@@ -16,6 +16,7 @@ import com.tpv.modelo.FacturaDetalleCombo;
 import com.tpv.modelo.ListaPrecioProducto;
 import com.tpv.modelo.Producto;
 import com.tpv.modelo.enums.FacturaEstadoEnum;
+import com.tpv.modelo.enums.TipoComprobanteEnum;
 import com.tpv.print.event.FiscalPrinterEvent;
 import com.tpv.service.ClienteService;
 import com.tpv.service.FacturacionService;
@@ -941,7 +942,7 @@ public class FXMLMainController implements Initializable {
             factura.setNumeroComprobante(impresoraService.getNroUltimoTicketBC());
             factura.setUsuario(Context.getInstance().currentDMTicket().getUsuario());
             factura.setCheckout(Context.getInstance().currentDMTicket().getCheckout());
-            factura.setTipoComprobante("F");
+            factura.setTipoComprobante(TipoComprobanteEnum.F);
             facturaGuardada=factService.registrarFactura(factura);
         }catch(TpvException e){
             log.error("Error: "+e.getMessage());
@@ -1191,7 +1192,7 @@ public class FXMLMainController implements Initializable {
 
 
         String f = this.getClass().getResource("/com/tpv/resources/gif-emilio-luque.gif").toExternalForm();
-        //imageViewDer.setImage(new Image(f));
+        imageViewDer.setImage(new Image(f));
         
         
 //        imageViewIzq.setImage(new Image(f));
