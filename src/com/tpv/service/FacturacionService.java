@@ -7,17 +7,19 @@ package com.tpv.service;
 
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.AlicuotaIngresosBrutos;
+import com.tpv.modelo.AperturaCierreCajeroDetalle;
+import com.tpv.modelo.Checkout;
 import com.tpv.modelo.Combo;
 import com.tpv.modelo.ComboGrupo;
 import com.tpv.modelo.ComboGrupoDetalle;
 import com.tpv.modelo.Concurso;
-import com.tpv.modelo.CondicionIva;
 import com.tpv.modelo.Factura;
 import com.tpv.modelo.FacturaDetalle;
 import com.tpv.modelo.FacturaDetalleCombo;
 import com.tpv.modelo.FacturaDetalleComboAbierto;
 import com.tpv.modelo.FacturaDetalleConcurso;
 import com.tpv.modelo.FacturaFormaPagoDetalle;
+import com.tpv.modelo.MotivoNotaDC;
 import com.tpv.modelo.ProductoAgrupadoEnFactura;
 import com.tpv.modelo.Usuario;
 import com.tpv.modelo.enums.FacturaEstadoEnum;
@@ -35,7 +37,6 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 import org.apache.log4j.Logger;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 
 /**
  *
@@ -56,7 +57,7 @@ public class FacturacionService  {
             factura.setBonificaTarjeta(BigDecimal.ZERO);
             factura.setIvaBonificaTarjeta(BigDecimal.ZERO);
             factura.setImpuestoInterno(BigDecimal.ZERO);
-            factura.setCondicionIva(em.find(CondicionIva.class, 1));
+            //factura.setCondicionIva(em.find(CondicionIva.class, 1));
             factura.setFechaAlta(factura.getUsuario().getFechaHoraHoy());
             em.persist(factura);
             tx.commit();
@@ -70,7 +71,7 @@ public class FacturacionService  {
         return factura;
     }
     
-    public Factura getFactura(String prefijo, String numero) throws TpvException{
+    public Factura getFactura(Long prefijo, Long numero) throws TpvException{
         Factura factura=null;
         EntityManager em = Connection.getEm();
         try{
@@ -211,6 +212,12 @@ public class FacturacionService  {
             factura.getBonificacionCombos();
             factura.setEstado(FacturaEstadoEnum.CERRADA);
             factura.setFechaHoraCierre(factura.getFechaHoy());
+            for(Iterator<FacturaDetalle> it = factura.getDetalle().iterator();it.hasNext();){
+                FacturaDetalle factDet = (FacturaDetalle)it.next();
+                factDet.getProducto().setStock(
+                        factDet.getProducto().getStock().subtract(factDet.getCantidad())
+                    );
+            }
             factura=em.merge(factura);
             tx.commit();
             log.info("Factura guardada, id: "+factura.getId());
@@ -708,6 +715,167 @@ public class FacturacionService  {
             totalFacturado = BigDecimal.ZERO;
         
         return totalFacturado.subtract(totalRetiro);
+    }
+    
+    public void invertirSignoNotaDCConFactOrigen(Factura notaDC,Factura factOrigen){
+            notaDC.setBonificaTarjeta(factOrigen.getBonificaTarjeta()
+                        .multiply(BigDecimal.valueOf(-1)));
+            notaDC.setBonificacion(factOrigen.getBonificacion()
+                        .multiply(BigDecimal.valueOf(-1)));
+            notaDC.setCosto(factOrigen.getCosto()
+                        .multiply(BigDecimal.valueOf(-1)));
+            notaDC.setDescuento(factOrigen.getDescuento()
+                        .multiply(BigDecimal.valueOf(-1)));
+            notaDC.setExento(factOrigen.getExento()
+                        .multiply(BigDecimal.valueOf(-1)));
+            notaDC.setImpuestoInterno(factOrigen.getImpuestoInterno()
+                        .multiply(factOrigen.getImpuestoInterno()));
+            notaDC.setInteresTarjeta(factOrigen.getInteresTarjeta()
+                        .multiply(BigDecimal.valueOf(-1)));
+            notaDC.setIva(factOrigen.getIva()
+                        .multiply(BigDecimal.valueOf(-1)));
+            notaDC.setIvaBonificaTarjeta(factOrigen.getIvaBonificaTarjeta()
+                        .multiply(BigDecimal.valueOf(-1)));
+            notaDC.setIvaBonificacion(factOrigen.getIvaBonificacion()
+                        .multiply(BigDecimal.valueOf(-1)));
+            notaDC.setIvaReducido(factOrigen.getIvaReducido()
+                        .multiply(BigDecimal.valueOf(-1)));
+            notaDC.setIvaTarjeta(factOrigen.getIvaTarjeta()
+                        .multiply(BigDecimal.valueOf(-1)));
+            notaDC.setNeto(factOrigen.getNeto()
+                        .multiply(BigDecimal.valueOf(-1)));
+            notaDC.setNetoReducido(factOrigen.getNetoReducido()
+                        .multiply(BigDecimal.valueOf(-1)));
+            notaDC.setNetoReducido(factOrigen.getNetoReducido()
+                        .multiply(BigDecimal.valueOf(-1)));
+            notaDC.setRetencion(factOrigen.getRetencion()
+                        .multiply(BigDecimal.valueOf(-1)));
+            notaDC.setTotal(factOrigen.getFacturaOrigen()
+                        .getTotal().multiply(BigDecimal.valueOf(-1)));
+            
+    }
+    
+    public void confirmarNotaDCFactura(TipoComprobanteEnum tipo
+            ,Factura facturaOrigen,BigDecimal monto
+            ,Long prefijoFiscal,String numeroComprobante
+            ,AperturaCierreCajeroDetalle apCiereCajDet
+            ,Checkout checkout
+            ,Usuario usuario
+            ,int idMotivo
+            ,int caja
+        ) throws TpvException{
+        log.info("Capa de servicios FacturaService, registrando nota DC");
+        EntityManager em = Connection.getEm();
+        MotivoNotaDC motivo = em.find(MotivoNotaDC.class,idMotivo);
+        EntityTransaction tx = null;
+        try{
+            tx = em.getTransaction();
+            tx.begin();
+            Factura facturaDC = new Factura();
+            facturaDC.setPrefijoFiscal(prefijoFiscal);
+            facturaDC.setNumeroComprobante(Long.parseLong(numeroComprobante));
+            facturaDC.setTipoComprobante(tipo);
+            facturaDC.setFacturaOrigen(facturaOrigen);
+            facturaDC.setClaseComprobante(facturaDC.getFacturaOrigen().getClaseComprobante());
+            facturaDC.setAperturaCierreCajeroDetalle(apCiereCajDet);
+            facturaDC.setCheckout(checkout);
+            facturaDC.setEstado(FacturaEstadoEnum.CERRADA);
+            facturaDC.setUsuario(usuario);
+            facturaDC.setMotivo(motivo);
+            if(facturaOrigen.getCliente()!=null){
+                facturaDC.setCondicionIva(facturaOrigen.getCliente().getCondicionIva());
+                if(facturaDC.getCondicionIva().getId()==2)
+                    facturaDC.setClaseComprobante("A");
+                else
+                    facturaDC.setClaseComprobante("B");
+            }
+            facturaOrigen.getDetalleNotasDC().add(facturaDC);
+            facturaDC.setCaja(caja);
+            
+            invertirSignoNotaDCConFactOrigen(facturaDC,facturaOrigen);
+            
+            em.persist(facturaDC);
+            tx.commit();
+            
+        }catch(RuntimeException e){
+            
+        }
+    }
+            
+    
+    public void confirmarNotaDCMonto(TipoComprobanteEnum tipo
+            ,Factura facturaOrigen,BigDecimal monto
+            ,Long prefijoFiscal,String numeroComprobante
+            ,AperturaCierreCajeroDetalle apCiereCajDet
+            ,Checkout checkout
+            ,Usuario usuario
+            ,int idMotivo
+            ,int caja
+        ) throws TpvException{
+        log.info("Capa de servicios FacturacionService, registrando nota DC");
+        EntityManager em = Connection.getEm();
+        MotivoNotaDC motivo = em.find(MotivoNotaDC.class, idMotivo);
+        EntityTransaction tx = null;
+        try{
+            tx = em.getTransaction();
+            tx.begin();
+            Factura facturaDC = new Factura();
+            facturaDC.setPrefijoFiscal(prefijoFiscal);
+            facturaDC.setNumeroComprobante(Long.parseLong(numeroComprobante));
+            facturaDC.setTipoComprobante(tipo);
+            facturaDC.setFacturaOrigen(facturaOrigen);
+            facturaDC.setClaseComprobante(facturaDC.getFacturaOrigen().getClaseComprobante());
+            
+            facturaOrigen.getDetalleNotasDC().add(facturaDC);
+            facturaDC.setTotal(monto.multiply(BigDecimal.valueOf(-1)));
+            
+            facturaDC.setIva(monto.multiply(BigDecimal.valueOf(0.21)));
+            facturaDC.setIva(facturaDC.getIva().multiply(BigDecimal.valueOf(-1)));
+            facturaDC.setNeto(facturaDC.getTotal().subtract(facturaDC.getIva()));
+            facturaDC.setNeto(facturaDC.getNeto().multiply(BigDecimal.valueOf(-1)));
+            
+            
+            
+            facturaDC.setAperturaCierreCajeroDetalle(apCiereCajDet);
+            facturaDC.setCheckout(checkout);
+            facturaDC.setEstado(FacturaEstadoEnum.CERRADA);
+            facturaDC.setUsuario(usuario);
+            facturaDC.setMotivo(motivo);
+            if(facturaOrigen.getCliente()!=null){
+                facturaDC.setCondicionIva(facturaOrigen.getCliente().getCondicionIva());
+                if(facturaDC.getCondicionIva().getId()==2)
+                    facturaDC.setClaseComprobante("A");
+                else
+                    facturaDC.setClaseComprobante("B");
+            }
+                
+            em.persist(facturaDC);
+            tx.commit();
+        }catch(RuntimeException e){
+            log.error("Error en la capa de servicios al registrar la nota D/C ",e);
+            throw new TpvException("Error en la capa de servicios al registrar la nota D/C");
+        }finally{
+            em.clear();
+        }
+    }
+    
+    
+    
+    public List<MotivoNotaDC> getMotivos(TipoComprobanteEnum tipo) throws TpvException{
+        List<MotivoNotaDC> motivos = null;
+        EntityManager em = Connection.getEm();
+        try{
+            Query q = em.createQuery("FROM MotivoNotaDC WHERE tipo = :tipo")
+                    .setParameter("tipo", tipo);
+            motivos = q.getResultList();
+        }catch(RuntimeException e){
+            log.error("Error en capa de servicios al tratar de recuperar motivos de Nota D/C",e);
+            throw new TpvException("Error en capa de servicios al tratar de recuperar motivos de Nota D/C");
+        }finally{
+            em.clear();
+        }
+        
+        return motivos;
     }
     
     /*public List getConcursos(Long idFactura) throws TpvException{

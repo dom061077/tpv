@@ -525,7 +525,7 @@ public class ConfirmaPagoTicketController implements Initializable{
                                        .getFacturaConTotalesConPagos(Context.getInstance().currentDMTicket().getIdFactura()
                                                 ,Context.getInstance().currentDMTicket().getPagos().iterator());
                             
-                            factura.setNumeroComprobante(nroTicketEmitido);
+                            factura.setNumeroComprobante(Long.parseLong(nroTicketEmitido));
                             factura.setFechaHoraFiscal(fechaHoraFiscal);
 
 

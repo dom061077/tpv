@@ -22,7 +22,7 @@
 
 <AnchorPane focusTraversable="true" maxHeight="768.0" maxWidth="1024.0" minHeight="768.0" minWidth="1024.0" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javafx8tpv1.TabPanePrincipalController">
    <children>
-      <BorderPane focusTraversable="true" maxHeight="780.0" maxWidth="1024.0" minHeight="780.0" minWidth="1024.0" prefHeight="780.0" prefWidth="1024.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <BorderPane focusTraversable="true" maxHeight="780.0" maxWidth="1400.0" minHeight="780.0" minWidth="1400.0" prefHeight="780.0" prefWidth="1400.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
             <VBox maxWidth="138.0" minWidth="138.0" prefWidth="138.0" BorderPane.alignment="CENTER">
                <children>
@@ -42,6 +42,11 @@
                      <children>
                         <TabPane fx:id="tabPanePrincipal" focusTraversable="false" maxHeight="700.0" maxWidth="1024.0" minHeight="700.0" minWidth="1024.0" prefHeight="700.0" prefWidth="1024.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE">
                           <tabs>
+                              <Tab fx:id="tabNotasDCFactura" text="Notas DC Factura">
+                                <content>
+                                  <fx:include fx:id="notasDCFactura" maxHeight="740.0" minWidth="740.0" prefHeight="740.0" source="../com/tpv/notasdc/NotasCreditoFactura.fxml" />
+                                </content>
+                              </Tab>
                               <Tab fx:id="tabNotasDCMenu" text="Notas DC Menú">
                                 <content>
                                   <fx:include fx:id="notasDCMenu" maxHeight="740.0" minWidth="740.0" prefHeight="740.0" source="../com/tpv/notasdc/NotasDCMenu.fxml" />
@@ -49,7 +54,7 @@
                               </Tab>
                               <Tab fx:id="tabNotaCreditos" text="Notas de Crédito">
                                 <content>
-                                  <fx:include fx:id="notasCredito" maxHeight="740.0" minWidth="740.0" prefHeight="740.0" source="../com/tpv/notasdc/NotasCreditoMonto.fxml" />
+                                  <fx:include fx:id="notasCreditoMonto" maxHeight="740.0" minWidth="740.0" prefHeight="740.0" source="../com/tpv/notasdc/NotasCreditoMonto.fxml" />
                                 </content>
                               </Tab>
                               <Tab fx:id="tabRetiroDineroMenu" text="Retiro Dinero Menu">

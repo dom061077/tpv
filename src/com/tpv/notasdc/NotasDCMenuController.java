@@ -43,7 +43,7 @@ public class NotasDCMenuController implements Initializable {
                 }
                 
                 if(keyEvent.getCode()==KeyCode.NUMPAD2){
-                    //this.tabController.gotoRetiroDineroConfirmacion(true);
+                    this.tabController.gotoNotasDCFactura();
                 }
                     
                 keyEvent.consume();

@@ -123,6 +123,12 @@ public class ErrorController implements Initializable {
                             case PANTALLA_CONFIRMARETIRODINERO:
                                 tabController.gotoMenuRetiroDinero();
                                 break;
+                            case PANTALLA_NOTACREDITOMONTO:
+                                tabController.gotoNotasCreditoMonto();
+                                break;
+                            case PANTALLA_MENUNOTASDC:
+                                tabController.gotoNotasDCMenu();
+                                break;
                             default:
                                 tabController.gotoLogin();
                                 break;

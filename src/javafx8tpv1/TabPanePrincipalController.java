@@ -25,6 +25,8 @@ import javafx.scene.control.TabPane;
 import org.apache.log4j.Logger;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.ParametroGeneral;
+import com.tpv.notasdc.LineaMotivoData;
+import com.tpv.notasdc.NotasCreditoFacturaController;
 import com.tpv.notasdc.NotasDCMenuController;
 import com.tpv.pagoticket.ConfirmaPagoTicketController;
 import com.tpv.pagoticket.PagoTicketController;
@@ -45,6 +47,7 @@ import com.tpv.util.ui.TabPaneModalCommand;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -124,6 +127,7 @@ public class TabPanePrincipalController implements Initializable {
     @FXML private RetiroDineroMenuController retiroDineroMenuController;
     @FXML private NotasCreditoMontoController notasCreditoMontoController;
     @FXML private NotasDCMenuController notasDCMenuController;
+    @FXML private NotasCreditoFacturaController notasDCFacturaController;
     
     @FXML private Button buttonMenuPrincipal;
     
@@ -143,6 +147,8 @@ public class TabPanePrincipalController implements Initializable {
     @FXML private Tab tabRetiroDineroMenu;
     @FXML private Tab tabNotaCreditos;
     @FXML private Tab tabNotasDCMenu;
+    @FXML private Tab tabNotasDCFactura;
+    
     
     @FXML private TabPane tabPanePrincipal;
     @FXML private StackPane stackPaneModal;
@@ -213,8 +219,10 @@ public class TabPanePrincipalController implements Initializable {
         this.retiroDineroController.setTabController(this);
         this.retiroDineroConfirmacionController.setTabController(this);
         this.retiroDineroMenuController.setTabController(this);
-        this.notasCreditoMontoController.setTabController(this);
         this.notasDCMenuController.setTabController(this);
+        
+        this.notasCreditoMontoController.setTabController(this);
+        this.notasDCFacturaController.setTabController(this);
         
 
         getTabPanePrincipal().getSelectionModel().selectedItemProperty()
@@ -436,18 +444,40 @@ public class TabPanePrincipalController implements Initializable {
     }
             
     public void gotoNotasCreditoMonto(){
-        this.getLabelTituloVentana().setText("NOTAS DE CREDITO");
+        this.getLabelTituloVentana().setText("NOTAS DE CREDITO - MONTO");
         this.getLabelShortCut().setText("F11 - Retornar a Menú");
 
-        this.notasCreditoController
-        
-        this.getTabPanePrincipal().getSelectionModel().select(tabNotaCreditos);
+        try{
+            this.notasCreditoMontoController.configurarInicio();
+            this.getTabPanePrincipal().getSelectionModel().select(tabNotaCreditos);
+            
+        }catch(TpvException e){
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_MENUNOTASDC);
+            Context.getInstance().currentDMTicket().setException(e);
+            gotoError();
+        }
     }
+    
     
     public void gotoNotasDCMenu(){
         this.getLabelTituloVentana().setText("MENU NOTAS - CREDITO/DEBITO");
         this.getLabelShortCut().setText("1- Nota Cred.Monto |   2- Nota Cred.Detalle    |   3- Nota Cred.Ing. Detalle   |   4- Nota de Débito   |   F11 - Retornar a Menú Principal");                
+        this.notasDCMenuController.configurarInicio();
         this.getTabPanePrincipal().getSelectionModel().select(tabNotasDCMenu);
+        
+    }
+    
+    public void gotoNotasDCFactura(){
+        this.getLabelTituloVentana().setText("NOTAS DE CREDITO - ANULA FACTURA");
+        this.getLabelShortCut().setText("F11 - Retornar a Menú");
+        this.getTabPanePrincipal().getSelectionModel().select(tabNotasDCFactura);
+        try{
+            this.notasDCFacturaController.configurarInicio();
+        }catch(TpvException e){
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_MENUNOTASDC);
+            Context.getInstance().currentDMTicket().setException(e);
+            gotoError();
+        }
     }
 
     public void repeatFocus(Node node){
@@ -567,6 +597,6 @@ public class TabPanePrincipalController implements Initializable {
         this.repeatFocus(stackPaneModal);
     }
     
-    
+ 
     
 }

@@ -82,7 +82,7 @@ public class Producto {
     
     public boolean tieneEsteProveedor(Long idProveedor){
         Proveedor prov = new Proveedor();
-        prov.setId(idProducto);
+        prov.setId(idProveedor);
         return tieneEsteProveedor(prov);
     }
 
@@ -226,7 +226,7 @@ public class Producto {
     public boolean tieneEsteProveedor(Proveedor prov){
         for(Iterator<ProveedorProducto> it = getProveedores().iterator();it.hasNext();){
             ProveedorProducto pp = it.next();
-            if(pp.getProveedor().equals(prov)){
+            if(pp.getProveedor().getId().equals(prov.getId())){
                 return true;
             }
                 

@@ -11,6 +11,7 @@ package com.tpv.modelo.enums;
  */
 public enum TipoComprobanteEnum {
     F,//factura
-    C;//nota de credito
+    C,//nota de crédito
+    D;//nota de débito
     
 }

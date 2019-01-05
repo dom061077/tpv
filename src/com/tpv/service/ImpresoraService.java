@@ -63,6 +63,11 @@ public class ImpresoraService {
     public static final String TIPODOC_CEDULA_IDENTIDAD="4";
     public static final String TIPODOC_SIN_CALIFICADOR=" ";
     
+    //--------constantes notas de creditos-----------
+    public static final String NOTACREDITO_A="R";
+    public static final String NOTACREDITO_BC="S";
+    
+    
     
     
     /**
@@ -107,6 +112,18 @@ public class ImpresoraService {
         coeficienteK = BigDecimal.ONE.divide(coeficienteK,2,RoundingMode.HALF_UP);
         return coeficienteK;
     }    
+    
+    public static String getTraduccionCondicionIVA(int codigoDB){
+        if (codigoDB==1)
+            return IVA_CONSUMIDOR_FINAL;
+        if (codigoDB==2)
+            return IVA_RESPONSABLE_INS;
+        if (codigoDB==5)
+            return IVA_EXENTO;
+        if (codigoDB==6)
+            return IVA_MONOTRIBUTO_SOCIAL;
+        return IVA_CONSUMIDOR_FINAL;
+    }
     
     public String getNroPuntoVenta() throws TpvException{
         //HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
@@ -272,12 +289,13 @@ public class ImpresoraService {
         FiscalPacket request;
         FiscalPacket requestStatus;
         FiscalPacket response;
-        FiscalMessages fMsg;
         
         try{
             requestStatus = getHfp().cmdStatusRequest();
-            response = getHfp().execute(requestStatus);
+            getHfp().execute(requestStatus);
+            response = getHfp().execute(getHfp().cmdGetInitData());
             
+            Context.getInstance().currentDMTicket().setPuntoVenta(Long.parseLong(response.getString(7)));
 
             
             if(Context.getInstance().currentDMTicket().getCliente()!=null){
@@ -301,7 +319,6 @@ public class ImpresoraService {
                 request = getHfp().cmdOpenFiscalReceipt("T");
             response = getHfp().execute(request);
         }catch(FiscalPrinterStatusError e){
-            fMsg = getHfp().getMessages();
             log.warn("Error fiscal al abrir el ticket",e);
             throw new TpvException(e.getMessage());
         }catch(FiscalPrinterIOException e){
@@ -340,9 +357,16 @@ public class ImpresoraService {
 //        hfp.cmdPrintFiscalText(descripcion, Integer.SIZE)
         try{
             response = getHfp().execute(requestEstado);
-            response = getHfp().execute(request1eraLineaDetalle);
-            if(_2daLineaDetalle.compareTo("")!=0)
+            
+            if(_2daLineaDetalle.compareTo("")!=0){
+                response = getHfp().execute(request1eraLineaDetalle);
                 response = getHfp().execute(request2daLineaDetalle);
+            }else{
+                getHfp().execute(
+                  getHfp().cmdPrintLineItem(_1erLineaDetalle
+                          ,  cantidad, precio, iva, imprimeNegativo, impuestoInterno, false,0)
+                );
+            }
         }catch(FiscalPrinterStatusError e){
             fMsg = getHfp().getMessages();
             log.warn("Error fiscal al imprimir linea de ticket",e);
@@ -739,4 +763,50 @@ public class ImpresoraService {
         }        
         
     }
+
+    public void abrirNotaCredito(String tipo,String numeroFacturaOrigen
+            ,String nombreComprador,String cuitComprador,String condicionIVA
+            ,String domicilio,String tipoDocImpresion
+            ) throws TpvException{
+        
+        try{
+            
+            ArrayList<String> concursos = new ArrayList();
+            printHeaderTrailer(" ", " ", " ", concursos);
+            
+            FiscalPacket response = getHfp().execute(getHfp().cmdStatusRequest());
+            
+            response = getHfp().execute(getHfp().cmdGetInitData());
+            Context.getInstance().currentDMTicket().setPuntoVenta(Long.parseLong(response.getString(7)));            
+            
+            getHfp().execute(getHfp().cmdSetCustomerData(nombreComprador
+                    ,cuitComprador
+                    ,condicionIVA,tipoDocImpresion, domicilio));
+            
+            getHfp().execute(getHfp().cmdSetEmbarkNumber(1, numeroFacturaOrigen));
+            getHfp().execute(getHfp().cmdOpenDNFH(tipo, ""));
+        }catch(FiscalPrinterStatusError e){
+            log.warn("Error de estado en la impresora al enviar datos del comprador",e);
+            throw new TpvException(e.getMessage());
+        }catch(FiscalPrinterIOException e){
+            log.warn("Error mecánico de impresora al enviar datos del comprador",e);
+            throw new TpvException(e.getMessage());
+        }
+    }
+    
+    public void cerrarNotaCredito() throws TpvException{
+        FiscalPacket response;
+        try{
+            getHfp().execute(getHfp().cmdStatusRequest());
+            response = getHfp().execute(getHfp().cmdCloseDNFH(1));
+        }catch(FiscalPrinterStatusError e){
+            log.error("Error en el estado de la impresora al cerrar el DFNH",e);
+            throw new TpvException(e.getMessage());
+        }catch(FiscalPrinterIOException e){
+            log.error("Error mecánico de impresora al cerrar el DFNH",e);
+            throw new TpvException(e.getMessage());
+        }
+    }
+    
+    
 }

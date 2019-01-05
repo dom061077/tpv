@@ -90,6 +90,10 @@ public class DataModelTicket {
     private TpvException exception;
     private int nroTicket;
     private int nroFacturaA;
+    private int nroNotaCreditoBC;
+    private int nroNotaCreditoA;
+    private int nroNotaDebitoBC;
+    private int nroNotaDebitoA;
     private Long puntoVenta;//checkout
     private Checkout checkout;
     private int caja;
@@ -563,6 +567,62 @@ public class DataModelTicket {
      */
     public void setCaja(int caja) {
         this.caja = caja;
+    }
+
+    /**
+     * @return the nroNotaCreditoBC
+     */
+    public int getNroNotaCreditoBC() {
+        return nroNotaCreditoBC;
+    }
+
+    /**
+     * @param nroNotaCreditoBC the nroNotaCreditoBC to set
+     */
+    public void setNroNotaCreditoBC(int nroNotaCreditoBC) {
+        this.nroNotaCreditoBC = nroNotaCreditoBC;
+    }
+
+    /**
+     * @return the nroNotaCreditoA
+     */
+    public int getNroNotaCreditoA() {
+        return nroNotaCreditoA;
+    }
+
+    /**
+     * @param nroNotaCreditoA the nroNotaCreditoA to set
+     */
+    public void setNroNotaCreditoA(int nroNotaCreditoA) {
+        this.nroNotaCreditoA = nroNotaCreditoA;
+    }
+
+    /**
+     * @return the nroNotaDebitoBC
+     */
+    public int getNroNotaDebitoBC() {
+        return nroNotaDebitoBC;
+    }
+
+    /**
+     * @param nroNotaDebitoBC the nroNotaDebitoBC to set
+     */
+    public void setNroNotaDebitoBC(int nroNotaDebitoBC) {
+        this.nroNotaDebitoBC = nroNotaDebitoBC;
+    }
+
+    /**
+     * @return the nroNotaDebitoA
+     */
+    public int getNroNotaDebitoA() {
+        return nroNotaDebitoA;
+    }
+
+    /**
+     * @param nroNotaDebitoA the nroNotaDebitoA to set
+     */
+    public void setNroNotaDebitoA(int nroNotaDebitoA) {
+        this.nroNotaDebitoA = nroNotaDebitoA;
     }
     
     

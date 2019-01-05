@@ -38,6 +38,48 @@ import org.hibernate.annotations.Formula;
 public class Factura {
 
     /**
+     * @return the motivo
+     */
+    public MotivoNotaDC getMotivo() {
+        return motivo;
+    }
+
+    /**
+     * @param motivo the motivo to set
+     */
+    public void setMotivo(MotivoNotaDC motivo) {
+        this.motivo = motivo;
+    }
+
+    /**
+     * @return the detalleNotasDC
+     */
+    public List<Factura> getDetalleNotasDC() {
+        return detalleNotasDC;
+    }
+
+    /**
+     * @param detalleNotasDC the detalleNotasDC to set
+     */
+    public void setDetalleNotasDC(List<Factura> detalleNotasDC) {
+        this.detalleNotasDC = detalleNotasDC;
+    }
+
+    /**
+     * @return the facturaOrigen
+     */
+    public Factura getFacturaOrigen() {
+        return facturaOrigen;
+    }
+
+    /**
+     * @param facturaOrigen the facturaOrigen to set
+     */
+    public void setFacturaOrigen(Factura facturaOrigen) {
+        this.facturaOrigen = facturaOrigen;
+    }
+
+    /**
      * @return the claseComprobante
      */
     public String getClaseComprobante() {
@@ -121,7 +163,7 @@ public class Factura {
     private String claseComprobante;
     
     @Column(name = "NUMEROCOMPROBANTE")
-    private String numeroComprobante;
+    private Long numeroComprobante;
     
     @Column(name = "PREFIJOFISCAL")
     private Long prefijoFiscal;
@@ -234,6 +276,11 @@ public class Factura {
     private AperturaCierreCajeroDetalle aperturaCierreCajeroDetalle;
     
     @ManyToOne
+    @JoinColumn(name = "idMOTIVOS"
+            , referencedColumnName = "idMOTIVOS", nullable=false)
+    private MotivoNotaDC motivo;
+    
+    @ManyToOne
     @JoinColumn(name = "idClientes", referencedColumnName = "idClientes", nullable=true)
     private Cliente cliente;
     
@@ -305,14 +352,14 @@ public class Factura {
     /**
      * @return the numeroComprobante
      */
-    public String getNumeroComprobante() {
+    public Long getNumeroComprobante() {
         return numeroComprobante;
     }
 
     /**
      * @param numeroComprobante the numeroComprobante to set
      */
-    public void setNumeroComprobante(String numeroComprobante) {
+    public void setNumeroComprobante(Long numeroComprobante) {
         this.numeroComprobante = numeroComprobante;
     }
 
@@ -596,6 +643,19 @@ public class Factura {
         }
         return totalBonificado;
 
+    }
+    
+    public BigDecimal getTotalNotasDC(){
+        BigDecimal totalDC=BigDecimal.ZERO;
+        for(Iterator<Factura> it = getDetalleNotasDC().iterator();it.hasNext();){
+            Factura fact = it.next();
+            totalDC = totalDC.add(fact.getTotal());
+        }
+        return totalDC;
+    }
+    
+    public BigDecimal getSaldoDispNotasDC(){
+        return getTotal().subtract(getTotalNotasDC());
     }
 
     private void addProductoAgrupadoEnFactura(FacturaDetalle fd){

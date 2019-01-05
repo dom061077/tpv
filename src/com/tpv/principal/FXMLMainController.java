@@ -762,7 +762,7 @@ public class FXMLMainController implements Initializable {
                 
 //            }
         }
-        nroticket.setText("Pto.Venta: "+Context.getInstance().currentDMTicket().getPuntoVenta()+" ║ Nº Ticket: "
+        nroticket.setText("Pto.Venta: "+Context.getInstance().currentDMTicket().getPuntoVenta()+" ║ Nº Fact.B/C: "
                             +Context.getInstance().currentDMTicket().getNroTicket()
                             +" ║ Nº Fact.A: "+Context.getInstance().currentDMTicket().getNroFacturaA()
                 //+" Nro. Ticket (A): "+retorno[2]
@@ -939,7 +939,7 @@ public class FXMLMainController implements Initializable {
         });*/
         Factura facturaGuardada=null;
         try{
-            factura.setNumeroComprobante(impresoraService.getNroUltimoTicketBC());
+            factura.setNumeroComprobante(Long.parseLong(impresoraService.getNroUltimoTicketBC()));
             factura.setUsuario(Context.getInstance().currentDMTicket().getUsuario());
             factura.setCheckout(Context.getInstance().currentDMTicket().getCheckout());
             factura.setTipoComprobante(TipoComprobanteEnum.F);
