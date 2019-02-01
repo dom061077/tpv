@@ -10,12 +10,15 @@ import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Factura;
 import com.tpv.modelo.FacturaDetalle;
 import com.tpv.modelo.MotivoNotaDC;
+import com.tpv.modelo.Producto;
+import com.tpv.modelo.enums.FacturaEstadoEnum;
 import com.tpv.modelo.enums.TipoComprobanteEnum;
 import com.tpv.principal.Context;
 import com.tpv.principal.LineaTicketData;
 import com.tpv.print.event.FiscalPrinterEvent;
 import com.tpv.service.FacturacionService;
 import com.tpv.service.ImpresoraService;
+import com.tpv.service.ProductoService;
 import com.tpv.util.Util;
 import com.tpv.util.ui.MaskTextField;
 import com.tpv.util.ui.MensajeModal;
@@ -44,15 +47,15 @@ import org.apache.log4j.Logger;
 import org.tpv.print.fiscal.FiscalPacket;
 import org.tpv.print.fiscal.FiscalPrinter;
 import org.tpv.print.fiscal.hasar.HasarCommands;
-import org.tpv.print.fiscal.msg.FiscalMessage;
 import org.tpv.print.fiscal.msg.FiscalMessages;
+
 
 /**
  *
  * @author COMPUTOS
  */
-public class NotasCreditoFacturaController implements Initializable {
-    Logger log = Logger.getLogger(NotasCreditoFacturaController.class);
+public class NotasCreditoFacturaPorProductoController implements Initializable {
+    Logger log = Logger.getLogger(NotasCreditoFacturaPorProductoController.class);
     TabPanePrincipalController tabPaneController;
     
     @FXML StackPane stackPaneMotivos;
@@ -76,37 +79,28 @@ public class NotasCreditoFacturaController implements Initializable {
     @FXML private TableColumn cantidadColumn;
     @FXML private TableColumn precioUnitarioColumn;
     @FXML private TableColumn subTotalColumn;
-    
-    
+    @FXML private Label labelCantidad;
+    @FXML private BigDecimal cantidad;
+    @FXML private Label labelTotal; 
     
     
     MaskTextField textFieldPrefijo;
     MaskTextField textFieldNumero;
-    
+    MaskTextField textFieldProducto;
+    BigDecimal total = BigDecimal.ZERO;    
     
     private Factura facturaOrigenCredito;
+    
     private FacturacionService factService = new FacturacionService();
+    private ProductoService productoService = new ProductoService();
     private int idMotivo;
     private ImpresoraService impresoraService = new ImpresoraService();
     private FiscalPrinterEvent fiscalPrinterEvent;
     private Long idNotaDCGenerada;
-    
-    
+    private LineaTicketData lineaTicketData;
     
     public void setTabController(TabPanePrincipalController tabPaneController){
         this.tabPaneController=tabPaneController;
-    }
-    
-    public void configurarInicio() throws TpvException{
-        stackPaneMotivos.setVisible(false);
-        tabPaneController.repeatFocus(textFieldPrefijo);
-        limpiarLabelsDatoYTableViewTickets();
-        if(impresoraService.getHfp().getEventListener()==null)
-            asignarEvento();
-        initTableViewMotivos();
-        cargarTableViewMotivos();
-        initTableViewTickets();
-        
     }
     
     @FXML
@@ -120,6 +114,13 @@ public class NotasCreditoFacturaController implements Initializable {
         textFieldNumero.setMask("N!");
         textFieldNumero.getStyleClass().add("textfield_sin_border");
         gridPaneIngreso.add(textFieldNumero, 2, 2);
+        
+        textFieldProducto = new MaskTextField();
+        textFieldProducto.setMask("N!");
+        textFieldProducto.getStyleClass().add("textfield_sin_border");
+        gridPaneDatos.add(textFieldProducto, 1, 4);
+        
+        
         
         Platform.runLater(()->{
             tableViewTickets.setOnKeyPressed(keyEvent ->{
@@ -148,10 +149,10 @@ public class NotasCreditoFacturaController implements Initializable {
                         }                        
                     
                         tabPaneController.showMsgModal(new MensajeModal("Confirmación"
-                                , "¿Confirma el cierre de la nota de crédito?", "", null){
+                                , "¿Confirma el cierre del ticket?", "", null){
                                     @Override
                                     public void aceptarMensaje(){
-                                        confirmarCredito();
+                                        enviarComandoLineaTicket();
                                     }
                                     
                                     @Override
@@ -170,9 +171,11 @@ public class NotasCreditoFacturaController implements Initializable {
                     labelMotivoData
                        .setText(((LineaMotivoData)tableViewMotivos.getSelectionModel().getSelectedItem()).getDescripcion());
                     idMotivo = ((LineaMotivoData)tableViewMotivos.getSelectionModel().getSelectedItem()).getCodigoMotivo();
-                    tabPaneController.repeatFocus(tableViewTickets);
-                    if(tableViewTickets.getItems().size()>0)
-                        tableViewTickets.getSelectionModel().select(0);
+                    this.tabPaneController.repeatFocus(this.textFieldProducto);
+                    //tabPaneController.repeatFocus(tableViewTickets);
+                    //if(tableViewTickets.getItems().size()>0)
+                        //tableViewTickets.getSelectionModel().select(0);
+                        
                     keyEvent.consume();
                 }
                 if(keyEvent.getCode() == KeyCode.ESCAPE){
@@ -221,7 +224,33 @@ public class NotasCreditoFacturaController implements Initializable {
                 if(keyEvent.getCode() == KeyCode.ENTER){
                     if(!this.textFieldNumero.getText().trim().equals("")){
                         this.traerTicket();
-                        
+                    }
+                    keyEvent.consume();
+                }
+            });
+            
+            textFieldProducto.setOnKeyPressed(keyEvent->{
+                if(keyEvent.getCode() == KeyCode.F11){
+                    tabPaneController.gotoNotasDCMenu();
+                    keyEvent.consume();
+                }
+                
+                if(keyEvent.getCode() == KeyCode.ENTER){
+                    if(textFieldProducto.getText().compareTo("")!=0)
+                        enviarComandoLineaTicket();
+                    else{
+                        tabPaneController.showMsgModal(new MensajeModal("Confirmación"
+                                , "¿Confirma el cierre de la nota de crédito?", "", null){
+                                    @Override
+                                    public void aceptarMensaje(){
+                                        confirmarCredito();
+                                    }
+                                    
+                                    @Override
+                                    public void cancelarMensaje(){
+                                        tabPaneController.repeatFocus(textFieldProducto);
+                                    }
+                               });                          
                     }
                     keyEvent.consume();
                 }
@@ -232,6 +261,19 @@ public class NotasCreditoFacturaController implements Initializable {
         
     }
     
+    
+    public void configurarInicio() throws TpvException{
+        stackPaneMotivos.setVisible(false);
+        tabPaneController.repeatFocus(textFieldPrefijo);
+        limpiarLabelsDatoYTableViewTickets();
+        if(impresoraService.getHfp().getEventListener()==null)
+            asignarEvento();
+        initTableViewMotivos();
+        cargarTableViewMotivos();
+        initTableViewTickets();
+        this.cantidad=BigDecimal.ONE;
+    }
+
     private void cargarTableViewTickets(){
         tableViewTickets.getItems().clear();
         for(Iterator iterator = facturaOrigenCredito.getDetalleOrdenadoPorId().iterator();iterator.hasNext();){
@@ -239,7 +281,7 @@ public class NotasCreditoFacturaController implements Initializable {
 
 
                 LineaTicketData lineaTicketData = new LineaTicketData(
-                                 fd.getProducto().getIdProducto()
+                                 fd.getId()
                                 ,fd.getProducto().getCodigoProducto()
                                 ,fd.getProducto().getCodBarra()
                                 ,fd.getProducto().getDescripcion(),fd.getCantidad()
@@ -272,14 +314,16 @@ public class NotasCreditoFacturaController implements Initializable {
                 ));
                 return;
             }
+            /*
             if(facturaOrigenCredito.getTotalNotasDC().compareTo(BigDecimal.ZERO)<0){
                     
                 tabPaneController.showMsgModal(new MensajeModalAceptar("Mensaje"
                         , "La factura con el prefijo y Nº ingresado tiene al menos una nota de Crédito."
-                            +" No se puede acreditar toda la factura."
+                            +" No se puede cargar."
                         , "", textFieldPrefijo));
                 return;
             }
+            */
             
             if(this.facturaOrigenCredito!=null){
                 labelNumeroFacturaDato.setText(facturaOrigenCredito.getPrefijoFiscal().toString()
@@ -291,8 +335,11 @@ public class NotasCreditoFacturaController implements Initializable {
                     this.ocultarRowCliente(false);
                 }else
                     this.ocultarRowCliente(true);
-                cargarTableViewTickets();
+                //cargarTableViewTickets();
                 stackPaneMotivos.setVisible(true);
+                labelCantidad.setText("1");
+                DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
+                labelTotal.setText(df.format(BigDecimal.ZERO));
                 this.tabPaneController.repeatFocus( tableViewMotivos);
                 
                 
@@ -357,6 +404,10 @@ public class NotasCreditoFacturaController implements Initializable {
             labelTotalFacturaDato.setText("");
             labelMotivoData.setText("");
             tableViewTickets.getItems().clear();
+            labelCantidad.setText("");
+            textFieldProducto.setText("");
+            textFieldNumero.setText("");
+            textFieldPrefijo.setText("");
     }    
     
     private void initTableViewTickets(){
@@ -464,8 +515,85 @@ public class NotasCreditoFacturaController implements Initializable {
         subTotalColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
     }    
     
-    private void confirmarCredito(){
+    private void calcularTotalGeneral(){
+        
+        DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
+        
+        tableViewTickets.getItems().forEach((item)->{
+            this.total = total.add(((LineaTicketData)item).getSubTotal());
+        });
+        labelTotal.setText(df.format(this.total));
+        
+    }
+    
+    private void enviarComandoLineaTicket(){
         String nombreComprador=" ";
+        String cuitComprador=" ";
+        String domicilioComprador=" ";
+        String tipoCreditoImpresion=ImpresoraService.NOTACREDITO_BC;
+        String condicionIVA=ImpresoraService.IVA_CONSUMIDOR_FINAL;
+        String tipoDocImpresion = " ";
+        if(facturaOrigenCredito.getCliente()!=null){
+            tipoCreditoImpresion = ImpresoraService.NOTACREDITO_A;
+            nombreComprador = facturaOrigenCredito.getCliente().getRazonSocial();
+            cuitComprador = facturaOrigenCredito.getCliente().getCuit();
+            domicilioComprador = facturaOrigenCredito.getCliente().getDireccion();
+            tipoDocImpresion = "C";
+            condicionIVA = ImpresoraService
+                            .getTraduccionCondicionIVA(
+                                    facturaOrigenCredito.getCliente().getCondicionIva().getId());
+        }    
+        try{
+            FacturaDetalle det = validarDetalleProducto(textFieldProducto.getText()
+                    ,BigDecimal.ONE, facturaOrigenCredito.getDetalle());
+            if(det==null)
+                return;
+            if(tableViewTickets.getItems().size()==0){
+                    this.impresoraService.abrirNotaCredito(tipoCreditoImpresion
+                        , facturaOrigenCredito.getPrefijoFiscal()+"-"+ facturaOrigenCredito.getNumeroComprobante()
+                        , nombreComprador, cuitComprador, condicionIVA, condicionIVA, tipoDocImpresion);
+            }
+            BigDecimal coeficienteK = BigDecimal.ZERO;
+            ImpresoraService.getCoeficienteK(det.getImpuestoInterno());        
+            this.lineaTicketData = new LineaTicketData(
+                     det.getProducto().getIdProducto()
+                    ,det.getProducto().getCodigoProducto()
+                    ,det.getProducto().getCodBarra()
+                    ,det.getProducto().getDescripcion(),this.cantidad
+                    ,det.getPrecioUnitario()
+                    ,det.getPrecioUnitarioBase(),det.getNeto(),det.getNetoReducido()
+                    ,det.getExento(),det.getDescuento(),det.getIva(),det.getIvaReducido()
+                    ,det.getImpuestoInterno(),BigDecimal.ZERO
+                    ,det.getPorcentajeIva()
+                    ,det.getCosto()
+                    ,false
+            );
+            
+            this.impresoraService.imprimirLineaTicket(det.getProducto().getDescripcion()
+                    , this.cantidad, det.getPrecioUnitario()
+                    , det.getPorcentajeIva(), false, coeficienteK);
+            textFieldProducto.setText("");
+        }catch(TpvException e){
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_NOTACREDITOFACTURAPROPRODUCTO);
+            Context.getInstance().currentDMTicket().setException(e);
+            tabPaneController.gotoError();
+        }           
+            
+
+    }
+    
+    private void confirmarCredito(){
+        try{
+            this.impresoraService.cerrarNotaCredito(facturaOrigenCredito);
+            limpiarLabelsDatoYTableViewTickets();
+            tabPaneController.repeatFocus(textFieldPrefijo);
+            
+        }catch(TpvException e){
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_NOTACREDITOFACTURAPROPRODUCTO);
+            Context.getInstance().currentDMTicket().setException(e);
+            tabPaneController.gotoError();
+        }
+        /*String nombreComprador=" ";
         String cuitComprador=" ";
         String domicilioComprador=" ";
         String tipoCreditoImpresion=ImpresoraService.NOTACREDITO_BC;
@@ -494,7 +622,7 @@ public class NotasCreditoFacturaController implements Initializable {
             idNotaDCGenerada = notaDC.getId();
         }catch(TpvException e){
             Context.getInstance().currentDMTicket().setException(e);
-            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_NOTACREDITOFACTURA);
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_NOTACREDITOFACTURAPROPRODUCTO);
             tabPaneController.gotoError();
             return;
         }
@@ -512,13 +640,82 @@ public class NotasCreditoFacturaController implements Initializable {
             }
             this.impresoraService.cerrarNotaCredito(facturaOrigenCredito);
         }catch(TpvException e){
-            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_NOTACREDITOFACTURA);
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_NOTACREDITOFACTURAPROPRODUCTO);
+            Context.getInstance().currentDMTicket().setException(e);
+            tabPaneController.gotoError();
+        }*/
+    }    
+    
+    private void guardarNotaDCPrimeraVez(){
+        log.info("Guardando NotaDC por primera vez");
+        try{
+            Factura factura = new Factura();
+            factura.setEstado(FacturaEstadoEnum.ABIERTA);
+            factura.setFacturaOrigen(facturaOrigenCredito);
+            factura.setClaseComprobante(facturaOrigenCredito.getClaseComprobante());
+            factura.setTipoComprobante(TipoComprobanteEnum.C);
+            
+            factura.setCliente(facturaOrigenCredito.getCliente());
+            factura.setAperturaCierreCajeroDetalle(Context.getInstance()
+                    .currentDMTicket().getAperturaCierreCajDetalle());
+            factura.setCheckout(Context.getInstance().currentDMTicket().getCheckout());
+            factura.setCaja(Context.getInstance().currentDMTicket()
+                    .getCaja());
+            factura.setCondicionIva(facturaOrigenCredito.getCondicionIva());
+            
+            if(facturaOrigenCredito.getCliente()!=null){
+                factura.setCondicionIva(facturaOrigenCredito.getCliente().getCondicionIva());
+                if(factura.getCondicionIva().getId()==2)
+                    factura.setClaseComprobante("A");
+                else
+                    factura.setClaseComprobante("B");
+            }            
+            
+            factura.setUsuario(Context.getInstance().currentDMTicket().getUsuario());
+            
+            factura.setPrefijoFiscal(Context.getInstance().currentDMTicket().getPuntoVenta());
+            
+            
+            Factura notaDC = factService.registrarFactura(factura);
+            this.idNotaDCGenerada = notaDC.getId();
+        }catch(TpvException e){
+            Context.getInstance().currentDMTicket().setException(e);
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_NOTACREDITOFACTURAPROPRODUCTO);
+            tabPaneController.gotoError();
+        }
+        
+    }    
+    
+    private void agregarDetalleFactura(){
+        log.info("Agregando detalle factura");
+        FacturaDetalle facturaDetalle = new FacturaDetalle();
+        facturaDetalle.setCantidad(lineaTicketData.getCantidad().multiply(BigDecimal.valueOf(-1)));
+        facturaDetalle.setDescuento(lineaTicketData.getDescuentoCliente().multiply(BigDecimal.valueOf(-1)));
+        facturaDetalle.setExento(lineaTicketData.getExento().multiply(BigDecimal.valueOf(-1)));
+        facturaDetalle.setImpuestoInterno(lineaTicketData.getImpuestoInterno().multiply(BigDecimal.valueOf(-1)));
+        facturaDetalle.setIva(lineaTicketData.getIva().multiply(BigDecimal.valueOf(-1)));
+        facturaDetalle.setIvaReducido(lineaTicketData.getIvaReducido().multiply(BigDecimal.valueOf(-1)));
+        facturaDetalle.setNeto(lineaTicketData.getNeto().multiply(BigDecimal.valueOf(-1)));
+        facturaDetalle.setNetoReducido(lineaTicketData.getNetoReducido().multiply(BigDecimal.valueOf(-1)));
+        facturaDetalle.setPrecioUnitario(lineaTicketData.getPrecioUnitario().multiply(BigDecimal.valueOf(-1)));
+        facturaDetalle.setPrecioUnitarioBase(lineaTicketData.getPrecioUnitarioBase().multiply(BigDecimal.valueOf(-1)));
+        facturaDetalle.setCosto(lineaTicketData.getCosto().multiply(BigDecimal.valueOf(-1)));
+        facturaDetalle.setSubTotal(lineaTicketData.getSubTotal().multiply(BigDecimal.valueOf(-1)));
+        facturaDetalle.setPorcentajeIva(lineaTicketData.getPorcentajeIva());
+        Producto producto;
+        producto = productoService.getProductoPorId(lineaTicketData.getId());
+        facturaDetalle.setUsuarioSupervisor(Context.getInstance().currentDMTicket().getUsuarioSupervisor());
+        facturaDetalle.setProducto(producto);
+        try{
+            factService.agregarDetalleFactura(this.idNotaDCGenerada,facturaDetalle);
+            tableViewTickets.getItems().add(this.lineaTicketData);
+        }catch(TpvException e){
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_NOTACREDITOFACTURAPROPRODUCTO);
             Context.getInstance().currentDMTicket().setException(e);
             tabPaneController.gotoError();
         }
-    }    
-    
-
+        
+    }
     
     private void asignarEvento(){
         this.fiscalPrinterEvent = new FiscalPrinterEvent(){
@@ -526,9 +723,19 @@ public class NotasCreditoFacturaController implements Initializable {
             public void commandExecuted(FiscalPrinter source, FiscalPacket command
                 ,FiscalPacket response){
                 
+                if(command.getCommandCode()==HasarCommands.CMD_OPEN_DNFH){
+                    guardarNotaDCPrimeraVez();
+                }
+                
+                if(command.getCommandCode()==HasarCommands.CMD_PRINT_LINE_ITEM){
+                    agregarDetalleFactura();
+                    calcularTotalGeneral();
+                }
+                
+                
                 if(command.getCommandCode()==HasarCommands.CMD_CLOSE_DNFH){
                     try{
-                        factService.modificarNroCreditoYCerrar(
+                        factService.modificarNroCreditoTotalizarYCerrar(
                                     Context.getInstance().currentDMTicket().getPuntoVenta()
                                     ,Long.parseLong(response.getString(3))
                                     ,idNotaDCGenerada
@@ -536,7 +743,7 @@ public class NotasCreditoFacturaController implements Initializable {
                         tabPaneController.gotoNotasDCMenu();
                     }catch(TpvException e){
                         Context.getInstance().currentDMTicket().setException(e);
-                        Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_NOTACREDITOFACTURA);
+                        Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_NOTACREDITOFACTURAPROPRODUCTO);
                         tabPaneController.gotoError();
                     }
                 }
@@ -549,5 +756,31 @@ public class NotasCreditoFacturaController implements Initializable {
         };
         impresoraService.getHfp().setEventListener(fiscalPrinterEvent);
     }
+
+    private FacturaDetalle validarDetalleProducto(String codProdCodBarra,BigDecimal cantidad,List<FacturaDetalle> detalle){
+        BigDecimal cantAcreditada = BigDecimal.ZERO;
+        BigDecimal cantDisponible = BigDecimal.ZERO;
+        FacturaDetalle detResult = null;
+        for (Iterator<LineaTicketData> it = tableViewTickets.getItems().iterator();it.hasNext();){
+            LineaTicketData det = it.next();
+            if(det.getCodigoProducto()==Integer.parseInt(codProdCodBarra)
+                    || det.getCodBarra().compareTo(codProdCodBarra)==0)
+                cantAcreditada = cantAcreditada.add(det.getCantidad());
+        }
+        for(Iterator<FacturaDetalle> it = detalle.iterator();it.hasNext();){
+            FacturaDetalle det = it.next();
+            if(det.getProducto().getCodigoProducto()==Integer.parseInt(codProdCodBarra)
+                    || det.getProducto().getCodBarra().compareTo(codProdCodBarra)==0){
+                cantDisponible = cantDisponible.add(det.getCantidad());
+                if(det.getCantidad().compareTo(BigDecimal.ZERO)>0)
+                    detResult = det;
+            }
+        }
+        cantAcreditada = cantAcreditada.add(cantidad);
+        if(cantAcreditada.compareTo(cantDisponible)>0)
+            return null;
+        return detResult;
+    }
+    
     
 }

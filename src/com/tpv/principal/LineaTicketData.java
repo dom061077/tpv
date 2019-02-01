@@ -9,11 +9,10 @@ import java.math.BigDecimal;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -22,7 +21,9 @@ import javafx.beans.property.SimpleStringProperty;
  * @author daniel
  */
 public class LineaTicketData {
+    private ObjectProperty<Long> idProducto;//id del PRODUCTO!!
     private IntegerProperty CodigoProducto;
+    private StringProperty CodBarra;
     private StringProperty Descripcion;
     private ObjectProperty<BigDecimal> Cantidad;
     private ObjectProperty<BigDecimal> PrecioUnitario;
@@ -64,6 +65,7 @@ public class LineaTicketData {
     private ObjectProperty<BigDecimal> impuestoInterno;
     private ObjectProperty<BigDecimal> descuentoCliente;
     private ObjectProperty<BigDecimal> retencion; //ingresos brutos
+    private ObjectProperty<BigDecimal> costo;
     
     private BooleanProperty Devuelto;
     
@@ -71,18 +73,20 @@ public class LineaTicketData {
         
     }
     
-    public LineaTicketData(int codigoProducto,String descripcion,BigDecimal cantidad,BigDecimal precioUnitario
+    public LineaTicketData(Long idProducto, int codigoProducto,String codBarra,String descripcion,BigDecimal cantidad,BigDecimal precioUnitario
             ,BigDecimal precioUnitarioBase,BigDecimal neto,BigDecimal netoReducido,BigDecimal exento
             ,BigDecimal descuentoCliente,BigDecimal iva ,BigDecimal ivaReducido
             ,BigDecimal impuestoInterno,BigDecimal retencion
             ,BigDecimal porcentajeIva
+            ,BigDecimal costo
             ,boolean devuelto){
         
         BigDecimal montoSigno = BigDecimal.valueOf(1);
         if(devuelto)
             montoSigno = montoSigno.multiply(BigDecimal.valueOf(-1));
-        
+        this.idProducto = new SimpleObjectProperty(idProducto);
         this.CodigoProducto = new SimpleIntegerProperty(codigoProducto);
+        this.CodBarra = new SimpleStringProperty(codBarra);
         this.Descripcion = new SimpleStringProperty(descripcion);
         this.Cantidad = new SimpleObjectProperty(cantidad);
         this.PrecioUnitario = new SimpleObjectProperty(precioUnitario);
@@ -100,6 +104,7 @@ public class LineaTicketData {
         //this.SubTotal = new SimpleObjectProperty(new BigDecimal(precioUnitario.doubleValue()*cantidad));
         this.SubTotal = new SimpleObjectProperty(precioUnitario.multiply(cantidad));
         this.porcentajeIva = new SimpleObjectProperty(porcentajeIva);
+        this.costo = new SimpleObjectProperty(costo);
     }
     
     public int getCodigoProducto(){
@@ -112,7 +117,23 @@ public class LineaTicketData {
         }
         return CodigoProducto;
     }
+
+    public StringProperty codBarraProperty(){
+        if(CodBarra == null){
+            CodBarra = new SimpleStringProperty();
+        }
+        return CodBarra;
+    }
     
+    public String getCodBarra(){
+        return codBarraProperty().get();
+    }
+            
+    public void setCodBarra(String codBarra){
+        this.CodBarra.set(codBarra);
+        
+    }
+            
     
     public String getDescripcion(){
         return descripcionProperty().get();
@@ -174,8 +195,39 @@ public class LineaTicketData {
         return Devuelto;
     }
     
+    
     public void setDevuelto(boolean devuelto){
         this.devueltoProperty().set(devuelto);
+    }
+    
+    public ObjectProperty<Long> idProperty(){
+        if(idProducto == null){
+            idProducto = new SimpleObjectProperty<Long>();
+        }
+        return idProducto;
+    }
+    
+    public Long getId(){
+        return idProperty().get();
+    }
+    
+    public void setId(Long id){
+        this.idProperty().set(id);
+    }
+    
+    public ObjectProperty<BigDecimal> costoProperty(){
+        if(costo == null){
+            costo = new SimpleObjectProperty<BigDecimal>();
+        }
+        return costo;
+    }
+    
+    public BigDecimal getCosto(){
+        return costoProperty().get();
+    }
+
+    public void setCosto(BigDecimal costo){
+        this.costoProperty().set(costo);
     }
 
     /**
@@ -185,6 +237,8 @@ public class LineaTicketData {
         return netoReducido.get();
     }
 
+    
+    
     /**
      * @param netoReducido the netoReducido to set
      */
@@ -303,6 +357,7 @@ public class LineaTicketData {
     public void setPorcentajeIva(ObjectProperty<BigDecimal> porcentajeIva) {
         this.porcentajeIva = porcentajeIva;
     }
+    
     
     
 }

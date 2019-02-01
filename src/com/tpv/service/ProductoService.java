@@ -128,6 +128,14 @@ public class ProductoService {
         return productosPrecios;
     }
     
+    public Producto getProductoPorId(Long id){
+        log.info("Capa de servicios, búsqueda por id, filtro: "+id);
+        EntityManager em = Connection.getEm();
+        Producto producto = null;
+        producto = em.find(Producto.class, id);
+        return producto;
+    }
+    
     public Producto getProductoPorCodigo(int filtroCodigo) throws TpvException{
         log.info("Capa de servicios búsqueda por código, filtro "+filtroCodigo);
         EntityManager em = Connection.getEm();

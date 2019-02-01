@@ -383,13 +383,10 @@ public class ImpresoraService {
         
     }
     
-    public void cerrarTicket(Factura factura) throws TpvException{
-        //HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
-        log.info("Cierre de factura en capa de servicios. Factura id: "+factura.getId());
+    private void imprimirBonifCombosTarjPercepciones(Factura factura) throws TpvException{
         FiscalPacket request;
-        FiscalPacket requestStatus;
-        FiscalPacket response;
-        requestStatus = getHfp().cmdStatusRequest();
+        FiscalPacket requestStatus = getHfp().cmdStatusRequest();
+        FiscalPacket response;     
         
         for(Iterator<FacturaDetalleCombo> it = factura.getDetalleCombosAux().iterator();it.hasNext();){
             FacturaDetalleCombo fdc = it.next();
@@ -398,9 +395,6 @@ public class ImpresoraService {
                     );
             
                     
-            //BigDecimal impInterno = fdc.getImpuestoInterno()
-            //        .multiply(BigDecimal.valueOf(100))
-            //        .divide(neto,RoundingMode.HALF_UP).setScale(2, RoundingMode.HALF_UP);
             BigDecimal impInterno = ImpresoraService.getCoeficienteK(fdc.getImpuestoInterno());
             request = getHfp().cmdReturnRecharge(fdc.getCombo().getDescripcion(),
                             fdc.getBonificacion(),
@@ -466,6 +460,16 @@ public class ImpresoraService {
                 throw new TpvException(e.getMessage());
             }
         }   
+        
+    }
+    
+    public void cerrarTicket(Factura factura) throws TpvException{
+        //HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
+        log.info("Cierre de factura en capa de servicios. Factura id: "+factura.getId());
+        FiscalPacket request;
+        FiscalPacket response;
+        
+        imprimirBonifCombosTarjPercepciones(factura);
         ArrayList<String> concursos = new ArrayList();
         if(!factura.getDetalleConcursos().isEmpty()){
             for(Iterator<FacturaDetalleConcurso> it = factura.getDetalleConcursos().iterator();it.hasNext(); ){
@@ -524,7 +528,7 @@ public class ImpresoraService {
         
         request = getHfp().cmdCloseFiscalReceipt(null);
         try{
-          response = getHfp().execute(requestStatus);
+          response = getHfp().execute(getHfp().cmdStatusRequest());
           response = getHfp().execute(request);
         }catch(FiscalPrinterStatusError e){
             log.warn("Error en estado fiscal de la impresora al cerrar el ticket fiscal",e);
@@ -795,8 +799,14 @@ public class ImpresoraService {
     }
     
     public void cerrarNotaCredito() throws TpvException{
+        cerrarNotaCredito(null);
+    }
+    
+    public void cerrarNotaCredito(Factura factura) throws TpvException{
         FiscalPacket response;
         try{
+            if(factura!=null)
+                imprimirBonifCombosTarjPercepciones(factura);
             getHfp().execute(getHfp().cmdStatusRequest());
             response = getHfp().execute(getHfp().cmdCloseDNFH(1));
         }catch(FiscalPrinterStatusError e){

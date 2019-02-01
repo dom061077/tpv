@@ -113,6 +113,8 @@ public class Producto {
     public BigDecimal getStock() {
         return stock;
     }
+    
+    
 
     /**
      * @param stock the stock to set
@@ -123,6 +125,10 @@ public class Producto {
 
     public void decStock(BigDecimal decremento){
         this.stock = stock.subtract(decremento);
+    }
+    
+    public void incStock(BigDecimal incremento){
+        this.stock = stock.add(incremento);
     }
 
     /**

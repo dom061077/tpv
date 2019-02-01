@@ -45,6 +45,10 @@ public class NotasDCMenuController implements Initializable {
                 if(keyEvent.getCode()==KeyCode.NUMPAD2){
                     this.tabController.gotoNotasDCFactura();
                 }
+                
+                if(keyEvent.getCode()==KeyCode.NUMPAD3){
+                    this.tabController.gotoNotasDCFacturaPorProducto();
+                }
                     
                 keyEvent.consume();
             });

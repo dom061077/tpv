@@ -622,7 +622,9 @@ public class FXMLMainController implements Initializable {
                         
                         
                         lineaTicketData = new LineaTicketData(
-                                  producto.getCodigoProducto()
+                                  new Long(0)
+                                , producto.getCodigoProducto()
+                                , producto.getCodBarra()
                                 , producto.getDescripcion(),cantidad,precio
                                 , lpp.getPrecioUnitario()
                                 , lpp.getNeto().multiply(cantidad)
@@ -634,6 +636,7 @@ public class FXMLMainController implements Initializable {
                                 , lpp.getMontoImpuestoInterno().multiply(cantidad)
                                 , new BigDecimal(0)
                                 , producto.getValorImpositivo().getValor()
+                                , producto.getCostoPiso()
                                 , Context.getInstance().currentDMTicket().isImprimeComoNegativo());
 
                         if(Context.getInstance().currentDMTicket().isImprimeComoNegativo()){
@@ -652,7 +655,7 @@ public class FXMLMainController implements Initializable {
                         //efectoImprimirLinea(producto, cantidad, precio,lpp.getMontoImpuestoInterno());
                         
                         try{
-                                BigDecimal coeficienteK = impresoraService.getCoeficienteK(lpp.getMontoImpuestoInterno());
+                                BigDecimal coeficienteK = ImpresoraService.getCoeficienteK(lpp.getMontoImpuestoInterno());
 
                                 impresoraService.imprimirLineaTicket(producto.getDescripcionConCodigo(), cantidad
                                         ,precio ,producto.getValorImpositivo().getValor() ,Context.getInstance().currentDMTicket().isImprimeComoNegativo()
@@ -905,7 +908,8 @@ public class FXMLMainController implements Initializable {
         factura.setClaseComprobante("B");        
         factura.setCliente(Context.getInstance().currentDMTicket().getCliente());
         factura.setAperturaCierreCajeroDetalle(Context.getInstance()
-                    .currentDMTicket().getAperturaCierreCajDetalle());      
+                    .currentDMTicket().getAperturaCierreCajDetalle());     
+        factura.setCaja(Context.getInstance().currentDMTicket().getCaja());
         if(Context.getInstance().currentDMTicket().getCliente()!=null){
             factura.setCondicionIva(Context.getInstance().currentDMTicket().getCliente().getCondicionIva());
             if(factura.getCondicionIva().getId()==2){
@@ -1236,7 +1240,9 @@ public class FXMLMainController implements Initializable {
 
 
                             lineaTicketData = new LineaTicketData(
-                                             fd.getProducto().getCodigoProducto()
+                                             fd.getId()
+                                            ,fd.getProducto().getCodigoProducto()
+                                            ,fd.getProducto().getCodBarra()
                                             ,fd.getProducto().getDescripcion(),fd.getCantidad()
                                             ,fd.getPrecioUnitario()
                                             ,fd.getPrecioUnitarioBase()
@@ -1247,6 +1253,7 @@ public class FXMLMainController implements Initializable {
                                             ,fd.getImpuestoInterno()
                                             ,new BigDecimal(0)
                                             ,fd.getPorcentajeIva()
+                                            ,fd.getCosto()
                                             ,(fd.getSubTotal().compareTo(BigDecimal.ZERO)<0?true:false)
                             );   
                             //Context.getInstance().currentDMTicket().getDetalle().add(lineaTicketData);
@@ -1366,7 +1373,7 @@ public class FXMLMainController implements Initializable {
             @Override
             public void run(){
                 try{
-                        BigDecimal coeficienteK = impresoraService.getCoeficienteK(montoImpuestoInterno);
+                        BigDecimal coeficienteK = ImpresoraService.getCoeficienteK(montoImpuestoInterno);
                 
                         impresoraService.imprimirLineaTicket(producto.getDescripcionConCodigo(), cantidad
                                 ,precio ,producto.getValorImpositivo().getValor() ,Context.getInstance().currentDMTicket().isImprimeComoNegativo()

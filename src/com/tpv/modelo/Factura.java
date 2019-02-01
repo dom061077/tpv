@@ -277,7 +277,7 @@ public class Factura {
     
     @ManyToOne
     @JoinColumn(name = "idMOTIVOS"
-            , referencedColumnName = "idMOTIVOS", nullable=false)
+            , referencedColumnName = "idMOTIVOS", nullable=true)
     private MotivoNotaDC motivo;
     
     @ManyToOne
@@ -655,7 +655,7 @@ public class Factura {
     }
     
     public BigDecimal getSaldoDispNotasDC(){
-        return getTotal().subtract(getTotalNotasDC());
+        return getTotal().add(getTotalNotasDC());
     }
 
     private void addProductoAgrupadoEnFactura(FacturaDetalle fd){

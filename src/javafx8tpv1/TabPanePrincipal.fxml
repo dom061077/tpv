@@ -42,6 +42,11 @@
                      <children>
                         <TabPane fx:id="tabPanePrincipal" focusTraversable="false" maxHeight="700.0" maxWidth="1024.0" minHeight="700.0" minWidth="1024.0" prefHeight="700.0" prefWidth="1024.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE">
                           <tabs>
+                              <Tab fx:id="tabNotasDCFacturaPorProducto" text="Notas DC Factura Por Producto">
+                                <content>
+                                  <fx:include fx:id="notasDCFacturaPorProducto" maxHeight="740.0" minWidth="740.0" prefHeight="740.0" source="../com/tpv/notasdc/NotasCreditoFacturaPorProducto.fxml" />
+                                </content>
+                              </Tab>
                               <Tab fx:id="tabNotasDCFactura" text="Notas DC Factura">
                                 <content>
                                   <fx:include fx:id="notasDCFactura" maxHeight="740.0" minWidth="740.0" prefHeight="740.0" source="../com/tpv/notasdc/NotasCreditoFactura.fxml" />

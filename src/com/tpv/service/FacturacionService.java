@@ -120,10 +120,11 @@ public class FacturacionService  {
         EntityTransaction tx = null;
         try{
             Query q = em.createQuery("FROM Factura f WHERE f.estado = :estado and f.checkout.id = :idCheckout "
-                        +" and f.usuario.id = :usuarioId")
+                        +" and f.usuario.id = :usuarioId and f.tipoComprobante = :tipoComprobante")
                         .setParameter("usuarioId",usuarioId)
                         .setParameter("estado", FacturaEstadoEnum.ABIERTA)
-                        .setParameter("idCheckout", idCheckout);
+                        .setParameter("idCheckout", idCheckout)
+                        .setParameter("tipoComprobante",TipoComprobanteEnum.F);
             factura = (Factura)q.getSingleResult();
         }catch(NonUniqueResultException e){    
             log.error("Hay más de una factura abierta",e);
@@ -214,9 +215,10 @@ public class FacturacionService  {
             factura.setFechaHoraCierre(factura.getFechaHoy());
             for(Iterator<FacturaDetalle> it = factura.getDetalle().iterator();it.hasNext();){
                 FacturaDetalle factDet = (FacturaDetalle)it.next();
-                factDet.getProducto().setStock(
-                        factDet.getProducto().getStock().subtract(factDet.getCantidad())
-                    );
+                factDet.getProducto().decStock(factDet.getCantidad());
+                //factDet.getProducto().setStock(
+                //        factDet.getProducto().getStock().subtract(factDet.getCantidad())
+                //    );
             }
             factura=em.merge(factura);
             tx.commit();
@@ -280,7 +282,7 @@ public class FacturacionService  {
             log.info("Factura con id: "+factura.getId()+", Nro. factura: "
                       +factura.getNumeroComprobante());   
         }catch(RuntimeException e){
-            tx.rollback();
+            //tx.rollback();
             log.error("Error en la capa de servicios al cancelar la factura",e);
             throw new TpvException("Error en la capa de servicios al cancelar la factura. "+e.getMessage());
         }finally{
@@ -540,7 +542,7 @@ public class FacturacionService  {
             
             for(Iterator<FacturaDetalle>it = factura.getDetalle().iterator();it.hasNext();){
                 FacturaDetalle fd = it.next();
-                fd.getProducto().decStock(fd.getCantidad());
+                //fd.getProducto().decStock(fd.getCantidad());
                 total=total.add(fd.getSubTotal());
                 costo = costo.add(fd.getPrecioUnitario());
                 neto = neto.add(fd.getNeto());
@@ -750,14 +752,43 @@ public class FacturacionService  {
                         .multiply(BigDecimal.valueOf(-1)));
             notaDC.setRetencion(factOrigen.getRetencion()
                         .multiply(BigDecimal.valueOf(-1)));
-            notaDC.setTotal(factOrigen.getFacturaOrigen()
-                        .getTotal().multiply(BigDecimal.valueOf(-1)));
+            notaDC.setTotal(factOrigen.getTotal()
+                    .multiply(BigDecimal.valueOf(-1)));
             
     }
     
-    public void confirmarNotaDCFactura(TipoComprobanteEnum tipo
-            ,Factura facturaOrigen,BigDecimal monto
-            ,Long prefijoFiscal,String numeroComprobante
+    private void copiarDetalleFactADetalleNotaDC(Factura factOrigen
+            ,Factura notaDC){
+        factOrigen.getDetalle().forEach(det ->{
+            FacturaDetalle factDet = new FacturaDetalle();
+            factDet.setCantidad(det.getCantidad().multiply(BigDecimal.valueOf(-1)));
+            //factDet.setCantidadAuxCombo(0); trasient
+            factDet.setCosto(det.getCosto().multiply(BigDecimal.valueOf(-1)));
+            factDet.setDescuento(det.getDescuento().multiply(BigDecimal.valueOf(-1)));
+            factDet.setExento(det.getExento().multiply(BigDecimal.valueOf(-1)));
+            factDet.setImpuestoInterno(det.getImpuestoInterno()
+                    .multiply(BigDecimal.valueOf(-1)));
+            factDet.setIva(det.getIva().multiply(BigDecimal.valueOf(-1)));
+            factDet.setIvaReducido(det.getIvaReducido().multiply(BigDecimal.valueOf(-1)));
+            factDet.setNeto(det.getNeto().multiply(BigDecimal.valueOf(-1)));
+            factDet.setNetoReducido(det.getNetoReducido().multiply(BigDecimal.valueOf(-1)));
+            factDet.setPorcentajeIva(det.getPorcentajeIva().multiply(BigDecimal.valueOf(-1)));
+            factDet.setPrecioUnitario(det.getPrecioUnitario().multiply(BigDecimal.valueOf(-1)));
+            factDet.setPrecioUnitarioBase(det.getPrecioUnitarioBase().multiply(BigDecimal.valueOf(-1)));
+            factDet.setSubTotal(det.getSubTotal().multiply(BigDecimal.valueOf(-1)));
+            
+            factDet.setProducto(det.getProducto());
+            
+            factDet.getProducto().incStock(det.getCantidad());
+            
+            factDet.setFactura(notaDC);
+            notaDC.getDetalle().add(factDet);
+            
+        });
+    }
+    
+    public Factura confirmarNotaDCFactura(TipoComprobanteEnum tipo
+            ,Factura facturaOrigen
             ,AperturaCierreCajeroDetalle apCiereCajDet
             ,Checkout checkout
             ,Usuario usuario
@@ -768,38 +799,52 @@ public class FacturacionService  {
         EntityManager em = Connection.getEm();
         MotivoNotaDC motivo = em.find(MotivoNotaDC.class,idMotivo);
         EntityTransaction tx = null;
+        Factura notaDC = new Factura();
         try{
             tx = em.getTransaction();
             tx.begin();
-            Factura facturaDC = new Factura();
-            facturaDC.setPrefijoFiscal(prefijoFiscal);
-            facturaDC.setNumeroComprobante(Long.parseLong(numeroComprobante));
-            facturaDC.setTipoComprobante(tipo);
-            facturaDC.setFacturaOrigen(facturaOrigen);
-            facturaDC.setClaseComprobante(facturaDC.getFacturaOrigen().getClaseComprobante());
-            facturaDC.setAperturaCierreCajeroDetalle(apCiereCajDet);
-            facturaDC.setCheckout(checkout);
-            facturaDC.setEstado(FacturaEstadoEnum.CERRADA);
-            facturaDC.setUsuario(usuario);
-            facturaDC.setMotivo(motivo);
+            
+            notaDC.setTipoComprobante(tipo);
+            notaDC.setFacturaOrigen(facturaOrigen);
+            notaDC.setCliente(facturaOrigen.getCliente());
+            notaDC.setClaseComprobante(notaDC.getFacturaOrigen().getClaseComprobante());
+            notaDC.setAperturaCierreCajeroDetalle(apCiereCajDet);
+            notaDC.setCheckout(checkout);
+            notaDC.setEstado(FacturaEstadoEnum.ABIERTA);
+            notaDC.setUsuario(usuario);
+            notaDC.setMotivo(motivo);
+            notaDC.setClaseComprobante("B");
+            notaDC.setFechaAlta(facturaOrigen.getUsuario().getFechaHoraHoy());
+            
             if(facturaOrigen.getCliente()!=null){
-                facturaDC.setCondicionIva(facturaOrigen.getCliente().getCondicionIva());
-                if(facturaDC.getCondicionIva().getId()==2)
-                    facturaDC.setClaseComprobante("A");
-                else
-                    facturaDC.setClaseComprobante("B");
+                notaDC.setCondicionIva(facturaOrigen.getCliente().getCondicionIva());
+                if(notaDC.getCondicionIva().getId()==2)
+                    notaDC.setClaseComprobante("A");
             }
-            facturaOrigen.getDetalleNotasDC().add(facturaDC);
-            facturaDC.setCaja(caja);
+            facturaOrigen.getDetalleNotasDC().add(notaDC);
+            notaDC.setCaja(caja);
             
-            invertirSignoNotaDCConFactOrigen(facturaDC,facturaOrigen);
-            
-            em.persist(facturaDC);
+            invertirSignoNotaDCConFactOrigen(notaDC,facturaOrigen);
+            copiarDetalleFactADetalleNotaDC(facturaOrigen,notaDC);            
+            /*tengo que hacer un merge en un bucle del detalle 
+                    para actualizar el stock de productos
+                            
+            revisar en la facturacion, el stock descuenta dos veces
+                    */
+            em.persist(notaDC);
+            em.merge(notaDC);
             tx.commit();
             
         }catch(RuntimeException e){
+            if(tx!=null)
+                tx.rollback();
+            log.error("Error en la capa de servicios al confirmar la nota DC.",e);
+            throw new TpvException("Error en la capa de servicios al confirmar la nota DC.");
             
+        }finally{
+            em.clear();
         }
+        return notaDC;
     }
             
     
@@ -824,10 +869,13 @@ public class FacturacionService  {
             facturaDC.setNumeroComprobante(Long.parseLong(numeroComprobante));
             facturaDC.setTipoComprobante(tipo);
             facturaDC.setFacturaOrigen(facturaOrigen);
+            facturaDC.setCliente(facturaOrigen.getCliente());
             facturaDC.setClaseComprobante(facturaDC.getFacturaOrigen().getClaseComprobante());
+            facturaDC.setCondicionIva(facturaOrigen.getCondicionIva());
             
             facturaOrigen.getDetalleNotasDC().add(facturaDC);
             facturaDC.setTotal(monto.multiply(BigDecimal.valueOf(-1)));
+            facturaDC.setFechaAlta(facturaOrigen.getUsuario().getFechaHoraHoy());
             
             facturaDC.setIva(monto.multiply(BigDecimal.valueOf(0.21)));
             facturaDC.setIva(facturaDC.getIva().multiply(BigDecimal.valueOf(-1)));
@@ -859,7 +907,96 @@ public class FacturacionService  {
         }
     }
     
+    public void modificarNroCreditoTotalizarYCerrar(Long prefijo,Long numeroComprobante,Long idFactura) throws TpvException{
+        log.info("Capa de servicios, modificar numero comprobante con id");
+        EntityManager em = Connection.getEm();
+        EntityTransaction tx = null;
+        try{
+            tx = em.getTransaction();
+            tx.begin();
+            Factura factura = em.find(Factura.class, idFactura);
+            
+            BigDecimal bonificaTarjeta = BigDecimal.ZERO;
+            BigDecimal bonificacion = BigDecimal.ZERO;
+            BigDecimal costo = BigDecimal.ZERO;
+            BigDecimal descuento = BigDecimal.ZERO;
+            BigDecimal exento = BigDecimal.ZERO;
+            BigDecimal impuestoInterno = BigDecimal.ZERO;
+            BigDecimal interesTarjeta = BigDecimal.ZERO;
+            BigDecimal iva = BigDecimal.ZERO;
+            BigDecimal ivaBonificacionTarjeta = BigDecimal.ZERO;
+            BigDecimal ivaBonificacion = BigDecimal.ZERO;
+            BigDecimal ivaReducido = BigDecimal.ZERO;
+            BigDecimal ivaTarjeta = BigDecimal.ZERO;
+            BigDecimal neto = BigDecimal.ZERO;
+            BigDecimal netoReducido = BigDecimal.ZERO;
+            BigDecimal retencion = BigDecimal.ZERO;
+            BigDecimal total = BigDecimal.ZERO;
+            
+            for(Iterator<FacturaDetalle> it = factura.getDetalle().iterator();it.hasNext();){
+                FacturaDetalle det = it.next();
+                costo = costo.add(det.getCosto());
+                descuento = descuento.add(det.getDescuento());
+                exento = exento.add(det.getExento());
+                impuestoInterno = impuestoInterno.add(det.getImpuestoInterno());
+                iva = det.getIva();
+                ivaReducido = ivaReducido.add(det.getIvaReducido());
+                neto = neto.add(det.getNeto());
+                netoReducido = netoReducido.add(det.getNetoReducido());
+                total = total.add(det.getSubTotal());
+                
+            }
+            
+            factura.setCosto(costo);
+            factura.setDescuento(descuento);
+            factura.setExento(exento);
+            factura.setImpuestoInterno(impuestoInterno);
+            factura.setIva(iva);
+            factura.setIvaReducido(ivaReducido);
+            factura.setTotal(total);
+            
+            
+            factura.setNumeroComprobante(numeroComprobante);
+            factura.setPrefijoFiscal(prefijo);
+            factura.setEstado(FacturaEstadoEnum.CERRADA);
+            em.merge(factura);
+            tx.commit();
+            
+        }catch(RuntimeException e){
+            if(tx!=null)
+                tx.rollback();
+            log.error("Erro en la capa de servicios al confirmar la factura.",e);
+            throw new TpvException("Error en la capa de servicios al confirmar la factura.");
+        }finally{
+            em.clear();
+        }
     
+    }
+    
+    public void modificarNroCreditoYCerrar(Long prefijo,Long numeroComprobante,Long idFactura) throws TpvException{
+        log.info("Capa de servicios, modificar numero comprobante con id");
+        EntityManager em = Connection.getEm();
+        EntityTransaction tx = null;
+        try{
+            tx = em.getTransaction();
+            tx.begin();
+            Factura factura = em.find(Factura.class, idFactura);
+            factura.setNumeroComprobante(numeroComprobante);
+            factura.setPrefijoFiscal(prefijo);
+            factura.setEstado(FacturaEstadoEnum.CERRADA);
+            em.merge(factura);
+            tx.commit();
+            
+        }catch(RuntimeException e){
+            if(tx!=null)
+                tx.rollback();
+            log.error("Erro en la capa de servicios al confirmar la factura.",e);
+            throw new TpvException("Error en la capa de servicios al confirmar la factura.");
+        }finally{
+            em.clear();
+        }
+    }
+            
     
     public List<MotivoNotaDC> getMotivos(TipoComprobanteEnum tipo) throws TpvException{
         List<MotivoNotaDC> motivos = null;
@@ -877,6 +1014,7 @@ public class FacturacionService  {
         
         return motivos;
     }
+    
     
     /*public List getConcursos(Long idFactura) throws TpvException{
         List list=new ArrayList();

@@ -25,8 +25,8 @@ import javafx.scene.control.TabPane;
 import org.apache.log4j.Logger;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.ParametroGeneral;
-import com.tpv.notasdc.LineaMotivoData;
 import com.tpv.notasdc.NotasCreditoFacturaController;
+import com.tpv.notasdc.NotasCreditoFacturaPorProductoController;
 import com.tpv.notasdc.NotasDCMenuController;
 import com.tpv.pagoticket.ConfirmaPagoTicketController;
 import com.tpv.pagoticket.PagoTicketController;
@@ -47,7 +47,6 @@ import com.tpv.util.ui.TabPaneModalCommand;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -128,6 +127,7 @@ public class TabPanePrincipalController implements Initializable {
     @FXML private NotasCreditoMontoController notasCreditoMontoController;
     @FXML private NotasDCMenuController notasDCMenuController;
     @FXML private NotasCreditoFacturaController notasDCFacturaController;
+    @FXML private NotasCreditoFacturaPorProductoController notasDCFacturaPorProductoController;
     
     @FXML private Button buttonMenuPrincipal;
     
@@ -148,6 +148,7 @@ public class TabPanePrincipalController implements Initializable {
     @FXML private Tab tabNotaCreditos;
     @FXML private Tab tabNotasDCMenu;
     @FXML private Tab tabNotasDCFactura;
+    @FXML private Tab tabNotasDCFacturaPorProducto;
     
     
     @FXML private TabPane tabPanePrincipal;
@@ -223,6 +224,7 @@ public class TabPanePrincipalController implements Initializable {
         
         this.notasCreditoMontoController.setTabController(this);
         this.notasDCFacturaController.setTabController(this);
+        this.notasDCFacturaPorProductoController.setTabController(this);
         
 
         getTabPanePrincipal().getSelectionModel().selectedItemProperty()
@@ -461,7 +463,7 @@ public class TabPanePrincipalController implements Initializable {
     
     public void gotoNotasDCMenu(){
         this.getLabelTituloVentana().setText("MENU NOTAS - CREDITO/DEBITO");
-        this.getLabelShortCut().setText("1- Nota Cred.Monto |   2- Nota Cred.Detalle    |   3- Nota Cred.Ing. Detalle   |   4- Nota de Débito   |   F11 - Retornar a Menú Principal");                
+        this.getLabelShortCut().setText("1- Nota Cred.Monto |   2- Nota Cred.Detalle    |   3- Nota Cred.Por Producto   |   4- Nota de Débito   |   F11 - Retornar a Menú Principal");                
         this.notasDCMenuController.configurarInicio();
         this.getTabPanePrincipal().getSelectionModel().select(tabNotasDCMenu);
         
@@ -478,6 +480,18 @@ public class TabPanePrincipalController implements Initializable {
             Context.getInstance().currentDMTicket().setException(e);
             gotoError();
         }
+    }
+    
+    public void gotoNotasDCFacturaPorProducto(){
+        this.getLabelTituloVentana().setText("NOTAS DE CREDITO - ANULA FACTURA POR PRODUCTO");
+        this.getLabelShortCut().setText("F11 - Retornar a Menu");
+        this.getTabPanePrincipal().getSelectionModel().select(tabNotasDCFacturaPorProducto);
+        try{
+            this.notasDCFacturaPorProductoController.configurarInicio();
+        }catch(TpvException e){
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_MENUNOTASDC);
+        }
+        
     }
 
     public void repeatFocus(Node node){

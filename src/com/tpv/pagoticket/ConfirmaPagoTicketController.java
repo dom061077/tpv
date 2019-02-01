@@ -401,7 +401,7 @@ public class ConfirmaPagoTicketController implements Initializable{
             
             for(Iterator<FacturaDetalle>it = factura.getDetalle().iterator();it.hasNext();){
                 FacturaDetalle fd = it.next();
-                fd.getProducto().decStock(fd.getCantidad());
+                //fd.getProducto().decStock(fd.getCantidad());
                 total=total.add(fd.getSubTotal());
                 costo = costo.add(fd.getPrecioUnitario());
                 neto = neto.add(fd.getNeto());
