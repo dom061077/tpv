@@ -6,6 +6,7 @@
 package com.tpv.supervisor;
 
 import com.tpv.enums.OrigenPantallaErrorEnum;
+import com.tpv.enums.TipoTituloSupervisorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Usuario;
 import com.tpv.principal.Context;
@@ -119,6 +120,9 @@ public class SupervisorController implements Initializable{
                         case CANCELAR_TICKET:
                             tabController.gotoFacturacion();
                             break;
+                        case CANCELAR_NOTADC:
+                            tabController.gotoNotasDCFacturaPorProducto();
+                            break;        
                         case HABILITAR_CONTROLADOR:
                             tabController.gotoMenuPrincipal();
                             break;
@@ -211,6 +215,10 @@ public class SupervisorController implements Initializable{
                                         cancelarTicketCompleto();
                                         tabController.gotoFacturacion();
                                         break;
+                                    case CANCELAR_NOTADC:
+                                        cancelarTicketCompleto();
+                                        tabController.gotoNotasDCFacturaPorProducto();
+                                        break;
                                     case HABILITAR_CONTROLADOR:
                                         tabController.gotoControlador();
                                         break;
@@ -274,19 +282,25 @@ public class SupervisorController implements Initializable{
                 log.debug("Evento despues de cerrar cancelar ticket");
                 if(command.getCommandCode()==HasarCommands.CMD_CANCEL_DOCUMENT){
                     try{
-                        facturaService.anularFacturaPorSupervisor(Context.getInstance().currentDMTicket().getIdFactura()
+                        facturaService.anularFacturaPorSupervisor(Context.getInstance().currentDMTicket().getIdDocumento()
                                 ,Context.getInstance().currentDMTicket().getUsuarioSupervisor()
                         );
                         Context.getInstance().currentDMTicket().setCliente(null);
                         Context.getInstance().currentDMTicket().setClienteSeleccionado(false);
                         Context.getInstance().currentDMTicket().getDetalle().clear();
                         Context.getInstance().currentDMTicket().getPagos().clear();
+                        Context.getInstance().currentDMTicket().setIdDocumento(null);
                     }catch(TpvException e){
                         Context.getInstance().currentDMTicket().setException(e);
-                        Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CONFIRMARTICKET);
+                        if(Context.getInstance().currentDMTicket().getTipoTituloSupervisor()==
+                                    TipoTituloSupervisorEnum.CANCELAR_NOTADC)
+                              Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_NOTACREDITOFACTURAPROPRODUCTO);
+                        else
+                            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CONFIRMARTICKET);
                         tabController.gotoError();
                     }
                 }
+
             }
         };
         

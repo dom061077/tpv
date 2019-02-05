@@ -235,7 +235,7 @@ public class ProductoService {
                     +" and lpp.producto.codigoProducto = :codigoProducto").setParameter("codigoProducto", filtroCodigo);
                 lstPrecioProducto = (ListaPrecioProducto)q.getSingleResult();
                 
-                precio = lstPrecioProducto.getPrecioFinal();
+                precio = lstPrecioProducto.getPrecioUnitario();//lstPrecioProducto.getPrecioFinal();
                 
             if(cliente!= null && cliente.getEmpresa().isEstado()){
                     q = em.createQuery("SELECT pp.proveedor FROM ProveedorProducto pp WHERE pp.producto.codigoProducto = :productoId"

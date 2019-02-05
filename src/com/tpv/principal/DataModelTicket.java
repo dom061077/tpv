@@ -102,7 +102,7 @@ public class DataModelTicket {
     private int codigoClienteSelecEnBuscarPorDesc;
     private boolean imprimeComoNegativo = false;
     private TipoTituloSupervisorEnum tipoTituloSupervisor;
-    private Long idFactura;
+    private Long idDocumento;
     private OrigenPantallaErrorEnum origenPantalla;
     private boolean reinicioVerificado=false;
     private BigDecimal bonificaciones = BigDecimal.ZERO;
@@ -405,15 +405,15 @@ public class DataModelTicket {
     /**
      * @return the idFactura
      */
-    public Long getIdFactura() {
-        return idFactura;
+    public Long getIdDocumento() {
+        return idDocumento;
     }
 
     /**
      * @param idFactura the idFactura to set
      */
-    public void setIdFactura(Long idFactura) {
-        this.idFactura = idFactura;
+    public void setIdDocumento(Long idDocumento) {
+        this.idDocumento = idDocumento;
     }
 
     /**

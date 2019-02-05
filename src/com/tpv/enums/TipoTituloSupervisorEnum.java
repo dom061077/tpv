@@ -12,11 +12,12 @@ package com.tpv.enums;
 public enum TipoTituloSupervisorEnum {
     HABILITAR_NEGATIVO("Habilitar Negativos",1),
     CANCELAR_TICKET("Cancelar Ticket",2),
-    HABILITAR_MENU("Ir a Menu",3),
-    HABILITAR_CONTROLADOR("Habilitar Controlador",4),
-    HABILITAR_CONFIRMARETIRODINERO("Confirmar Retiro de Dinero",5),
-    CANCELAR_PAGO("Cancelar Pago",6),
-    CANCELAR_CONFIRMACION_PAGO("Cancelar Confirmación Pago",7);
+    CANCELAR_NOTADC("Cancelar Doc. No Fiscal Homologado",3),
+    HABILITAR_MENU("Ir a Menu",4),
+    HABILITAR_CONTROLADOR("Habilitar Controlador",5),
+    HABILITAR_CONFIRMARETIRODINERO("Confirmar Retiro de Dinero",6),
+    CANCELAR_PAGO("Cancelar Pago",7),
+    CANCELAR_CONFIRMACION_PAGO("Cancelar Confirmación Pago",8);
     
     
     private String titulo;

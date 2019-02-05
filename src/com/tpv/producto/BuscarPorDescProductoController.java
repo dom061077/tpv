@@ -169,7 +169,7 @@ public class BuscarPorDescProductoController implements Initializable{
                     data.add(new ProductoData(
                             lstPrecioProducto.getProducto().getCodigoProducto(),
                             lstPrecioProducto.getProducto().getDescripcion()
-                            ,lstPrecioProducto.getPrecioFinal()
+                            ,lstPrecioProducto.getPrecioUnitario()
                     ));
             });
         

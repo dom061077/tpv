@@ -454,7 +454,7 @@ public class ConfirmaPagoTicketController implements Initializable{
             log.info("Cerrando y confirmando factura ");
             
             //Factura factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdFactura());
-            Factura factura = factService.getFacturaConTotalesConPagos(Context.getInstance().currentDMTicket().getIdFactura()
+            Factura factura = factService.getFacturaConTotalesConPagos(Context.getInstance().currentDMTicket().getIdDocumento()
                                     ,Context.getInstance().currentDMTicket().getPagos().iterator());
             
             //log.info("Cantidad de combos a guardar en la base de datos: "+factura.getDetalleCombosAux().size());
@@ -515,14 +515,14 @@ public class ConfirmaPagoTicketController implements Initializable{
                 if(command.getCommandCode()==HasarCommands.CMD_CLOSE_FISCAL_RECEIPT){
                     String nroTicketEmitido = response.getString(3);
                     try{
-                            log.info("El cierre del ticket para el id de Factura : "+Context.getInstance().currentDMTicket().getIdFactura()
+                            log.info("El cierre del ticket para el id de Factura : "+Context.getInstance().currentDMTicket().getIdDocumento()
                                 +" en la impresora fiscal fue correcto. A continuación se cierra el ticket en la base de datos");
                             //List<FacturaFormaPagoDetalle> pagos = new ArrayList<FacturaFormaPagoDetalle>();
                             //ListProperty<LineaPagoData> detallePagosData = Context.getInstance().currentDMTicket().getPagos();
                             //Factura factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdFactura());
                             
                             Factura factura = factService
-                                       .getFacturaConTotalesConPagos(Context.getInstance().currentDMTicket().getIdFactura()
+                                       .getFacturaConTotalesConPagos(Context.getInstance().currentDMTicket().getIdDocumento()
                                                 ,Context.getInstance().currentDMTicket().getPagos().iterator());
                             
                             factura.setNumeroComprobante(Long.parseLong(nroTicketEmitido));

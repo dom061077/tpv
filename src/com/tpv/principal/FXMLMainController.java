@@ -300,6 +300,7 @@ public class FXMLMainController implements Initializable {
                 }
                 if(keyEvent.getCode()==KeyCode.F11 ){
                     if(Context.getInstance().currentDMTicket().getDetalle().size()==0)
+                        Context.getInstance().currentDMTicket().setIdDocumento(null);
                         this.tabPaneController.gotoMenuPrincipal();
                     /*else{
                         Context.getInstance().currentDMTicket().setTipoTituloSupervisor(TipoTituloSupervisorEnum.HABILITAR_MENU);
@@ -421,7 +422,6 @@ public class FXMLMainController implements Initializable {
                 
                 if(keyEvent.getCode() == KeyCode.F11){
                     if(Context.getInstance().currentDMTicket().getDetalle().isEmpty())
-                        
                         this.tabPaneController.gotoMenuPrincipal();
                     else{
                         
@@ -459,7 +459,7 @@ public class FXMLMainController implements Initializable {
                 }
                 
                 if(keyEvent.getCode() == KeyCode.F7){
-                    if(Context.getInstance().currentDMTicket().getIdFactura()!=null){
+                    if(Context.getInstance().currentDMTicket().getIdDocumento()!=null){
                         Context.getInstance().currentDMTicket().setTipoTituloSupervisor(TipoTituloSupervisorEnum.CANCELAR_TICKET);
                         //habilitarSupervisorButton.fire();
                         tabPaneController.gotoSupervisor();
@@ -498,7 +498,7 @@ public class FXMLMainController implements Initializable {
         DecimalFormat df = new DecimalFormat("#,###,##0.00");
         Factura factura = null;
         try{
-            factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdFactura());
+            factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdDocumento());
         }catch(TpvException e){
                 Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
                 Context.getInstance().currentDMTicket().setException(e);
@@ -579,7 +579,7 @@ public class FXMLMainController implements Initializable {
                         throw new TpvException("El producto "+producto.getDescripcion()+", con código "+producto.getCodigoProducto()+" no tiene precio");
                          
                     }
-                    precio = lpp.getPrecioFinal();
+                    precio = lpp.getPrecioUnitario(); //lpp.getPrecioFinal();
                    
                     if(producto.isProductoVilleco()){
                         if(precioOPeso.compareTo(BigDecimal.ZERO)>0){
@@ -954,7 +954,7 @@ public class FXMLMainController implements Initializable {
             Context.getInstance().currentDMTicket().setException(e);
             tabPaneController.gotoError();
         }
-        Context.getInstance().currentDMTicket().setIdFactura(facturaGuardada.getId());
+        Context.getInstance().currentDMTicket().setIdDocumento(facturaGuardada.getId());
         log.debug("ID de factura: "+facturaGuardada.getId());
     }  
     
@@ -991,7 +991,7 @@ public class FXMLMainController implements Initializable {
             if(Context.getInstance().currentDMTicket().isImprimeComoNegativo())
                 facturaDetalle.setUsuarioSupervisor(Context.getInstance().currentDMTicket().getUsuarioSupervisor());
             facturaDetalle.setProducto(producto);
-            factService.agregarDetalleFactura(Context.getInstance().currentDMTicket().getIdFactura(), facturaDetalle);
+            factService.agregarDetalleFactura(Context.getInstance().currentDMTicket().getIdDocumento(), facturaDetalle);
         }catch(TpvException e){
             log.error("Error: "+e.getMessage());
             Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
@@ -1308,7 +1308,7 @@ public class FXMLMainController implements Initializable {
         ListProperty<FacturaDetalleComboData> listCombos = new SimpleListProperty<>(combosItems);
         
         try{
-            Factura factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdFactura());
+            Factura factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdDocumento());
             for(Iterator<FacturaDetalleCombo> it = factura.getDetalleCombosAux().iterator();it.hasNext();){
                 FacturaDetalleCombo fdc = it.next();
                 FacturaDetalleComboData fdcd = new FacturaDetalleComboData(

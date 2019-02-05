@@ -187,7 +187,7 @@ public class PagoTicketController implements Initializable {
     public void configurarInicio() throws TpvException{
         
             //Factura factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdFactura());
-            Factura factura = factService.getFacturaConTotalesSinPagos(Context.getInstance().currentDMTicket().getIdFactura());
+            Factura factura = factService.getFacturaConTotalesSinPagos(Context.getInstance().currentDMTicket().getIdDocumento());
             Context.getInstance().currentDMTicket().setBonificaciones(factura.getBonificacionCombosAux());
             Context.getInstance().currentDMTicket().setTotalIva(factura.getIva());
             Context.getInstance().currentDMTicket().setTotalNeto(factura.getNeto().add(

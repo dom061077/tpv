@@ -109,7 +109,7 @@ public class ImpresoraService {
     public static BigDecimal getCoeficienteK(BigDecimal montoImpuestoInterno){
         BigDecimal coeficienteK = BigDecimal.ONE;
         coeficienteK = montoImpuestoInterno.add(coeficienteK);
-        coeficienteK = BigDecimal.ONE.divide(coeficienteK,2,RoundingMode.HALF_UP);
+        coeficienteK = BigDecimal.ONE.divide(coeficienteK,8,RoundingMode.HALF_UP);
         return coeficienteK;
     }    
     

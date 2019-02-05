@@ -172,7 +172,7 @@ public class CombosController implements Initializable{
         DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
         listCombos.removeAll(combosItems);
         try{
-            Factura factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdFactura());
+            Factura factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdDocumento());
             totalBonificado = BigDecimal.ZERO;
             for(Iterator<FacturaDetalleCombo> it = factura.getDetalleCombosAux().iterator();it.hasNext();){
                 FacturaDetalleCombo fdc = it.next();

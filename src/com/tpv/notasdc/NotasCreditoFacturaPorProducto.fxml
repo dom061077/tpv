@@ -87,6 +87,31 @@
                                     </BorderPane>
                                  </children>
                               </StackPane>
+                              <StackPane fx:id="stackPaneCantidad" layoutX="140.0" layoutY="-10.0" prefHeight="200.0" prefWidth="377.0" styleClass="rounded_corner_modal" visible="false">
+                                 <children>
+                                    <BorderPane prefHeight="200.0" prefWidth="200.0">
+                                       <top>
+                                          <Label alignment="CENTER" prefHeight="17.0" prefWidth="378.0" styleClass="label_sub_titulo_modal" text="Ingreso de Cantidad" textAlignment="CENTER" BorderPane.alignment="CENTER" />
+                                       </top>
+                                       <center>
+                                          <GridPane fx:id="gridPaneCantidad" BorderPane.alignment="CENTER">
+                                            <columnConstraints>
+                                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                             <children>
+                                                <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="203.0" styleClass="label_textfield" text="Cantidad:" GridPane.rowIndex="1" />
+                                             </children>
+                                          </GridPane>
+                                       </center>
+                                    </BorderPane>
+                                 </children>
+                              </StackPane>
                            </children>
                         </Pane>
                      </center>
