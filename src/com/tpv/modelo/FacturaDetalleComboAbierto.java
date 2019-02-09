@@ -24,6 +24,20 @@ import javax.persistence.Table;
 @Entity
 @Table(name="facturasdetallecombosabierto")
 public class FacturaDetalleComboAbierto {
+
+    /**
+     * @return the precioUnitarioBase
+     */
+    public BigDecimal getPrecioUnitarioBase() {
+        return precioUnitarioBase;
+    }
+
+    /**
+     * @param precioUnitarioBase the precioUnitarioBase to set
+     */
+    public void setPrecioUnitarioBase(BigDecimal precioUnitarioBase) {
+        this.precioUnitarioBase = precioUnitarioBase;
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="idFACTURASDETALLECOMBOSABIERTO")
@@ -50,6 +64,9 @@ public class FacturaDetalleComboAbierto {
     
     @Column(name="PORCENTAJEIVA")
     private BigDecimal porcentajeIva;
+    
+    @Column(name="VALORUNITARIOBASE")
+    private BigDecimal precioUnitarioBase;
     
     @ManyToOne
     @JoinColumn(name = "idPRODUCTOS", referencedColumnName = "idPRODUCTOS", nullable=false)

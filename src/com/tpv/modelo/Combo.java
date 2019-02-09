@@ -435,6 +435,11 @@ public class Combo {
                         .multiply(porcentajeDesc)
                         .divide(BigDecimal.valueOf(100),RoundingMode.HALF_EVEN)
             );
+        fdca.setPrecioUnitarioBase(
+                cgdpp.getPaf().getPrecioUnitarioBase()
+                        .multiply(porcentajeDesc)
+                        .divide(BigDecimal.valueOf(100),RoundingMode.HALF_EVEN)
+        );
 
         fdca.setIva(cgdpp.getPaf().getPrecioUnitarioBase()
                     .multiply(cgdpp.getPaf().getProducto().getValorImpositivo().getValor())

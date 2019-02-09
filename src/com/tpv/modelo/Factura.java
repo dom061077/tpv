@@ -649,7 +649,8 @@ public class Factura {
         BigDecimal totalDC=BigDecimal.ZERO;
         for(Iterator<Factura> it = getDetalleNotasDC().iterator();it.hasNext();){
             Factura fact = it.next();
-            totalDC = totalDC.add(fact.getTotal());
+            if(fact.getEstado() == FacturaEstadoEnum.CERRADA)
+                totalDC = totalDC.add(fact.getTotal());
         }
         return totalDC;
     }

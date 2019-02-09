@@ -139,11 +139,17 @@ public class MenuPrincipalController implements Initializable {
                         Context.getInstance().currentDMTicket().setClienteSeleccionado(false);
                         Context.getInstance().currentDMTicket().setReinicioVerificado(false);
                         Context.getInstance().currentDMTicket().getDetalle().clear();
+                        Context.getInstance().currentDMTicket().setIdDocumento(null);
                         tabController.gotoFacturacion();
                     }
                 }
                 
                 if(keyEvent.getCode()==KeyCode.NUMPAD5){
+                    Context.getInstance().currentDMTicket().setCliente(null);
+                    Context.getInstance().currentDMTicket().setClienteSeleccionado(false);
+                    Context.getInstance().currentDMTicket().setReinicioVerificado(false);
+                    Context.getInstance().currentDMTicket().setIdDocumento(null);
+                    Context.getInstance().currentDMTicket().getDetalle().clear();
                     tabController.gotoNotasDCMenu();
                 }
                 

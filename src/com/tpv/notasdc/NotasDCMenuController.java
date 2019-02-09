@@ -5,6 +5,7 @@
  */
 package com.tpv.notasdc;
 
+import com.tpv.principal.Context;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -25,6 +26,7 @@ public class NotasDCMenuController implements Initializable {
     
     
     public void configurarInicio(){
+        
         this.tabController.repeatFocus(gridPaneMenu);
     }
     
@@ -36,6 +38,7 @@ public class NotasDCMenuController implements Initializable {
     public void initialize(URL url, ResourceBundle rb){
         Platform.runLater(()->{
             gridPaneMenu.setOnKeyPressed(keyEvent->{
+                keyEvent.consume();
                 if(keyEvent.getCode()==KeyCode.F11)
                    tabController.gotoMenuPrincipal(); 
                 if(keyEvent.getCode()==KeyCode.NUMPAD1){
@@ -47,10 +50,13 @@ public class NotasDCMenuController implements Initializable {
                 }
                 
                 if(keyEvent.getCode()==KeyCode.NUMPAD3){
+                    Context.getInstance().currentDMTicket().setCliente(null);
+                    Context.getInstance().currentDMTicket().setClienteSeleccionado(false);
+                    Context.getInstance().currentDMTicket().setReinicioVerificado(false);
                     this.tabController.gotoNotasDCFacturaPorProducto();
                 }
                     
-                keyEvent.consume();
+                
             });
         });        
     }

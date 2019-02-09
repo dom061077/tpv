@@ -179,7 +179,12 @@ public class TabPanePrincipalController implements Initializable {
         Thread.currentThread().setUncaughtExceptionHandler((thread, throwable) -> {
             
             log.error("Error:",throwable);
-            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+            if(Context.getInstance().currentDMTicket().getTpvException()==null){
+                if(Context.getInstance().currentDMTicket().getUsuario()==null)
+                    Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_LOGIN);
+                else    
+                    Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_MENUPRINCIPAL);
+            }
             Context.getInstance().currentDMTicket().setException(new TpvException("Error no controlado: "+throwable.getMessage()));
             gotoError();
             
@@ -490,6 +495,8 @@ public class TabPanePrincipalController implements Initializable {
             this.notasDCFacturaPorProductoController.configurarInicio();
         }catch(TpvException e){
             Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_MENUNOTASDC);
+            Context.getInstance().currentDMTicket().setException(e);
+            gotoError();
         }
         
     }
@@ -611,6 +618,13 @@ public class TabPanePrincipalController implements Initializable {
         this.repeatFocus(stackPaneModal);
     }
     
+    public void actualizarInfoImpresoraEnContexto() throws TpvException{
+        String retorno[] = impresoraService.getPtoVtaNrosTicket();
+        Context.getInstance().currentDMTicket().setNroTicket(Integer.parseInt(retorno[1])+1);
+        Context.getInstance().currentDMTicket().setNroFacturaA(Integer.parseInt(retorno[2])+1);
+        Context.getInstance().currentDMTicket().setPuntoVenta(Long.parseLong(retorno[0]));
+        Context.getInstance().currentDMTicket().setTicketAbierto(Boolean.parseBoolean(retorno[3]));
+    }
  
     
 }

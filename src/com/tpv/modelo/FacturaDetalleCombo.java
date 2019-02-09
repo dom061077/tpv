@@ -203,6 +203,25 @@ public class FacturaDetalleCombo {
         }
         return impuestoInterno;
     }
+    
+    public BigDecimal getImpuestoInternoParaCoeficienteK(){
+        BigDecimal totalii = BigDecimal.ZERO;
+        for(Iterator<FacturaDetalleComboAbierto> it = getDetalleAbierto().iterator();it.hasNext();){
+            FacturaDetalleComboAbierto fdca = it.next();
+            totalii = totalii.add(fdca.getImpuestoInterno()
+                    .divide(fdca.getCantidad()));
+        }
+        return totalii;
+    }
+    
+    public BigDecimal getPrecioUnitarioBaseParaCoeficienteK(){
+        BigDecimal totalizado = BigDecimal.ZERO;
+        for(Iterator<FacturaDetalleComboAbierto> it = getDetalleAbierto().iterator();it.hasNext();){
+            FacturaDetalleComboAbierto fdca = it.next();
+            totalizado = totalizado.add(fdca.getPrecioUnitarioBase());
+        }
+        return totalizado;
+    }
 
     /**
      * @return the detalleAbierto

@@ -106,10 +106,13 @@ public class ImpresoraService {
     }
     
             
-    public static BigDecimal getCoeficienteK(BigDecimal montoImpuestoInterno){
-        BigDecimal coeficienteK = BigDecimal.ONE;
-        coeficienteK = montoImpuestoInterno.add(coeficienteK);
-        coeficienteK = BigDecimal.ONE.divide(coeficienteK,8,RoundingMode.HALF_UP);
+    public static BigDecimal getCoeficienteK(BigDecimal montoImpuestoInterno
+               ,BigDecimal precioLista ){
+        BigDecimal coeficienteK = BigDecimal.ZERO;
+        
+        BigDecimal li = montoImpuestoInterno.divide(precioLista,4,RoundingMode.HALF_UP);
+        li = li.add(BigDecimal.ONE);
+        coeficienteK = BigDecimal.ONE.divide(li,8,RoundingMode.HALF_UP);        
         return coeficienteK;
     }    
     
@@ -212,7 +215,7 @@ public class ImpresoraService {
         retorno[2]=response.getString(5);
         
         BinaryFiscalPacketParser binaryFP = new BinaryFiscalPacketParser(response);
-        retorno[3]=String.valueOf(binaryFP.isDocumentoFiscalAbierto());
+        retorno[3]=String.valueOf(binaryFP.isDocumentoFiscalAbiertoODocNoFiscalAbierto());
         
         
         try{
@@ -390,16 +393,25 @@ public class ImpresoraService {
         
         for(Iterator<FacturaDetalleCombo> it = factura.getDetalleCombosAux().iterator();it.hasNext();){
             FacturaDetalleCombo fdc = it.next();
-            BigDecimal neto=fdc.getNetoCompletoBonif().add(
+            /*BigDecimal neto=fdc.getNetoCompletoBonif().add(
                         fdc.getNetoReducidoBonif()
-                    );
+                    );*/
             
                     
-            BigDecimal impInterno = ImpresoraService.getCoeficienteK(fdc.getImpuestoInterno());
+            /*Recordar!!! en FacturaDetalleComboAbierto tengo el total 
+                del impuesto interno como porcentaje de descuento y 
+                MULTIPLICADO POR LA CANTIDAD DE PRODUCTOS como asi tambien
+                el . Para calcular el 
+                coeficiente K debo dividir el total del impuesto interno
+                en la cantidad de productos.
+            */
+            BigDecimal coeficienteK = ImpresoraService.getCoeficienteK(
+                        fdc.getImpuestoInternoParaCoeficienteK()
+                    , fdc.getPrecioUnitarioBaseParaCoeficienteK());
             request = getHfp().cmdReturnRecharge(fdc.getCombo().getDescripcion(),
                             fdc.getBonificacion(),
                             BigDecimal.valueOf(21), true,
-                            impInterno, false, 0, "B");
+                            coeficienteK, false, 0, "B");
             try{
                 response = getHfp().execute(requestStatus);
                 response = getHfp().execute(request);

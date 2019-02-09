@@ -9,6 +9,7 @@ import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Factura;
 import com.tpv.modelo.MotivoNotaDC;
+import com.tpv.modelo.enums.FacturaEstadoEnum;
 import com.tpv.modelo.enums.TipoComprobanteEnum;
 import com.tpv.pagoticket.ConfirmaPagoTicketController;
 import com.tpv.principal.Context;
@@ -287,7 +288,8 @@ public class NotasCreditoMontoController implements Initializable {
             this.facturaOrigenCredito = factService.getFactura(
                  Long.parseLong(textFieldPrefijo.getText().trim())
                 , Long.parseLong(textFieldNumero.getText().trim()));
-            if(this.facturaOrigenCredito!=null){
+            if(this.facturaOrigenCredito!=null 
+                    && this.facturaOrigenCredito.getEstado()==FacturaEstadoEnum.CERRADA){
                 labelNumeroFacturaDato.setText(facturaOrigenCredito.getPrefijoFiscal().toString()
                     +'-'+facturaOrigenCredito.getNumeroComprobante());
                 labelTotalFacturaDato.setText(Util.formatearDecimal(facturaOrigenCredito.getTotal()));

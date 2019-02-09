@@ -114,7 +114,8 @@ public class FacturacionService  {
         return factura;
     }
 
-    public Factura getFacturaAbiertaPorCheckout(int idCheckout, int usuarioId) throws TpvException{
+    public Factura getFacturaAbiertaPorCheckout(int idCheckout, int usuarioId
+            ,TipoComprobanteEnum tipoComprobante) throws TpvException{
         Factura factura = null;
         EntityManager em = Connection.getEm();
         EntityTransaction tx = null;
@@ -124,7 +125,7 @@ public class FacturacionService  {
                         .setParameter("usuarioId",usuarioId)
                         .setParameter("estado", FacturaEstadoEnum.ABIERTA)
                         .setParameter("idCheckout", idCheckout)
-                        .setParameter("tipoComprobante",TipoComprobanteEnum.F);
+                        .setParameter("tipoComprobante",tipoComprobante);
             factura = (Factura)q.getSingleResult();
         }catch(NonUniqueResultException e){    
             log.error("Hay más de una factura abierta",e);
@@ -151,7 +152,6 @@ public class FacturacionService  {
             
             tx = em.getTransaction();
             tx.begin();
-            facturaDetalle.setCosto(facturaDetalle.getProducto().getCostoPiso());
             factura = em.find(Factura.class,id);
             facturaDetalle.setFactura(factura);
             
@@ -212,7 +212,7 @@ public class FacturacionService  {
             factura.setDescuento(BigDecimal.ZERO);
             factura.getBonificacionCombos();
             factura.setEstado(FacturaEstadoEnum.CERRADA);
-            factura.setFechaHoraCierre(factura.getFechaHoy());
+            factura.setFechaHoraCierre(factura.getUsuario().getFechaHoy());
             for(Iterator<FacturaDetalle> it = factura.getDetalle().iterator();it.hasNext();){
                 FacturaDetalle factDet = (FacturaDetalle)it.next();
                 factDet.getProducto().decStock(factDet.getCantidad());
@@ -944,6 +944,8 @@ public class FacturacionService  {
                 neto = neto.add(det.getNeto());
                 netoReducido = netoReducido.add(det.getNetoReducido());
                 total = total.add(det.getSubTotal());
+                BigDecimal cantidadSumaStock = det.getCantidad().multiply(BigDecimal.valueOf(-1));
+                det.getProducto().incStock(cantidadSumaStock);
                 
             }
             
@@ -953,8 +955,10 @@ public class FacturacionService  {
             factura.setImpuestoInterno(impuestoInterno);
             factura.setIva(iva);
             factura.setIvaReducido(ivaReducido);
+            factura.setNeto(neto);
+            factura.setNetoReducido(netoReducido);
             factura.setTotal(total);
-            
+            factura.setFechaHoraCierre(factura.getUsuario().getFechaHoraHoy());
             
             factura.setNumeroComprobante(numeroComprobante);
             factura.setPrefijoFiscal(prefijo);
@@ -983,6 +987,7 @@ public class FacturacionService  {
             Factura factura = em.find(Factura.class, idFactura);
             factura.setNumeroComprobante(numeroComprobante);
             factura.setPrefijoFiscal(prefijo);
+            factura.setFechaHoraCierre(factura.getUsuario().getFechaHoraHoy());
             factura.setEstado(FacturaEstadoEnum.CERRADA);
             em.merge(factura);
             tx.commit();
@@ -990,7 +995,7 @@ public class FacturacionService  {
         }catch(RuntimeException e){
             if(tx!=null)
                 tx.rollback();
-            log.error("Erro en la capa de servicios al confirmar la factura.",e);
+            log.error("Error en la capa de servicios al confirmar la factura.",e);
             throw new TpvException("Error en la capa de servicios al confirmar la factura.");
         }finally{
             em.clear();
@@ -1015,6 +1020,24 @@ public class FacturacionService  {
         return motivos;
     }
     
+    
+    public boolean validarCierreNotaDC(Long idDocumento)throws TpvException{
+        log.info("Capa de servicios, validando cierra de NotaDC. Parametros: idDocumento="+idDocumento);
+        boolean valido=false;
+        EntityManager em = Connection.getEm();
+        try{
+            Factura notaDC = em.find(Factura.class,idDocumento);
+            if(notaDC.getTotal().compareTo(notaDC.getFacturaOrigen().getSaldoDispNotasDC()) <= 0){
+                valido = true;
+            }
+        }catch(RuntimeException e){
+            log.error("Error en la capa de servicios al validar cierre de NotaDC.",e);
+            throw new TpvException("Error en la capa de servicios al validar cierre de NotaDC.");
+        }finally{
+            em.clear();
+        }
+        return valido;
+    }
     
     /*public List getConcursos(Long idFactura) throws TpvException{
         List list=new ArrayList();

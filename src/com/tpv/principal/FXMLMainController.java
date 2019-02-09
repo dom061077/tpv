@@ -626,7 +626,7 @@ public class FXMLMainController implements Initializable {
                                 , producto.getCodigoProducto()
                                 , producto.getCodBarra()
                                 , producto.getDescripcion(),cantidad,precio
-                                , lpp.getPrecioUnitario()
+                                , lpp.getPrecioLista()
                                 , lpp.getNeto().multiply(cantidad)
                                 , lpp.getNetoReducido().multiply(cantidad)
                                 , lpp.getExento().multiply(cantidad)
@@ -655,7 +655,10 @@ public class FXMLMainController implements Initializable {
                         //efectoImprimirLinea(producto, cantidad, precio,lpp.getMontoImpuestoInterno());
                         
                         try{
-                                BigDecimal coeficienteK = ImpresoraService.getCoeficienteK(lpp.getMontoImpuestoInterno());
+                                BigDecimal coeficienteK = ImpresoraService.getCoeficienteK(lpp.getMontoImpuestoInterno()
+                                        ,lpp.getPrecioLista());
+
+                                
 
                                 impresoraService.imprimirLineaTicket(producto.getDescripcionConCodigo(), cantidad
                                         ,precio ,producto.getValorImpositivo().getValor() ,Context.getInstance().currentDMTicket().isImprimeComoNegativo()
@@ -749,63 +752,22 @@ public class FXMLMainController implements Initializable {
     
     public void traerInfoImpresora() throws TpvException{
         if(Context.getInstance().currentDMTicket().getNroTicket()==0){
-//            try{
-
-                String retorno[] = impresoraService.getPtoVtaNrosTicket();
+            tabPaneController.actualizarInfoImpresoraEnContexto();
+                /*String retorno[] = impresoraService.getPtoVtaNrosTicket();
                 Context.getInstance().currentDMTicket().setNroTicket(Integer.parseInt(retorno[1])+1);
                 Context.getInstance().currentDMTicket().setNroFacturaA(Integer.parseInt(retorno[2])+1);
                 Context.getInstance().currentDMTicket().setPuntoVenta(Long.parseLong(retorno[0]));
-                Context.getInstance().currentDMTicket().setTicketAbierto(Boolean.parseBoolean(retorno[3]));
+                Context.getInstance().currentDMTicket().setTicketAbierto(Boolean.parseBoolean(retorno[3]));*/
 
-//            }catch(TpvException e){
-//                log.error(e.getMessage());
-//                Context.getInstance().currentDMTicket().setException(e);
-//                Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
-//                tabPaneController.gotoError();
-                
-//            }
         }
         nroticket.setText("Pto.Venta: "+Context.getInstance().currentDMTicket().getPuntoVenta()+" ║ Nº Fact.B/C: "
                             +Context.getInstance().currentDMTicket().getNroTicket()
                             +" ║ Nº Fact.A: "+Context.getInstance().currentDMTicket().getNroFacturaA()
-                //+" Nro. Ticket (A): "+retorno[2]
         );
         checkout.setText("Checkout: "+Context.getInstance().currentDMTicket().getCheckout().getId()
                     +" ║ Caja: "+Context.getInstance().currentDMTicket().getCaja()
             );
         
-//            Worker<String> worker = new Task<String>(){
-//                @Override
-//                protected String call() throws Exception{
-//                    String retorno[] = new String[3];
-//                    try {
-//                        Thread.sleep(20);
-//                    } catch (InterruptedException e) {
-//                        if (isCancelled()) {
-//                            //updateValue("Canceled at " + System.currentTimeMillis());
-//                            return null; // ignored
-//                        }
-//                    }
-//                    
-//                    if(!Connection.getStcp().isConnected()){
-//                        Context.getInstance().currentDMTicket().setException(new TpvException("La impresora no está conectada"));
-//                        throw Context.getInstance().currentDMTicket().getTpvException();
-//                    }else{
-//                            retorno = impresoraService.getPtoVtaNrosTicket();
-//                    }
-//                    
-//                    updateMessage("Pto.Venta: "+retorno[0]+" Nro. Ticket (B/C): "
-//                            +retorno[1]+" Nro. Ticket (A): "+retorno[2]);
-//                    Context.getInstance().currentDMTicket().setNroTicket(Integer.parseInt(retorno[1]));
-//                    return "Tarea finalizada";
-//                }
-//            };
-//            ((Task<String>) worker).setOnFailed(event -> {
-//               goToErrorButton.fire();
-//            });
-//            nroticket.textProperty().bind(worker.messageProperty());
-//            
-//            new Thread((Runnable) worker).start();
     }
 
     
@@ -976,7 +938,7 @@ public class FXMLMainController implements Initializable {
         facturaDetalle.setNetoReducido(lineaTicketData.getNetoReducido());
         facturaDetalle.setPrecioUnitario(lineaTicketData.getPrecioUnitario());
         facturaDetalle.setPrecioUnitarioBase(lineaTicketData.getPrecioUnitarioBase());
-        facturaDetalle.setCosto(BigDecimal.ZERO);
+        facturaDetalle.setCosto(lineaTicketData.getCosto());
         facturaDetalle.setSubTotal(lineaTicketData.getSubTotal());
         facturaDetalle.setPorcentajeIva(lineaTicketData.getPorcentajeIva());
         Producto producto ;
@@ -1219,11 +1181,13 @@ public class FXMLMainController implements Initializable {
         Factura factura = null;
         //try{
             factura = factService.getFacturaAbiertaPorCheckout(Context.getInstance().currentDMTicket().getCheckout().getId()
-                    ,Context.getInstance().currentDMTicket().getUsuario().getIdUsuario());
+                    ,Context.getInstance().currentDMTicket().getUsuario().getIdUsuario()
+                    ,TipoComprobanteEnum.F);
             if(factura!=null){
+                log.info("Se econtró factura abierta con id: "+factura.getId()+", se procede a anulación en BD");
                 factService.anularFacturaPorReinicio(factura.getId());
                 if(Context.getInstance().currentDMTicket().isTicketAbierto()){
-                    log.warn("Factura abierta en base de datos y cerrada en impresora. Se procede a cancelar en BD");
+                    log.warn("Factura en impresora. Se procede a cancelar documento en Impresora");
                    impresoraService.cancelarTicket();
                 }
                 //}else{
@@ -1257,7 +1221,9 @@ public class FXMLMainController implements Initializable {
                                             ,(fd.getSubTotal().compareTo(BigDecimal.ZERO)<0?true:false)
                             );   
                             //Context.getInstance().currentDMTicket().getDetalle().add(lineaTicketData);
-                            BigDecimal coeficienteK = ImpresoraService.getCoeficienteK(fd.getImpuestoInterno());
+                            BigDecimal coeficienteK = ImpresoraService.getCoeficienteK(
+                                    fd.getImpuestoInterno().divide(fd.getCantidad(),4,RoundingMode.HALF_EVEN)
+                                    ,fd.getPrecioUnitarioBase());
                             impresoraService.imprimirLineaTicket(
                                     fd.getProducto().getDescripcionConCodigo()
                                     ,(fd.getSubTotal()
@@ -1366,7 +1332,7 @@ public class FXMLMainController implements Initializable {
 
     
     
-    public void efectoImprimirLinea(Producto producto,BigDecimal cantidad
+    /*public void efectoImprimirLinea(Producto producto,BigDecimal cantidad
             ,BigDecimal precio,BigDecimal montoImpuestoInterno){
         
         Platform.runLater(new Runnable(){
@@ -1377,7 +1343,7 @@ public class FXMLMainController implements Initializable {
                 
                         impresoraService.imprimirLineaTicket(producto.getDescripcionConCodigo(), cantidad
                                 ,precio ,producto.getValorImpositivo().getValor() ,Context.getInstance().currentDMTicket().isImprimeComoNegativo()
-                                ,coeficienteK /*producto.getImpuestoInterno()*/);
+                                ,coeficienteK );
 
                         
                 }catch(TpvException e){
@@ -1391,7 +1357,7 @@ public class FXMLMainController implements Initializable {
                 
             }
         });
-    }
+    }*/
     
     
 }

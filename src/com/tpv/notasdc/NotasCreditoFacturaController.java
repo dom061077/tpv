@@ -10,6 +10,7 @@ import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Factura;
 import com.tpv.modelo.FacturaDetalle;
 import com.tpv.modelo.MotivoNotaDC;
+import com.tpv.modelo.enums.FacturaEstadoEnum;
 import com.tpv.modelo.enums.TipoComprobanteEnum;
 import com.tpv.principal.Context;
 import com.tpv.principal.LineaTicketData;
@@ -21,6 +22,7 @@ import com.tpv.util.ui.MaskTextField;
 import com.tpv.util.ui.MensajeModal;
 import com.tpv.util.ui.MensajeModalAceptar;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.Iterator;
@@ -265,7 +267,8 @@ public class NotasCreditoFacturaController implements Initializable {
             this.facturaOrigenCredito = factService.getFactura(
                  Long.parseLong(textFieldPrefijo.getText().trim())
                 , Long.parseLong(textFieldNumero.getText().trim()));
-            if(this.facturaOrigenCredito==null){
+            if(this.facturaOrigenCredito==null  
+                    && this.facturaOrigenCredito.getEstado()==FacturaEstadoEnum.CERRADA){
                 tabPaneController.showMsgModal(new MensajeModalAceptar(
                         "Mensaje","La factura con el prefijo y Nº ingresado no existe."
                         ,"",textFieldPrefijo
@@ -505,7 +508,10 @@ public class NotasCreditoFacturaController implements Initializable {
             for(Iterator<FacturaDetalle> it = facturaOrigenCredito.getDetalle().iterator()
                     ;it.hasNext();){
                 FacturaDetalle factDet = it.next();
-                BigDecimal coeficienteK = ImpresoraService.getCoeficienteK(factDet.getImpuestoInterno());
+                BigDecimal coeficienteK = ImpresoraService.getCoeficienteK(
+                     factDet.getImpuestoInterno().divide(factDet.getCantidad(), 4,RoundingMode.HALF_EVEN)
+                     ,factDet.getPrecioUnitarioBase()
+                   );
                 this.impresoraService.imprimirLineaTicket(factDet.getProducto().getDescripcionConCodigo()
                         ,factDet.getCantidad(),factDet.getPrecioUnitario()
                         ,factDet.getPorcentajeIva(),false,coeficienteK);
