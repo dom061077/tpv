@@ -327,10 +327,15 @@ public class NotasCreditoFacturaPorProductoController implements Initializable {
                 }
                 
                 if(keyEvent.getCode() == KeyCode.ENTER){
-                    stackPaneCantidad.setVisible(false);
-                    tabPaneController.repeatFocus(textFieldProducto);
-                    this.cantidad.setValue(new BigDecimal(textFieldCantidad.getText()));
-                    keyEvent.consume();
+                    if(textFieldCantidad.getText().trim().compareTo("")!=0){
+                        BigDecimal cantidad = new BigDecimal(textFieldCantidad.getText());
+                        if(cantidad.compareTo(BigDecimal.ZERO)>0){
+                            this.cantidad.setValue(cantidad);
+                            stackPaneCantidad.setVisible(false);
+                            tabPaneController.repeatFocus(textFieldProducto);
+                            keyEvent.consume();
+                        }
+                    }
                 }
                 
             });
@@ -396,7 +401,7 @@ public class NotasCreditoFacturaPorProductoController implements Initializable {
                         ,fd.getNeto().multiply(BigDecimal.valueOf(-1))
                         ,fd.getNetoReducido().multiply(BigDecimal.valueOf(-1))
                         ,fd.getExento().multiply(BigDecimal.valueOf(-1))
-                        ,fd.getDescuento().multiply(BigDecimal.valueOf(-1))
+                        ,fd.getDescuentoCliente().multiply(BigDecimal.valueOf(-1))
                         ,fd.getIva().multiply(BigDecimal.valueOf(-1))
                         ,fd.getIvaReducido().multiply(BigDecimal.valueOf(-1))
                         ,fd.getImpuestoInterno().multiply(BigDecimal.valueOf(-1))
@@ -731,7 +736,7 @@ public class NotasCreditoFacturaPorProductoController implements Initializable {
                     ,det.getProducto().getDescripcionConCodigo(),this.cantidad.getValue()
                     ,det.getPrecioUnitario()
                     ,det.getPrecioUnitarioBase(),det.getNeto(),det.getNetoReducido()
-                    ,det.getExento(),det.getDescuento(),det.getIva(),det.getIvaReducido()
+                    ,det.getExento(),det.getDescuentoCliente(),det.getIva(),det.getIvaReducido()
                     ,det.getImpuestoInterno(),BigDecimal.ZERO
                     ,det.getPorcentajeIva()
                     ,det.getCosto()
@@ -877,7 +882,7 @@ public class NotasCreditoFacturaPorProductoController implements Initializable {
         log.info("Agregando detalle factura");
         FacturaDetalle facturaDetalle = new FacturaDetalle();
         facturaDetalle.setCantidad(lineaTicketData.getCantidad().multiply(BigDecimal.valueOf(-1)));
-        facturaDetalle.setDescuento(lineaTicketData.getDescuentoCliente().multiply(BigDecimal.valueOf(-1)));
+        facturaDetalle.setDescuentoCliente(lineaTicketData.getDescuentoCliente().multiply(BigDecimal.valueOf(-1)));
         facturaDetalle.setExento(lineaTicketData.getExento().multiply(BigDecimal.valueOf(-1)));
         facturaDetalle.setImpuestoInterno(lineaTicketData.getImpuestoInterno().multiply(BigDecimal.valueOf(-1)));
         facturaDetalle.setIva(lineaTicketData.getIva().multiply(BigDecimal.valueOf(-1)));

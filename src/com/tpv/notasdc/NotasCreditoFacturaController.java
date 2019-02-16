@@ -248,7 +248,7 @@ public class NotasCreditoFacturaController implements Initializable {
                                 ,fd.getPrecioUnitario()
                                 ,fd.getPrecioUnitarioBase()
                                 ,fd.getNeto(),fd.getNetoReducido(),fd.getExento()
-                                ,fd.getDescuento()
+                                ,fd.getDescuentoCliente()
                                 ,fd.getIva()
                                 ,fd.getIvaReducido()
                                 ,fd.getImpuestoInterno()

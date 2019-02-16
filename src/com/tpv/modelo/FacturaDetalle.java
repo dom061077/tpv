@@ -53,7 +53,7 @@ public class FacturaDetalle {
     private BigDecimal ivaReducido;
     
     @Column(name = "DESCUENTO")
-    private BigDecimal descuento;
+    private BigDecimal descuentoCliente;
     
     @Column(name = "IMPUESTOINTERNO")
     private BigDecimal impuestoInterno;
@@ -197,15 +197,15 @@ public class FacturaDetalle {
     /**
      * @return the descuento
      */
-    public BigDecimal getDescuento() {
-        return descuento;
+    public BigDecimal getDescuentoCliente() {
+        return descuentoCliente;
     }
 
     /**
      * @param descuento the descuento to set
      */
-    public void setDescuento(BigDecimal descuento) {
-        this.descuento = descuento;
+    public void setDescuentoCliente(BigDecimal descuento) {
+        this.descuentoCliente = descuento;
     }
 
     /**

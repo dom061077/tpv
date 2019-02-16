@@ -28,6 +28,7 @@ import com.tpv.modelo.ParametroGeneral;
 import com.tpv.notasdc.NotasCreditoFacturaController;
 import com.tpv.notasdc.NotasCreditoFacturaPorProductoController;
 import com.tpv.notasdc.NotasDCMenuController;
+import com.tpv.notasdc.NotasDebitoMontoController;
 import com.tpv.pagoticket.ConfirmaPagoTicketController;
 import com.tpv.pagoticket.PagoTicketController;
 import com.tpv.print.fiscal.ConfiguracionImpresoraController;
@@ -128,6 +129,7 @@ public class TabPanePrincipalController implements Initializable {
     @FXML private NotasDCMenuController notasDCMenuController;
     @FXML private NotasCreditoFacturaController notasDCFacturaController;
     @FXML private NotasCreditoFacturaPorProductoController notasDCFacturaPorProductoController;
+    @FXML private NotasDebitoMontoController notasDCDebitoController;
     
     @FXML private Button buttonMenuPrincipal;
     
@@ -149,6 +151,7 @@ public class TabPanePrincipalController implements Initializable {
     @FXML private Tab tabNotasDCMenu;
     @FXML private Tab tabNotasDCFactura;
     @FXML private Tab tabNotasDCFacturaPorProducto;
+    @FXML private Tab tabNotasDCDebito;
     
     
     @FXML private TabPane tabPanePrincipal;
@@ -230,6 +233,7 @@ public class TabPanePrincipalController implements Initializable {
         this.notasCreditoMontoController.setTabController(this);
         this.notasDCFacturaController.setTabController(this);
         this.notasDCFacturaPorProductoController.setTabController(this);
+        this.notasDCDebitoController.setTabController(this);
         
 
         getTabPanePrincipal().getSelectionModel().selectedItemProperty()
@@ -499,6 +503,19 @@ public class TabPanePrincipalController implements Initializable {
             gotoError();
         }
         
+    }
+    
+    public void gotoNotasDCDebitoMonto(){
+        this.getLabelTituloVentana().setText("NOTAS DE DEBITO - MONTO");
+        this.getLabelShortCut().setText("F11 - Retornar a Menu");
+        this.getTabPanePrincipal().getSelectionModel().select(tabNotasDCDebito);
+        Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_NOTADEBITOMONTO);
+        try{
+            this.notasDCDebitoController.configurarInicio();
+        }catch(TpvException e){
+            Context.getInstance().currentDMTicket().setException(e);
+            gotoError();
+        }
     }
 
     public void repeatFocus(Node node){

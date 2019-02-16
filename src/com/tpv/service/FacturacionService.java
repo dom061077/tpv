@@ -8,6 +8,7 @@ package com.tpv.service;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.AlicuotaIngresosBrutos;
 import com.tpv.modelo.AperturaCierreCajeroDetalle;
+import com.tpv.modelo.BonificacionCliente;
 import com.tpv.modelo.Checkout;
 import com.tpv.modelo.Combo;
 import com.tpv.modelo.ComboGrupo;
@@ -37,6 +38,9 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 import org.apache.log4j.Logger;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  *
@@ -213,13 +217,45 @@ public class FacturacionService  {
             factura.getBonificacionCombos();
             factura.setEstado(FacturaEstadoEnum.CERRADA);
             factura.setFechaHoraCierre(factura.getUsuario().getFechaHoy());
+            BigDecimal descuentoAcumCliente = BigDecimal.ZERO;//CAMBIAR
             for(Iterator<FacturaDetalle> it = factura.getDetalle().iterator();it.hasNext();){
                 FacturaDetalle factDet = (FacturaDetalle)it.next();
                 factDet.getProducto().decStock(factDet.getCantidad());
-                //factDet.getProducto().setStock(
-                //        factDet.getProducto().getStock().subtract(factDet.getCantidad())
-                //    );
+                if(factDet.getDescuentoCliente().compareTo(BigDecimal.ZERO)>0){
+                    descuentoAcumCliente = descuentoAcumCliente
+                            .add(factDet.getPrecioUnitarioBase()
+                                  .multiply(factDet.getCantidad()));
+                }
             }
+            
+            if(factura.getCliente()!=null){
+                try{
+                    Query q = em.createQuery("FROM BonificacionCliente b WHERE b.cliente.id = :idCliente"
+                        +" AND b.mesAnio = :mesAnio")
+                        .setParameter("idCliente", factura.getCliente().getId())
+                        .setParameter("mesAnio", factura.getUsuario().getMesAnioCalc());
+                    BonificacionCliente bc = (BonificacionCliente)q.getSingleResult();
+                    bc.addMontoAcumulado(descuentoAcumCliente);
+                    bc.addMontoAcumuladoTotal(descuentoAcumCliente);
+                    em.merge(bc);
+                }catch(NoResultException e){
+                    log.info("No se encontró el registro de bonificación para el cliente: "
+                        +factura.getCliente().getId()+". Se procede a insertar el registro por primera vez.");
+                    BonificacionCliente bc = new BonificacionCliente();
+                    bc.setCliente(factura.getCliente());
+                    bc.setMesAnio(factura.getUsuario().getMesAnioCalc());
+                    bc.setMontoAcumulado(descuentoAcumCliente);
+                    bc.setMontoAcumuladoTotal(descuentoAcumCliente);
+                    em.persist(bc);
+
+                }catch(NonUniqueResultException e){
+                    log.error("Se encontró más de un registro de bonificación para el cliente: "
+                            +factura.getCliente().getId()+". Se interrumpe confirmación de factura",e);
+                    throw new TpvException("Se encontró más de un registro de bonificación para el cliente: "
+                            +factura.getCliente().getId()+". Se interrumpe confirmación de factura");
+                }
+            }
+            
             factura=em.merge(factura);
             tx.commit();
             log.info("Factura guardada, id: "+factura.getId());
@@ -510,7 +546,7 @@ public class FacturacionService  {
             for(Iterator<FacturaDetalleCombo> it = factura.getDetalleCombos().iterator();it.hasNext();){
                 FacturaDetalleCombo fdc = it.next();
                 facturaDetalle.setCantidad(BigDecimal.valueOf(fdc.getCantidad()));
-                facturaDetalle.setDescuento(BigDecimal.ZERO);
+                facturaDetalle.setDescuentoCliente(BigDecimal.ZERO);
                 facturaDetalle.setExento(fdc.getExentoBonif());
                 facturaDetalle.setImpuestoInterno(fdc.getImpuestoInterno().multiply(BigDecimal.valueOf(-1)));
                 facturaDetalle.setIva(fdc.getIvaCompletoBonif().multiply(BigDecimal.valueOf(-1)));
@@ -547,7 +583,7 @@ public class FacturacionService  {
                 costo = costo.add(fd.getPrecioUnitario());
                 neto = neto.add(fd.getNeto());
                 netoReducido = netoReducido.add(fd.getNetoReducido());
-                descuento = descuento.add(fd.getDescuento());
+                descuento = descuento.add(fd.getDescuentoCliente());
                 exento = exento.add(fd.getExento());
                 iva = iva.add(fd.getIva());
                 ivaReducido = ivaReducido.add(fd.getIvaReducido());
@@ -764,7 +800,7 @@ public class FacturacionService  {
             factDet.setCantidad(det.getCantidad().multiply(BigDecimal.valueOf(-1)));
             //factDet.setCantidadAuxCombo(0); trasient
             factDet.setCosto(det.getCosto().multiply(BigDecimal.valueOf(-1)));
-            factDet.setDescuento(det.getDescuento().multiply(BigDecimal.valueOf(-1)));
+            factDet.setDescuentoCliente(det.getDescuentoCliente().multiply(BigDecimal.valueOf(-1)));
             factDet.setExento(det.getExento().multiply(BigDecimal.valueOf(-1)));
             factDet.setImpuestoInterno(det.getImpuestoInterno()
                     .multiply(BigDecimal.valueOf(-1)));
@@ -816,6 +852,8 @@ public class FacturacionService  {
             notaDC.setClaseComprobante("B");
             notaDC.setFechaAlta(facturaOrigen.getUsuario().getFechaHoraHoy());
             
+            notaDC.setFechaHoraCierre(facturaOrigen.getUsuario().getFechaHoy());
+            
             if(facturaOrigen.getCliente()!=null){
                 notaDC.setCondicionIva(facturaOrigen.getCliente().getCondicionIva());
                 if(notaDC.getCondicionIva().getId()==2)
@@ -848,6 +886,7 @@ public class FacturacionService  {
     }
             
     
+    
     public void confirmarNotaDCMonto(TipoComprobanteEnum tipo
             ,Factura facturaOrigen,BigDecimal monto
             ,Long prefijoFiscal,String numeroComprobante
@@ -857,47 +896,63 @@ public class FacturacionService  {
             ,int idMotivo
             ,int caja
         ) throws TpvException{
+        BigDecimal signo = BigDecimal.ONE;
         log.info("Capa de servicios FacturacionService, registrando nota DC");
+        if(tipo  == TipoComprobanteEnum.C)
+            signo = signo.multiply(BigDecimal.valueOf(-1));
         EntityManager em = Connection.getEm();
         MotivoNotaDC motivo = em.find(MotivoNotaDC.class, idMotivo);
         EntityTransaction tx = null;
         try{
             tx = em.getTransaction();
             tx.begin();
-            Factura facturaDC = new Factura();
-            facturaDC.setPrefijoFiscal(prefijoFiscal);
-            facturaDC.setNumeroComprobante(Long.parseLong(numeroComprobante));
-            facturaDC.setTipoComprobante(tipo);
-            facturaDC.setFacturaOrigen(facturaOrigen);
-            facturaDC.setCliente(facturaOrigen.getCliente());
-            facturaDC.setClaseComprobante(facturaDC.getFacturaOrigen().getClaseComprobante());
-            facturaDC.setCondicionIva(facturaOrigen.getCondicionIva());
+            Factura notaDC = new Factura();
+            notaDC.setPrefijoFiscal(prefijoFiscal);
+            notaDC.setNumeroComprobante(Long.parseLong(numeroComprobante));
+            notaDC.setTipoComprobante(tipo);
+            notaDC.setFacturaOrigen(facturaOrigen);
+            notaDC.setCliente(facturaOrigen.getCliente());
+            notaDC.setClaseComprobante(notaDC.getFacturaOrigen().getClaseComprobante());
+            notaDC.setCondicionIva(facturaOrigen.getCondicionIva());
             
-            facturaOrigen.getDetalleNotasDC().add(facturaDC);
-            facturaDC.setTotal(monto.multiply(BigDecimal.valueOf(-1)));
-            facturaDC.setFechaAlta(facturaOrigen.getUsuario().getFechaHoraHoy());
+            facturaOrigen.getDetalleNotasDC().add(notaDC);
+            notaDC.setTotal(monto.multiply(signo));
+            notaDC.setFechaAlta(facturaOrigen.getUsuario().getFechaHoraHoy());
+            notaDC.setFechaHoraCierre(facturaOrigen.getUsuario().getFechaHoraHoy());
             
-            facturaDC.setIva(monto.multiply(BigDecimal.valueOf(0.21)));
-            facturaDC.setIva(facturaDC.getIva().multiply(BigDecimal.valueOf(-1)));
-            facturaDC.setNeto(facturaDC.getTotal().subtract(facturaDC.getIva()));
-            facturaDC.setNeto(facturaDC.getNeto().multiply(BigDecimal.valueOf(-1)));
+            notaDC.setIva(monto.multiply(BigDecimal.valueOf(0.21)));
+            notaDC.setIva(notaDC.getIva().multiply(signo));
+            notaDC.setNeto(notaDC.getTotal().subtract(notaDC.getIva()));
+            notaDC.setNeto(notaDC.getNeto().multiply(signo));
             
+            notaDC.setCosto(BigDecimal.ZERO);
+            notaDC.setDescuento(BigDecimal.ZERO);
+            notaDC.setExento(BigDecimal.ZERO);
+            notaDC.setImpuestoInterno(BigDecimal.ZERO);
+            notaDC.setInteresTarjeta(BigDecimal.ZERO);
+            notaDC.setIvaBonificaTarjeta(BigDecimal.ZERO);
+            notaDC.setIvaBonificacion(BigDecimal.ZERO);
+            notaDC.setIvaReducido(BigDecimal.ZERO);
+            notaDC.setIvaTarjeta(BigDecimal.ZERO);
+            notaDC.setNetoReducido(BigDecimal.ZERO);
+            notaDC.setRetencion(BigDecimal.ZERO);
+            notaDC.setBonificacion(BigDecimal.ZERO);
+            notaDC.setBonificaTarjeta(BigDecimal.ZERO);
             
-            
-            facturaDC.setAperturaCierreCajeroDetalle(apCiereCajDet);
-            facturaDC.setCheckout(checkout);
-            facturaDC.setEstado(FacturaEstadoEnum.CERRADA);
-            facturaDC.setUsuario(usuario);
-            facturaDC.setMotivo(motivo);
+            notaDC.setAperturaCierreCajeroDetalle(apCiereCajDet);
+            notaDC.setCheckout(checkout);
+            notaDC.setEstado(FacturaEstadoEnum.CERRADA);
+            notaDC.setUsuario(usuario);
+            notaDC.setMotivo(motivo);
             if(facturaOrigen.getCliente()!=null){
-                facturaDC.setCondicionIva(facturaOrigen.getCliente().getCondicionIva());
-                if(facturaDC.getCondicionIva().getId()==2)
-                    facturaDC.setClaseComprobante("A");
+                notaDC.setCondicionIva(facturaOrigen.getCliente().getCondicionIva());
+                if(notaDC.getCondicionIva().getId()==2)
+                    notaDC.setClaseComprobante("A");
                 else
-                    facturaDC.setClaseComprobante("B");
+                    notaDC.setClaseComprobante("B");
             }
                 
-            em.persist(facturaDC);
+            em.persist(notaDC);
             tx.commit();
         }catch(RuntimeException e){
             log.error("Error en la capa de servicios al registrar la nota D/C ",e);
@@ -936,7 +991,7 @@ public class FacturacionService  {
             for(Iterator<FacturaDetalle> it = factura.getDetalle().iterator();it.hasNext();){
                 FacturaDetalle det = it.next();
                 costo = costo.add(det.getCosto());
-                descuento = descuento.add(det.getDescuento());
+                descuento = descuento.add(det.getDescuentoCliente());
                 exento = exento.add(det.getExento());
                 impuestoInterno = impuestoInterno.add(det.getImpuestoInterno());
                 iva = det.getIva();
@@ -1038,6 +1093,7 @@ public class FacturacionService  {
         }
         return valido;
     }
+    
     
     /*public List getConcursos(Long idFactura) throws TpvException{
         List list=new ArrayList();

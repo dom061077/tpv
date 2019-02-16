@@ -56,6 +56,9 @@ public class NotasDCMenuController implements Initializable {
                     this.tabController.gotoNotasDCFacturaPorProducto();
                 }
                     
+                if(keyEvent.getCode()==KeyCode.NUMPAD4){
+                    this.tabController.gotoNotasDCDebitoMonto();
+                }
                 
             });
         });        

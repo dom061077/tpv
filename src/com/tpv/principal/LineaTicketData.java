@@ -222,6 +222,9 @@ public class LineaTicketData {
         return costo;
     }
     
+    
+
+    
     public BigDecimal getCosto(){
         return costoProperty().get();
     }

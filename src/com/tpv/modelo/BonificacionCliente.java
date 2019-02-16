@@ -22,6 +22,34 @@ import org.hibernate.annotations.Formula;
 @Entity
 @Table(name="bonificacioncliente")
 public class BonificacionCliente {
+
+    /**
+     * @return the montoAcumuladoTotal
+     */
+    public BigDecimal getMontoAcumuladoTotal() {
+        return montoAcumuladoTotal;
+    }
+
+    /**
+     * @param montoAcumuladoTotal the montoAcumuladoTotal to set
+     */
+    public void setMontoAcumuladoTotal(BigDecimal montoAcumuladoTotal) {
+        this.montoAcumuladoTotal = montoAcumuladoTotal;
+    }
+
+    /**
+     * @return the mesAnioCalc
+     */
+    public String getMesAnioCalc() {
+        return mesAnioCalc;
+    }
+
+    /**
+     * @param cliente the cliente to set
+     */
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
     @Id
     @Column(name = "idBONIFICACIONCLIENTE")
     private int id;    
@@ -31,6 +59,9 @@ public class BonificacionCliente {
     
     @Column(name = "MONTOACUMULADO")
     private BigDecimal montoAcumulado;
+    
+    @Column(name = "MONTOACUMULADOTOTAL")
+    private BigDecimal montoAcumuladoTotal;
     
     @Formula("(SELECT (DATE_FORMAT(NOW(),'%m%Y')))")
     private String mesAnioCalc;
@@ -87,6 +118,14 @@ public class BonificacionCliente {
      */
     public Cliente getCliente() {
         return cliente;
+    }
+    
+    public void addMontoAcumulado(BigDecimal incremento){
+        montoAcumulado = montoAcumulado.add(incremento);
+    }
+    
+    public void addMontoAcumuladoTotal(BigDecimal incremento){
+        montoAcumuladoTotal = montoAcumuladoTotal.add(incremento);
     }
     
 }

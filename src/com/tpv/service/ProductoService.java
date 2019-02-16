@@ -223,7 +223,8 @@ public class ProductoService {
     }
     
     
-    public ListaPrecioProducto getListaPrecioProducto(int filtroCodigo,Cliente cliente) throws TpvException{
+    public ListaPrecioProducto getListaPrecioProducto(int filtroCodigo,Cliente cliente
+        ,BigDecimal cantidadCompra) throws TpvException{
         log.info("Capa de servicios, parámetro de filtro producto: "+filtroCodigo
                 +", cliente: "+(cliente!=null?cliente.getId():0));
         ListaPrecioProducto lstPrecioProducto=null;
@@ -254,21 +255,38 @@ public class ProductoService {
                     if(proveedor==null && !isProductoEnCombo(filtroCodigo)
                             && !lstPrecioProducto.isEsPrecioOferta()){
                         log.debug("el proveedor es null ");
-                        q = em.createQuery("FROM BonificacionCliente bc WHERE bc.cliente.id = :clienteId "
-                                +" AND mesAnio = mesAnioCalc")
-                                .setParameter("clienteId", cliente.getId());
-                        BonificacionCliente bc = (BonificacionCliente)q.getSingleResult();
-                        BigDecimal descuento = precio.multiply(cliente.getEmpresa()
+                        
+                        lstPrecioProducto.setPorcentajeDescCliente(cliente.getEmpresa()
+                                .getPorcentajeDescuento());
+                        
+                        /*BigDecimal descuento = precio.multiply(cliente.getEmpresa()
                                 .getPorcentajeDescuento()).divide(BigDecimal.valueOf(100));
                         BigDecimal precioConDescuento = precio.subtract(descuento);
-                        BigDecimal totalAcumulado = bc.getMontoAcumulado().add(precioConDescuento);
-                        if(bc!=null){
+                        */
+                        
+                        BonificacionCliente bc = null;
+                        try{
+                            q = em.createQuery("FROM BonificacionCliente bc WHERE bc.cliente.id = :clienteId "
+                                    +" AND mesAnio = mesAnioCalc")
+                                    .setParameter("clienteId", cliente.getId());
+                            bc = (BonificacionCliente)q.getSingleResult();
+                            BigDecimal totalAcumulado = bc.getMontoAcumuladoTotal()
+                                    .add(lstPrecioProducto.getDescuentoCliente()
+                                            .multiply(cantidadCompra)
+                                        );
                             if(cliente.getEmpresa().getTopeDescuento()
-                                .compareTo(totalAcumulado)>0){
-                                log.info("El precio del producto tiene descuento de personal");
-                                precio = precioConDescuento;
-                                lstPrecioProducto.setDescuentoCliente(descuento);
+                                .compareTo(totalAcumulado)<0){
+                                log.info("La compra del producto supera el monto acumulado "
+                                    +" de compra del cliente: "+cliente.getId()
+                                    +". No se aplica descuento");
+                                lstPrecioProducto.setPorcentajeDescCliente(BigDecimal.ZERO);
+                                    
                             }
+                        }catch(NoResultException e){
+                            log.info("No se encontró el registro de acumulación de "
+                                +" bonificaciones para el cliente: "+cliente.getId()
+                                +". Se insertará en el momento de confirmar la factura"
+                                +". Se aplicará de todas maneras el descuento");
                         }
                     }
             }

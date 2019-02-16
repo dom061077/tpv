@@ -135,6 +135,9 @@ public class ErrorController implements Initializable {
                             case PANTALLA_NOTACREDITOFACTURAPROPRODUCTO:
                                 tabController.gotoNotasDCFacturaPorProducto();
                                 break;
+                            case PANTALLA_NOTADEBITOMONTO:
+                                tabController.gotoNotasDCDebitoMonto();
+                                break;
                             default:
                                 tabController.gotoLogin();
                                 break;

@@ -539,7 +539,6 @@ public class FXMLMainController implements Initializable {
         Producto producto = null;
         BigDecimal precioOPeso = BigDecimal.ZERO;
         BigDecimal precio = BigDecimal.valueOf(0);
-        BigDecimal descuentoCliente = BigDecimal.valueOf(0);
         ListaPrecioProducto lpp;
         try{
             cantidad = new BigDecimal(textFieldCantidad.getText());
@@ -574,7 +573,9 @@ public class FXMLMainController implements Initializable {
                         
                 if(producto!=null){
                     log.debug("Producto encontrado: "+producto.getDescripcion());
-                    lpp = productoService.getListaPrecioProducto(producto.getCodigoProducto(),Context.getInstance().currentDMTicket().getCliente());
+                    lpp = productoService.getListaPrecioProducto(producto.getCodigoProducto()
+                            ,Context.getInstance().currentDMTicket().getCliente()
+                            ,cantidad);
                     if(lpp == null){
                         throw new TpvException("El producto "+producto.getDescripcion()+", con código "+producto.getCodigoProducto()+" no tiene precio");
                          
@@ -591,12 +592,15 @@ public class FXMLMainController implements Initializable {
                         }
                     }
                     if(precio.compareTo(BigDecimal.valueOf(0))>0){
-                        if(Context.getInstance().currentDMTicket().getDetalle().size()==0){
+                        if(Context.getInstance().currentDMTicket().getDetalle().isEmpty()){
                                 //------------------------------------
                                 //imageViewLoading.setVisible(true);
                                 //efectoAbrirTicket();
                                 try{
-                                    impresoraService.abrirTicket();                
+                                    impresoraService.abrirTicket(
+                                        Context.getInstance().currentDMTicket().getCliente()
+                                        ,TipoComprobanteEnum.F    
+                                    );                
                                 }catch(TpvException e){
                                     Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
                                     Context.getInstance().currentDMTicket().setException(e);
@@ -627,6 +631,7 @@ public class FXMLMainController implements Initializable {
                                 , producto.getCodBarra()
                                 , producto.getDescripcion(),cantidad,precio
                                 , lpp.getPrecioLista()
+                                        .subtract(lpp.getDescuentoCliente())
                                 , lpp.getNeto().multiply(cantidad)
                                 , lpp.getNetoReducido().multiply(cantidad)
                                 , lpp.getExento().multiply(cantidad)
@@ -929,7 +934,7 @@ public class FXMLMainController implements Initializable {
         
         FacturaDetalle facturaDetalle = new FacturaDetalle();
         facturaDetalle.setCantidad(lineaTicketData.getCantidad());
-        facturaDetalle.setDescuento(lineaTicketData.getDescuentoCliente());
+        facturaDetalle.setDescuentoCliente(lineaTicketData.getDescuentoCliente());
         facturaDetalle.setExento(lineaTicketData.getExento());
         facturaDetalle.setImpuestoInterno(lineaTicketData.getImpuestoInterno());
         facturaDetalle.setIva(lineaTicketData.getIva());
@@ -1105,6 +1110,13 @@ public class FXMLMainController implements Initializable {
                     
                 }
                 
+                
+                
+                if(command.getCommandCode() == HasarCommands.CMD_GET_INIT_DATA){
+                    Context.getInstance().currentDMTicket().setPuntoVenta(Long.parseLong(response.getString(7)));
+                }
+                    
+                
                 if(command.getCommandCode()==HasarCommands.CMD_PRINT_LINE_ITEM){
 
                     agregarDetalleFactura();
@@ -1197,7 +1209,9 @@ public class FXMLMainController implements Initializable {
                 }
                 Context.getInstance().currentDMTicket().setClienteSeleccionado(true);
                 
-                impresoraService.abrirTicket();
+                impresoraService.abrirTicket(Context.getInstance().currentDMTicket().getCliente()
+                        ,TipoComprobanteEnum.F
+                );
                     
                         for(Iterator iterator = factura.getDetalleOrdenadoPorId().iterator();iterator.hasNext();){
                             FacturaDetalle fd = (FacturaDetalle)iterator.next();
@@ -1211,7 +1225,7 @@ public class FXMLMainController implements Initializable {
                                             ,fd.getPrecioUnitario()
                                             ,fd.getPrecioUnitarioBase()
                                             ,fd.getNeto(),fd.getNetoReducido(),fd.getExento()
-                                            ,fd.getDescuento()
+                                            ,fd.getDescuentoCliente()
                                             ,fd.getIva()
                                             ,fd.getIvaReducido()
                                             ,fd.getImpuestoInterno()
@@ -1316,7 +1330,10 @@ public class FXMLMainController implements Initializable {
             @Override
             public void run(){
                 try{
-                    impresoraService.abrirTicket();                
+                    impresoraService.abrirTicket(
+                            Context.getInstance().currentDMTicket().getCliente()
+                            ,TipoComprobanteEnum.F
+                    );                
                 }catch(TpvException e){
                     Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
                     Context.getInstance().currentDMTicket().setException(e);

@@ -369,7 +369,7 @@ public class ConfirmaPagoTicketController implements Initializable{
             for(Iterator<FacturaDetalleCombo> it = factura.getDetalleCombos().iterator();it.hasNext();){
                 FacturaDetalleCombo fdc = it.next();
                 facturaDetalle.setCantidad(BigDecimal.valueOf(fdc.getCantidad()));
-                facturaDetalle.setDescuento(BigDecimal.ZERO);
+                facturaDetalle.setDescuentoCliente(BigDecimal.ZERO);
                 facturaDetalle.setExento(fdc.getExentoBonif());
                 facturaDetalle.setImpuestoInterno(fdc.getImpuestoInterno().multiply(BigDecimal.valueOf(-1)));
                 facturaDetalle.setIva(fdc.getIvaCompletoBonif().multiply(BigDecimal.valueOf(-1)));
@@ -406,7 +406,7 @@ public class ConfirmaPagoTicketController implements Initializable{
                 costo = costo.add(fd.getPrecioUnitario());
                 neto = neto.add(fd.getNeto());
                 netoReducido = netoReducido.add(fd.getNetoReducido());
-                descuento = descuento.add(fd.getDescuento());
+                descuento = descuento.add(fd.getDescuentoCliente());
                 exento = exento.add(fd.getExento());
                 iva = iva.add(fd.getIva());
                 ivaReducido = ivaReducido.add(fd.getIvaReducido());

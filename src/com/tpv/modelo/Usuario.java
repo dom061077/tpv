@@ -21,6 +21,13 @@ import org.hibernate.annotations.Formula;
 public class Usuario {
 
     /**
+     * @return the mesAnioCalc
+     */
+    public String getMesAnioCalc() {
+        return mesAnioCalc;
+    }
+
+    /**
      * @return the nombreCompleto
      */
     public String getNombreCompleto() {
@@ -70,6 +77,10 @@ public class Usuario {
     
     @Formula("(SELECT NOW())")
     private java.util.Date fechaHoraHoy;
+    
+    @Formula("(SELECT (DATE_FORMAT(NOW(),'%m%Y')))")
+    private String mesAnioCalc;
+    
 
     @Transient
     private boolean supervisor; 

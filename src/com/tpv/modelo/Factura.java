@@ -645,6 +645,11 @@ public class Factura {
 
     }
     
+    /*
+        Tanto las notas de débito como las de crédito se suman, ya que las
+        primeras tienen signo positivo y las últimas tienen signo negativo.
+    */
+    
     public BigDecimal getTotalNotasDC(){
         BigDecimal totalDC=BigDecimal.ZERO;
         for(Iterator<Factura> it = getDetalleNotasDC().iterator();it.hasNext();){

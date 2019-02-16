@@ -11,7 +11,6 @@ import com.tpv.modelo.Factura;
 import com.tpv.modelo.MotivoNotaDC;
 import com.tpv.modelo.enums.FacturaEstadoEnum;
 import com.tpv.modelo.enums.TipoComprobanteEnum;
-import com.tpv.pagoticket.ConfirmaPagoTicketController;
 import com.tpv.principal.Context;
 import com.tpv.print.event.FiscalPrinterEvent;
 import com.tpv.service.FacturacionService;
@@ -36,7 +35,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx8tpv1.TabPanePrincipalController;
-import org.apache.log4j.Logger;
+import org.jboss.logging.Logger;
 import org.tpv.print.fiscal.FiscalPacket;
 import org.tpv.print.fiscal.FiscalPrinter;
 import org.tpv.print.fiscal.hasar.HasarCommands;
@@ -46,8 +45,8 @@ import org.tpv.print.fiscal.msg.FiscalMessages;
  *
  * @author COMPUTOS
  */
-public class NotasCreditoMontoController implements Initializable {
-    Logger log = Logger.getLogger(ConfirmaPagoTicketController.class);
+public class NotasDebitoMontoController implements Initializable {
+    Logger log = Logger.getLogger(NotasDebitoMontoController.class);
     
     private MaskTextField textFieldPrefijo; 
     private MaskTextField textFieldNumero;
@@ -74,12 +73,11 @@ public class NotasCreditoMontoController implements Initializable {
     
     private FacturacionService factService = new FacturacionService();
     private ImpresoraService impresoraService = new ImpresoraService();
-    private Factura facturaOrigenCredito;
+    private Factura facturaOrigenDebito;
     private FiscalPrinterEvent fiscalPrinterEvent;
     private int idMotivo;
+    private String detalleMotivo;
     
-    //@FXML private Label labelIngreso;
-    //@FXML private Label labelCantidad;
     
     @FXML
     public  void initialize(URL url, ResourceBundle rb) {
@@ -100,6 +98,9 @@ public class NotasCreditoMontoController implements Initializable {
         textFieldMontoCredito.setPrefWidth(100);
         textFieldMontoCredito.setMaxWidth(250);
         gridPaneDatos.add(textFieldMontoCredito,1,5);
+        gridPaneDatos.getRowConstraints().get(2).setPrefHeight(0);
+        gridPaneDatos.getRowConstraints().get(2).setMaxHeight(0);
+        gridPaneDatos.getRowConstraints().get(2).setMinHeight(0);
         Platform.runLater(()->{
             tableViewMotivos.setOnKeyPressed(keyEvent ->{
                 if(keyEvent.getCode() == KeyCode.ENTER){
@@ -107,6 +108,7 @@ public class NotasCreditoMontoController implements Initializable {
                     labelMotivoData
                        .setText(((LineaMotivoData)tableViewMotivos.getSelectionModel().getSelectedItem()).getDescripcion());
                     idMotivo = ((LineaMotivoData)tableViewMotivos.getSelectionModel().getSelectedItem()).getCodigoMotivo();
+                    this.detalleMotivo = ((LineaMotivoData)tableViewMotivos.getSelectionModel().getSelectedItem()).getDescripcion();
                     tabPaneController.repeatFocus(textFieldMontoCredito);
                     keyEvent.consume();
                 }
@@ -168,20 +170,20 @@ public class NotasCreditoMontoController implements Initializable {
                         }
                         
                         
-                        if (facturaOrigenCredito.getSaldoDispNotasDC()
+                        /*if (facturaOrigenCredito.getSaldoDispNotasDC()
                                 .compareTo(new BigDecimal(textFieldMontoCredito.getText()))<0){
                             tabPaneController
                                   .showMsgModal(new MensajeModalAceptar("Error"
                                             ,"El monto del crédito supera el saldo disponible para crédito"
                                               ,"",textFieldMontoCredito));            
                             return;
-                        }                        
+                        } */                       
                     
                         tabPaneController.showMsgModal(new MensajeModal("Confirmación"
                                 , "¿Confirma el cierre del Documento?", "", null){
                                     @Override
                                     public void aceptarMensaje(){
-                                        confirmarCredito();
+                                        confirmarDebito();
                                     }
                                     
                                     @Override
@@ -206,6 +208,8 @@ public class NotasCreditoMontoController implements Initializable {
             
             
         });
+        
+        
     }
     
     private void limpiarLabelsDato(){
@@ -223,7 +227,7 @@ public class NotasCreditoMontoController implements Initializable {
         motivoDescripcionColumn.setCellValueFactory(new PropertyValueFactory<LineaMotivoData,String>("descripcion"));
     }
     
-    private void confirmarCredito(){
+    private void confirmarDebito(){
         String nombreComprador=" ";
         String cuitComprador=" ";
         String domicilioComprador=" ";
@@ -231,8 +235,11 @@ public class NotasCreditoMontoController implements Initializable {
         String condicionIVA=ImpresoraService.IVA_CONSUMIDOR_FINAL;
         BigDecimal montoCredito = new BigDecimal(textFieldMontoCredito.getText());
         String tipoDocImpresion = " ";
+        String detalle = this.detalleMotivo+" Origen.Nº: "
+            +this.facturaOrigenDebito.getPrefijoFiscal()+"-"
+            +this.facturaOrigenDebito.getNumeroComprobante();
 
-        if(facturaOrigenCredito.getCliente()!=null){
+        /*if(facturaOrigenCredito.getCliente()!=null){
             tipoCreditoImpresion = ImpresoraService.NOTACREDITO_A;
             nombreComprador = facturaOrigenCredito.getCliente().getRazonSocial();
             cuitComprador = facturaOrigenCredito.getCliente().getCuit();
@@ -241,24 +248,21 @@ public class NotasCreditoMontoController implements Initializable {
             condicionIVA = ImpresoraService
                             .getTraduccionCondicionIVA(
                                     facturaOrigenCredito.getCliente().getCondicionIva().getId());
-        }
+        }*/
         
 
         
         try{
-            this.impresoraService.abrirNotaCredito(
-                    tipoCreditoImpresion
-                    ,facturaOrigenCredito.getPrefijoFiscal()+"-"+ facturaOrigenCredito.getNumeroComprobante()
-                    , nombreComprador, cuitComprador, condicionIVA, domicilioComprador,tipoDocImpresion);
-            //imprimirLineaTicket(String descripcion,BigDecimal cantidad
-            //,BigDecimal precio, BigDecimal iva,boolean imprimeNegativo,BigDecimal impuestoInterno)            
+            this.impresoraService.abrirTicket(Context.getInstance().currentDMTicket()
+                    .getCliente()
+                    , TipoComprobanteEnum.D);
             
-            this.impresoraService.imprimirLineaTicket("CREDITO POR", BigDecimal.ONE
+            this.impresoraService.imprimirLineaTicket(detalle, BigDecimal.ONE
                      ,montoCredito 
                      , BigDecimal.valueOf(21), false, BigDecimal.ZERO);
-            this.impresoraService.cerrarNotaCredito();
+            this.impresoraService.cerrarDebito();
         }catch(TpvException e){
-            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_NOTACREDITOMONTO);
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_NOTADEBITOMONTO);
             Context.getInstance().currentDMTicket().setException(e);
             tabPaneController.gotoError();
         }
@@ -284,18 +288,18 @@ public class NotasCreditoMontoController implements Initializable {
             
     private void traerTicket(){
         try{
-            this.facturaOrigenCredito = factService.getFactura(
+            this.facturaOrigenDebito = factService.getFactura(
                  Long.parseLong(textFieldPrefijo.getText().trim())
                 , Long.parseLong(textFieldNumero.getText().trim()));
-            if(this.facturaOrigenCredito!=null 
-                    && this.facturaOrigenCredito.getEstado()==FacturaEstadoEnum.CERRADA){
-                labelNumeroFacturaDato.setText(facturaOrigenCredito.getPrefijoFiscal().toString()
-                    +'-'+facturaOrigenCredito.getNumeroComprobante());
-                labelTotalFacturaDato.setText(Util.formatearDecimal(facturaOrigenCredito.getTotal()));
-                labelSaldoDCDato.setText(Util.formatearDecimal(facturaOrigenCredito.getSaldoDispNotasDC()));
-                if(facturaOrigenCredito.getCliente()!=null){
-                    labelCuitClienteDato.setText(facturaOrigenCredito.getCliente().getCuit());
-                    labelNombreClienteDato.setText(facturaOrigenCredito.getCliente().getRazonSocial());
+            if(this.facturaOrigenDebito!=null 
+                    && this.facturaOrigenDebito.getEstado()==FacturaEstadoEnum.CERRADA){
+                labelNumeroFacturaDato.setText(facturaOrigenDebito.getPrefijoFiscal().toString()
+                    +'-'+facturaOrigenDebito.getNumeroComprobante());
+                labelTotalFacturaDato.setText(Util.formatearDecimal(facturaOrigenDebito.getTotal()));
+                labelSaldoDCDato.setText(Util.formatearDecimal(facturaOrigenDebito.getSaldoDispNotasDC()));
+                if(facturaOrigenDebito.getCliente()!=null){
+                    labelCuitClienteDato.setText(facturaOrigenDebito.getCliente().getCuit());
+                    labelNombreClienteDato.setText(facturaOrigenDebito.getCliente().getRazonSocial());
                     this.ocultarRowCliente(false);
                 }else
                     this.ocultarRowCliente(true);
@@ -310,7 +314,7 @@ public class NotasCreditoMontoController implements Initializable {
                                   ,"",textFieldPrefijo));                 
             }
         }catch(TpvException e){
-                Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_NOTACREDITOMONTO);
+                Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_NOTADEBITOMONTO);
                 Context.getInstance().currentDMTicket().setException(e);
                 tabPaneController.gotoError();
         }
@@ -318,20 +322,20 @@ public class NotasCreditoMontoController implements Initializable {
     
     private void asignarEvento(){
         this.fiscalPrinterEvent = new FiscalPrinterEvent(){
+            
             @Override
             public void commandExecuted(FiscalPrinter source, FiscalPacket command
                     ,FiscalPacket response){
-                if(command.getCommandCode()==HasarCommands.CMD_OPEN_DNFH){
+                if(command.getCommandCode() == HasarCommands.CMD_GET_INIT_DATA){
+                    Context.getInstance().currentDMTicket().setPuntoVenta(Long.parseLong(response.getString(7)));
                 }
-                if(command.getCommandCode()==HasarCommands.CMD_CLOSE_DNFH){
+                    
+                    
+                    
+                if(command.getCommandCode()==HasarCommands.CMD_CLOSE_FISCAL_RECEIPT){
                     try{
-/*confirmarNotaDCMonto(TipoComprobanteEnum tipo
-            ,Factura facturaOrigen,BigDecimal monto
-            ,Long prefijoFiscal,String numeroComprobante
-            ,AperturaCierreCajeroDetalle apCiereCajDet
-            ,Checkout checkout                        */
                         
-                        factService.confirmarNotaDCMonto(TipoComprobanteEnum.C, facturaOrigenCredito
+                        factService.confirmarNotaDCMonto(TipoComprobanteEnum.D, facturaOrigenDebito
                                , new BigDecimal(textFieldMontoCredito.getText())
                                , Context.getInstance().currentDMTicket().getPuntoVenta()
                                , response.getString(3)
@@ -370,6 +374,10 @@ public class NotasCreditoMontoController implements Initializable {
         this.labelNumeroFacturaDato.setText("");
         this.labelTotalFacturaDato.setText("");
         this.labelSaldoDCDato.setText("");
+        this.textFieldMontoCredito.setText("");
+        this.textFieldPrefijo.setText("");
+        this.textFieldNumero.setText("");
+        
         this.ocultarRowCliente(true);
         if(impresoraService.getHfp().getEventListener()==null)
            asignarEvento(); 
@@ -379,7 +387,7 @@ public class NotasCreditoMontoController implements Initializable {
     
     private void cargarTableViewMotivos() throws TpvException{
         tableViewMotivos.getItems().clear();
-        List<MotivoNotaDC> list = factService.getMotivos(TipoComprobanteEnum.C);
+        List<MotivoNotaDC> list = factService.getMotivos(TipoComprobanteEnum.D);
         for(Iterator<MotivoNotaDC> it = list.iterator();it.hasNext(); ){
             MotivoNotaDC motivo = it.next();
             tableViewMotivos.getItems().add(new LineaMotivoData(
@@ -389,5 +397,8 @@ public class NotasCreditoMontoController implements Initializable {
         if(tableViewMotivos.getItems().size()>0)
             tableViewMotivos.getSelectionModel().select(0);
     }
+    
+    
+    
     
 }

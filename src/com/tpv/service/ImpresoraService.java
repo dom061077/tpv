@@ -6,11 +6,13 @@
 package com.tpv.service;
 
 import com.tpv.exceptions.TpvException;
+import com.tpv.modelo.Cliente;
 import com.tpv.modelo.Factura;
 import com.tpv.modelo.FacturaDetalleCombo;
 import com.tpv.modelo.FacturaDetalleConcurso;
 import com.tpv.modelo.RetiroDinero;
 import com.tpv.modelo.RetiroDineroDetalle;
+import com.tpv.modelo.enums.TipoComprobanteEnum;
 import com.tpv.principal.Context;
 import com.tpv.util.BinaryFiscalPacketParser;
 import com.tpv.util.Connection;
@@ -274,16 +276,18 @@ public class ImpresoraService {
             response = getHfp().execute(request);
         }
         int linea = 14;
-        for(String item : concursos){
-            request = getHfp().cmdSetHeaderTrailer(linea,item);
-            response = getHfp().execute(request);
-            linea++;
+        
+        if(concursos != null){
+            for(String item : concursos){
+                request = getHfp().cmdSetHeaderTrailer(linea,item);
+                response = getHfp().execute(request);
+                linea++;
+            }
         }
         
     }
     
-    public void abrirTicket() throws TpvException{
-      
+    public void abrirTicket(Cliente cliente,TipoComprobanteEnum tipoComp) throws TpvException{
         if(!Connection.getStcp().isConnected()){
             throw new TpvException("La impresora no está conectada");
         }
@@ -298,28 +302,40 @@ public class ImpresoraService {
             getHfp().execute(requestStatus);
             response = getHfp().execute(getHfp().cmdGetInitData());
             
-            Context.getInstance().currentDMTicket().setPuntoVenta(Long.parseLong(response.getString(7)));
+            //Context.getInstance().currentDMTicket().setPuntoVenta(Long.parseLong(response.getString(7)));
 
             
-            if(Context.getInstance().currentDMTicket().getCliente()!=null){
-                if(Context.getInstance().currentDMTicket().getCliente().getCondicionIva().getId()!=1){
+            if(cliente!=null){
+                if(cliente.getCondicionIva().getId()!=1){
                     //cmdSetCustomerData(String name, String customerDocNumber, String ivaResponsibility, String docType, String location)
 
                     request = getHfp().cmdSetCustomerData(
-                            Context.getInstance().currentDMTicket().getCliente().getRazonSocial()
-                            , Context.getInstance().currentDMTicket().getCliente().getCuit()
-                            , traducirIVAcmdCustomerData(Context.getInstance().currentDMTicket().getCliente().getCondicionIva().getId())
+                            cliente.getRazonSocial()
+                            , cliente.getCuit()
+                            , traducirIVAcmdCustomerData(cliente.getCondicionIva().getId())
                             , TIPODOC_CUIT
-                            , Context.getInstance().currentDMTicket().getCliente().getDireccion());
+                            , cliente.getDireccion());
                     response = getHfp().execute(request);
                 }
 
-                if(Context.getInstance().currentDMTicket().getCliente().getCondicionIva().getId()==2)
-                    request = getHfp().cmdOpenFiscalReceipt("A");
-                else    
+                if(cliente.getCondicionIva().getId()==2){
+                    
+                    if(tipoComp==TipoComprobanteEnum.F)
+                        request = getHfp().cmdOpenFiscalReceipt("A");
+                    else
+                        request = getHfp().cmdOpenFiscalReceipt("D");
+                }else{
+                    if(tipoComp==TipoComprobanteEnum.F)
+                        request = getHfp().cmdOpenFiscalReceipt("T");
+                    else
+                        request = getHfp().cmdOpenFiscalReceipt("E");
+                }
+            }else{
+                if(tipoComp==TipoComprobanteEnum.F)
                     request = getHfp().cmdOpenFiscalReceipt("T");
-            }else
-                request = getHfp().cmdOpenFiscalReceipt("T");
+                else
+                    request = getHfp().cmdOpenFiscalReceipt("E");
+            }
             response = getHfp().execute(request);
         }catch(FiscalPrinterStatusError e){
             log.warn("Error fiscal al abrir el ticket",e);
@@ -475,6 +491,23 @@ public class ImpresoraService {
         
     }
     
+    public void cerrarDebito()throws TpvException{
+        log.info("Cierre de nota de débito en capa de servicios.");
+        try{
+            printHeaderTrailer(" ", " ", " ", null);
+            getHfp().execute(getHfp().cmdStatusRequest());
+            getHfp().execute(getHfp().cmdCloseFiscalReceipt(null));
+            log.info("Cierre de nota de débito exitoso");
+        }catch(FiscalPrinterStatusError e){
+            log.warn("Error en estado fiscal de la impresora al imprimir cierre de nota de débito.",e);
+            throw new TpvException(e.getMessage());
+        }catch(FiscalPrinterIOException e){
+            log.warn("Error de entrada/salida en la impresora fiscal al imprimir cierre de nota de débito",e);
+            throw new TpvException(e.getMessage());
+        }
+        
+    }
+    
     public void cerrarTicket(Factura factura) throws TpvException{
         //HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
         log.info("Cierre de factura en capa de servicios. Factura id: "+factura.getId());
@@ -518,7 +551,7 @@ public class ImpresoraService {
                             +factura.getId()
                         ,concursos);
         }catch(FiscalPrinterStatusError e){
-            log.warn("Error en estado fiscal de la impresora al imprimir retención");
+            log.warn("Error en estado fiscal de la impresora al imprimir retención",e);
             throw new TpvException(e.getMessage());
         }catch(FiscalPrinterIOException e){
             log.warn("Error de entrada/salida en la impresora fiscal al imprimir retención",e);
