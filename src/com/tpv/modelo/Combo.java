@@ -32,6 +32,20 @@ import javax.persistence.ManyToOne;
 @Entity
 @Table(name="combos")
 public class Combo {
+
+    /**
+     * @return the anulado
+     */
+    public boolean isAnulado() {
+        return anulado;
+    }
+
+    /**
+     * @param anulado the anulado to set
+     */
+    public void setAnulado(boolean anulado) {
+        this.anulado = anulado;
+    }
     @Id
     @Column(name = "idCOMBOS")
     private Long id;
@@ -58,6 +72,8 @@ public class Combo {
     @Column(name = "COMBINARPRODUCTOS", columnDefinition = "TINYINT(1)") 
     private boolean combinarProductos;
     
+    @Column(name = "ANULADO", columnDefinition = "TINYINT(1)")
+    private boolean anulado;
     
     
     /**
@@ -427,18 +443,30 @@ public class Combo {
     private void addComboAbierto(ComboGrupoDetallePrecioProducto cgdpp,BigDecimal cantidad,BigDecimal porcentajeDesc){
         FacturaDetalleComboAbierto fdca = new FacturaDetalleComboAbierto();
         fdca.setCantidad(cantidad);
+        fdca.setPorcentajeDescUnitario(porcentajeDesc);
+        /*el impuesto interno si lo tengo que multiplicar por la cantidad
+          en cambio el valor unitario base no. Solo lo uso para hacer el 
+          calculo del coeficiente K.
+        */
+        BigDecimal montoii = cgdpp.getPaf().getProducto().getCostoPiso()
+                .multiply(cgdpp.getPaf().getProducto().getImpuestoInterno())
+                .divide(BigDecimal.valueOf(100));
+        montoii = montoii.multiply(cantidad);
         fdca.setImpuestoInterno(
-                cgdpp.getPaf().getPrecioUnitarioBase()
-                        .multiply(cgdpp.getPaf().getProducto().getImpuestoInterno())
-                        .divide(BigDecimal.valueOf(100),RoundingMode.HALF_EVEN)
-                        .multiply(cantidad)
-                        .multiply(porcentajeDesc)
-                        .divide(BigDecimal.valueOf(100),RoundingMode.HALF_EVEN)
+                montoii.multiply(porcentajeDesc)
+                .divide(BigDecimal.valueOf(100),RoundingMode.HALF_EVEN)
             );
         fdca.setPrecioUnitarioBase(
                 cgdpp.getPaf().getPrecioUnitarioBase()
-                        .multiply(porcentajeDesc)
-                        .divide(BigDecimal.valueOf(100),RoundingMode.HALF_EVEN)
+        );
+        /*
+            el costopiso también va multiplicado por la cantidad
+            Preguntar si debe ir multiplicado por la cantidad
+        */
+        fdca.setCostoPiso(cgdpp.getPaf().getProducto().getCostoPiso()
+                    .multiply(porcentajeDesc)
+                    .divide(BigDecimal.valueOf(100),RoundingMode.HALF_EVEN)
+                    .multiply(cantidad)
         );
 
         fdca.setIva(cgdpp.getPaf().getPrecioUnitarioBase()
@@ -600,9 +628,12 @@ public class Combo {
                                          
                                     }
                                     if(cg.getMonto().compareTo(BigDecimal.ZERO)>0){
-                                        //bonificacionFinal = bonificacionFinal.add(cdpp.getPaf()
-                                        //        .getPrecioUnitario().multiply(BigDecimal.valueOf(cantidadDecrementada))
-                                        //    );
+                                        BigDecimal porcentajeCalc = 
+                                                cg.getMonto().divide(cg.getCantidad())
+                                                .multiply(BigDecimal.valueOf(100))
+                                                .divide(cdpp.getPaf().getPrecioUnitario(),RoundingMode.HALF_EVEN);
+                                        if(cantidadDecrementada.compareTo(BigDecimal.ZERO)>0)
+                                            addComboAbierto(cdpp, cantidadDecrementada, porcentajeCalc);
                                         
                                     }else{
                                         /*if (cg.getOrdenPorcentaje()==0)
@@ -620,8 +651,20 @@ public class Combo {
                                                             .divide(BigDecimal.valueOf(100),RoundingMode.HALF_EVEN)
                                                             .multiply(cantidadDecrementada)
                                                     );
-                                                    if(cantidadDecrementada.compareTo(BigDecimal.ZERO)>0)//if(cantidadDecrementada>0)
-                                                        addComboAbierto(cdpp,cantidadDecrementada,cg.getPorcentaje());    
+                                                    if(cantidadDecrementada.compareTo(BigDecimal.ZERO)>0){//if(cantidadDecrementada>0)
+                                                        if(cg.getMonto().compareTo(BigDecimal.ZERO)==0)
+                                                            addComboAbierto(cdpp,cantidadDecrementada,cg.getPorcentaje());    
+                                                        else{
+                                                            /*tengo que mandar el calculo del porcentaje
+                                                              para el caso de que el descuento sea un monto fijo
+                                                            */
+                                                            BigDecimal porcentajeCalc = 
+                                                                    cg.getMonto().divide(cg.getCantidad())
+                                                                    .multiply(BigDecimal.valueOf(100))
+                                                                    .divide(cdpp.getPaf().getPrecioUnitario(),RoundingMode.HALF_EVEN);
+                                                            addComboAbierto(cdpp,cantidadDecrementada,porcentajeCalc);
+                                                        }
+                                                    }
 
                                     }
                                     //if(cantidadDecrementada.compareTo(BigDecimal.ZERO)==0)//if(cantidadADecrementar==0)
@@ -655,6 +698,21 @@ public class Combo {
                         //bonificacionFinal = bonificacionFinal.add(cdpp.getPaf()
                         //        .getPrecioUnitario().multiply(BigDecimal.valueOf(cantidadDecrementada*cg.getCantidad()))
                         //    );
+                        /*tengo que mandar el calculo del porcentaje
+                          para el caso de que el descuento sea un monto fijo
+                        */
+                        if(cantidadDecrementada.compareTo(BigDecimal.ZERO)>0){
+                                BigDecimal porcentajeCalc = 
+                                        cg.getMonto()
+                                        .divide(cg.getCantidad(),RoundingMode.HALF_EVEN)
+                                        .multiply(BigDecimal.valueOf(100))
+                                        .divide(cdpp.getPaf().getPrecioUnitario(),RoundingMode.HALF_EVEN);
+
+                                addComboAbierto(cdpp,
+                                        cantidadDecrementada.multiply(cg.getCantidad())
+                                        ,porcentajeCalc);
+                        }
+                        
                     }else{
                         /*if(cg.getOrdenPorcentaje()==0)
                             bonificacionFinal = bonificacionFinal.add(
@@ -669,16 +727,23 @@ public class Combo {
                             */
                             bonificacionFinal = bonificacionFinal.add(
                                     cdpp.getPaf().getPrecioUnitario().multiply(porcien)
-                                    .divide(BigDecimal.valueOf(100))
+                                    .divide(BigDecimal.valueOf(100),RoundingMode.HALF_EVEN)
                                     .multiply(cantidadDecrementada).multiply(cg.getCantidad())//.multiply(BigDecimal.valueOf(cantidadDecrementada*cg.getCantidad()))
                             );
-                           if(cantidadDecrementada.compareTo(BigDecimal.ZERO)>0) //if(cantidadDecrementada>0)
-                                addComboAbierto(cdpp,cantidadDecrementada.multiply(cg.getCantidad()),porcien);//addComboAbierto(cdpp,cantidadDecrementada*cg.getCantidad(),porcien);    
+                           if(cantidadDecrementada.compareTo(BigDecimal.ZERO)>0){ //if(cantidadDecrementada>0)
+                                addComboAbierto(cdpp,cantidadDecrementada
+                                        .multiply(cg.getCantidad()),porcien);//addComboAbierto(cdpp,cantidadDecrementada*cg.getCantidad(),porcien);    
+                           }
                         //}
                                 
                     }
                 }
                if(cg.getMonto().compareTo(BigDecimal.ZERO)>0)
+                   /*seguir aqui
+                           aqui esta el problema de la division por cero para un combo
+                                   que tiene descuento por monto fijo. Debo
+                                           agregar el detalle del combo abierto
+                   */
                    bonificacionFinal = bonificacionFinal.add(
                            cg.getMonto().multiply(BigDecimal.valueOf(cantidadCombos))
                    );

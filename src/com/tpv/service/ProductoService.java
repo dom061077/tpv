@@ -197,11 +197,12 @@ public class ProductoService {
                 +" LEFT JOIN combosgrupodetalle cgd ON p.idPRODUCTOS = cgd.idproductos OR grupoprod.grupohijo = cgd.idGRUPOPRODUCTOS"
                 +"		OR grupoprod.grupopadre = cgd.idGRUPOPRODUCTOS"
                 +" LEFT JOIN combosgrupo cg ON cgd.idCOMBOSGRUPO = cg.idCOMBOSGRUPO"
-                +" LEFT JOIN combos c ON cg.idCOMBOS = c.idCOMBOS"
+                +" LEFT JOIN combos c ON cg.idCOMBOS = c.idCOMBOS AND c.ANULADO = ?2"
                 +" LEFT JOIN proveedores_productos pp ON p.idPRODUCTOS = pp.idPRODUCTOS AND pp.idProveedor=cgd.idProveedor"
                 +" WHERE c.idcombos IS NOT NULL AND p.codigoProducto = ?1 AND CONVERT(NOW(),DATE) BETWEEN c.FECHADESDE AND c.FECHAHASTA"
                 +" AND p.DISCONTINUADO = 0"
-                , Combo.class).setParameter(1, filtroCodigo);
+                , Combo.class).setParameter(1, filtroCodigo)
+                .setParameter(2, false);
         try{
             combos = q.getResultList();
         }catch(NoResultException e){    

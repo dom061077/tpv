@@ -204,6 +204,15 @@ public class FacturaDetalleCombo {
         return impuestoInterno;
     }
     
+    public BigDecimal getCostoPiso(){
+        BigDecimal totalCostoPiso = BigDecimal.ZERO;
+        for(Iterator<FacturaDetalleComboAbierto> it = getDetalleAbierto().iterator();it.hasNext();){
+            FacturaDetalleComboAbierto fdca = it.next();
+            totalCostoPiso = totalCostoPiso.add(fdca.getCostoPiso());
+        }
+        return totalCostoPiso;
+    }
+    
     public BigDecimal getImpuestoInternoParaCoeficienteK(){
         BigDecimal totalii = BigDecimal.ZERO;
         for(Iterator<FacturaDetalleComboAbierto> it = getDetalleAbierto().iterator();it.hasNext();){

@@ -660,6 +660,8 @@ public class FXMLMainController implements Initializable {
                         //efectoImprimirLinea(producto, cantidad, precio,lpp.getMontoImpuestoInterno());
                         
                         try{
+                                log.debug("Monto impuesto interno: "+lpp.getMontoImpuestoInterno());
+                                log.debug("Precio base: "+lpp.getPrecioLista());
                                 BigDecimal coeficienteK = ImpresoraService.getCoeficienteK(lpp.getMontoImpuestoInterno()
                                         ,lpp.getPrecioLista());
 
@@ -1195,6 +1197,12 @@ public class FXMLMainController implements Initializable {
             factura = factService.getFacturaAbiertaPorCheckout(Context.getInstance().currentDMTicket().getCheckout().getId()
                     ,Context.getInstance().currentDMTicket().getUsuario().getIdUsuario()
                     ,TipoComprobanteEnum.F);
+            /*-----------borrar esta parte del código -------------*/
+            /*factura = factService.calcularCombos(factura.getId());
+            this.impresoraService.borrarEsteMetodo(factura);
+            */
+            /*------------------------------*/
+            
             if(factura!=null){
                 log.info("Se econtró factura abierta con id: "+factura.getId()+", se procede a anulación en BD");
                 factService.anularFacturaPorReinicio(factura.getId());

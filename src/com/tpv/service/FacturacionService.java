@@ -372,10 +372,12 @@ public class FacturacionService  {
                 +" LEFT JOIN combosgrupodetalle cgd ON fd.idPRODUCTOS = cgd.idproductos OR grupoprod.grupohijo = cgd.idGRUPOPRODUCTOS"
 		+"		OR grupoprod.grupopadre = cgd.idGRUPOPRODUCTOS OR pp.idProveedor=cgd.idProveedor"
                 +" LEFT JOIN combosgrupo cg ON cgd.idCOMBOSGRUPO = cg.idCOMBOSGRUPO"
-                +" LEFT JOIN combos c ON cg.idCOMBOS = c.idCOMBOS"
+                +" LEFT JOIN combos c ON cg.idCOMBOS = c.idCOMBOS AND c.ANULADO = ?2"
                 +" WHERE c.idcombos IS NOT NULL AND fd.idFACTURAS = ?1 AND CONVERT(NOW(),DATE) BETWEEN c.FECHADESDE AND c.FECHAHASTA"
                 +" ORDER BY c.PRIORIDAD"
-                , Combo.class).setParameter(1, id);
+                , Combo.class)
+                .setParameter(1, id)
+                .setParameter(2, false);
         try{
             listadoCombos = q.getResultList();
 //            if(listadoCombos.size()>0){
@@ -549,6 +551,7 @@ public class FacturacionService  {
                 facturaDetalle.setDescuentoCliente(BigDecimal.ZERO);
                 facturaDetalle.setExento(fdc.getExentoBonif());
                 facturaDetalle.setImpuestoInterno(fdc.getImpuestoInterno().multiply(BigDecimal.valueOf(-1)));
+                facturaDetalle.setCosto(fdc.getCostoPiso().multiply(BigDecimal.valueOf(-1)));
                 facturaDetalle.setIva(fdc.getIvaCompletoBonif().multiply(BigDecimal.valueOf(-1)));
                 facturaDetalle.setIvaReducido(fdc.getIvaReducidoBonif().multiply(BigDecimal.valueOf(-1)));
                 facturaDetalle.setNeto(fdc.getNetoCompletoBonif().multiply(BigDecimal.valueOf(-1)));

@@ -402,6 +402,15 @@ public class ImpresoraService {
         
     }
     
+    public void borrarEsteMetodo(Factura factura){
+        for(Iterator<FacturaDetalleCombo> it = factura.getDetalleCombosAux().iterator();it.hasNext();){
+            FacturaDetalleCombo fdc = it.next();
+            BigDecimal coeficienteK = ImpresoraService.getCoeficienteK(
+                        fdc.getImpuestoInternoParaCoeficienteK()
+                    , fdc.getPrecioUnitarioBaseParaCoeficienteK());
+        }
+    }
+    
     private void imprimirBonifCombosTarjPercepciones(Factura factura) throws TpvException{
         FiscalPacket request;
         FiscalPacket requestStatus = getHfp().cmdStatusRequest();
@@ -421,6 +430,8 @@ public class ImpresoraService {
                 coeficiente K debo dividir el total del impuesto interno
                 en la cantidad de productos.
             */
+            log.debug("Total impuesto interno del combo: "+fdc.getImpuestoInternoParaCoeficienteK());
+            log.debug("Precios unitario base "+fdc.getPrecioUnitarioBaseParaCoeficienteK());
             BigDecimal coeficienteK = ImpresoraService.getCoeficienteK(
                         fdc.getImpuestoInternoParaCoeficienteK()
                     , fdc.getPrecioUnitarioBaseParaCoeficienteK());

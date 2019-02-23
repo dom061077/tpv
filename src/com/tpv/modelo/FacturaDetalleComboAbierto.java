@@ -26,6 +26,34 @@ import javax.persistence.Table;
 public class FacturaDetalleComboAbierto {
 
     /**
+     * @return the porcentajeDescUnitario
+     */
+    public BigDecimal getPorcentajeDescUnitario() {
+        return porcentajeDescUnitario;
+    }
+
+    /**
+     * @param porcentajeDescUnitario the porcentajeDescUnitario to set
+     */
+    public void setPorcentajeDescUnitario(BigDecimal porcentajeDescUnitario) {
+        this.porcentajeDescUnitario = porcentajeDescUnitario;
+    }
+
+    /**
+     * @return the costoPiso
+     */
+    public BigDecimal getCostoPiso() {
+        return costoPiso;
+    }
+
+    /**
+     * @param costoPiso the costoPiso to set
+     */
+    public void setCostoPiso(BigDecimal costoPiso) {
+        this.costoPiso = costoPiso;
+    }
+
+    /**
      * @return the precioUnitarioBase
      */
     public BigDecimal getPrecioUnitarioBase() {
@@ -65,8 +93,14 @@ public class FacturaDetalleComboAbierto {
     @Column(name="PORCENTAJEIVA")
     private BigDecimal porcentajeIva;
     
+    @Column(name="PORCENTAJE_DESCUENTO_UNITARIO")
+    private BigDecimal porcentajeDescUnitario;
+    
     @Column(name="VALORUNITARIOBASE")
     private BigDecimal precioUnitarioBase;
+    
+    @Column(name="COSTOPISO")
+    private BigDecimal costoPiso;
     
     @ManyToOne
     @JoinColumn(name = "idPRODUCTOS", referencedColumnName = "idPRODUCTOS", nullable=false)
