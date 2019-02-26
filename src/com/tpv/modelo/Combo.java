@@ -444,18 +444,25 @@ public class Combo {
         FacturaDetalleComboAbierto fdca = new FacturaDetalleComboAbierto();
         fdca.setCantidad(cantidad);
         fdca.setPorcentajeDescUnitario(porcentajeDesc);
-        /*el impuesto interno si lo tengo que multiplicar por la cantidad
+        /*
+          el impuesto interno si lo tengo que multiplicar por la cantidad
           en cambio el valor unitario base no. Solo lo uso para hacer el 
           calculo del coeficiente K.
+          Como cambio de último momento, el descuento de combos
+          no se aplica al impuesto interno. Por lo tanto, se clava en cero
+          el impuesto interno.
+          
         */
         BigDecimal montoii = cgdpp.getPaf().getProducto().getCostoPiso()
                 .multiply(cgdpp.getPaf().getProducto().getImpuestoInterno())
                 .divide(BigDecimal.valueOf(100));
         montoii = montoii.multiply(cantidad);
         fdca.setImpuestoInterno(
-                montoii.multiply(porcentajeDesc)
-                .divide(BigDecimal.valueOf(100),RoundingMode.HALF_EVEN)
+                BigDecimal.ZERO
+                //montoii.multiply(porcentajeDesc)
+                //.divide(BigDecimal.valueOf(100),RoundingMode.HALF_EVEN)
             );
+        
         fdca.setPrecioUnitarioBase(
                 cgdpp.getPaf().getPrecioUnitarioBase()
         );
@@ -469,21 +476,25 @@ public class Combo {
                     .multiply(cantidad)
         );
 
-        fdca.setIva(cgdpp.getPaf().getPrecioUnitarioBase()
+        /*para calcular iva tengo que sumar el impuesto interno 
+          al precio base. Es asi porque no se hace descuento sobre el impuesto
+          interno y es absorvido por el IVA.
+        */
+        fdca.setIva(cgdpp.getPaf().getPrecioUnitarioBase().add(montoii)
                     .multiply(cgdpp.getPaf().getProducto().getValorImpositivo().getValor())
                     .divide(BigDecimal.valueOf(100))
                     .multiply(cantidad)
                     .multiply(porcentajeDesc)
-                    .divide(BigDecimal.valueOf(100))
-                
-        );
-        fdca.setNeto(
-                cgdpp.getPaf().getPrecioUnitarioBase()
+                    .divide(BigDecimal.valueOf(100)));
+
+        /*para calcular el neto tengo que sumar el impuesto interno 
+          al precio base. Es asi porque no se hace descuento sobre el impuesto
+          interno y es absorvido por el neto.
+        */        
+        fdca.setNeto(cgdpp.getPaf().getPrecioUnitarioBase().add(montoii)
                  .multiply(cantidad)
                  .multiply(porcentajeDesc)
-                 .divide(BigDecimal.valueOf(100))
-                
-        );
+                 .divide(BigDecimal.valueOf(100)));
         fdca.setTotal(cgdpp.getPaf().getPrecioUnitario()
                         .multiply(cantidad)
                         .multiply(porcentajeDesc)
@@ -628,12 +639,12 @@ public class Combo {
                                          
                                     }
                                     if(cg.getMonto().compareTo(BigDecimal.ZERO)>0){
-                                        BigDecimal porcentajeCalc = 
-                                                cg.getMonto().divide(cg.getCantidad())
-                                                .multiply(BigDecimal.valueOf(100))
-                                                .divide(cdpp.getPaf().getPrecioUnitario(),RoundingMode.HALF_EVEN);
                                         if(cantidadDecrementada.compareTo(BigDecimal.ZERO)>0)
-                                            addComboAbierto(cdpp, cantidadDecrementada, porcentajeCalc);
+                                            /*  Mando el porcentaje de descuento en CERO 
+                                                para el caso de los descuentos por monto fijo.
+                                                Será calculada en un método posterior.
+                                            */
+                                            addComboAbierto(cdpp, cantidadDecrementada, BigDecimal.ZERO);
                                         
                                     }else{
                                         /*if (cg.getOrdenPorcentaje()==0)
@@ -655,14 +666,11 @@ public class Combo {
                                                         if(cg.getMonto().compareTo(BigDecimal.ZERO)==0)
                                                             addComboAbierto(cdpp,cantidadDecrementada,cg.getPorcentaje());    
                                                         else{
-                                                            /*tengo que mandar el calculo del porcentaje
-                                                              para el caso de que el descuento sea un monto fijo
+                                                            /*  Mando el porcentaje de descuento en CERO 
+                                                                para el caso de los descuentos por monto fijo.
+                                                                Será calculada en un método posterior.
                                                             */
-                                                            BigDecimal porcentajeCalc = 
-                                                                    cg.getMonto().divide(cg.getCantidad())
-                                                                    .multiply(BigDecimal.valueOf(100))
-                                                                    .divide(cdpp.getPaf().getPrecioUnitario(),RoundingMode.HALF_EVEN);
-                                                            addComboAbierto(cdpp,cantidadDecrementada,porcentajeCalc);
+                                                            addComboAbierto(cdpp,cantidadDecrementada,BigDecimal.ZERO);
                                                         }
                                                     }
 
@@ -698,19 +706,15 @@ public class Combo {
                         //bonificacionFinal = bonificacionFinal.add(cdpp.getPaf()
                         //        .getPrecioUnitario().multiply(BigDecimal.valueOf(cantidadDecrementada*cg.getCantidad()))
                         //    );
-                        /*tengo que mandar el calculo del porcentaje
-                          para el caso de que el descuento sea un monto fijo
-                        */
                         if(cantidadDecrementada.compareTo(BigDecimal.ZERO)>0){
-                                BigDecimal porcentajeCalc = 
-                                        cg.getMonto()
-                                        .divide(cg.getCantidad(),RoundingMode.HALF_EVEN)
-                                        .multiply(BigDecimal.valueOf(100))
-                                        .divide(cdpp.getPaf().getPrecioUnitario(),RoundingMode.HALF_EVEN);
+                                /*  Mando el porcentaje de descuento en CERO 
+                                    para el caso de los descuentos por monto fijo.
+                                    Será calculada en un método posterior.
+                                */
 
                                 addComboAbierto(cdpp,
                                         cantidadDecrementada.multiply(cg.getCantidad())
-                                        ,porcentajeCalc);
+                                        ,BigDecimal.ZERO);
                         }
                         
                     }else{
@@ -752,6 +756,27 @@ public class Combo {
         
         
         return cantidadCombos;
+    }
+    
+    private void calcularPorcentajeEnDescPorMonto(){
+        for(Iterator<ComboGrupo> itcg = getCombosGrupo().iterator();itcg.hasNext(); ){
+            ComboGrupo cg = itcg.next();
+            for(Iterator<ComboGrupoDetallePrecioProducto> itdpp = cg.getDetallePreciosProductos().iterator()
+                    ;itdpp.hasNext(); ){
+                ComboGrupoDetallePrecioProducto cdpp = itdpp.next();
+                for(Iterator<FacturaDetalleComboAbierto> itca = getComboAbierto().iterator();itca.hasNext();){
+                    FacturaDetalleComboAbierto fdca = itca.next();
+                    DECIDIR SI VALE LA PENA CAMBIAR DE TABLA EL CAMPO QUE HACE
+                            REFERENCIA AL MONTO DE DESCUENTO.
+                                   
+                    Recordar que para determinar el porcentaje de cada producto 
+                    en el combo abierto, tengo que calcular sin el impuesto interno
+                    al contrario del metodo que agrega detalle abierto. Es decir,
+                            sin sumar el precio base el monto del impuesto interno
+                                    
+                }
+            }
+        }
     }
 
 

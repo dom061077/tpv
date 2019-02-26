@@ -81,6 +81,7 @@ public class FacturaDetalleComboAbierto {
     @Column(name="NETO")
     private BigDecimal neto;
     
+    
     @Column(name="TOTAL")
     private BigDecimal total;
     
@@ -89,6 +90,7 @@ public class FacturaDetalleComboAbierto {
     
     @Column(name="IVA")
     private BigDecimal iva;
+    
     
     @Column(name="PORCENTAJEIVA")
     private BigDecimal porcentajeIva;
