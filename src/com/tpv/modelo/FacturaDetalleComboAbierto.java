@@ -26,17 +26,17 @@ import javax.persistence.Table;
 public class FacturaDetalleComboAbierto {
 
     /**
-     * @return the porcentajeDescUnitario
+     * @return the porcentajeDesc
      */
-    public BigDecimal getPorcentajeDescUnitario() {
-        return porcentajeDescUnitario;
+    public BigDecimal getPorcentajeDesc() {
+        return porcentajeDesc;
     }
 
     /**
-     * @param porcentajeDescUnitario the porcentajeDescUnitario to set
+     * @param porcentajeDesc the porcentajeDesc to set
      */
-    public void setPorcentajeDescUnitario(BigDecimal porcentajeDescUnitario) {
-        this.porcentajeDescUnitario = porcentajeDescUnitario;
+    public void setPorcentajeDesc(BigDecimal porcentajeDesc) {
+        this.porcentajeDesc = porcentajeDesc;
     }
 
     /**
@@ -95,8 +95,8 @@ public class FacturaDetalleComboAbierto {
     @Column(name="PORCENTAJEIVA")
     private BigDecimal porcentajeIva;
     
-    @Column(name="PORCENTAJE_DESCUENTO_UNITARIO")
-    private BigDecimal porcentajeDescUnitario;
+    @Column(name="PORCENTAJE_DESCUENTO")
+    private BigDecimal porcentajeDesc;
     
     @Column(name="VALORUNITARIOBASE")
     private BigDecimal precioUnitarioBase;
@@ -244,6 +244,10 @@ public class FacturaDetalleComboAbierto {
      */
     public BigDecimal getTotalSinBonif() {
         return totalSinBonif;
+    }
+    
+    public BigDecimal getTotalSinBonifSinII(){
+        return totalSinBonif.subtract(getProducto().getMontoImpInterno().multiply(cantidad));
     }
 
     /**

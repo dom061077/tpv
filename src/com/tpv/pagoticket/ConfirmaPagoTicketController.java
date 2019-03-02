@@ -563,6 +563,7 @@ public class ConfirmaPagoTicketController implements Initializable{
                             //setTotales(factura);
                             
                             factura = factService.confirmarFactura(factura);
+                            Context.getInstance().currentDMTicket().setIdDocumento(null);
                             Context.getInstance().currentDMTicket().setCliente(null);
                             Context.getInstance().currentDMTicket().setClienteSeleccionado(false);
                             Context.getInstance().currentDMTicket().setNroTicket(Context.getInstance().currentDMTicket().getNroTicket()+1);

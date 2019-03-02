@@ -641,7 +641,7 @@ public class FXMLMainController implements Initializable {
                                 , lpp.getMontoImpuestoInterno().multiply(cantidad)
                                 , new BigDecimal(0)
                                 , producto.getValorImpositivo().getValor()
-                                , producto.getCostoPiso()
+                                , producto.getCostoPiso().multiply(cantidad)
                                 , Context.getInstance().currentDMTicket().isImprimeComoNegativo());
 
                         if(Context.getInstance().currentDMTicket().isImprimeComoNegativo()){
@@ -1022,9 +1022,13 @@ public class FXMLMainController implements Initializable {
                     this.setText(null);
                     this.setGraphic(null);
                     if (!empty) {
-                            //String formattedDob = De
-                            DecimalFormat df = new DecimalFormat("#,###,###,##0.00");
-                            this.setText(df.format(item));
+                            if(item.remainder(BigDecimal.ONE).compareTo(BigDecimal.ZERO)>0){
+                                DecimalFormat df = new DecimalFormat("#,###,###,##0.000");
+                                this.setText(df.format(item));
+                            }else{
+                                DecimalFormat df = new DecimalFormat("#,###,##0")    ;
+                                this.setText(df.format(item));
+                            }
                     }
                 }
             };

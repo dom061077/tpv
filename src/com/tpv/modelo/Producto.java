@@ -130,6 +130,12 @@ public class Producto {
     public void incStock(BigDecimal incremento){
         this.stock = stock.add(incremento);
     }
+    
+    public BigDecimal getMontoImpInterno(){
+        BigDecimal ii = BigDecimal.ZERO;
+        ii = getCostoPiso().multiply(getImpuestoInterno()).divide(BigDecimal.valueOf(100));
+        return ii;
+    }
 
     /**
      * @return the codigoProducto

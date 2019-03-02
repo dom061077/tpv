@@ -727,7 +727,7 @@ public class NotasCreditoFacturaPorProductoController implements Initializable {
             }
             BigDecimal coeficienteK = BigDecimal.ZERO;
             coeficienteK = ImpresoraService.getCoeficienteK(
-                    det.getImpuestoInterno().divide(det.getCantidad(),4,RoundingMode.HALF_EVEN)
+                    det.getImpuestoInterno().divide(this.cantidad.getValue(),4,RoundingMode.HALF_EVEN)
                     ,det.getPrecioUnitarioBase());        
             this.lineaTicketData = new LineaTicketData(
                      det.getProducto().getIdProducto()
@@ -735,9 +735,22 @@ public class NotasCreditoFacturaPorProductoController implements Initializable {
                     ,det.getProducto().getCodBarra()
                     ,det.getProducto().getDescripcionConCodigo(),this.cantidad.getValue()
                     ,det.getPrecioUnitario()
-                    ,det.getPrecioUnitarioBase(),det.getNeto(),det.getNetoReducido()
-                    ,det.getExento(),det.getDescuentoCliente(),det.getIva(),det.getIvaReducido()
-                    ,det.getImpuestoInterno(),BigDecimal.ZERO
+                    ,det.getPrecioUnitarioBase()
+                    ,det.getNeto().divide(det.getCantidad(),RoundingMode.HALF_EVEN)
+                                .multiply(this.cantidad.getValue())
+                    ,det.getNetoReducido().divide(det.getCantidad(),RoundingMode.HALF_EVEN)
+                                .multiply(this.cantidad.getValue())
+                    ,det.getExento().divide(det.getCantidad(),RoundingMode.HALF_EVEN)
+                                .multiply(this.cantidad.getValue())
+                    ,det.getDescuentoCliente().divide(det.getCantidad(),RoundingMode.HALF_EVEN)
+                                .multiply(this.cantidad.getValue())
+                    ,det.getIva().divide(det.getCantidad(),RoundingMode.HALF_EVEN)
+                                .multiply(this.cantidad.getValue())
+                    ,det.getIvaReducido().divide(det.getCantidad(),RoundingMode.HALF_EVEN)
+                                .multiply(this.cantidad.getValue())
+                    ,det.getImpuestoInterno().divide(det.getCantidad(),RoundingMode.HALF_EVEN)
+                                .multiply(this.cantidad.getValue())
+                    ,BigDecimal.ZERO
                     ,det.getPorcentajeIva()
                     ,det.getCosto()
                     ,false

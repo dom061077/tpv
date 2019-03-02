@@ -6,9 +6,8 @@
 package com.tpv.util;
 
 import com.tpv.principal.FXMLMainController;
+import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import org.apache.log4j.Logger;
 import org.tpv.print.fiscal.FiscalPacket;
 
@@ -228,7 +227,8 @@ public class BinaryFiscalPacketParser {
         System.out.println(String.format("%3d",19));
         System.out.println(String.format("%6s","$1.000"));
         System.out.println(String.format("%6s","$500"));*/
-        
+        BigDecimal valor = new BigDecimal(1.3);
+        System.out.println(valor.remainder(BigDecimal.ONE));
         
         
     }

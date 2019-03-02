@@ -42,8 +42,6 @@ public class ComboGrupo {
     @Column(name = "PORCENTAJE")
     private BigDecimal porcentaje;
 
-    @Column(name = "MONTO")
-    private BigDecimal monto;
     
     @Column(name = "BONIFICACION_EN_MENOR_PRECIO", columnDefinition = "TINYINT(1)")
     private boolean tomarMenorPrecio;
@@ -104,19 +102,6 @@ public class ComboGrupo {
         this.porcentaje = porcentaje;
     }
 
-    /**
-     * @return the monto
-     */
-    public BigDecimal getMonto() {
-        return monto;
-    }
-
-    /**
-     * @param monto the monto to set
-     */
-    public void setMonto(BigDecimal monto) {
-        this.monto = monto;
-    }
 
     /**
      * @return the combo
