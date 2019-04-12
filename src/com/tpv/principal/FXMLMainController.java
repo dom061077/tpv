@@ -630,8 +630,8 @@ public class FXMLMainController implements Initializable {
                                 , producto.getCodigoProducto()
                                 , producto.getCodBarra()
                                 , producto.getDescripcion(),cantidad,precio
-                                , lpp.getPrecioLista()
-                                        .subtract(lpp.getDescuentoCliente())
+                                , lpp.getPrecioUnitarioSinDescCliente()//lpp.getPrecioLista()
+                                  //      .subtract(lpp.getDescuentoCliente())
                                 , lpp.getNeto().multiply(cantidad)
                                 , lpp.getNetoReducido().multiply(cantidad)
                                 , lpp.getExento().multiply(cantidad)
@@ -661,9 +661,10 @@ public class FXMLMainController implements Initializable {
                         
                         try{
                                 log.debug("Monto impuesto interno: "+lpp.getMontoImpuestoInterno());
-                                log.debug("Precio base: "+lpp.getPrecioLista());
+                                log.debug("Precio base: "+lpp.getPrecioUnitarioSinDescCliente());//lpp.getPrecioLista());
                                 BigDecimal coeficienteK = ImpresoraService.getCoeficienteK(lpp.getMontoImpuestoInterno()
-                                        ,lpp.getPrecioLista());
+                                                                    ,lpp.getPrecioUnitarioSinDescCliente()//lpp.getPrecioLista()
+                                                                );
 
                                 
 

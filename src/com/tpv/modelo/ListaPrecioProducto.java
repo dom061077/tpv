@@ -316,7 +316,7 @@ public class ListaPrecioProducto {
                        fechaFinOferta.compareTo(fechaHoy)>=0)
                        precioAux = precioOferta;
                    else
-                       precioAux = precioPublico;
+                       precioAux = precioPublico;// AQUI VA PRECIOLISTA
                }
                precioAux = precioAux.setScale(2, RoundingMode.HALF_EVEN);
                return precioAux; 
@@ -347,7 +347,7 @@ public class ListaPrecioProducto {
                        fechaFinOferta.compareTo(fechaHoy)>=0)
                        precioAux = precioOferta;
                    else{
-                       precioAux = precioPublico;
+                       precioAux = getPrecioLista(); //precioAux = precioPublico;
                        /*solo por aqui habilita descuento al cliente*/
                    }
                }
@@ -360,11 +360,14 @@ public class ListaPrecioProducto {
         public BigDecimal getPrecioUnitario(){
                BigDecimal precioAux = BigDecimal.ZERO;
                if(getDescuentoCliente().compareTo(BigDecimal.ZERO)>0)        
-                   precioAux = getPrecioLista().subtract(getDescuentoCliente())
+                   precioAux = getPrecioUnitarioSinDescCliente().subtract(getDescuentoCliente())
                            .add(getMontoImpuestoInterno()
                            .add(getIva()));
                else    
-                   precioAux = getPrecioUnitarioSinDescCliente();
+                   precioAux = getPrecioUnitarioSinDescCliente()
+                                .add(getMontoImpuestoInterno()
+                                .add(getIva())
+                                );
                precioAux = precioAux.setScale(2, RoundingMode.HALF_EVEN);
                return precioAux;
         }
@@ -393,10 +396,8 @@ public class ListaPrecioProducto {
         @Transient
         private BigDecimal getIva(){
             BigDecimal valorImpositivo = null;
-            //valorImpositivo = getPrecioUnitario().multiply(producto.getValorImpositivo().getValor());
-            //valorImpositivo = valorImpositivo.divide(BigDecimal.valueOf(100));
-            //valorImpositivo = valorImpositivo.setScale(2, RoundingMode.HALF_EVEN);
-            valorImpositivo = getPrecioLista().subtract(getDescuentoCliente())
+            
+            valorImpositivo = getPrecioUnitarioSinDescCliente()//getPrecioLista().subtract(getDescuentoCliente())
                     .multiply(producto.getValorImpositivo().getValor());
             valorImpositivo = valorImpositivo.divide(BigDecimal.valueOf(100));
             valorImpositivo = valorImpositivo.setScale(2,RoundingMode.HALF_EVEN);
@@ -431,7 +432,7 @@ public class ListaPrecioProducto {
         @Transient
         public BigDecimal  getNeto(){
             if (producto.getValorImpositivo().getId()==0)
-                return getPrecioLista().subtract(getDescuentoCliente());
+                return getPrecioUnitarioSinDescCliente(); //getPrecioLista().subtract(getDescuentoCliente());
             else
                 return BigDecimal.ZERO;   
         }
@@ -439,7 +440,7 @@ public class ListaPrecioProducto {
         @Transient
         public BigDecimal getNetoReducido(){
             if (producto.getValorImpositivo().getId()==2)
-                return getPrecioLista().subtract(getDescuentoCliente());
+                return getPrecioUnitarioSinDescCliente(); //getPrecioLista().subtract(getDescuentoCliente());
             else    
                 return BigDecimal.ZERO;
         }
@@ -448,7 +449,7 @@ public class ListaPrecioProducto {
         public BigDecimal getExento(){
             if (producto.getValorImpositivo().getId()==1)
                 //return getPrecioUnitario();
-                return getPrecioLista().subtract(getDescuentoCliente());
+                return getPrecioUnitarioSinDescCliente(); //getPrecioLista().subtract(getDescuentoCliente());
             else
                 return BigDecimal.ZERO;
         }

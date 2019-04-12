@@ -79,11 +79,11 @@ public class RetiroDinero {
     
     
     @ManyToOne
-    @JoinColumn(name = "idUSUARIOS",referencedColumnName="idUSUARIOS", nullable=false)
+    @JoinColumn(name = "idUSUARIOS",referencedColumnName="idUSUARIO", nullable=false)
     private Usuario usuario;
     
     @ManyToOne
-    @JoinColumn(name = "idUSUARIO_SUPERVISOR" ,referencedColumnName="idUSUARIOS" )
+    @JoinColumn(name = "idUSUARIO_SUPERVISOR" ,referencedColumnName="idUSUARIO" )
     private Usuario usuarioSupervisor;
     
     @ManyToOne

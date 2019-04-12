@@ -87,7 +87,7 @@ public class FacturaDetalle {
     private Producto producto;
     
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "idUSUARIOSUPERVISOR",referencedColumnName = "idUSUARIOS", nullable=true)
+    @JoinColumn(name = "idUSUARIOSUPERVISOR",referencedColumnName = "idUSUARIO", nullable=true)
     private Usuario usuarioSupervisor;
 
 

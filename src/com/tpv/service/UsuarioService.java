@@ -44,7 +44,7 @@ public class UsuarioService {
                     .setParameter("nombre", nombre).setParameter("clave", getMD5(password));
             //query.setHint("org.hibernate.cacheMode",org.hibernate.CacheMode.IGNORE);
             usuario = (Usuario) query.getSingleResult();
-            UsuarioPerfil usuPerfil=null;
+            /*UsuarioPerfil usuPerfil=null;
             if(usuario!=null){
                 usuPerfil = (UsuarioPerfil)em.createQuery("FROM UsuarioPerfil up WHERE up.id.usuarioId = :usuarioId AND up.id.perfilId = :perfilId")
                         .setParameter("usuarioId", usuario.getIdUsuario())
@@ -55,7 +55,7 @@ public class UsuarioService {
                 else
                     usuario.setSupervisor(false);
                 
-            }    
+            } */   
             //if(usuario.getPassword().compareTo(password)==0)
             //        flagReturn=true;
             //else

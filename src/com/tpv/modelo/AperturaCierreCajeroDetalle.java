@@ -69,7 +69,7 @@ public class AperturaCierreCajeroDetalle {
     private Checkout checkout;
     
     @ManyToOne
-    @JoinColumn(name = "idUsuarios", referencedColumnName="idUSUARIOS")
+    @JoinColumn(name = "idUsuarios", referencedColumnName="idUSUARIO")
     private Usuario usuario;
     
     @ManyToOne

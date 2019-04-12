@@ -17,7 +17,7 @@ import org.hibernate.annotations.Formula;
  * @author daniel
  */
 @Entity
-@Table(name="usuarios")
+@Table(name="tablausuarios")
 public class Usuario {
 
     /**
@@ -55,22 +55,26 @@ public class Usuario {
         this.supervisor = supervisor;
     }
     @Id
-    @Column(name="idUSUARIOS")
+    @Column(name="idUSUARIO")
     private int idUsuario;
     
 
     
-    @Column(name="NOMBRE")
+    @Column(name="Login")
     private String nombre;
     
-    @Column(name="NOMBRECOMPLETO")
+    @Column(name="NombreUsuario")
     private String nombreCompleto;
     
-    @Column(name="PASSWORD")
+    @Column(name="PasswordCajero")
     private String password;
     
-    @Column(name="CODIGOBARRA")
+    @Column(name="CodigoBarra")
     private String codigoBarra;
+    
+    @Column(name="EsSupervisor")
+    private boolean supervisor; 
+    
     
     @Formula("(SELECT current_date())")
     private java.util.Date fechaHoy;
@@ -82,8 +86,6 @@ public class Usuario {
     private String mesAnioCalc;
     
 
-    @Transient
-    private boolean supervisor; 
     
 
     /**
