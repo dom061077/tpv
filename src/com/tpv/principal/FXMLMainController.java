@@ -207,7 +207,8 @@ public class FXMLMainController implements Initializable {
         
         if(impresoraService.getHfp().getEventListener()==null)
             asignarEvento();
-        
+        if (Context.getInstance().currentDMTicket().getModeloImpresora().equals(""))
+            impresoraService.getPrinterVersion();
         //impresoraService.setComSpeed(Long.parseLong("4800"));
         traerInfoImpresora();        
         
@@ -260,7 +261,7 @@ public class FXMLMainController implements Initializable {
     
     @FXML
     public void initialize(URL url, ResourceBundle rb) {
-        setBanner();
+        //setBanner();
         configurarAnimacionIngresoNegativo();
         retiroDineroLabel.setText("Pedir retiro de dinero");
         activarAnimacionRetiroDinero();
@@ -297,6 +298,19 @@ public class FXMLMainController implements Initializable {
                         traerCliente();
                     } 
                     tabPaneController.repeatFocus(textFieldProducto);
+                    if(Context.getInstance().currentDMTicket().isClienteSeleccionado()){
+                        try{
+                            impresoraService.abrirTicket(
+                                Context.getInstance().currentDMTicket().getCliente()
+                                ,TipoComprobanteEnum.F    
+                            );                
+                        }catch(TpvException e){
+                            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+                            Context.getInstance().currentDMTicket().setException(e);
+                            tabPaneController.gotoError();
+                        }                          
+                    }
+                        
                 }
                 if(keyEvent.getCode()==KeyCode.F11 ){
                     if(Context.getInstance().currentDMTicket().getDetalle().size()==0)
@@ -592,7 +606,7 @@ public class FXMLMainController implements Initializable {
                         }
                     }
                     if(precio.compareTo(BigDecimal.valueOf(0))>0){
-                        if(Context.getInstance().currentDMTicket().getDetalle().isEmpty()){
+                       /* if(Context.getInstance().currentDMTicket().getDetalle().isEmpty()){
                                 //------------------------------------
                                 //imageViewLoading.setVisible(true);
                                 //efectoAbrirTicket();
@@ -607,7 +621,9 @@ public class FXMLMainController implements Initializable {
                                     tabPaneController.gotoError();
                                 }                                
                                 //------------------------------------                                
-                        }
+                        }*/
+                        
+                        
                         /*descripcion = producto.getCodigoProducto()+" "+ producto.getDescripcion();
                         if(producto.isProductoVilleco()){
                             descripcion="#"+descripcion;
@@ -747,6 +763,7 @@ public class FXMLMainController implements Initializable {
                 textFieldProducto.setVisible(true);
                 Context.getInstance().currentDMTicket().setClienteSeleccionado(true);
                 Context.getInstance().currentDMTicket().setCliente(cliente);
+                
             }else
                 textFieldCodCliente.setText("");
         }catch(TpvException e){

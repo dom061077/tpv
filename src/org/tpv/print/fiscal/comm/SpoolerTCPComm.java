@@ -1,11 +1,11 @@
 package org.tpv.print.fiscal.comm;
 
+import com.tpv.exceptions.TpvException;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-import java.util.logging.Level;
 
 import org.tpv.print.fiscal.FiscalPacket;
 import org.tpv.print.fiscal.msg.MsgRepository;
@@ -392,6 +392,28 @@ public class SpoolerTCPComm extends AbstractFiscalComm {
 		this.spoolerSocket = spoolerSocket;
 	}
 	
+        
+        public void setTimeOutSocket(int timeOut) throws TpvException{
+            try{
+                this.spoolerSocket.setSoTimeout(timeOut);
+                
+            }catch(IOException e){
+                throw new TpvException("Error al fijar timeout. "
+                          +e.getMessage());
+            }    
+        }
+        
+        public int getTimeOutSocket() throws TpvException{
+            int timeout=0;
+            try{
+                timeout = this.spoolerSocket.getSoTimeout();
+            }catch(IOException e){
+                throw new TpvException("Error al recuperar timeout. "
+                            +e.getMessage());
+            }
+            return timeout;
+            
+        }
 
 
 

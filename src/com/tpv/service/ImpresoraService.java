@@ -43,6 +43,7 @@ public class ImpresoraService {
     
     public static final String MODELOIMPRESORA_SMH_P_441F="SMH/P-441F";
     public static final String MODELOIMPRESORA_SMH_PT_1000F="SMH/PT-1000F";
+    public static final String MODELOIMPRESORA_SMH_P_PR5F = "SMH/P-PR5F";
     
     public static final String IVA_RESPONSABLE_INS = "I";
     public static final String IVA_RESPONSABLE_NO_INS = "N";
@@ -352,6 +353,7 @@ public class ImpresoraService {
             ,BigDecimal precio, BigDecimal iva,boolean imprimeNegativo,BigDecimal impuestoInterno) throws TpvException{
         String _2daLineaDetalle = "";
         String _1erLineaDetalle = "";
+        Connection.getStcp().setTimeOutSocket(50);
         
         if(descripcion.length()>20){
             _1erLineaDetalle = descripcion.substring(0,descripcion.length()-21);
@@ -375,8 +377,11 @@ public class ImpresoraService {
         requestEstado = getHfp().cmdStatusRequest();
 //        hfp.cmdPrintFiscalText(descripcion, Integer.SIZE)
         try{
-            response = getHfp().execute(requestEstado);
-            
+            if (Context.getInstance().currentDMTicket()
+                    .getModeloImpresora()
+                    .compareTo(MODELOIMPRESORA_SMH_P_PR5F)!=0){
+                    response = getHfp().execute(requestEstado);
+            }
             if(_2daLineaDetalle.compareTo("")!=0){
                 response = getHfp().execute(request1eraLineaDetalle);
                 response = getHfp().execute(request2daLineaDetalle);
@@ -398,7 +403,7 @@ public class ImpresoraService {
             
             throw new TpvException(e.getMessage());
         }
-        
+        Connection.getStcp().setTimeOutSocket(100);        
         
     }
     
@@ -605,6 +610,7 @@ public class ImpresoraService {
         FiscalMessages fMsg;
         request = getHfp().cmdCancelDocument();
         requestStatus = getHfp().cmdStatusRequest();
+        log.info("Timeout de socket: "+Connection.getStcp().getTimeOutSocket());
         try{
           response = getHfp().execute(requestStatus);
           response = getHfp().execute(request);
@@ -794,6 +800,8 @@ public class ImpresoraService {
               Context.getInstance().currentDMTicket().setModeloImpresora(MODELOIMPRESORA_SMH_P_441F);
           if (response.getString(3).contains(MODELOIMPRESORA_SMH_PT_1000F))
               Context.getInstance().currentDMTicket().setModeloImpresora(MODELOIMPRESORA_SMH_PT_1000F);
+          if (response.getString(3).contains(MODELOIMPRESORA_SMH_P_PR5F))
+              Context.getInstance().currentDMTicket().setModeloImpresora(MODELOIMPRESORA_SMH_P_PR5F);
           log.info("Modelo de Impresora conectada: "+response.getString(3));
         }catch(FiscalPrinterStatusError e){
             fMsg = getHfp().getMessages();

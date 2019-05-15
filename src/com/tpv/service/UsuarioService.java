@@ -115,18 +115,20 @@ public class UsuarioService {
         UsuarioPerfil usuPerfil = null;
         EntityManager em = Connection.getEm();
         try{            
-            usuario = (Usuario)em.createQuery("FROM Usuario u WHERE u.nombre = :nombre AND u.password = :clave AND u.codigoBarra = :codigoBarra")
+            usuario = (Usuario)em.createQuery("FROM Usuario u WHERE u.nombre = :nombre"
+                            +" AND EsSupervisor = true  AND u.password = :clave AND u.codigoBarra = :codigoBarra ")
                     .setParameter("nombre", nombre)
                     .setParameter("clave" , getMD5(password))
                     .setParameter("codigoBarra", codigoBarra)
                     .getSingleResult();
             if(usuario!=null){
-                usuPerfil = (UsuarioPerfil)em.createQuery("FROM UsuarioPerfil up WHERE up.id.usuarioId = :usuarioId AND up.id.perfilId = :perfilId")
+                /*usuPerfil = (UsuarioPerfil)em.createQuery("FROM UsuarioPerfil up WHERE up.id.usuarioId = :usuarioId AND up.id.perfilId = :perfilId")
                         .setParameter("usuarioId", usuario.getIdUsuario())
                         .setParameter("perfilId", Context.getInstance().currentDMParametroGral().getPerfilSupervisor())
                         .getSingleResult();
                 if(usuPerfil!=null)
-                    flagReturn=true;
+                    flagReturn=true;*/
+                flagReturn = true;
             }
                     
         }catch(NoResultException e){

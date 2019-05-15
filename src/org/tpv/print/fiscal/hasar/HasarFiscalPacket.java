@@ -170,7 +170,9 @@ public class HasarFiscalPacket extends AbstractFiscalPacket
 	public int getCommandCode() { return getByte(0); }
 
 	public void setPrinterStatus(int value) { setHex16(1, value); }
-	public int getPrinterStatus() { return getHex16(1); }
+	public int getPrinterStatus() { 
+            return getHex16(1); 
+        }
 
 	public void setFiscalStatus(int value) { setHex16(2, value); }
 	public int getFiscalStatus() { return getHex16(2); }

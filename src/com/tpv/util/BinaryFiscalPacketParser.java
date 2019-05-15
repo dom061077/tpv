@@ -227,8 +227,14 @@ public class BinaryFiscalPacketParser {
         System.out.println(String.format("%3d",19));
         System.out.println(String.format("%6s","$1.000"));
         System.out.println(String.format("%6s","$500"));*/
-        BigDecimal valor = new BigDecimal(1.3);
-        System.out.println(valor.remainder(BigDecimal.ONE));
+        //BigDecimal valor = new BigDecimal(1.3);
+        //System.out.println(valor.remainder(BigDecimal.ONE));
+        String fecha = "10/10/2019";
+        for(char c: fecha.toCharArray()){
+            System.out.println("Char: "+c);
+            
+        }
+        
         
         
     }

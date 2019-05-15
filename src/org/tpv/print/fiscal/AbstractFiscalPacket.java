@@ -1,7 +1,9 @@
 package org.tpv.print.fiscal;
 
+import com.tpv.service.ImpresoraService;
 import java.math.*;
 import java.util.*;
+import org.apache.log4j.Logger;
 
 import org.tpv.print.fiscal.util.ByteFormatter;
 
@@ -15,6 +17,7 @@ public abstract class AbstractFiscalPacket implements FiscalPacket
 	private List fields = new ArrayList();
 	
 	private FiscalPrinter fiscalPrinter;
+        private Logger log = Logger.getLogger(ImpresoraService.class);
 
 	
 	public AbstractFiscalPacket() {
@@ -192,13 +195,16 @@ public abstract class AbstractFiscalPacket implements FiscalPacket
 	public int getHex16(int field)	// NOTE: Does not use getString().
 	{
 		byte[] v = get(field);
-		if (v.length != 4) throw new NumberFormatException();
+		if (v.length != 4){ 
+                    throw new NumberFormatException();
+                }
 		int value = 0;
 		int p = 0;
 		for (int k = 12; k >= 0; k -= 4)
 		{
 			int d = Character.digit((char) (v[p++] & 0xFF), 0x10);
-			if (d < 0) throw new NumberFormatException();
+			if (d < 0) 
+                            throw new NumberFormatException();
 			value |= (d << k);
 		}
 		return value;
