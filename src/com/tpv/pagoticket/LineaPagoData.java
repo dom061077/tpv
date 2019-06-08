@@ -24,7 +24,7 @@ public class LineaPagoData {
     private IntegerProperty CodigoPago;
     private StringProperty Descripcion;
     private ObjectProperty<BigDecimal> Monto;
-    private ObjectProperty<BigDecimal> CambioCliente;
+    private ObjectProperty<BigDecimal> MontoReal;//este atributo es por si paga en efectivo con mayor monto
     private IntegerProperty CantidadCuotas;
     private StringProperty CodigoCupon;
     private StringProperty NroTarjeta;
@@ -43,7 +43,7 @@ public class LineaPagoData {
     }
     
     public LineaPagoData(int codigoPago,String descripcion,BigDecimal monto
-            ,BigDecimal cambioCliente
+            ,BigDecimal montoReal
             ,int cantidadCuotas,String nroTarjeta, String codigoCupon
             ,String terminal,String numeroLote, String dniCliente
             ,BigDecimal porcentaje
@@ -52,12 +52,12 @@ public class LineaPagoData {
         this.CodigoPago = new SimpleIntegerProperty(codigoPago);
         this.Descripcion = new SimpleStringProperty(descripcion);
         this.Monto = new SimpleObjectProperty(monto);
-        this.CambioCliente = new SimpleObjectProperty(cambioCliente);
+        this.MontoReal = new SimpleObjectProperty(montoReal);
         this.CantidadCuotas = new SimpleIntegerProperty(cantidadCuotas);
         this.CodigoCupon = new SimpleStringProperty(codigoCupon);
         this.NroTarjeta = new SimpleStringProperty(nroTarjeta);
         this.Terminal = new SimpleStringProperty(terminal);
-        this.NumeroLote = new SimpleStringProperty();
+        this.NumeroLote = new SimpleStringProperty(numeroLote);
         this.Porcentaje = new SimpleObjectProperty(porcentaje);
         this.Interes =new SimpleObjectProperty(interesTarjeta);
         this.Bonificacion = new SimpleObjectProperty(bonificacionTarjeta);
@@ -90,8 +90,8 @@ public class LineaPagoData {
         return Monto;
     }
     
-    public ObjectProperty<BigDecimal> cambioCliente(){
-        return CambioCliente;
+    public ObjectProperty<BigDecimal> montoReal(){
+        return MontoReal;
     }
             
     
@@ -163,8 +163,8 @@ public class LineaPagoData {
         return montoProperty().get();
     }
     
-    public BigDecimal getCambioCliente(){
-        return cambioCliente().get();
+    public BigDecimal getMontoReal(){
+        return montoReal().get();
     }
     
     

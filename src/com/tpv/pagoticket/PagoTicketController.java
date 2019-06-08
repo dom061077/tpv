@@ -245,7 +245,7 @@ public class PagoTicketController implements Initializable {
         codigoPagoColumn.setCellValueFactory(new PropertyValueFactory<LineaPagoData,Integer>("codigoPago"));
         codigoPagoColumn.setStyle("-fx-alignment: CENTER-RIGHT;");
         descripcionPagoColumn.setCellValueFactory(new PropertyValueFactory("descripcion"));
-        montoPagoColumn.setCellValueFactory(new PropertyValueFactory("monto"));
+        montoPagoColumn.setCellValueFactory(new PropertyValueFactory("montoReal"));
         montoPagoColumn.setCellFactory(col -> {
             TableCell<LineaPagoData,BigDecimal> cell = new TableCell<LineaPagoData,BigDecimal>(){
                 @Override
@@ -469,8 +469,9 @@ public class PagoTicketController implements Initializable {
                     }
                 }
                 if(keyEvent.getCode() == KeyCode.ESCAPE){
-                    Context.getInstance().currentDMTicket().setTipoTituloSupervisor(TipoTituloSupervisorEnum.CANCELAR_PAGO);
-                    tabPaneController.gotoSupervisor();                        
+                    //Context.getInstance().currentDMTicket().setTipoTituloSupervisor(TipoTituloSupervisorEnum.CANCELAR_PAGO);
+                    //tabPaneController.gotoSupervisor();                        
+                    tabPaneController.gotoFacturacion();
                 }
                 
                 
@@ -745,18 +746,17 @@ public class PagoTicketController implements Initializable {
         int codigoPago = 0;int cantidadCuotas=0;String codigoCupon;
         String nroTarjeta = "";
         BigDecimal monto = new BigDecimal(0);
-        BigDecimal cambioCliente = BigDecimal.ZERO;
+        BigDecimal montoReal = new BigDecimal(textFieldMonto.getText());
         codigoPago = Integer.parseInt(textFieldTipoPago.getText());
         if(Context.getInstance().currentDMTicket()
                 .getSaldo()
                 .compareTo(new BigDecimal(textFieldMonto.getText()))<0){        
             monto = Context.getInstance().currentDMTicket()
                     .getSaldo();
-            cambioCliente = new BigDecimal(textFieldMonto.getText())
-                    .subtract(Context.getInstance().currentDMTicket()
-                    .getSaldo());
+            
         }else    
             monto = new BigDecimal(textFieldMonto.getText());
+            
         BigDecimal netoBonifTarjeta = BigDecimal.ZERO;
         BigDecimal ivaBonifTarjeta = BigDecimal.ZERO;
         BigDecimal netoInteresTarjeta = BigDecimal.ZERO;
@@ -807,7 +807,7 @@ public class PagoTicketController implements Initializable {
             
         Context.getInstance().currentDMTicket().getPagos().add(new LineaPagoData(
             codigoPago,labelFormaPagoDescripcion.getText(),monto
-            ,cambioCliente
+            ,montoReal
             ,cantidadCuotas,nroTarjeta,codigoCupon
             ,terminal,numeroLote,dniCliente
             ,porcentajeIntBonifTarjeta

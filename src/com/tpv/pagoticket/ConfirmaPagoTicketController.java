@@ -104,7 +104,8 @@ public class ConfirmaPagoTicketController implements Initializable{
     private TextField totalTicketTextField;
     
     @FXML
-    private TextField totalPagoTextField;
+    private Label totalPagarLabel;
+    
     
     @FXML
     private Label cambioLabel;
@@ -128,7 +129,7 @@ public class ConfirmaPagoTicketController implements Initializable{
     private Label totalExentoIVALabel;    
     
     @FXML
-    private Label totalBonificacionesLabel;
+    private Label bonifTarjetaLabel;
     
     @FXML
     private Label ingBrutosLabel;
@@ -147,6 +148,11 @@ public class ConfirmaPagoTicketController implements Initializable{
     
     @FXML
     private Label labelRetIngBrutos;
+            
+    @FXML
+    private Label intTarjetaLabel;
+    
+
     
     @FXML
     private StackPane stackPaneConcursos;
@@ -211,9 +217,14 @@ public class ConfirmaPagoTicketController implements Initializable{
                 
                 
             totalPagosLabel.setText(df.format(Context.getInstance().currentDMTicket().getTotalPagos()));
-            totalBonificacionesLabel.setText(df.format(Context.getInstance().currentDMTicket().getBonificaciones()));
-            totalTicketLabel.setText(df.format(Context.getInstance().currentDMTicket().getTotalGral()));
+            bonifTarjetaLabel.setText(df.format(Context.getInstance().currentDMTicket().getBonificaciones()));
+            totalTicketLabel.setText(df.format(Context.getInstance().currentDMTicket().getTotalTicket()));
+            totalPagarLabel.setText(df.format(Context.getInstance().currentDMTicket().getTotalGral()));
             cambioLabel.setText(df.format(Context.getInstance().currentDMTicket().getCambioCliente()));
+            
+            intTarjetaLabel.setText(df.format(Context.getInstance().currentDMTicket().getInteresPorPagoTotal()));
+            bonifTarjetaLabel.setText(df.format(Context.getInstance().currentDMTicket().getBonificacionPorPagoTotal()));
+            
             
             totalNetoLabel.setText(df.format(Context.getInstance().currentDMTicket().getTotalNeto()));
             totalIVALabel.setText(df.format(Context.getInstance().currentDMTicket().getTotalIva()));
@@ -403,7 +414,7 @@ public class ConfirmaPagoTicketController implements Initializable{
                 FacturaDetalle fd = it.next();
                 //fd.getProducto().decStock(fd.getCantidad());
                 total=total.add(fd.getSubTotal());
-                costo = costo.add(fd.getPrecioUnitario());
+                costo = costo.add(fd.getCosto());
                 neto = neto.add(fd.getNeto());
                 netoReducido = netoReducido.add(fd.getNetoReducido());
                 descuento = descuento.add(fd.getDescuentoCliente());
@@ -563,17 +574,10 @@ public class ConfirmaPagoTicketController implements Initializable{
                             //setTotales(factura);
                             
                             factura = factService.confirmarFactura(factura);
-                            Context.getInstance().currentDMTicket().setIdDocumento(null);
-                            Context.getInstance().currentDMTicket().setCliente(null);
-                            Context.getInstance().currentDMTicket().setClienteSeleccionado(false);
-                            Context.getInstance().currentDMTicket().setNroTicket(Context.getInstance().currentDMTicket().getNroTicket()+1);
-                            Context.getInstance().currentDMTicket().getDetalle().clear();
-                            Context.getInstance().currentDMTicket().getPagos().clear();
-                            Context.getInstance().currentDMTicket().setRetencion(BigDecimal.ZERO);
-                            Context.getInstance().currentDMTicket().setBonificaciones(BigDecimal.ZERO);
-                            Context.getInstance().currentDMTicket().setTotalIva(BigDecimal.ZERO);
-                            Context.getInstance().currentDMTicket().setTotalImpuestoInterno(BigDecimal.ZERO);
-                            Context.getInstance().currentDMTicket().setImprimeComoNegativo(false);
+                            Context.getInstance().currentDMTicket()
+                                    .setNroTicket(Context.getInstance().currentDMTicket().getNroTicket()+1);
+                            Context.clearCurrentDMTicket();
+                            
                             log.info("Factura cerrada y confirmada: "+factura.getId());
                             if(factura.getDetalleConcursos().size()>0){
                                 cargarGrillaConcursos(factura);

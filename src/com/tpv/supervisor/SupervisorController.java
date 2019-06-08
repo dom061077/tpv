@@ -135,6 +135,10 @@ public class SupervisorController implements Initializable{
                         case CANCELAR_CONFIRMACION_PAGO:
                             tabController.gotoConfirmarPago();
                             break;
+                        case HABILITAR_MENU_NOTASDC:
+                            tabController.gotoMenuPrincipal();
+                            break;
+                            
                     }                    
                     
                     keyEvent.consume();
@@ -230,6 +234,9 @@ public class SupervisorController implements Initializable{
                                         break;
                                     case CANCELAR_CONFIRMACION_PAGO:
                                         tabController.gotoPago();
+                                        break;
+                                    case HABILITAR_MENU_NOTASDC:
+                                        tabController.gotoNotasDCMenu();
                                         break;
                                 }
                                 keyEvent.consume();

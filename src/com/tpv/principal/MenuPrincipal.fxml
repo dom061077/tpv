@@ -18,18 +18,19 @@
 
 <BorderPane fx:id="borderPane" focusTraversable="true" maxHeight="640.0" maxWidth="1024.0" minHeight="640.0" minWidth="1024.0" prefHeight="640.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tpv.principal.MenuPrincipalController">
    <center>
-      <GridPane alignment="TOP_CENTER" focusTraversable="true" BorderPane.alignment="CENTER">
+      <GridPane alignment="TOP_CENTER" focusTraversable="true" prefHeight="592.0" prefWidth="924.0" BorderPane.alignment="CENTER">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="679.0" minWidth="10.0" prefWidth="160.0" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="866.0" minWidth="10.0" prefWidth="864.0" />
          </columnConstraints>
          <rowConstraints>
-            <RowConstraints maxHeight="100.0" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="95.0" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="100.0" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="100.0" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="100.0" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="100.0" minHeight="100.0" prefHeight="100.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="100.0" minHeight="73.0" prefHeight="73.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="127.0" minHeight="91.0" prefHeight="91.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="109.0" minHeight="74.0" prefHeight="95.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="126.0" minHeight="75.0" prefHeight="75.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="100.0" minHeight="78.0" prefHeight="94.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="122.0" minHeight="78.0" prefHeight="78.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="122.0" minHeight="100.0" prefHeight="122.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
             <Label styleClass="label_menu" text="4- RETIRO DE DINERO" GridPane.columnIndex="1" GridPane.rowIndex="3" />
@@ -51,19 +52,21 @@
                   <Font name="Arial" size="64.0" />
                </font>
             </Label>
-            <ImageView fx:id="imageFin" fitHeight="77.0" fitWidth="112.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="5" />
+            <ImageView fx:id="imageFin" fitHeight="77.0" fitWidth="112.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="6" />
             <Label styleClass="label_menu" text="5- NOTAS DE CRED./DEB." textFill="#3062e1" GridPane.columnIndex="1" GridPane.rowIndex="4">
                <font>
                   <Font size="64.0" />
                </font>
             </Label>
             <ImageView fx:id="imageCargaRetiroDinero" fitHeight="77.0" fitWidth="112.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2" />
-            <Label styleClass="label_menu" text="6- CERRAR SISTEMA" textFill="#3062e1" GridPane.columnIndex="1" GridPane.rowIndex="5">
+            <Label styleClass="label_menu" text="7- CERRAR SISTEMA" textFill="#3062e1" GridPane.columnIndex="1" GridPane.rowIndex="6">
                <font>
                   <Font size="64.0" />
                </font>
             </Label>
             <ImageView fx:id="imageNotasCredito" fitHeight="77.0" fitWidth="112.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="4" />
+            <Label styleClass="label_menu" text="6- CERRAR SESION" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <ImageView fx:id="imageLogin" fitHeight="77.0" fitWidth="112.0" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="5" />
          </children>
          <BorderPane.margin>
             <Insets top="50.0" />

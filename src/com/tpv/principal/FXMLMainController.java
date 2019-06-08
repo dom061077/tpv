@@ -219,7 +219,7 @@ public class FXMLMainController implements Initializable {
         
         chequearInterfazNegativo();    
         
-        initLoadingIcon();
+        
 
         
         tableViewTickets.setItems(Context.getInstance().currentDMTicket().getDetalle());
@@ -261,7 +261,7 @@ public class FXMLMainController implements Initializable {
     
     @FXML
     public void initialize(URL url, ResourceBundle rb) {
-        //setBanner();
+        setBanner();
         configurarAnimacionIngresoNegativo();
         retiroDineroLabel.setText("Pedir retiro de dinero");
         activarAnimacionRetiroDinero();
@@ -276,7 +276,7 @@ public class FXMLMainController implements Initializable {
         Platform.runLater(() -> {
             
             iniciaIngresosVisibles();
-
+            initLoadingIcon();
             textFieldCodCliente.setOnKeyPressed(keyEvent ->{
                 if(keyEvent.getCode() == KeyCode.F2){
                     tabPaneController.gotoCliente();
@@ -298,7 +298,7 @@ public class FXMLMainController implements Initializable {
                         traerCliente();
                     } 
                     tabPaneController.repeatFocus(textFieldProducto);
-                    if(Context.getInstance().currentDMTicket().isClienteSeleccionado()){
+                    /*if(Context.getInstance().currentDMTicket().isClienteSeleccionado()){
                         try{
                             impresoraService.abrirTicket(
                                 Context.getInstance().currentDMTicket().getCliente()
@@ -309,7 +309,7 @@ public class FXMLMainController implements Initializable {
                             Context.getInstance().currentDMTicket().setException(e);
                             tabPaneController.gotoError();
                         }                          
-                    }
+                    }*/
                         
                 }
                 if(keyEvent.getCode()==KeyCode.F11 ){
@@ -333,13 +333,13 @@ public class FXMLMainController implements Initializable {
                 if(keyEvent.getCode() == KeyCode.ENTER ||
                         keyEvent.getCode() == KeyCode.ESCAPE){
                     if(keyEvent.getCode() == KeyCode.ENTER){
-                        try{
+                        /*try{
                             int cantidad = Integer.parseInt(textFieldCantidad.getText());
                             if(cantidad <=0)
                                 return;
                         }catch(Exception e){
                             return;
-                        }
+                        }*/
                         labelCantidadIngresada.setText(LABEL_CANTIDAD_INGRESADA+textFieldCantidad.getText()+")");
                         labelCantidadIngresada.setVisible(true);
                     }else{
@@ -606,7 +606,7 @@ public class FXMLMainController implements Initializable {
                         }
                     }
                     if(precio.compareTo(BigDecimal.valueOf(0))>0){
-                       /* if(Context.getInstance().currentDMTicket().getDetalle().isEmpty()){
+                        if(Context.getInstance().currentDMTicket().getDetalle().isEmpty()){
                                 //------------------------------------
                                 //imageViewLoading.setVisible(true);
                                 //efectoAbrirTicket();
@@ -621,7 +621,7 @@ public class FXMLMainController implements Initializable {
                                     tabPaneController.gotoError();
                                 }                                
                                 //------------------------------------                                
-                        }*/
+                        }
                         
                         
                         /*descripcion = producto.getCodigoProducto()+" "+ producto.getDescripcion();
@@ -725,9 +725,9 @@ public class FXMLMainController implements Initializable {
         textFieldProducto.getStyleClass().add("textfield_sin_border");
         
         textFieldCantidad = new MaskTextField();
-        textFieldCantidad.setMask("N!");//textFieldCantidad.setRawMask("^[0-9]+(\\.([0-9]{1,2})?)?$");
+        textFieldCantidad.setMask("N!.N!");//textFieldCantidad.setRawMask("^[0-9]+(\\.([0-9]{1,2})?)?$");
         textFieldCantidad.setVisible(false);
-        textFieldCantidad.setMaxDigitos(4);
+        textFieldCantidad.setMaxDigitos(6);
         textFieldCantidad.setPrefWidth(150);
         textFieldCantidad.setMaxWidth(150);
         textFieldCantidad.getStyleClass().add("textfield_sin_border");
@@ -776,7 +776,7 @@ public class FXMLMainController implements Initializable {
     }
     
     public void traerInfoImpresora() throws TpvException{
-        if(Context.getInstance().currentDMTicket().getNroTicket()==0){
+        //if(Context.getInstance().currentDMTicket().getNroTicket()==0){
             tabPaneController.actualizarInfoImpresoraEnContexto();
                 /*String retorno[] = impresoraService.getPtoVtaNrosTicket();
                 Context.getInstance().currentDMTicket().setNroTicket(Integer.parseInt(retorno[1])+1);
@@ -784,7 +784,7 @@ public class FXMLMainController implements Initializable {
                 Context.getInstance().currentDMTicket().setPuntoVenta(Long.parseLong(retorno[0]));
                 Context.getInstance().currentDMTicket().setTicketAbierto(Boolean.parseBoolean(retorno[3]));*/
 
-        }
+        //}
         nroticket.setText("Pto.Venta: "+Context.getInstance().currentDMTicket().getPuntoVenta()+" ║ Nº Fact.B/C: "
                             +Context.getInstance().currentDMTicket().getNroTicket()
                             +" ║ Nº Fact.A: "+Context.getInstance().currentDMTicket().getNroFacturaA()
@@ -1242,10 +1242,12 @@ public class FXMLMainController implements Initializable {
                 impresoraService.abrirTicket(Context.getInstance().currentDMTicket().getCliente()
                         ,TipoComprobanteEnum.F
                 );
-                    
+
                         for(Iterator iterator = factura.getDetalleOrdenadoPorId().iterator();iterator.hasNext();){
                             FacturaDetalle fd = (FacturaDetalle)iterator.next();
-
+                            BigDecimal montoSigno = new BigDecimal(1);
+                            if (fd.getSubTotal().compareTo(BigDecimal.ZERO)<0)
+                                montoSigno = montoSigno.multiply(BigDecimal.valueOf(-1));
 
                             lineaTicketData = new LineaTicketData(
                                              fd.getId()
@@ -1253,15 +1255,17 @@ public class FXMLMainController implements Initializable {
                                             ,fd.getProducto().getCodBarra()
                                             ,fd.getProducto().getDescripcion(),fd.getCantidad()
                                             ,fd.getPrecioUnitario()
-                                            ,fd.getPrecioUnitarioBase()
-                                            ,fd.getNeto(),fd.getNetoReducido(),fd.getExento()
-                                            ,fd.getDescuentoCliente()
-                                            ,fd.getIva()
-                                            ,fd.getIvaReducido()
-                                            ,fd.getImpuestoInterno()
+                                            ,fd.getPrecioUnitarioBase().multiply(montoSigno)
+                                            ,fd.getNeto().multiply(montoSigno)
+                                            ,fd.getNetoReducido().multiply(montoSigno)
+                                            ,fd.getExento().multiply(montoSigno)
+                                            ,fd.getDescuentoCliente().multiply(montoSigno)
+                                            ,fd.getIva().multiply(montoSigno)
+                                            ,fd.getIvaReducido().multiply(montoSigno)
+                                            ,fd.getImpuestoInterno().multiply(montoSigno)
                                             ,new BigDecimal(0)
                                             ,fd.getPorcentajeIva()
-                                            ,fd.getCosto()
+                                            ,fd.getCosto().multiply(montoSigno)
                                             ,(fd.getSubTotal().compareTo(BigDecimal.ZERO)<0?true:false)
                             );   
                             //Context.getInstance().currentDMTicket().getDetalle().add(lineaTicketData);

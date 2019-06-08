@@ -107,6 +107,9 @@ public class MenuPrincipalController implements Initializable {
     private ImageView imageNotasCredito;
     
     @FXML
+    private ImageView imageLogin;
+    
+    @FXML
     private ImageView imageFin;
     
     
@@ -150,10 +153,24 @@ public class MenuPrincipalController implements Initializable {
                     Context.getInstance().currentDMTicket().setReinicioVerificado(false);
                     Context.getInstance().currentDMTicket().setIdDocumento(null);
                     Context.getInstance().currentDMTicket().getDetalle().clear();
-                    tabController.gotoNotasDCMenu();
+                    Context.getInstance().currentDMTicket()
+                         .setTipoTituloSupervisor(TipoTituloSupervisorEnum.HABILITAR_MENU_NOTASDC);
+                    tabController.gotoSupervisor();
+                    
+                    //tabController.gotoNotasDCMenu();
+                }
+                if (keyEvent.getCode() == KeyCode.NUMPAD6){
+                    try{
+                        usuarioService.logout();
+                    }catch(TpvException e){
+                        Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_MENUPRINCIPAL);
+                        Context.getInstance().currentDMTicket().setException(e);
+                        tabController.gotoError();
+                    }    
+                    tabController.gotoLogin();
                 }
                 
-                if(keyEvent.getCode()==KeyCode.NUMPAD6){
+                if(keyEvent.getCode()==KeyCode.NUMPAD7){
                     try{
                         usuarioService.logout();
                     }catch(TpvException e){
@@ -202,6 +219,7 @@ public class MenuPrincipalController implements Initializable {
         imageCargaRetiroDinero.setImage(new Image(this.getClass().getResource("/com/tpv/resources/carga_retirodinero.png").toExternalForm()));
         imageNotasCredito.setImage(new Image(this.getClass().getResource("/com/tpv/resources/notadecredito.png").toExternalForm()));
         imageFin.setImage(new Image(this.getClass().getResource("/com/tpv/resources/fin.png").toExternalForm()));
+        imageLogin.setImage(new Image(this.getClass().getResource("/com/tpv/resources/login.png").toExternalForm()));
                 
     }    
     

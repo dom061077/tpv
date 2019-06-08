@@ -155,11 +155,26 @@ public class DataModelTicket {
         for(Iterator iter=innerList.iterator();iter.hasNext();){
             LineaPagoData pago = (LineaPagoData)iter.next();
             //total = total + pago.getMonto().doubleValue();
-            total = total.add(pago.getMonto());
+            total = total.add(pago.getMontoReal());
+            total = total.add(pago.getInteres());
+            total = total.subtract(pago.getBonificacion());
         }
-        //total = total.setScale(2,RoundingMode.HALF_EVEN);
+        total = total.setScale(2,RoundingMode.HALF_EVEN);
         return total;
     }
+    
+    public BigDecimal getTotalPagosSinIntBonifTarjeta(){
+        ListProperty<LineaPagoData> innerList = getPagos();
+        BigDecimal total = BigDecimal.ZERO;
+        for(Iterator iter=innerList.iterator();iter.hasNext();){
+            LineaPagoData pago = (LineaPagoData)iter.next();
+            //total = total + pago.getMonto().doubleValue();
+            total = total.add(pago.getMontoReal());
+        }
+        total = total.setScale(2,RoundingMode.HALF_EVEN);
+        return total;        
+    }
+            
     
     public BigDecimal getTotalIva(){
         ListProperty<LineaTicketData> innerList = getDetalle();
@@ -213,19 +228,20 @@ public class DataModelTicket {
     }
     
     public BigDecimal getSaldo(){
-        BigDecimal saldo = getTotalTicket().subtract(getTotalPagos());
+        BigDecimal saldo = getTotalTicket().subtract(getTotalPagosSinIntBonifTarjeta());
         saldo = saldo.subtract(getBonificaciones());
         saldo = saldo.setScale(2,BigDecimal.ROUND_HALF_EVEN);
         return saldo;
     }
     
     public BigDecimal getCambioCliente(){
-        ListProperty<LineaPagoData> innerList = getPagos();
         BigDecimal cambio = BigDecimal.ZERO;
+        ListProperty<LineaPagoData> innerList = getPagos();
         for(Iterator iter = innerList.iterator();iter.hasNext();){
             LineaPagoData lineaPago = (LineaPagoData) iter.next();
-            cambio = cambio.add(lineaPago.getCambioCliente());
+            cambio = cambio.add(lineaPago.getMontoReal());
         }
+        cambio = getTotalTicket().subtract(cambio).multiply(BigDecimal.valueOf(-1));
         cambio = cambio.setScale(2,BigDecimal.ROUND_HALF_EVEN);
         return cambio;
     }

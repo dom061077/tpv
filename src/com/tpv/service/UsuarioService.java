@@ -189,6 +189,8 @@ public class UsuarioService {
         }catch(NoSuchAlgorithmException e){
             
         }
+        if (md5.length()==31) //agrego estas lineas porque el md5 con BigInteger
+                md5="0"+md5;  //no toma los ceros a la izquierda cuando pasa a string
         return md5;
     }
     
@@ -252,7 +254,7 @@ public class UsuarioService {
     
     public static void main(String[] args){
         String md5 = "";
-        String message = "luque123";
+        String message = "123";
 
          
         message = message;//adding a salt to the string before it gets hashed.

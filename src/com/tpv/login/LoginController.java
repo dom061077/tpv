@@ -62,6 +62,8 @@ public class LoginController implements Initializable{
     
     public void configurarInicio() throws TpvException{
             checkMac();
+            userName.setText("");
+            password.setText("");
             this.tabController.repeatFocus(userName);
     }
     

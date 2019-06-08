@@ -51,7 +51,18 @@ public class Context {
         this.dataModelTicket = dataModelTicket;
     }
 
-
+    public static void clearCurrentDMTicket(){
+        Context.getInstance().currentDMTicket().setIdDocumento(null);
+        Context.getInstance().currentDMTicket().setCliente(null);
+        Context.getInstance().currentDMTicket().setClienteSeleccionado(false);
+        Context.getInstance().currentDMTicket().getDetalle().clear();
+        Context.getInstance().currentDMTicket().getPagos().clear();
+        Context.getInstance().currentDMTicket().setRetencion(BigDecimal.ZERO);
+        Context.getInstance().currentDMTicket().setBonificaciones(BigDecimal.ZERO);
+        Context.getInstance().currentDMTicket().setTotalIva(BigDecimal.ZERO);
+        Context.getInstance().currentDMTicket().setTotalImpuestoInterno(BigDecimal.ZERO);
+        Context.getInstance().currentDMTicket().setImprimeComoNegativo(false);
+    }
     
 
     

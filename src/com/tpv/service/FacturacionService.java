@@ -583,7 +583,7 @@ public class FacturacionService  {
                 FacturaDetalle fd = it.next();
                 //fd.getProducto().decStock(fd.getCantidad());
                 total=total.add(fd.getSubTotal());
-                costo = costo.add(fd.getPrecioUnitario());
+                costo = costo.add(fd.getCosto());
                 neto = neto.add(fd.getNeto());
                 netoReducido = netoReducido.add(fd.getNetoReducido());
                 descuento = descuento.add(fd.getDescuentoCliente());
@@ -666,7 +666,7 @@ public class FacturacionService  {
         factura.setBonificaTarjeta(totalBonificacionPago);
         factura.setInteresTarjeta(totalInteresPago);
         factura.setIvaBonificaTarjeta(totalIvaBonificacionPago);
-        factura.setIvaTarjeta(totalInteresPago);
+        factura.setIvaTarjeta(totalIvaInteresPago);
         BigDecimal totalFactura = factura.getTotal();
         totalFactura = totalFactura.subtract(totalBonificacionPago).add(totalInteresPago);
         factura.setTotal(totalFactura);
@@ -683,9 +683,11 @@ public class FacturacionService  {
                             +" LEFT JOIN  concursos cgph ON cgph.idSUBGRUPO = p.idGRUPOPRODUCTOS"
                             +" LEFT JOIN  concursos cp ON fd.idPRODUCTOS = cp.idPRODUCTOS"
                             +" LEFT JOIN proveedores prov ON pp.idProveedor = prov.idProveedor "
-                            +" LEFT JOIN concursos c ON c.idCONCURSOS = cgp.idCONCURSOS OR"
+                            +" LEFT JOIN concursos c ON (c.idCONCURSOS = cgp.idCONCURSOS OR"
                             +" c.idCONCURSOS = cgph.idCONCURSOS OR c.idCONCURSOS = cp.idCONCURSOS"
-                            +" OR c.idProveedor = prov.idProveedor "            
+                            +" OR c.idProveedor = prov.idProveedor) "            
+                            +"  AND c.vigenciaDesde <= CONVERT(NOW() , DATE) AND "         
+                            +"  c.vigenciaHasta >= CONVERT(NOW() , DATE)"         
                             +" WHERE fd.idFACTURAS = :idFacturas AND c.idCONCURSOS IS NOT NULL"
                             +" GROUP BY c.idCONCURSOS,c.TEXTOCORTO,c.CANTIDADPRODUCTOS,c.CANTIDADCUPONES"
                             +" HAVING (SUM( IF(fd.total<0,fd.CANTIDAD*(-1),fd.CANTIDAD)) DIV c.CANTIDADPRODUCTOS)*c.CANTIDADCUPONES>0")

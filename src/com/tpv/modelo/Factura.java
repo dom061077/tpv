@@ -232,7 +232,7 @@ public class Factura {
     @Column(name = "ANULADO", nullable = false, columnDefinition = "TINYINT(1)") 
     private boolean anulada;
     
-    @Column(name = "CAJA", nullable = false, columnDefinition = "TINYINT(2)")
+    @Column(name = "TURNO", nullable = false, columnDefinition = "TINYINT(2)")
     private int caja;
     
     @Column(name = "FECHAHORAFISCAL")

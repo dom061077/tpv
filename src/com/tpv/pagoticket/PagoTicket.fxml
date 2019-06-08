@@ -43,7 +43,7 @@
                         <Label prefHeight="17.0" prefWidth="292.0" styleClass="label_textfield" text="Bonif. del Pago:" GridPane.rowIndex="2" />
                         <Label fx:id="interesPorPagoTotal" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="204.0" styleClass="label_total" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                         <Label fx:id="saldoPagar" alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="245.0" styleClass="label_total" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Label prefHeight="17.0" prefWidth="275.0" styleClass="label_textfield" text="Total Pago:" GridPane.rowIndex="4" />
+                        <Label prefHeight="17.0" prefWidth="275.0" styleClass="label_textfield" text="Total a Pagar:" GridPane.rowIndex="4" />
                      </children>
                   </GridPane>
                </children>

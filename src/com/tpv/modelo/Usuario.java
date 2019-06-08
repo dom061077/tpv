@@ -72,6 +72,9 @@ public class Usuario {
     @Column(name="CodigoBarra")
     private String codigoBarra;
     
+    @Column(name="CodigoBarraSinEncript")
+    private String codigoBarraSinEncript;
+    
     @Column(name="EsSupervisor")
     private boolean supervisor; 
     

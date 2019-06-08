@@ -353,7 +353,12 @@ public class ImpresoraService {
             ,BigDecimal precio, BigDecimal iva,boolean imprimeNegativo,BigDecimal impuestoInterno) throws TpvException{
         String _2daLineaDetalle = "";
         String _1erLineaDetalle = "";
-        Connection.getStcp().setTimeOutSocket(50);
+        if (Context.getInstance().currentDMTicket()
+                .getModeloImpresora()
+                .compareTo(MODELOIMPRESORA_SMH_P_PR5F)!=0)        
+            Connection.getStcp().setTimeOutSocket(50);
+        else
+            Connection.getStcp().setTimeOutSocket(90);
         
         if(descripcion.length()>20){
             _1erLineaDetalle = descripcion.substring(0,descripcion.length()-21);

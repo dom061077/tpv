@@ -197,7 +197,7 @@
                   <Label fx:id="labelTituloVentana" alignment="TOP_CENTER" contentDisplay="TOP" maxHeight="35.0" maxWidth="1024.0" minHeight="35.0" minWidth="1024.0" prefHeight="35.0" prefWidth="1024.0" styleClass="label_barra_titulo" text="TITULO" BorderPane.alignment="TOP_CENTER" />
                </top>
                <bottom>
-                  <Label fx:id="labelShortCut" maxWidth="1024.0" minWidth="1024.0" prefHeight="31.0" prefWidth="1024.0" styleClass="label_shorcut" text="Label" BorderPane.alignment="CENTER" />
+                  <Label fx:id="labelShortCut" maxWidth="1024.0" minWidth="1024.0" prefHeight="31.0" prefWidth="1024.0" styleClass="label_shorcut" text="Label" textFill="#d31818" BorderPane.alignment="CENTER" />
                </bottom>
             </BorderPane>
          </center>

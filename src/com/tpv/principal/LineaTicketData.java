@@ -104,7 +104,7 @@ public class LineaTicketData {
         //this.SubTotal = new SimpleObjectProperty(new BigDecimal(precioUnitario.doubleValue()*cantidad));
         this.SubTotal = new SimpleObjectProperty(precioUnitario.multiply(cantidad));
         this.porcentajeIva = new SimpleObjectProperty(porcentajeIva);
-        this.costo = new SimpleObjectProperty(costo);
+        this.costo = new SimpleObjectProperty(costo.multiply(montoSigno));
     }
     
     public int getCodigoProducto(){

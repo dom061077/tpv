@@ -637,8 +637,8 @@ public class TabPanePrincipalController implements Initializable {
     
     public void actualizarInfoImpresoraEnContexto() throws TpvException{
         String retorno[] = impresoraService.getPtoVtaNrosTicket();
-        Context.getInstance().currentDMTicket().setNroTicket(Integer.parseInt(retorno[1])+1);
-        Context.getInstance().currentDMTicket().setNroFacturaA(Integer.parseInt(retorno[2])+1);
+        Context.getInstance().currentDMTicket().setNroTicket(Integer.parseInt(retorno[1]));
+        Context.getInstance().currentDMTicket().setNroFacturaA(Integer.parseInt(retorno[2]));
         Context.getInstance().currentDMTicket().setPuntoVenta(Long.parseLong(retorno[0]));
         Context.getInstance().currentDMTicket().setTicketAbierto(Boolean.parseBoolean(retorno[3]));
     }
