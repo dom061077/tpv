@@ -461,37 +461,43 @@ public class ConfirmaPagoTicketController implements Initializable{
     }
             
     private void confirmarFactura(){
+        Factura factura = null;
         try{
             log.info("Cerrando y confirmando factura ");
             
-            //Factura factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdFactura());
-            Factura factura = factService.getFacturaConTotalesConPagos(Context.getInstance().currentDMTicket().getIdDocumento()
+            factura = factService.getFacturaConTotalesConPagos(Context.getInstance().currentDMTicket().getIdDocumento()
                                     ,Context.getInstance().currentDMTicket().getPagos().iterator());
-            
-            //log.info("Cantidad de combos a guardar en la base de datos: "+factura.getDetalleCombosAux().size());
-           
-            
-            //setTotales(factura); //tengo que llamar de dos veces el cálculo de totales
-                                 //sino el comando de cierre de ticket de la impresora
-                                 //no funciona
-            
-            /*for(Iterator<FacturaDetalleCombo> it = factura.getDetalleCombosAux().iterator();it.hasNext();){
-                FacturaDetalleCombo fdc = it.next();
-                //TODO en las bonificaciones de los combos
-                //impresoraService.imprimirLineaTicket(fdc.getCombo().getDescripcion(), fdc.getCantidad()
-                //            ,fdc.getBonificacion() ,producto.getValorImpositivo().getValor() ,Context.getInstance().currentDMTicket().isImprimeComoNegativo(), producto.getImpuestoInterno());
+            if (factura.getClaseComprobante().compareTo("A")==0)
+                factura
+                  .setNumeroComprobante(
+                          new Long(Context.getInstance().currentDMTicket().getNroFacturaA()));
+            if (factura.getClaseComprobante().compareTo("B")==0)
+                factura
+                  .setNumeroComprobante(
+                          new Long(Context.getInstance().currentDMTicket().getNroTicket()));
                 
-            }*/
-            
-            impresoraService.cerrarTicket(factura);
-            
-
+            factura = factService.confirmarFactura(factura);
         }catch(TpvException e){
             log.error("Error en controlador llamando al método cerrarTicket de ImpresoraService",e);
             Context.getInstance().currentDMTicket().setException(e);
             Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CONFIRMARTICKET);
             tabPaneController.gotoError();
-        }
+        }            
+        Context.clearCurrentDMTicket();
+           
+        Context.getInstance().currentDMTicket().setIdDocumento(factura.getId());
+        log.info("Factura cerrada y confirmada: "+factura.getId());
+        try{
+            impresoraService.cerrarTicket(factura);
+        }catch(TpvException e){
+            log.error("Error en controlador llamando al método cerrarTicket de ImpresoraService",e);
+            Context.getInstance().currentDMTicket().setException(e);
+            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
+            tabPaneController.gotoError();
+        } 
+            
+
+
     }
     
     /*public LineaConcursoData(Long codigoConcurso,String textoCorto,boolean imprimeTexto
@@ -525,12 +531,24 @@ public class ConfirmaPagoTicketController implements Initializable{
                 
                 if(command.getCommandCode()==HasarCommands.CMD_CLOSE_FISCAL_RECEIPT){
                     String nroTicketEmitido = response.getString(3);
+//registrarNroComprobanteYHoraFiscal(Long idFactura
+//            ,Long numeroComprobante,String fechaHoraFiscal)                    
+                    try{
+                        factService.registrarNroComprobanteYHoraFiscal(
+                            Context.getInstance().currentDMTicket().getIdDocumento()
+                            , Long.parseLong(nroTicketEmitido), fechaHoraFiscal);
+                        tabPaneController.gotoFacturacion();
+                    }catch(TpvException e){
+                        Context.getInstance().currentDMTicket().setException(e);
+                        Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CONFIRMARTICKET);
+                        tabPaneController.gotoError();
+                    }catch(NullPointerException e){
+                        e.printStackTrace();
+                    }
+                    /*
                     try{
                             log.info("El cierre del ticket para el id de Factura : "+Context.getInstance().currentDMTicket().getIdDocumento()
                                 +" en la impresora fiscal fue correcto. A continuación se cierra el ticket en la base de datos");
-                            //List<FacturaFormaPagoDetalle> pagos = new ArrayList<FacturaFormaPagoDetalle>();
-                            //ListProperty<LineaPagoData> detallePagosData = Context.getInstance().currentDMTicket().getPagos();
-                            //Factura factura = factService.calcularCombos(Context.getInstance().currentDMTicket().getIdFactura());
                             
                             Factura factura = factService
                                        .getFacturaConTotalesConPagos(Context.getInstance().currentDMTicket().getIdDocumento()
@@ -538,41 +556,6 @@ public class ConfirmaPagoTicketController implements Initializable{
                             
                             factura.setNumeroComprobante(Long.parseLong(nroTicketEmitido));
                             factura.setFechaHoraFiscal(fechaHoraFiscal);
-
-
-                            
-                            
-                            
-
-                            
-                            //Factura factura = factService.getFactura(Context.getInstance().currentDMTicket().getIdFactura());
-                            /*log.info("Cantidad de formas de pago: "+detallePagosData.size());
-                            for(Iterator<LineaPagoData> it = detallePagosData.iterator();it.hasNext();){
-                                LineaPagoData item = it.next();
-                                FacturaFormaPagoDetalle formaPagoDetalle = new FacturaFormaPagoDetalle();
-                                try{
-                                    formaPagoDetalle.setFormaPago(pagoService.getFormaPago(item.getCodigoPago()));
-                                }catch(TpvException e){
-                                        Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CONFIRMARTICKET);
-                                        Context.getInstance().currentDMTicket().setException(e);
-                                        tabPaneController.gotoError();
-                                }
-                                
-                                formaPagoDetalle.setFactura(factura);
-                                
-                                formaPagoDetalle.setMontoPago(item.getMonto());
-                                formaPagoDetalle.setCuota(item.getCantidadCuotas());
-                                formaPagoDetalle.setInteres(item.getInteres());
-                                formaPagoDetalle.setBonificacion(item.getBonificacion());
-                                formaPagoDetalle.setIvaInteres(item.getIvaInteres());
-                                formaPagoDetalle.setIvaBonificacion(item.getIvaBonficacion());
-//                                factura.getDetallePagos().add(formaPagoDetalle);
-                                factura.addFormaPago(formaPagoDetalle);
-                                log.info("                  Código forma: "+item.getCodigoPago());
-                            }*/
-                            
-                            //setTotales(factura);
-                            
                             factura = factService.confirmarFactura(factura);
                             Context.getInstance().currentDMTicket()
                                     .setNroTicket(Context.getInstance().currentDMTicket().getNroTicket()+1);
@@ -593,10 +576,9 @@ public class ConfirmaPagoTicketController implements Initializable{
                         tabPaneController.gotoError();
                     }catch(NullPointerException e){
                         e.printStackTrace();
-                    }  
-                    
-                    
-                }
+                    }
+                    */  
+                } 
                 log.debug("Mensajes de error: ");
                 source.getMessages().getErrorMsgs().forEach(item->{
                     log.debug("     Código de Error: "+item.getCode());

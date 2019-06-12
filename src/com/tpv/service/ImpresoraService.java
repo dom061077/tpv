@@ -592,9 +592,11 @@ public class ImpresoraService {
             throw new TpvException(e.getMessage());
         }*/
         
+        
         request = getHfp().cmdCloseFiscalReceipt(null);
         try{
           response = getHfp().execute(getHfp().cmdStatusRequest());
+          response = getHfp().execute(getHfp().cmdGetDateTime());
           response = getHfp().execute(request);
         }catch(FiscalPrinterStatusError e){
             log.warn("Error en estado fiscal de la impresora al cerrar el ticket fiscal",e);
@@ -611,13 +613,13 @@ public class ImpresoraService {
     public void cancelarTicket() throws TpvException{
         //HasarFiscalPrinter hfp = new HasarPrinterP715F(Connection.getStcp()); //new HasarPrinterP320F(stcp);
         FiscalPacket request,requestStatus;
-        FiscalPacket response;
+        FiscalPacket response=null;
         FiscalMessages fMsg;
         request = getHfp().cmdCancelDocument();
         requestStatus = getHfp().cmdStatusRequest();
         log.info("Timeout de socket: "+Connection.getStcp().getTimeOutSocket());
         try{
-          response = getHfp().execute(requestStatus);
+          //response = getHfp().execute(requestStatus);
           response = getHfp().execute(request);
         }catch(FiscalPrinterStatusError e){
             fMsg = getHfp().getMessages();
@@ -626,6 +628,14 @@ public class ImpresoraService {
             
         }catch(FiscalPrinterIOException e){
             log.warn("Error de impresora al cancelar el ticket",e);
+            /*try{
+                response = getHfp().execute(requestStatus);
+            }catch(FiscalPrinterIOException e2){
+                BinaryFiscalPacketParser binaryFP = new BinaryFiscalPacketParser(response);
+                if (binaryFP.isDocumentoFiscalAbiertoODocNoFiscalAbierto())
+                    throw new TpvException(e.getMessage());
+                
+            }*/
             throw new TpvException(e.getMessage());
         }        
     }
@@ -887,5 +897,18 @@ public class ImpresoraService {
         }
     }
     
+    public void getFechaHoraFiscal() throws TpvException{
+        try{
+            FiscalPacket response = getHfp().execute(getHfp().cmdGetDateTime());
+            
+        }catch(FiscalPrinterStatusError e){
+            log.warn("Error de estado en la impresora al enviar datos del comprador",e);
+            throw new TpvException(e.getMessage());
+        }catch(FiscalPrinterIOException e){
+            log.warn("Error mecánico de impresora al enviar datos del comprador",e);
+            throw new TpvException(e.getMessage());
+        }
+    }
+
     
 }

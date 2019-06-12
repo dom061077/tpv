@@ -172,7 +172,28 @@ public class FacturacionService  {
         }
     }
     
-    
+    public void registrarNroComprobanteYHoraFiscal(Long idFactura
+            ,Long numeroComprobante,String fechaHoraFiscal)throws TpvException{
+        Factura factura;
+        EntityManager em = Connection.getEm();
+        EntityTransaction tx = null;
+        try{
+            tx = em.getTransaction();
+            tx.begin();
+            factura = em.find(Factura.class, idFactura);
+            factura.setNumeroComprobante(numeroComprobante);
+            factura.setFechaHoraFiscal(fechaHoraFiscal);
+            tx.commit();
+        em.clear();
+        }catch(RuntimeException e){
+            if(tx.isActive())
+                tx.rollback();
+            log.error("Error en la capa de servicios al agregar detalle de la factura.",e);
+            throw new TpvException("Error en la capa de servicios al agregar detalle de la factura.");
+        }finally{
+            em.clear();
+        }
+    }
     
     public Factura confirmarFactura(Factura factura)throws TpvException{
         //Factura factura;
@@ -299,21 +320,44 @@ public class FacturacionService  {
         anularFactura(id,usuarioSupervisor,FacturaEstadoEnum.ANULADA_SUPERVISOR);
     }
     
-    public void anularFacturaPorReinicio(Long id) throws TpvException{
-        anularFactura(id,null,FacturaEstadoEnum.ANULADA);
+    public Long anularFacturaPorReinicio(Long id) throws TpvException{
+        return anularFactura(id,null,FacturaEstadoEnum.ANULADA);
     }
     
-    private void anularFactura(Long id,Usuario usuarioSupervisor, FacturaEstadoEnum estadoCancelacion) throws TpvException{
+    private Long anularFactura(Long id,Usuario usuarioSupervisor, FacturaEstadoEnum estadoCancelacion) throws TpvException{
         log.info("Capa de servicios, cancelar factura");
         Factura factura;
+        Factura facturaReinicioAbierta;
         EntityManager em = Connection.getEm();
         EntityTransaction tx = null;
+        Long idFactura = null;
         try{
             tx = em.getTransaction();
             tx.begin();
             factura = em.find(Factura.class, id);
             factura.setUsuarioModificacion(usuarioSupervisor);
             factura.setEstado(estadoCancelacion);
+            if(estadoCancelacion == FacturaEstadoEnum.ANULADA){
+                facturaReinicioAbierta = new Factura();
+                facturaReinicioAbierta.setAperturaCierreCajeroDetalle(factura.getAperturaCierreCajeroDetalle());
+                facturaReinicioAbierta.setCaja(factura.getCaja());
+                facturaReinicioAbierta.setCheckout(factura.getCheckout());
+                facturaReinicioAbierta.setCliente(factura.getCliente());
+                facturaReinicioAbierta.setCondicionIva(factura.getCondicionIva());
+                facturaReinicioAbierta.setEstado(FacturaEstadoEnum.ABIERTA);
+                facturaReinicioAbierta.setFechaAlta(factura.getUsuario().getFechaHoraHoy());
+                facturaReinicioAbierta.setTipoComprobante(factura.getTipoComprobante());
+                facturaReinicioAbierta.setClaseComprobante(factura.getClaseComprobante());
+                facturaReinicioAbierta.setPrefijoFiscal(factura.getPrefijoFiscal());
+                facturaReinicioAbierta.setUsuario(factura.getUsuario());
+                
+                facturaReinicioAbierta.setTotal(BigDecimal.ZERO);
+                facturaReinicioAbierta.setBonificaTarjeta(BigDecimal.ZERO);
+                facturaReinicioAbierta.setIvaBonificaTarjeta(BigDecimal.ZERO);
+                facturaReinicioAbierta.setImpuestoInterno(BigDecimal.ZERO);                
+                em.persist(facturaReinicioAbierta);
+                idFactura = facturaReinicioAbierta.getId();
+            }
             tx.commit();
             log.info("Factura con id: "+factura.getId()+", Nro. factura: "
                       +factura.getNumeroComprobante());   
@@ -324,6 +368,7 @@ public class FacturacionService  {
         }finally{
             em.clear();
         }
+        return idFactura;
     }
             
 //    public void registrarCombos(Long id){

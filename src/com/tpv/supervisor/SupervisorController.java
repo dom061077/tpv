@@ -273,6 +273,13 @@ public class SupervisorController implements Initializable{
     
     
     private void cancelarTicketCompleto() throws TpvException{
+        
+            if(Context.getInstance().currentDMTicket().getIdDocumento()!=null)
+                facturaService.anularFacturaPorSupervisor(Context.getInstance().currentDMTicket().getIdDocumento()
+                    ,Context.getInstance().currentDMTicket().getUsuarioSupervisor()
+            );
+            Context.clearCurrentDMTicket();
+        
             impresoraService.cancelarTicket();
     }
     
@@ -288,6 +295,7 @@ public class SupervisorController implements Initializable{
              public void commandExecuted(FiscalPrinter source, FiscalPacket command, FiscalPacket response){
                 log.debug("Evento despues de cerrar cancelar ticket");
                 if(command.getCommandCode()==HasarCommands.CMD_CANCEL_DOCUMENT){
+                    /*
                     try{
                         facturaService.anularFacturaPorSupervisor(Context.getInstance().currentDMTicket().getIdDocumento()
                                 ,Context.getInstance().currentDMTicket().getUsuarioSupervisor()
@@ -306,6 +314,7 @@ public class SupervisorController implements Initializable{
                             Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_CONFIRMARTICKET);
                         tabController.gotoError();
                     }
+                    */
                 }
 
             }

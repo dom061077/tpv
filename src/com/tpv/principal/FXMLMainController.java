@@ -75,7 +75,7 @@ public class FXMLMainController implements Initializable {
     private final static String TITULO_INGRESO_CANTIDAD="Ingrese Cantidad";
     
     Logger log = Logger.getLogger(FXMLMainController.class);
-
+    String flagClaseComprobante;
     
     ProductoService productoService = new ProductoService();
     ClienteService clienteService = new ClienteService();
@@ -611,6 +611,7 @@ public class FXMLMainController implements Initializable {
                                 //imageViewLoading.setVisible(true);
                                 //efectoAbrirTicket();
                                 try{
+                                    guardarFacturaPrimeraVez();
                                     impresoraService.abrirTicket(
                                         Context.getInstance().currentDMTicket().getCliente()
                                         ,TipoComprobanteEnum.F    
@@ -775,6 +776,16 @@ public class FXMLMainController implements Initializable {
 
     }
     
+    private void RefreshNroTicketCheckoutLabel(){
+        nroticket.setText("Pto.Venta: "+Context.getInstance().currentDMTicket().getPuntoVenta()+" ║ Nº Fact.B/C: "
+                            +Context.getInstance().currentDMTicket().getNroTicket()
+                            +" ║ Nº Fact.A: "+Context.getInstance().currentDMTicket().getNroFacturaA()
+        );
+        checkout.setText("Checkout: "+Context.getInstance().currentDMTicket().getCheckout().getId()
+                    +" ║ Caja: "+Context.getInstance().currentDMTicket().getCaja()
+            );        
+    }
+    
     public void traerInfoImpresora() throws TpvException{
         //if(Context.getInstance().currentDMTicket().getNroTicket()==0){
             tabPaneController.actualizarInfoImpresoraEnContexto();
@@ -785,14 +796,8 @@ public class FXMLMainController implements Initializable {
                 Context.getInstance().currentDMTicket().setTicketAbierto(Boolean.parseBoolean(retorno[3]));*/
 
         //}
-        nroticket.setText("Pto.Venta: "+Context.getInstance().currentDMTicket().getPuntoVenta()+" ║ Nº Fact.B/C: "
-                            +Context.getInstance().currentDMTicket().getNroTicket()
-                            +" ║ Nº Fact.A: "+Context.getInstance().currentDMTicket().getNroFacturaA()
-        );
-        checkout.setText("Checkout: "+Context.getInstance().currentDMTicket().getCheckout().getId()
-                    +" ║ Caja: "+Context.getInstance().currentDMTicket().getCaja()
-            );
-        
+
+        RefreshNroTicketCheckoutLabel();
     }
 
     
@@ -905,6 +910,7 @@ public class FXMLMainController implements Initializable {
         }
         factura.setCheckout(Context.getInstance().currentDMTicket().getCheckout());
         factura.setPrefijoFiscal(Context.getInstance().currentDMTicket().getPuntoVenta());
+        this.flagClaseComprobante = factura.getClaseComprobante();
         /*ListProperty<LineaTicketData> detalle =  Context.getInstance().currentDMTicket().getDetalle();
         
         detalle.forEach(item->{
@@ -1124,9 +1130,19 @@ public class FXMLMainController implements Initializable {
             public void commandExecuted(FiscalPrinter source, FiscalPacket command, FiscalPacket response){
                 log.info("Se ejecutó correctamente el siguiente comando:");
                 if(command.getCommandCode()==HasarCommands.CMD_OPEN_FISCAL_RECEIPT){
-                    log.debug("     CMD_OPEN_FISCAL_RECEIPT: ");
+                    log.debug("Evento commandExecuted completado. Comando  CMD_OPEN_FISCAL_RECEIPT: ");
                     imprimiendo=false;
-                    guardarFacturaPrimeraVez();
+                    //guardarFacturaPrimeraVez();
+                    if (flagClaseComprobante.compareTo("A")==0){
+                        Context.getInstance().currentDMTicket()
+                                .setNroFacturaA(Integer.parseInt(response.getString(3)));
+                    }
+                    if (flagClaseComprobante.compareTo("B")==0){
+                        Context.getInstance().currentDMTicket()
+                                .setNroTicket(Integer.parseInt(response.getString(3)));
+                    }
+                        
+                    RefreshNroTicketCheckoutLabel();
                 }
                 
                 if(command.getCommandCode()==HasarCommands.CMD_STATUS_REQUEST){
@@ -1142,7 +1158,7 @@ public class FXMLMainController implements Initializable {
                     
                 
                 if(command.getCommandCode()==HasarCommands.CMD_PRINT_LINE_ITEM){
-
+                    log.info("Evento commandExecuted completado. Comando CMD_PRINT_LINE_ITEM");
                     agregarDetalleFactura();
                     calcularTotalGeneral();
                     verificarRetiroDinero();
@@ -1166,6 +1182,7 @@ public class FXMLMainController implements Initializable {
             @Override
             public void printEnded(FiscalPrinter source, FiscalMessages msgs){
                 tabPaneController.ocultarMensajeModal();
+                log.info("Evento printEnded completado");
             }
         };
         impresoraService.getHfp().setEventListener(this.fiscalPrinterEvent);
@@ -1200,6 +1217,8 @@ public class FXMLMainController implements Initializable {
 //        imageViewIzq.setImage(new Image(f));
         //mp.play();
     }
+    
+
             
     /**
      * Verifica si hay una factura abierta. Si la hay debe ser anulada
@@ -1227,7 +1246,10 @@ public class FXMLMainController implements Initializable {
             
             if(factura!=null){
                 log.info("Se econtró factura abierta con id: "+factura.getId()+", se procede a anulación en BD");
-                factService.anularFacturaPorReinicio(factura.getId());
+                Context.getInstance().currentDMTicket()
+                        // en la anulacion de la factura en la capa de servicios
+                        // se inserta de nuevo la nueva factura.
+                        .setIdDocumento(factService.anularFacturaPorReinicio(factura.getId()));
                 if(Context.getInstance().currentDMTicket().isTicketAbierto()){
                     log.warn("Factura en impresora. Se procede a cancelar documento en Impresora");
                    impresoraService.cancelarTicket();
@@ -1238,6 +1260,7 @@ public class FXMLMainController implements Initializable {
                     
                 }
                 Context.getInstance().currentDMTicket().setClienteSeleccionado(true);
+                this.flagClaseComprobante = factura.getClaseComprobante();
                 
                 impresoraService.abrirTicket(Context.getInstance().currentDMTicket().getCliente()
                         ,TipoComprobanteEnum.F
@@ -1285,7 +1308,7 @@ public class FXMLMainController implements Initializable {
                                     );
 
                         }
-                        //Context.getInstance().currentDMTicket().setIdFactura(factura.getId());
+                        
                 //}
             }
             Context.getInstance().currentDMTicket().setReinicioVerificado(true);                    
