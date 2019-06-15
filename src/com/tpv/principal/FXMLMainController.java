@@ -936,7 +936,6 @@ public class FXMLMainController implements Initializable {
         });*/
         Factura facturaGuardada=null;
         try{
-            factura.setNumeroComprobante(Long.parseLong(impresoraService.getNroUltimoTicketBC()));
             factura.setUsuario(Context.getInstance().currentDMTicket().getUsuario());
             factura.setCheckout(Context.getInstance().currentDMTicket().getCheckout());
             factura.setTipoComprobante(TipoComprobanteEnum.F);

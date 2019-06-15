@@ -19,6 +19,7 @@ import com.tpv.util.ui.MensajeModalAceptar;
 import com.tpv.util.ui.TabPaneModalCommand;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -48,7 +49,7 @@ public class SupervisorController implements Initializable{
     private UsuarioService usuarioService = new UsuarioService();    
     private TabPanePrincipalController tabController;
     private FiscalPrinterEvent fiscalPrinterEvent;
-
+    boolean flagEstadoImpresora;
     
     //@FXML
     //private Label labelTitulo;
@@ -74,15 +75,22 @@ public class SupervisorController implements Initializable{
     @FXML
     private GridPane gridPane;
     
+    @FXML
+    private StackPane stackPaneEsperandoImpresora;
+    
 
-
+    private void clearTextFields(){
+        textFieldCodigoSupervisor.setText("");
+        textFieldPassword.setText("");
+        textFieldCodigoBarra.setText("");
+    }
+    
     public void configurarInicio(){
         //stackPaneError.setVisible(false);
         //labelTitulo.setText(Context.getInstance().currentDMTicket().getTipoTituloSupervisor().getTitulo());
         
-        textFieldCodigoSupervisor.setText("");
-        textFieldPassword.setText("");
-        textFieldCodigoBarra.setText("");
+        clearTextFields();
+        gridPane.setDisable(false);
         tabController.repeatFocus(textFieldCodigoSupervisor);
         if(impresoraService.getHfp().getEventListener()==null)
             asignarEvento();        
@@ -108,6 +116,14 @@ public class SupervisorController implements Initializable{
                 }
             });
             */
+            borderPaneIngreso.setOnKeyPressed(keyEvent->{
+                if(keyEvent.getCode() == KeyCode.F12){
+                    //tabController.setMsgImpresoraVisible(false);
+                    flagEstadoImpresora = true;
+                    tabController.gotoMenuPrincipal();
+                }
+                keyEvent.consume();
+            });
             textFieldCodigoSupervisor.setOnKeyPressed(keyEvent->{
                 if(keyEvent.getCode() == KeyCode.ESCAPE){
                     switch(Context.getInstance().currentDMTicket().getTipoTituloSupervisor()){
@@ -217,7 +233,6 @@ public class SupervisorController implements Initializable{
                                         break;
                                     case CANCELAR_TICKET:
                                         cancelarTicketCompleto();
-                                        tabController.gotoFacturacion();
                                         break;
                                     case CANCELAR_NOTADC:
                                         cancelarTicketCompleto();
@@ -273,14 +288,64 @@ public class SupervisorController implements Initializable{
     
     
     private void cancelarTicketCompleto() throws TpvException{
-        
+        clearTextFields();
             if(Context.getInstance().currentDMTicket().getIdDocumento()!=null)
                 facturaService.anularFacturaPorSupervisor(Context.getInstance().currentDMTicket().getIdDocumento()
                     ,Context.getInstance().currentDMTicket().getUsuarioSupervisor()
             );
             Context.clearCurrentDMTicket();
-        
+            /*tabController.verificarEstadoImpresora();
             impresoraService.cancelarTicket();
+            */
+        Thread cancelarTicketthread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                /*Runnable updater = new Runnable() {
+
+                    @Override
+                    public void run() {
+                        //stackPaneImpresoraEsperando.setVisible(true);
+
+                    }
+                };*/
+                flagEstadoImpresora=false;
+                while (!flagEstadoImpresora) {
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException ex) {
+                        log.warn("Error en sleep the hilo",ex);
+                    }
+                    try{
+                        impresoraService.enviarConsultaEstado();
+                        flagEstadoImpresora=true; 
+                    }catch(TpvException e){
+                       tabController.setMsgImpresoraVisible(true);
+
+                    }                     
+
+                    // UI update is run on the Application thread
+                    //Platform.runLater(updater);
+                }
+                try{
+                    impresoraService.cancelarTicket();
+                }catch(Exception e){
+                    
+                }
+                tabController.setMsgImpresoraVisible(false);
+                
+                tabController.gotoFacturacion();
+                gridPane.setDisable(false);
+                
+            }
+
+        });
+        // don't let thread prevent JVM shutdown
+        cancelarTicketthread.setDaemon(true);
+        cancelarTicketthread.start();
+        gridPane.setDisable(true);
+        tabController.repeatFocus(borderPaneIngreso);
+            
     }
     
     public void setTabController(TabPanePrincipalController tabController){
@@ -332,6 +397,8 @@ public class SupervisorController implements Initializable{
     
     public void cancelarMensajeModal(){
     }
+    
+    
         
     
 }

@@ -64,6 +64,7 @@ public class ConfirmaPagoTicketController implements Initializable{
     private FiscalPrinterEvent fiscalPrinterEvent;
     private String fechaHoraFiscal;
     private ListProperty<LineaConcursoData> concursosList;
+    private boolean flagEstadoImpresora ;
 
     
     
@@ -496,6 +497,35 @@ public class ConfirmaPagoTicketController implements Initializable{
             tabPaneController.gotoError();
         } 
             
+        Thread confirmarTicketThread = new Thread(new Runnable(){
+            @Override
+                public void run(){
+                    flagEstadoImpresora = false;
+                    while(!flagEstadoImpresora){
+                        try{
+                            Thread.sleep(50);
+                        }catch(InterruptedException ex){
+                           log.warn("Error en sleep the hilo",ex);
+                        }
+                        try{
+                            impresoraService.enviarConsultaEstado();
+                            flagEstadoImpresora = true;
+                        }catch(TpvException e){
+                            tabPaneController.setMsgImpresoraVisible(true);
+                        }
+                        
+                        try{
+                            impresoraService.cerrarTicket(factura);
+                        }catch(Exception e){
+                            
+                        }
+                    }
+                    
+                }
+            
+            
+        }) ;
+        
 
 
     }

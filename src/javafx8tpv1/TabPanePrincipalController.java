@@ -25,6 +25,7 @@ import javafx.scene.control.TabPane;
 import org.apache.log4j.Logger;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.ParametroGeneral;
+import com.tpv.modelo.enums.TipoComprobanteEnum;
 import com.tpv.notasdc.NotasCreditoFacturaController;
 import com.tpv.notasdc.NotasCreditoFacturaPorProductoController;
 import com.tpv.notasdc.NotasDCMenuController;
@@ -169,6 +170,7 @@ public class TabPanePrincipalController implements Initializable {
     @FXML private ImageView imageIzquierda;
     @FXML private ImageView imageDerecha;
     @FXML private Label usuarioLogueadoLabel;
+    @FXML private StackPane stackPaneImpresoraEsperando;
     
     
     public Button getButtonMenuPrincipal(){
@@ -179,6 +181,7 @@ public class TabPanePrincipalController implements Initializable {
     //@Override
     @FXML
     public  void initialize(URL url, ResourceBundle rb) {
+        stackPaneImpresoraEsperando.setVisible(false);
         Thread.currentThread().setUncaughtExceptionHandler((thread, throwable) -> {
             
             log.error("Error:",throwable);
@@ -641,6 +644,85 @@ public class TabPanePrincipalController implements Initializable {
         Context.getInstance().currentDMTicket().setNroFacturaA(Integer.parseInt(retorno[2]));
         Context.getInstance().currentDMTicket().setPuntoVenta(Long.parseLong(retorno[0]));
         Context.getInstance().currentDMTicket().setTicketAbierto(Boolean.parseBoolean(retorno[3]));
+    }
+    
+    public void verificarEstadoImpresora(){
+        
+        Thread thread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                Runnable updater = new Runnable() {
+
+                    @Override
+                    public void run() {
+                        //stackPaneImpresoraEsperando.setVisible(true);
+
+                    }
+                };
+                boolean flagestado=false;
+                while (!flagestado) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ex) {
+                    }
+                    try{
+                        impresoraService.enviarConsultaEstado();
+                        flagestado=true; 
+                        stackPaneImpresoraEsperando.setVisible(false);
+                    }catch(TpvException e){
+                       stackPaneImpresoraEsperando.setVisible(true);
+
+                    }                     
+
+                    // UI update is run on the Application thread
+                    Platform.runLater(updater);
+                }
+            }
+
+        });
+        // don't let thread prevent JVM shutdown
+        thread.setDaemon(true);
+        thread.start();
+        
+        /*Thread thread = new Thread("Mensaje de impresora"){
+            public void run(){
+                boolean flagestado = false;
+                
+
+                
+                do{
+                    try{
+                        Thread.sleep(50);
+                    }catch(InterruptedException e){
+
+                    }         
+                    
+                    try{
+                        impresoraService.enviarConsultaEstado();
+                        flagestado=true; 
+                        stackPaneImpresoraEsperando.setVisible(false);
+                    }catch(TpvException e){
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					stackPaneImpresoraEsperando.setVisible(true);
+				}
+			});
+                        
+                    } 
+                }while(!flagestado);
+            }
+        };*/
+        
+    }
+    
+    public void setMsgImpresoraVisible(boolean visible){
+        stackPaneImpresoraEsperando.setVisible(visible);
+    }
+    
+    public void setDisableTabSupervisor(boolean disable){
+        tabSupervisor.setDisable(disable);
     }
  
     

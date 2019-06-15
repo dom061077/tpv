@@ -1145,6 +1145,7 @@ public class FacturacionService  {
     }
     
     
+    
     /*public List getConcursos(Long idFactura) throws TpvException{
         List list=new ArrayList();
         EntityManager em = Connection.getEm();

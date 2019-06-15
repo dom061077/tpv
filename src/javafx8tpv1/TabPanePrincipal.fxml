@@ -187,6 +187,12 @@
                               </BorderPane>
                            </children>
                         </StackPane>
+                        <StackPane fx:id="stackPaneImpresoraEsperando" layoutX="250.0" layoutY="200.0" prefHeight="150.0" prefWidth="400.0">
+                           <children>
+                              <Label styleClass="label_error" text="Esperando Impresora ..." />
+                           </children>
+                        </StackPane>
+                        <Label text="Label" />
                      </children>
                      <padding>
                         <Insets top="10.0" />
