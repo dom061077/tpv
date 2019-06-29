@@ -323,6 +323,14 @@ public class ConfirmaPagoTicketController implements Initializable{
             tableViewConcursos.setItems(concursosList);
             Platform.runLater(()->{
                 tableViewPagos.setItems(Context.getInstance().currentDMTicket().getPagos());
+                
+                borderPane.setOnKeyPressed(keyEvent->{
+                        if(keyEvent.getCode() == KeyCode.F12){
+                            flagEstadoImpresora = true;
+                            tabPaneController.gotoMenuPrincipal();
+                        }
+                        keyEvent.consume();                    
+                });
                 tableViewPagos.setOnKeyPressed(keyEvent->{
                     if(keyEvent.getCode()==KeyCode.ESCAPE){
                         Context.getInstance().currentDMTicket().setTipoTituloSupervisor(TipoTituloSupervisorEnum.CANCELAR_CONFIRMACION_PAGO);
@@ -488,14 +496,15 @@ public class ConfirmaPagoTicketController implements Initializable{
            
         Context.getInstance().currentDMTicket().setIdDocumento(factura.getId());
         log.info("Factura cerrada y confirmada: "+factura.getId());
-        try{
+        final Factura facturaFinal = factura;
+        /*try{
             impresoraService.cerrarTicket(factura);
         }catch(TpvException e){
             log.error("Error en controlador llamando al método cerrarTicket de ImpresoraService",e);
             Context.getInstance().currentDMTicket().setException(e);
             Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
             tabPaneController.gotoError();
-        } 
+        } */
             
         Thread confirmarTicketThread = new Thread(new Runnable(){
             @Override
@@ -512,21 +521,30 @@ public class ConfirmaPagoTicketController implements Initializable{
                             flagEstadoImpresora = true;
                         }catch(TpvException e){
                             tabPaneController.setMsgImpresoraVisible(true);
+                            //tabPaneController.repeatFocus(borderPane);
                         }
-                        
-                        try{
-                            impresoraService.cerrarTicket(factura);
-                        }catch(Exception e){
-                            
-                        }
+
                     }
+                    
+                    tabPaneController.setMsgImpresoraVisible(false);
+                    
+                    try{
+                        impresoraService.cerrarTicket(facturaFinal);
+                    }catch(Exception e){
+
+                    }
+                    tabPaneController.setDisableTabConfirmarPago(false);                    
                     
                 }
             
             
         }) ;
         
-
+        // don't let thread prevent JVM shutdown
+        confirmarTicketThread.setDaemon(true);
+        confirmarTicketThread.start();
+        
+        
 
     }
     

@@ -724,6 +724,10 @@ public class TabPanePrincipalController implements Initializable {
     public void setDisableTabSupervisor(boolean disable){
         tabSupervisor.setDisable(disable);
     }
+    
+    public void setDisableTabConfirmarPago(boolean disable){
+        tabConfirmarPago.setDisable(disable);
+    }
  
     
 }

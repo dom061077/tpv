@@ -41,4 +41,7 @@
          </center>
       </BorderPane>
    </center>
+   <left>
+      <Pane fx:id="paneSalidaMenuPrincipal" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </left>
 </BorderPane>

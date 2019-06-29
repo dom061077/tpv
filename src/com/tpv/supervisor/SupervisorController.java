@@ -6,7 +6,6 @@
 package com.tpv.supervisor;
 
 import com.tpv.enums.OrigenPantallaErrorEnum;
-import com.tpv.enums.TipoTituloSupervisorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.Usuario;
 import com.tpv.principal.Context;
@@ -16,10 +15,8 @@ import com.tpv.service.ImpresoraService;
 import com.tpv.service.UsuarioService;
 import com.tpv.util.ui.MaskTextField;
 import com.tpv.util.ui.MensajeModalAceptar;
-import com.tpv.util.ui.TabPaneModalCommand;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -27,6 +24,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx8tpv1.TabPanePrincipalController;
 import org.apache.log4j.Logger;
@@ -73,10 +71,15 @@ public class SupervisorController implements Initializable{
     private BorderPane borderPaneIngreso;
     
     @FXML
+    private Pane paneSalidaMenuPrincipal;
+    
+    @FXML
     private GridPane gridPane;
     
     @FXML
     private StackPane stackPaneEsperandoImpresora;
+    
+    private Thread cancelarTicketthread;
     
 
     private void clearTextFields(){
@@ -116,7 +119,7 @@ public class SupervisorController implements Initializable{
                 }
             });
             */
-            borderPaneIngreso.setOnKeyPressed(keyEvent->{
+            paneSalidaMenuPrincipal.setOnKeyPressed(keyEvent->{
                 if(keyEvent.getCode() == KeyCode.F12){
                     //tabController.setMsgImpresoraVisible(false);
                     flagEstadoImpresora = true;
@@ -297,7 +300,7 @@ public class SupervisorController implements Initializable{
             /*tabController.verificarEstadoImpresora();
             impresoraService.cancelarTicket();
             */
-        Thread cancelarTicketthread = new Thread(new Runnable() {
+        cancelarTicketthread = new Thread(new Runnable() {
 
             @Override
             public void run() {
@@ -321,18 +324,20 @@ public class SupervisorController implements Initializable{
                         flagEstadoImpresora=true; 
                     }catch(TpvException e){
                        tabController.setMsgImpresoraVisible(true);
+                       tabController.repeatFocus(paneSalidaMenuPrincipal);
 
                     }                     
 
                     // UI update is run on the Application thread
                     //Platform.runLater(updater);
                 }
+                tabController.setMsgImpresoraVisible(false);
+                
                 try{
                     impresoraService.cancelarTicket();
                 }catch(Exception e){
                     
                 }
-                tabController.setMsgImpresoraVisible(false);
                 
                 tabController.gotoFacturacion();
                 gridPane.setDisable(false);
@@ -344,7 +349,7 @@ public class SupervisorController implements Initializable{
         cancelarTicketthread.setDaemon(true);
         cancelarTicketthread.start();
         gridPane.setDisable(true);
-        tabController.repeatFocus(borderPaneIngreso);
+        
             
     }
     
