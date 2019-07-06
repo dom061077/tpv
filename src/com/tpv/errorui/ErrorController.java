@@ -171,7 +171,7 @@ public class ErrorController implements Initializable {
                         */
                     }
                     if(keyEvent.getCode()==KeyCode.F12)
-                        System.exit(0);
+                        tabController.gotoMenuPrincipal();
                     
                     if(keyEvent.getCode()==KeyCode.TAB){
                         keyEvent.consume();

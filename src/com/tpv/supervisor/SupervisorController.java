@@ -17,6 +17,7 @@ import com.tpv.util.ui.MaskTextField;
 import com.tpv.util.ui.MensajeModalAceptar;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -48,6 +49,7 @@ public class SupervisorController implements Initializable{
     private TabPanePrincipalController tabController;
     private FiscalPrinterEvent fiscalPrinterEvent;
     boolean flagEstadoImpresora;
+    boolean flagCanceladoPorUsuario;
     
     //@FXML
     //private Label labelTitulo;
@@ -208,6 +210,7 @@ public class SupervisorController implements Initializable{
                                 //this.tabController.getLabelMensaje().setText("Credenciales de Supervisor Incorrectas");
                                 //this.tabController.getLabelCancelarModal().setVisible(false);
                                 //this.tabController.mostrarMensajeModal();
+                                textFieldCodigoBarra.setText("");
                                 tabController.showMsgModal(
                                         new MensajeModalAceptar("Error"
                                                 ,"Credenciales de Supervisor Incorrectas"
@@ -291,28 +294,30 @@ public class SupervisorController implements Initializable{
     
     
     private void cancelarTicketCompleto() throws TpvException{
+        flagCanceladoPorUsuario=false;
         clearTextFields();
             if(Context.getInstance().currentDMTicket().getIdDocumento()!=null)
                 facturaService.anularFacturaPorSupervisor(Context.getInstance().currentDMTicket().getIdDocumento()
                     ,Context.getInstance().currentDMTicket().getUsuarioSupervisor()
             );
             Context.clearCurrentDMTicket();
-            /*tabController.verificarEstadoImpresora();
-            impresoraService.cancelarTicket();
-            */
+            //impresoraService.cancelarTicket();
+            //tabController.gotoFacturacion();
+        
         cancelarTicketthread = new Thread(new Runnable() {
 
             @Override
             public void run() {
-                /*Runnable updater = new Runnable() {
+                //Runnable updater = new Runnable() {
 
-                    @Override
-                    public void run() {
+                //    @Override
+                //    public void run() {
                         //stackPaneImpresoraEsperando.setVisible(true);
 
-                    }
-                };*/
+                //    }
+                //};
                 flagEstadoImpresora=false;
+                //tabController.setMsgTituloVentana("OTRA PRUEBA");
                 while (!flagEstadoImpresora) {
                     try {
                         Thread.sleep(50);
@@ -323,24 +328,36 @@ public class SupervisorController implements Initializable{
                         impresoraService.enviarConsultaEstado();
                         flagEstadoImpresora=true; 
                     }catch(TpvException e){
-                       tabController.setMsgImpresoraVisible(true);
-                       tabController.repeatFocus(paneSalidaMenuPrincipal);
+                       Platform.runLater(new Runnable(){
+                           public void run(){
+                                tabController.setMsgImpresoraVisible(true);
+                           }
+                       });
 
                     }                     
 
                     // UI update is run on the Application thread
                     //Platform.runLater(updater);
                 }
-                tabController.setMsgImpresoraVisible(false);
                 
-                try{
-                    impresoraService.cancelarTicket();
-                }catch(Exception e){
-                    
+                if(!flagCanceladoPorUsuario){
+                    try{
+                        impresoraService.cancelarTicket();
+                    }catch(Exception e){
+
+                    }
                 }
-                
-                tabController.gotoFacturacion();
                 gridPane.setDisable(false);
+                Platform.runLater(new Runnable(){
+                    public void run(){
+                        tabController.setMsgImpresoraVisible(false);
+                        if(!flagCanceladoPorUsuario)
+                            tabController.gotoFacturacion();        
+                        else
+                            tabController.gotoMenuPrincipal();
+                    }
+                });
+                
                 
             }
 
@@ -385,6 +402,7 @@ public class SupervisorController implements Initializable{
                         tabController.gotoError();
                     }
                     */
+                   // tabController.gotoFacturacion();
                 }
 
             }
@@ -403,7 +421,10 @@ public class SupervisorController implements Initializable{
     public void cancelarMensajeModal(){
     }
     
-    
+    public void killEstadoImpresora(){
+        flagEstadoImpresora=true;
+        flagCanceladoPorUsuario=true;
+    }
         
     
 }

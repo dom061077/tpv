@@ -194,7 +194,9 @@ public class TabPanePrincipalController implements Initializable {
             Context.getInstance().currentDMTicket().setException(new TpvException("Error no controlado: "+throwable.getMessage()));
             gotoError();
             
-        });           
+        });         
+        
+
 
         labelMensaje.wrapTextProperty().set(true);
         labelMensajeModalSuperior.wrapTextProperty().set(true);
@@ -245,6 +247,15 @@ public class TabPanePrincipalController implements Initializable {
                        //menuPrincipalController.setMenuFocus();
                    }
                 });
+        
+        stackPaneImpresoraEsperando.setOnKeyPressed(keyEvent->{
+            if(keyEvent.getCode() == KeyCode.F12){
+                supervisorController.killEstadoImpresora();
+                confirmaPagoController.killEstadoImpresora();
+                gotoMenuPrincipal();
+            }
+            keyEvent.consume();
+        });
         stackPaneModal.setOnKeyPressed(keyEvent->{
             if(keyEvent.getCode() == KeyCode.ENTER){
                 if(getTabPaneModalCommand()!=null)
@@ -264,6 +275,7 @@ public class TabPanePrincipalController implements Initializable {
                     repeatFocus(getMensajeModal().getNode());
                 }
             }
+            keyEvent.consume();
         });
         
     }      
@@ -358,7 +370,7 @@ public class TabPanePrincipalController implements Initializable {
     
     public void gotoError(){
         this.getLabelTituloVentana().setText("ERROR");
-        this.getLabelShortCut().setText("Esc-Recuperar Sistema | F12-Salir de Sistema");
+        this.getLabelShortCut().setText("Esc-Recuperar Sistema | F12-Ir a Menú principal");
         this.errorController.configurarInicio();
         this.getTabPanePrincipal().getSelectionModel().select(tabError);
     }
@@ -525,7 +537,7 @@ public class TabPanePrincipalController implements Initializable {
         if(node == null)
             return;
         Platform.runLater(() -> {
-            if (!node.isFocused()) {
+            if (!node.isFocused() && node.isVisible()) {
                 node.requestFocus();
                 repeatFocus(node);
             }
@@ -719,6 +731,8 @@ public class TabPanePrincipalController implements Initializable {
     
     public void setMsgImpresoraVisible(boolean visible){
         stackPaneImpresoraEsperando.setVisible(visible);
+        if(visible == true)
+            repeatFocus(stackPaneImpresoraEsperando);
     }
     
     public void setDisableTabSupervisor(boolean disable){
@@ -729,5 +743,5 @@ public class TabPanePrincipalController implements Initializable {
         tabConfirmarPago.setDisable(disable);
     }
  
-    
+
 }

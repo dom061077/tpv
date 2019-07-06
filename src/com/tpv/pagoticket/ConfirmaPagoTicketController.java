@@ -65,6 +65,7 @@ public class ConfirmaPagoTicketController implements Initializable{
     private String fechaHoraFiscal;
     private ListProperty<LineaConcursoData> concursosList;
     private boolean flagEstadoImpresora ;
+    private boolean flagCanceladoPorUsuario;
 
     
     
@@ -324,13 +325,6 @@ public class ConfirmaPagoTicketController implements Initializable{
             Platform.runLater(()->{
                 tableViewPagos.setItems(Context.getInstance().currentDMTicket().getPagos());
                 
-                borderPane.setOnKeyPressed(keyEvent->{
-                        if(keyEvent.getCode() == KeyCode.F12){
-                            flagEstadoImpresora = true;
-                            tabPaneController.gotoMenuPrincipal();
-                        }
-                        keyEvent.consume();                    
-                });
                 tableViewPagos.setOnKeyPressed(keyEvent->{
                     if(keyEvent.getCode()==KeyCode.ESCAPE){
                         Context.getInstance().currentDMTicket().setTipoTituloSupervisor(TipoTituloSupervisorEnum.CANCELAR_CONFIRMACION_PAGO);
@@ -344,6 +338,7 @@ public class ConfirmaPagoTicketController implements Initializable{
                                 , "¿Confirma el cierre del ticket?", "", null){
                                     @Override
                                     public void aceptarMensaje(){
+                                        tabPaneController.setDisableTabConfirmarPago(true);
                                         confirmarFactura();
                                     }
                                     
@@ -471,6 +466,7 @@ public class ConfirmaPagoTicketController implements Initializable{
             
     private void confirmarFactura(){
         Factura factura = null;
+        flagCanceladoPorUsuario = false;
         try{
             log.info("Cerrando y confirmando factura ");
             
@@ -526,14 +522,26 @@ public class ConfirmaPagoTicketController implements Initializable{
 
                     }
                     
-                    tabPaneController.setMsgImpresoraVisible(false);
-                    
-                    try{
-                        impresoraService.cerrarTicket(facturaFinal);
-                    }catch(Exception e){
+                    if (!flagCanceladoPorUsuario){
+                        try{
+                            impresoraService.cerrarTicket(facturaFinal);
+                        }catch(Exception e){
 
+                        }
                     }
-                    tabPaneController.setDisableTabConfirmarPago(false);                    
+                    
+                    
+                    Platform.runLater(new Runnable(){
+                        public void run(){
+                            tabPaneController.setMsgImpresoraVisible(false);
+                            tabPaneController.setDisableTabConfirmarPago(false);                    
+                            if(!flagCanceladoPorUsuario)
+                                tabPaneController.gotoFacturacion();
+                            else
+                                tabPaneController.gotoMenuPrincipal();
+
+                        }
+                    });
                     
                 }
             
@@ -670,6 +678,10 @@ public class ConfirmaPagoTicketController implements Initializable{
         this.tabPaneController=tabPaneController;
     }
     
+    public void killEstadoImpresora(){
+        flagCanceladoPorUsuario = true;
+        flagEstadoImpresora = true;
+    }
     
     /*
     public void guardarTicket(){

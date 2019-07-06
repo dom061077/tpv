@@ -324,6 +324,36 @@ public class FacturacionService  {
         return anularFactura(id,null,FacturaEstadoEnum.ANULADA);
     }
     
+    public void anularFacturasAbiertas(int idCheckout,int idUsuario
+            ,Usuario usuarioSupervisor)throws TpvException{
+        log.info("Capa de servicios, anular facturas abiertas para checkout : "
+            +idCheckout+", Usuario cajero: "+idUsuario
+            +", Usuario supervisor: "+usuarioSupervisor.getIdUsuario());
+        EntityManager em = Connection.getEm();
+        EntityTransaction tx = null;
+        try{
+            tx = em.getTransaction();
+            tx.begin();
+            Query q = em.createQuery("FROM Factura f WHERE f.checkout.id = :idCheckout "
+                +" AND f.usuario.id = :idUsuario AND f.estado = :estado")
+                   .setParameter("idCheckout", idCheckout)
+                   .setParameter("idUsuario", idUsuario)
+                   .setParameter("estado", FacturaEstadoEnum.ABIERTA);
+            List<Factura> facturas = q.getResultList();
+            facturas.forEach(item->{
+                item.setEstado(FacturaEstadoEnum.ANULADA_SUPERVISOR);
+                item.setUsuarioModificacion(usuarioSupervisor);
+            });
+            tx.commit();
+        }catch (RuntimeException e){
+            log.error("Error en la capa de servicios al anular facturas abiertas",e);
+            throw new TpvException("Error en la capa de servicios al anular facturas abiertas. "
+                    +e.getMessage());
+        }finally{
+            em.clear();
+        }
+    }
+    
     private Long anularFactura(Long id,Usuario usuarioSupervisor, FacturaEstadoEnum estadoCancelacion) throws TpvException{
         log.info("Capa de servicios, cancelar factura");
         Factura factura;
@@ -896,7 +926,7 @@ public class FacturacionService  {
             notaDC.setClaseComprobante(notaDC.getFacturaOrigen().getClaseComprobante());
             notaDC.setAperturaCierreCajeroDetalle(apCiereCajDet);
             notaDC.setCheckout(checkout);
-            notaDC.setEstado(FacturaEstadoEnum.ABIERTA);
+            notaDC.setEstado(FacturaEstadoEnum.CERRADA);
             notaDC.setUsuario(usuario);
             notaDC.setMotivo(motivo);
             notaDC.setClaseComprobante("B");

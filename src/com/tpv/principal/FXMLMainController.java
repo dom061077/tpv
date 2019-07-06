@@ -499,7 +499,7 @@ public class FXMLMainController implements Initializable {
                 if(keyEvent.getCode() == KeyCode.BACK_SPACE
                         || keyEvent.getCode() == KeyCode.DELETE)
                     return;
-                keyEvent.consume();
+                //keyEvent.consume();
 
             });
 
@@ -611,7 +611,7 @@ public class FXMLMainController implements Initializable {
                                 //imageViewLoading.setVisible(true);
                                 //efectoAbrirTicket();
                                 try{
-                                    guardarFacturaPrimeraVez();
+                                    
                                     impresoraService.abrirTicket(
                                         Context.getInstance().currentDMTicket().getCliente()
                                         ,TipoComprobanteEnum.F    
@@ -620,6 +620,7 @@ public class FXMLMainController implements Initializable {
                                     Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_FACTURACION);
                                     Context.getInstance().currentDMTicket().setException(e);
                                     tabPaneController.gotoError();
+                                    return;
                                 }                                
                                 //------------------------------------                                
                         }
@@ -1131,7 +1132,7 @@ public class FXMLMainController implements Initializable {
                 if(command.getCommandCode()==HasarCommands.CMD_OPEN_FISCAL_RECEIPT){
                     log.debug("Evento commandExecuted completado. Comando  CMD_OPEN_FISCAL_RECEIPT: ");
                     imprimiendo=false;
-                    //guardarFacturaPrimeraVez();
+                    guardarFacturaPrimeraVez();
                     if (flagClaseComprobante.compareTo("A")==0){
                         Context.getInstance().currentDMTicket()
                                 .setNroFacturaA(Integer.parseInt(response.getString(3)));

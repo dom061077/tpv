@@ -40,7 +40,7 @@
                <center>
                   <Pane maxHeight="700.0" maxWidth="1024.0" minHeight="700.0" minWidth="1024.0" prefHeight="700.0" prefWidth="1024.0" styleClass="rounded_corner" BorderPane.alignment="CENTER">
                      <children>
-                        <TabPane fx:id="tabPanePrincipal" focusTraversable="false" maxHeight="700.0" maxWidth="1024.0" minHeight="700.0" minWidth="1024.0" prefHeight="700.0" prefWidth="1024.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE">
+                        <TabPane fx:id="tabPanePrincipal" cacheShape="false" focusTraversable="false" maxHeight="700.0" maxWidth="1024.0" minHeight="700.0" minWidth="1024.0" prefHeight="700.0" prefWidth="1024.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE">
                           <tabs>
                               <Tab fx:id="tabNotasDCDebito" text="Notas De Débito">
                                 <content>

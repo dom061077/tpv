@@ -8,6 +8,7 @@ package com.tpv.print.fiscal;
 import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.principal.Context;
+import com.tpv.service.FacturacionService;
 import java.net.URL;
 import java.util.ResourceBundle;
 import org.apache.log4j.Logger;
@@ -29,6 +30,7 @@ import javafx.scene.layout.BorderPane;
 
 public class ConfiguracionImpresoraController implements Initializable,TabPaneModalCommand {
     private ImpresoraService impresoraService = new ImpresoraService();
+    private FacturacionService factService = new FacturacionService();
     Logger log = Logger.getLogger(ConfiguracionImpresoraController.class);
     private TabPanePrincipalController tabController;
 
@@ -48,6 +50,10 @@ public class ConfiguracionImpresoraController implements Initializable,TabPaneMo
                 }
                 if(keyEvent.getCode()==KeyCode.NUMPAD1){
                     try{
+                        factService.anularFacturasAbiertas(
+                                Context.getInstance().currentDMTicket().getCheckout().getId()
+                                , Context.getInstance().currentDMTicket().getUsuario().getIdUsuario()
+                                , Context.getInstance().currentDMTicket().getUsuarioSupervisor());
                         impresoraService.cancelarTicket();
                         //tabController.getLabelCancelarModal().setVisible(false);
                         //tabController.getLabelMensaje().setText("El ticket fue cancelado con éxito");

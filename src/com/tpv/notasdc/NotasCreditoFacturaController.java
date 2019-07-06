@@ -267,8 +267,7 @@ public class NotasCreditoFacturaController implements Initializable {
             this.facturaOrigenCredito = factService.getFactura(
                  Long.parseLong(textFieldPrefijo.getText().trim())
                 , Long.parseLong(textFieldNumero.getText().trim()));
-            if(this.facturaOrigenCredito==null  
-                    && this.facturaOrigenCredito.getEstado()==FacturaEstadoEnum.CERRADA){
+            if(this.facturaOrigenCredito==null ){
                 tabPaneController.showMsgModal(new MensajeModalAceptar(
                         "Mensaje","La factura con el prefijo y Nº ingresado no existe."
                         ,"",textFieldPrefijo
