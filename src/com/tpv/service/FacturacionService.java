@@ -320,8 +320,8 @@ public class FacturacionService  {
         anularFactura(id,usuarioSupervisor,FacturaEstadoEnum.ANULADA_SUPERVISOR);
     }
     
-    public Long anularFacturaPorReinicio(Long id) throws TpvException{
-        return anularFactura(id,null,FacturaEstadoEnum.ANULADA);
+    public void anularFacturaPorReinicio(Long id) throws TpvException{
+        /*return*/ anularFactura(id,null,FacturaEstadoEnum.ANULADA);
     }
     
     public void anularFacturasAbiertas(int idCheckout,int idUsuario
@@ -354,7 +354,7 @@ public class FacturacionService  {
         }
     }
     
-    private Long anularFactura(Long id,Usuario usuarioSupervisor, FacturaEstadoEnum estadoCancelacion) throws TpvException{
+    private void anularFactura(Long id,Usuario usuarioSupervisor, FacturaEstadoEnum estadoCancelacion) throws TpvException{
         log.info("Capa de servicios, cancelar factura");
         Factura factura;
         Factura facturaReinicioAbierta;
@@ -367,7 +367,8 @@ public class FacturacionService  {
             factura = em.find(Factura.class, id);
             factura.setUsuarioModificacion(usuarioSupervisor);
             factura.setEstado(estadoCancelacion);
-            if(estadoCancelacion == FacturaEstadoEnum.ANULADA){
+            
+            /*if(estadoCancelacion == FacturaEstadoEnum.ANULADA){
                 facturaReinicioAbierta = new Factura();
                 facturaReinicioAbierta.setAperturaCierreCajeroDetalle(factura.getAperturaCierreCajeroDetalle());
                 facturaReinicioAbierta.setCaja(factura.getCaja());
@@ -387,7 +388,8 @@ public class FacturacionService  {
                 facturaReinicioAbierta.setImpuestoInterno(BigDecimal.ZERO);                
                 em.persist(facturaReinicioAbierta);
                 idFactura = facturaReinicioAbierta.getId();
-            }
+            }*/
+            
             tx.commit();
             log.info("Factura con id: "+factura.getId()+", Nro. factura: "
                       +factura.getNumeroComprobante());   
@@ -398,7 +400,7 @@ public class FacturacionService  {
         }finally{
             em.clear();
         }
-        return idFactura;
+        //return idFactura;
     }
             
 //    public void registrarCombos(Long id){
@@ -975,6 +977,7 @@ public class FacturacionService  {
             ,Usuario usuario
             ,int idMotivo
             ,int caja
+            ,String fechaHoraFiscal
         ) throws TpvException{
         BigDecimal signo = BigDecimal.ONE;
         log.info("Capa de servicios FacturacionService, registrando nota DC");
@@ -994,6 +997,7 @@ public class FacturacionService  {
             notaDC.setCliente(facturaOrigen.getCliente());
             notaDC.setClaseComprobante(notaDC.getFacturaOrigen().getClaseComprobante());
             notaDC.setCondicionIva(facturaOrigen.getCondicionIva());
+            notaDC.setFechaHoraFiscal(fechaHoraFiscal);
             
             facturaOrigen.getDetalleNotasDC().add(notaDC);
             notaDC.setTotal(monto.multiply(signo));
@@ -1042,7 +1046,10 @@ public class FacturacionService  {
         }
     }
     
-    public void modificarNroCreditoTotalizarYCerrar(Long prefijo,Long numeroComprobante,Long idFactura) throws TpvException{
+    public void modificarNroCreditoTotalizarYCerrar(Long prefijo
+            ,Long numeroComprobante,Long idFactura
+            ,String fechaHoraFiscal
+            ) throws TpvException{
         log.info("Capa de servicios, modificar numero comprobante con id");
         EntityManager em = Connection.getEm();
         EntityTransaction tx = null;
@@ -1097,6 +1104,7 @@ public class FacturacionService  {
             
             factura.setNumeroComprobante(numeroComprobante);
             factura.setPrefijoFiscal(prefijo);
+            factura.setFechaHoraFiscal(fechaHoraFiscal);
             factura.setEstado(FacturaEstadoEnum.CERRADA);
             em.merge(factura);
             tx.commit();
@@ -1112,7 +1120,10 @@ public class FacturacionService  {
     
     }
     
-    public void modificarNroCreditoYCerrar(Long prefijo,Long numeroComprobante,Long idFactura) throws TpvException{
+    public void modificarNroCreditoYCerrar(Long prefijo
+            ,Long numeroComprobante,Long idFactura
+            ,String fechaHoraFiscal 
+            ) throws TpvException{
         log.info("Capa de servicios, modificar numero comprobante con id");
         EntityManager em = Connection.getEm();
         EntityTransaction tx = null;
@@ -1124,6 +1135,7 @@ public class FacturacionService  {
             factura.setPrefijoFiscal(prefijo);
             factura.setFechaHoraCierre(factura.getUsuario().getFechaHoraHoy());
             factura.setEstado(FacturaEstadoEnum.CERRADA);
+            factura.setFechaHoraFiscal(fechaHoraFiscal);
             em.merge(factura);
             tx.commit();
             

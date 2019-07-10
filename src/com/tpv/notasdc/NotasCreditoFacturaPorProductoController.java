@@ -105,6 +105,7 @@ public class NotasCreditoFacturaPorProductoController implements Initializable {
     private ImpresoraService impresoraService = new ImpresoraService();
     private FiscalPrinterEvent fiscalPrinterEvent;
     private LineaTicketData lineaTicketData;
+    private String fechaHoraFiscal;
     
     public void setTabController(TabPanePrincipalController tabPaneController){
         this.tabPaneController=tabPaneController;
@@ -934,6 +935,9 @@ public class NotasCreditoFacturaPorProductoController implements Initializable {
                     numeroComprobante = new Long(response.getString(3));
                     guardarNotaDCPrimeraVez();
                 }
+                if(command.getCommandCode()==HasarCommands.CMD_GET_DATE_TIME){
+                    fechaHoraFiscal = response.getString(3)+" "+response.getString(4);
+                }                 
                 
                 if(command.getCommandCode()==HasarCommands.CMD_PRINT_LINE_ITEM){
                     agregarDetalleFactura();
@@ -947,6 +951,7 @@ public class NotasCreditoFacturaPorProductoController implements Initializable {
                                     Context.getInstance().currentDMTicket().getPuntoVenta()
                                     ,Long.parseLong(response.getString(3))
                                     ,Context.getInstance().currentDMTicket().getIdDocumento()
+                                    ,fechaHoraFiscal
                                 );
                         Context.getInstance().currentDMTicket().setIdDocumento(null);
                         tabPaneController.gotoNotasDCMenu();

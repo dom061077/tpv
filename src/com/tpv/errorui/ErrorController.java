@@ -5,13 +5,9 @@
  */
 package com.tpv.errorui;
 
-import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.exceptions.TpvException;
-import com.tpv.principal.DataModelTicket;
 import com.tpv.util.Connection;
-import java.net.ConnectException;
 import java.net.URL;
-import java.net.UnknownHostException;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -21,7 +17,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx8tpv1.TabPanePrincipalController;
-import javax.inject.Inject;
 import org.apache.log4j.Logger;
 import com.tpv.principal.Context;
 import javafx.scene.Node;

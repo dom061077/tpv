@@ -534,6 +534,7 @@ public class ImpresoraService {
         try{
             printHeaderTrailer(" ", " ", " ", null);
             getHfp().execute(getHfp().cmdStatusRequest());
+            getHfp().execute(getHfp().cmdGetDateTime());
             getHfp().execute(getHfp().cmdCloseFiscalReceipt(null));
             log.info("Cierre de nota de débito exitoso");
         }catch(FiscalPrinterStatusError e){
@@ -904,6 +905,7 @@ public class ImpresoraService {
             if(factura!=null)
                 imprimirBonifCombosTarjPercepciones(factura);
             getHfp().execute(getHfp().cmdStatusRequest());
+            getHfp().execute(getHfp().cmdGetDateTime());
             response = getHfp().execute(getHfp().cmdCloseDNFH(1));
         }catch(FiscalPrinterStatusError e){
             log.error("Error en el estado de la impresora al cerrar el DFNH",e);

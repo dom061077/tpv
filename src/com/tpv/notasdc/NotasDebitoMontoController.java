@@ -77,6 +77,7 @@ public class NotasDebitoMontoController implements Initializable {
     private FiscalPrinterEvent fiscalPrinterEvent;
     private int idMotivo;
     private String detalleMotivo;
+    private String fechaHoraFiscal;
     
     
     @FXML
@@ -330,6 +331,9 @@ public class NotasDebitoMontoController implements Initializable {
                     Context.getInstance().currentDMTicket().setPuntoVenta(Long.parseLong(response.getString(7)));
                 }
                     
+                if(command.getCommandCode()==HasarCommands.CMD_GET_DATE_TIME){
+                    fechaHoraFiscal = response.getString(3)+" "+response.getString(4);
+                }                  
                     
                     
                 if(command.getCommandCode()==HasarCommands.CMD_CLOSE_FISCAL_RECEIPT){
@@ -344,6 +348,7 @@ public class NotasDebitoMontoController implements Initializable {
                                , Context.getInstance().currentDMTicket().getUsuario()
                                ,idMotivo
                                , Context.getInstance().currentDMTicket().getCaja()
+                               , fechaHoraFiscal
                              );
                         tabPaneController.gotoNotasDCMenu();
                     }catch(TpvException e){

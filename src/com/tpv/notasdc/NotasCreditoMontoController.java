@@ -77,6 +77,7 @@ public class NotasCreditoMontoController implements Initializable {
     private Factura facturaOrigenCredito;
     private FiscalPrinterEvent fiscalPrinterEvent;
     private int idMotivo;
+    private String fechaHoraFiscal;
     
     //@FXML private Label labelIngreso;
     //@FXML private Label labelCantidad;
@@ -323,6 +324,9 @@ public class NotasCreditoMontoController implements Initializable {
                     ,FiscalPacket response){
                 if(command.getCommandCode()==HasarCommands.CMD_OPEN_DNFH){
                 }
+                if(command.getCommandCode()==HasarCommands.CMD_GET_DATE_TIME){
+                    fechaHoraFiscal = response.getString(3)+" "+response.getString(4);
+                }                
                 if(command.getCommandCode()==HasarCommands.CMD_CLOSE_DNFH){
                     try{
 /*confirmarNotaDCMonto(TipoComprobanteEnum tipo
@@ -340,6 +344,7 @@ public class NotasCreditoMontoController implements Initializable {
                                , Context.getInstance().currentDMTicket().getUsuario()
                                ,idMotivo
                                , Context.getInstance().currentDMTicket().getCaja()
+                               ,fechaHoraFiscal
                              );
                         tabPaneController.gotoNotasDCMenu();
                     }catch(TpvException e){

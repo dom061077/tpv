@@ -92,6 +92,7 @@ public class NotasCreditoFacturaController implements Initializable {
     private ImpresoraService impresoraService = new ImpresoraService();
     private FiscalPrinterEvent fiscalPrinterEvent;
     private Long idNotaDCGenerada;
+    private String fechaHoraFiscal;
     
     
     
@@ -474,7 +475,6 @@ public class NotasCreditoFacturaController implements Initializable {
         String condicionIVA=ImpresoraService.IVA_CONSUMIDOR_FINAL;
         String tipoDocImpresion = " ";
         
-        Factura notaDC = null;
 
         if(facturaOrigenCredito.getCliente()!=null){
             tipoCreditoImpresion = ImpresoraService.NOTACREDITO_A;
@@ -486,36 +486,12 @@ public class NotasCreditoFacturaController implements Initializable {
                             .getTraduccionCondicionIVA(
                                     facturaOrigenCredito.getCliente().getCondicionIva().getId());
         }    
-        try{
-            notaDC = factService.confirmarNotaDCFactura(TipoComprobanteEnum.C, facturaOrigenCredito
-                    ,Context.getInstance().currentDMTicket().getAperturaCierreCajDetalle()
-                    ,Context.getInstance().currentDMTicket().getCheckout()
-                    ,Context.getInstance().currentDMTicket().getUsuario()
-                    ,idMotivo
-                    ,Context.getInstance().currentDMTicket().getCaja());
-            idNotaDCGenerada = notaDC.getId();
-        }catch(TpvException e){
-            Context.getInstance().currentDMTicket().setException(e);
-            Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_NOTACREDITOFACTURA);
-            tabPaneController.gotoError();
-            return;
-        }
+        
+        
         try{
             this.impresoraService.abrirNotaCredito(tipoCreditoImpresion
                 , facturaOrigenCredito.getPrefijoFiscal()+"-"+ facturaOrigenCredito.getNumeroComprobante()
                 , nombreComprador, cuitComprador, condicionIVA, condicionIVA, tipoDocImpresion);
-            for(Iterator<FacturaDetalle> it = facturaOrigenCredito.getDetalle().iterator()
-                    ;it.hasNext();){
-                FacturaDetalle factDet = it.next();
-                BigDecimal coeficienteK = ImpresoraService.getCoeficienteK(
-                     factDet.getImpuestoInterno().divide(factDet.getCantidad(), 4,RoundingMode.HALF_EVEN)
-                     ,factDet.getPrecioUnitarioBase()
-                   );
-                this.impresoraService.imprimirLineaTicket(factDet.getProducto().getDescripcionConCodigo()
-                        ,factDet.getCantidad(),factDet.getPrecioUnitario()
-                        ,factDet.getPorcentajeIva(),false,coeficienteK);
-            }
-            this.impresoraService.cerrarNotaCredito(facturaOrigenCredito);
         }catch(TpvException e){
             Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_NOTACREDITOFACTURA);
             Context.getInstance().currentDMTicket().setException(e);
@@ -531,12 +507,50 @@ public class NotasCreditoFacturaController implements Initializable {
             public void commandExecuted(FiscalPrinter source, FiscalPacket command
                 ,FiscalPacket response){
                 
+                if(command.getCommandCode()==HasarCommands.CMD_GET_DATE_TIME){
+                    fechaHoraFiscal = response.getString(3)+" "+response.getString(4);
+                }                 
+                if (command.getCommandCode() == HasarCommands.CMD_OPEN_DNFH){
+                    Factura notaDC = null;
+                    try{
+                        notaDC = factService.confirmarNotaDCFactura(TipoComprobanteEnum.C, facturaOrigenCredito
+                                ,Context.getInstance().currentDMTicket().getAperturaCierreCajDetalle()
+                                ,Context.getInstance().currentDMTicket().getCheckout()
+                                ,Context.getInstance().currentDMTicket().getUsuario()
+                                ,idMotivo
+                                ,Context.getInstance().currentDMTicket().getCaja());
+                        idNotaDCGenerada = notaDC.getId();
+                        for(Iterator<FacturaDetalle> it = facturaOrigenCredito.getDetalle().iterator()
+                                ;it.hasNext();){
+                            FacturaDetalle factDet = it.next();
+                            BigDecimal coeficienteK = ImpresoraService.getCoeficienteK(
+                                 factDet.getImpuestoInterno().divide(factDet.getCantidad(), 4,RoundingMode.HALF_EVEN)
+                                 ,factDet.getPrecioUnitarioBase()
+                               );
+                            impresoraService.imprimirLineaTicket(factDet.getProducto().getDescripcionConCodigo()
+                                    ,factDet.getCantidad(),factDet.getPrecioUnitario()
+                                    ,factDet.getPorcentajeIva(),false,coeficienteK);
+                        }
+                        impresoraService.cerrarNotaCredito(facturaOrigenCredito);
+                        
+                        
+                        
+                    }catch(TpvException e){
+                        Context.getInstance().currentDMTicket().setException(e);
+                        Context.getInstance().currentDMTicket().setOrigenPantalla(OrigenPantallaErrorEnum.PANTALLA_NOTACREDITOFACTURA);
+                        tabPaneController.gotoError();
+                        return;
+                    }
+                    
+                    
+                }
                 if(command.getCommandCode()==HasarCommands.CMD_CLOSE_DNFH){
                     try{
                         factService.modificarNroCreditoYCerrar(
                                     Context.getInstance().currentDMTicket().getPuntoVenta()
                                     ,Long.parseLong(response.getString(3))
                                     ,idNotaDCGenerada
+                                    ,fechaHoraFiscal
                                 );
                         tabPaneController.gotoNotasDCMenu();
                     }catch(TpvException e){

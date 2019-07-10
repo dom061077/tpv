@@ -1246,10 +1246,11 @@ public class FXMLMainController implements Initializable {
             
             if(factura!=null){
                 log.info("Se econtró factura abierta con id: "+factura.getId()+", se procede a anulación en BD");
-                Context.getInstance().currentDMTicket()
+                //Context.getInstance().currentDMTicket()
                         // en la anulacion de la factura en la capa de servicios
                         // se inserta de nuevo la nueva factura.
-                        .setIdDocumento(factService.anularFacturaPorReinicio(factura.getId()));
+                //        .setIdDocumento(factService.anularFacturaPorReinicio(factura.getId()));
+                factService.anularFacturaPorReinicio(factura.getId());
                 if(Context.getInstance().currentDMTicket().isTicketAbierto()){
                     log.warn("Factura en impresora. Se procede a cancelar documento en Impresora");
                    impresoraService.cancelarTicket();
