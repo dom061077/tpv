@@ -25,7 +25,6 @@ import javafx.scene.control.TabPane;
 import org.apache.log4j.Logger;
 import com.tpv.exceptions.TpvException;
 import com.tpv.modelo.ParametroGeneral;
-import com.tpv.modelo.enums.TipoComprobanteEnum;
 import com.tpv.notasdc.NotasCreditoFacturaController;
 import com.tpv.notasdc.NotasCreditoFacturaPorProductoController;
 import com.tpv.notasdc.NotasDCMenuController;
@@ -33,6 +32,7 @@ import com.tpv.notasdc.NotasDebitoMontoController;
 import com.tpv.pagoticket.ConfirmaPagoTicketController;
 import com.tpv.pagoticket.PagoTicketController;
 import com.tpv.print.fiscal.ConfiguracionImpresoraController;
+import com.tpv.print.thread.PrinterStateThread;
 import com.tpv.producto.BuscarPorDescProductoController;
 import com.tpv.retirodinero.RetiroDineroConfirmacionController;
 import com.tpv.retirodinero.RetiroDineroController;
@@ -61,7 +61,9 @@ import javafx.scene.layout.StackPane;
  */
 
 public class TabPanePrincipalController implements Initializable {
-
+    PrinterStateThread printState;
+    Node currentFocusedNode;
+    Node nextFocusedNode;
     /**
      * @return the labelTituloVentanaMoal
      */
@@ -194,8 +196,11 @@ public class TabPanePrincipalController implements Initializable {
             Context.getInstance().currentDMTicket().setException(new TpvException("Error no controlado: "+throwable.getMessage()));
             gotoError();
             
+            
         });         
         
+        printState = new PrinterStateThread(this);
+        printState.run();
 
 
         labelMensaje.wrapTextProperty().set(true);
@@ -250,8 +255,10 @@ public class TabPanePrincipalController implements Initializable {
         
         stackPaneImpresoraEsperando.setOnKeyPressed(keyEvent->{
             if(keyEvent.getCode() == KeyCode.F12){
-                supervisorController.killEstadoImpresora();
-                confirmaPagoController.killEstadoImpresora();
+                //supervisorController.killEstadoImpresora();
+                //confirmaPagoController.killEstadoImpresora();
+                printState.setEstadoGral(false);
+                setMsgImpresoraVisible(false);
                 gotoMenuPrincipal();
             }
             keyEvent.consume();
@@ -276,6 +283,14 @@ public class TabPanePrincipalController implements Initializable {
                 }
             }
             keyEvent.consume();
+        });
+        
+        Platform.runLater(()->{
+            tabPanePrincipal.getScene().focusOwnerProperty().addListener(
+            (prop, oldNode, newNode) -> {
+                currentFocusedNode = oldNode;
+                nextFocusedNode = newNode;
+            });
         });
         
     }      
@@ -330,9 +345,11 @@ public class TabPanePrincipalController implements Initializable {
 
     
     public void gotoLogin(){
+        
         try{
             this.getLabelTituloVentana().setText("INGRESO");
             this.getLabelShortCut().setText("F12 - Sale del Sistema");
+            printState.setEstadoGral(false);
             this.loginController.configurarInicio();
             this.getTabPanePrincipal().getSelectionModel().select(tabLogin);
         }catch(TpvException e){
@@ -346,6 +363,7 @@ public class TabPanePrincipalController implements Initializable {
     }
     
     public void gotoMenuPrincipal(){
+        printState.setEstadoGral(false);
         this.getLabelTituloVentana().setText("MENU PRINCIPAL");
         this.getLabelShortCut().setText("1-Facturacion   |   2-Controlador   |   3-Carga Retiro de Dinero  |   4-Retiro de Dinero  |   5-Notas Deb./Cred.   |   6-Salir de Sistema");
         this.getTabPanePrincipal().getSelectionModel().select(tabMenuPrincipal);
@@ -354,6 +372,7 @@ public class TabPanePrincipalController implements Initializable {
     }
     
     public void gotoFacturacion(){
+        printState.setEstadoGral(true);
         try{
             this.getLabelTituloVentana().setText("FACTURACIÓN");
             this.getLabelShortCut().setText("F2-Cliente     |   F3-Producto |   F4-Ing.Cantidad     |   F5-Negativo     |   F6-Deshabilita Negativo     |   F7-Cancela Ticket   |   F8-Ofertas   |  F11-Menú Principal");            
@@ -369,6 +388,8 @@ public class TabPanePrincipalController implements Initializable {
     }
     
     public void gotoError(){
+        printState.setEstadoGral(false);
+
         this.getLabelTituloVentana().setText("ERROR");
         this.getLabelShortCut().setText("Esc-Recuperar Sistema | F12-Ir a Menú principal");
         this.errorController.configurarInicio();
@@ -376,6 +397,8 @@ public class TabPanePrincipalController implements Initializable {
     }
     
     public void gotoSupervisor(){
+        printState.setEstadoGral(true);
+
         this.getLabelTituloVentana().setText("AUTORIZACIÓN DE SUPERVISOR");
         this.getLabelShortCut().setText("Esc-Cancela Operación");
         this.supervisorController.configurarInicio();
@@ -384,6 +407,7 @@ public class TabPanePrincipalController implements Initializable {
     }
     
     public void gotoCliente(){
+        printState.setEstadoGral(true);
         this.getLabelTituloVentana().setText("BÚSQUEDA DE CLIENTE");
         this.getLabelShortCut().setText("Esc-Volver");
         this.buscarPorNombreClienteController.configurarInicio();
@@ -391,6 +415,7 @@ public class TabPanePrincipalController implements Initializable {
     }
     
     public void gotoProducto(){
+        printState.setEstadoGral(false);
         this.getLabelTituloVentana().setText("BÚSQUEDA DE PRODUCTO");
         this.getLabelShortCut().setText("Esc-Volver");
         this.productoController.configurarInicio();
@@ -398,6 +423,7 @@ public class TabPanePrincipalController implements Initializable {
     }
     
     public void gotoConfirmarPago(){
+        printState.setEstadoGral(true);
         this.getLabelTituloVentana().setText("CONFIRMACIÓN DE PAGO Y CIERRE DE TICKET");
         this.getLabelShortCut().setText("Esc-Volver");
         try{
@@ -407,10 +433,12 @@ public class TabPanePrincipalController implements Initializable {
             Context.getInstance().currentDMTicket().setException(e);
             gotoError();
         }
+        
         this.getTabPanePrincipal().getSelectionModel().select(tabConfirmarPago);
     }
     
     public void gotoPago(){
+        printState.setEstadoGral(true);
         try{
             this.getLabelTituloVentana().setText("INGRESO DE PAGOS");
             this.getLabelShortCut().setText("Esc-Volver  |   F3-Formas de Pago  |   Singo Menos (-) Elimina Pago");
@@ -422,9 +450,11 @@ public class TabPanePrincipalController implements Initializable {
             gotoError();
         }
         
+        
     }
     
     public void gotoCombos(){
+        printState.setEstadoGral(false);
         this.getLabelTituloVentana().setText("BONIFICACIONES DE LA COMPRA");
         this.getLabelShortCut().setText("Esc-Volver");        
         this.combosController.configurarInicio();
@@ -439,6 +469,7 @@ public class TabPanePrincipalController implements Initializable {
     }
     
     public void gotoControlador(){
+        printState.setEstadoGral(true);
         this.getLabelTituloVentana().setText("OPERACIONES DE CONTROLADOR");
         this.getLabelShortCut().setText("1-Cancelar Ticket   |   2-Cierre Z  |   3-Cierre X  |   F11-Retornar a Menú Principal");        
         this.configImpresoraController.configurarInicio();
@@ -459,6 +490,7 @@ public class TabPanePrincipalController implements Initializable {
     }
     
     public void gotoRetiroDineroConfirmacion(boolean readOnly){
+        printState.setEstadoGral(true);
         try{
             this.retiroDineroConfirmacionController.configurarInicio(readOnly);
             this.getTabPanePrincipal().getSelectionModel().select(tabRetiroDineroConfirmacion);
@@ -470,6 +502,7 @@ public class TabPanePrincipalController implements Initializable {
     }
             
     public void gotoNotasCreditoMonto(){
+        printState.setEstadoGral(true);
         this.getLabelTituloVentana().setText("NOTAS DE CREDITO - MONTO");
         this.getLabelShortCut().setText("F11 - Retornar a Menú");
 
@@ -494,6 +527,7 @@ public class TabPanePrincipalController implements Initializable {
     }
     
     public void gotoNotasDCFactura(){
+        printState.setEstadoGral(true);
         this.getLabelTituloVentana().setText("NOTAS DE CREDITO - ANULA FACTURA");
         this.getLabelShortCut().setText("F11 - Retornar a Menú");
         this.getTabPanePrincipal().getSelectionModel().select(tabNotasDCFactura);
@@ -507,6 +541,7 @@ public class TabPanePrincipalController implements Initializable {
     }
     
     public void gotoNotasDCFacturaPorProducto(){
+        printState.setEstadoGral(true);
         this.getLabelTituloVentana().setText("NOTAS DE CREDITO - ANULA FACTURA POR PRODUCTO");
         this.getLabelShortCut().setText("F11 - Retornar a Menu");
         this.getTabPanePrincipal().getSelectionModel().select(tabNotasDCFacturaPorProducto);
@@ -521,6 +556,7 @@ public class TabPanePrincipalController implements Initializable {
     }
     
     public void gotoNotasDCDebitoMonto(){
+        printState.setEstadoGral(true);
         this.getLabelTituloVentana().setText("NOTAS DE DEBITO - MONTO");
         this.getLabelShortCut().setText("F11 - Retornar a Menu");
         this.getTabPanePrincipal().getSelectionModel().select(tabNotasDCDebito);
@@ -731,6 +767,7 @@ public class TabPanePrincipalController implements Initializable {
     
     public void setMsgImpresoraVisible(boolean visible){
         stackPaneImpresoraEsperando.setVisible(visible);
+        tabPanePrincipal.setDisable(visible);
         if(visible == true)
             repeatFocus(stackPaneImpresoraEsperando);
     }
@@ -742,6 +779,18 @@ public class TabPanePrincipalController implements Initializable {
     public void setDisableTabConfirmarPago(boolean disable){
         tabConfirmarPago.setDisable(disable);
     }
+    
+    public Node getCurrentFocusedNode(){
+        return currentFocusedNode;
+    }
+    
+    public Node getNextFocusedNode(){
+        return nextFocusedNode;
+    }
+    
+    public Node getStackPaneImpresoraEsperando(){
+        return stackPaneImpresoraEsperando;
+    }
  
-
+    
 }

@@ -402,7 +402,7 @@ public class ImpresoraService {
             if (Context.getInstance().currentDMTicket()
                     .getModeloImpresora()
                     .compareTo(MODELOIMPRESORA_SMH_P_PR5F)!=0){
-                    response = getHfp().execute(requestEstado);
+                    //response = getHfp().execute(requestEstado);
             }
             if(_2daLineaDetalle.compareTo("")!=0){
                 response = getHfp().execute(request1eraLineaDetalle);
@@ -529,6 +529,21 @@ public class ImpresoraService {
         
     }
     
+    public void verificarCantItems() throws TpvException{
+        FiscalPacket response;
+        try{
+            response = getHfp().execute(getHfp().cmdSubtotal(false,0));
+            log.debug("Resultado del comando SubTotal: " + response.getString(0));
+        }catch(FiscalPrinterStatusError e){
+            log.warn("Error en estado fiscal de la impresora al imprimir cierre de nota de débito.",e);
+            throw new TpvException(e.getMessage());
+        }catch(FiscalPrinterIOException e){
+            log.warn("Error de entrada/salida en la impresora fiscal al imprimir cierre de nota de débito",e);
+            throw new TpvException(e.getMessage());
+        }
+        
+    }
+    
     public void cerrarDebito()throws TpvException{
         log.info("Cierre de nota de débito en capa de servicios.");
         try{
@@ -552,7 +567,9 @@ public class ImpresoraService {
         log.info("Cierre de factura en capa de servicios. Factura id: "+factura.getId());
         FiscalPacket request;
         FiscalPacket response;
+        //Context.getInstance().currentDMTicket().getTotalGral()
         
+                
         imprimirBonifCombosTarjPercepciones(factura);
         ArrayList<String> concursos = new ArrayList();
         if(!factura.getDetalleConcursos().isEmpty()){
@@ -573,6 +590,7 @@ public class ImpresoraService {
         }
         
         try{        
+            
             SimpleDateFormat sdfDia = new SimpleDateFormat("dd");
             SimpleDateFormat sdfMes = new SimpleDateFormat("MM");
             SimpleDateFormat sdfHora = new SimpleDateFormat("hh:mm");
@@ -637,7 +655,7 @@ public class ImpresoraService {
         requestStatus = getHfp().cmdStatusRequest();
         log.info("Timeout de socket: "+Connection.getStcp().getTimeOutSocket());
         try{
-          //response = getHfp().execute(requestStatus);
+          response = getHfp().execute(requestStatus);
           response = getHfp().execute(request);
         }catch(FiscalPrinterStatusError e){
             fMsg = getHfp().getMessages();
@@ -929,15 +947,15 @@ public class ImpresoraService {
         }
     }
     public void enviarConsultaEstado() throws TpvException{
-        log.info("Consulando estado de impresora");
+        //log.info("Consulando estado de impresora");
         try{
             FiscalPacket response = getHfp().execute(getHfp().cmdStatusRequest());
         }catch(FiscalPrinterStatusError e){
-            log.warn("Error de estado en la impresora al consultar estado",e);
+            //log.warn("Error de estado en la impresora al consultar estado",e);
             throw new TpvException(e.getMessage());
             
         }catch(FiscalPrinterIOException e){
-            log.warn("Error mecánico de impresora al consultar estado",e);
+            //log.warn("Error mecánico de impresora al consultar estado",e);
             throw new TpvException(e.getMessage());
         }
         

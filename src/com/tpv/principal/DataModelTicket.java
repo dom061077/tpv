@@ -134,17 +134,29 @@ public class DataModelTicket {
         return pagos;
     }
     
+    public BigDecimal getSubTotal(){
+        BigDecimal subTotal = BigDecimal.ZERO;
+        ListProperty<LineaTicketData> innerList = getDetalle();
+        for(Iterator iter=innerList.iterator();iter.hasNext();){
+            LineaTicketData ticket= (LineaTicketData)iter.next();
+            subTotal = subTotal.add(ticket.getSubTotal());
+        }
+        
+        return subTotal;
+    }
+    
     public BigDecimal getTotalTicket(){
         ListProperty<LineaTicketData> innerList = getDetalle();
         
-        BigDecimal total = new BigDecimal(0);
-        for(Iterator iter=innerList.iterator();iter.hasNext();){
+        BigDecimal total = BigDecimal.ZERO;
+        /*for(Iterator iter=innerList.iterator();iter.hasNext();){
             LineaTicketData ticket= (LineaTicketData)iter.next();
-            //total = total + ticket.getSubTotal().doubleValue();
             total = total.add(ticket.getSubTotal());
         }
+        */
+        total = getSubTotal();
         total = total.add(getRetencion());
-        //total = total.setScale(2, RoundingMode.HALF_EVEN);
+
         return total;
     }
 

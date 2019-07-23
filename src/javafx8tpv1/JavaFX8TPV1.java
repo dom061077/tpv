@@ -8,6 +8,7 @@ package javafx8tpv1;
 import com.tpv.enums.OrigenPantallaErrorEnum;
 import com.tpv.exceptions.TpvException;
 import com.tpv.principal.Context;
+import com.tpv.print.thread.PrinterStateThread;
 import com.tpv.util.Connection;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,15 +22,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCombination;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 //import org.datafx.samples.app.MasterViewController;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
+import static org.hibernate.internal.util.StringHelper.root;
 
 
 /**
@@ -80,7 +79,6 @@ public class JavaFX8TPV1 extends Application {
             
         }
         
-       
         
         
         

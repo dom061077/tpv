@@ -301,23 +301,14 @@ public class SupervisorController implements Initializable{
                     ,Context.getInstance().currentDMTicket().getUsuarioSupervisor()
             );
             Context.clearCurrentDMTicket();
-            //impresoraService.cancelarTicket();
-            //tabController.gotoFacturacion();
+            impresoraService.cancelarTicket();
+            tabController.gotoFacturacion();
         
-        cancelarTicketthread = new Thread(new Runnable() {
+        /*cancelarTicketthread = new Thread(new Runnable() {
 
             @Override
             public void run() {
-                //Runnable updater = new Runnable() {
-
-                //    @Override
-                //    public void run() {
-                        //stackPaneImpresoraEsperando.setVisible(true);
-
-                //    }
-                //};
                 flagEstadoImpresora=false;
-                //tabController.setMsgTituloVentana("OTRA PRUEBA");
                 while (!flagEstadoImpresora) {
                     try {
                         Thread.sleep(50);
@@ -335,9 +326,6 @@ public class SupervisorController implements Initializable{
                        });
 
                     }                     
-
-                    // UI update is run on the Application thread
-                    //Platform.runLater(updater);
                 }
                 
                 if(!flagCanceladoPorUsuario){
@@ -366,6 +354,7 @@ public class SupervisorController implements Initializable{
         cancelarTicketthread.setDaemon(true);
         cancelarTicketthread.start();
         gridPane.setDisable(true);
+        */
         
             
     }

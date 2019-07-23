@@ -237,6 +237,7 @@ public class ConfirmaPagoTicketController implements Initializable{
             stackPaneConcursos.setVisible(false);
             
             tabPaneController.repeatFocus(tableViewPagos);
+            impresoraService.verificarCantItems();
                     
     }
     
